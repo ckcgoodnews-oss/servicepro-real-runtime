@@ -38,6 +38,7 @@ const dispatch = require('./routes/dispatch');
 const inventory = require('./routes/inventory');
 const materials = require('./routes/materials');
 const privacyCaseOrchestration = require('./routes/privacyCaseOrchestration');
+const privacyDsarOps = require('./routes/privacyDsarOps');
 
 async function router(req, res) {
   req.context = {};
@@ -313,6 +314,53 @@ async function router(req, res) {
   if (req.url === '/api/v1/privacy/case-metrics' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.PRIVACY_READ)(req, res)) return;
     return privacyCaseOrchestration.metrics(req, res);
+  }
+
+  const privacyCreateRoutes = {
+    '/api/v1/privacy/dsars': 'createDsar',
+    '/api/v1/privacy/consents': 'createConsent',
+    '/api/v1/privacy/retention-policies': 'createRetentionPolicy',
+    '/api/v1/privacy/deletion-jobs': 'createDeletionJob',
+    '/api/v1/privacy/processing-activities': 'createProcessingActivity',
+    '/api/v1/privacy/dpias': 'createDpia',
+    '/api/v1/privacy/breaches': 'createBreach'
+  };
+  if (req.method === 'POST' && privacyCreateRoutes[req.url]) {
+    if (!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req, res)) return;
+    return privacyDsarOps[privacyCreateRoutes[req.url]](req, res);
+  }
+
+  const privacyActionRoutes = [
+    [/^\/api\/v1\/privacy\/dsars\/([^/]+)\/verify$/, 'verifyDsarIdentity'],
+    [/^\/api\/v1\/privacy\/dsars\/([^/]+)\/fulfill$/, 'fulfillDsar'],
+    [/^\/api\/v1\/privacy\/dsars\/([^/]+)\/deny$/, 'denyDsar'],
+    [/^\/api\/v1\/privacy\/consents\/([^/]+)\/withdraw$/, 'withdrawConsent'],
+    [/^\/api\/v1\/privacy\/retention-policies\/([^/]+)\/activate$/, 'activateRetentionPolicy'],
+    [/^\/api\/v1\/privacy\/retention-policies\/([^/]+)\/retire$/, 'retireRetentionPolicy'],
+    [/^\/api\/v1\/privacy\/deletion-jobs\/([^/]+)\/start$/, 'startDeletionJob'],
+    [/^\/api\/v1\/privacy\/deletion-jobs\/([^/]+)\/complete$/, 'completeDeletionJob'],
+    [/^\/api\/v1\/privacy\/deletion-jobs\/([^/]+)\/fail$/, 'failDeletionJob'],
+    [/^\/api\/v1\/privacy\/processing-activities\/([^/]+)\/activate$/, 'activateProcessingActivity'],
+    [/^\/api\/v1\/privacy\/processing-activities\/([^/]+)\/retire$/, 'retireProcessingActivity'],
+    [/^\/api\/v1\/privacy\/dpias\/([^/]+)\/review$/, 'submitDpiaForReview'],
+    [/^\/api\/v1\/privacy\/dpias\/([^/]+)\/approve$/, 'approveDpia'],
+    [/^\/api\/v1\/privacy\/dpias\/([^/]+)\/reject$/, 'rejectDpia'],
+    [/^\/api\/v1\/privacy\/breaches\/([^/]+)\/confirm$/, 'confirmBreach'],
+    [/^\/api\/v1\/privacy\/breaches\/([^/]+)\/report$/, 'reportBreach'],
+    [/^\/api\/v1\/privacy\/breaches\/([^/]+)\/notify-subjects$/, 'notifySubjects'],
+    [/^\/api\/v1\/privacy\/breaches\/([^/]+)\/close$/, 'closeBreach']
+  ];
+  if (req.method === 'POST') {
+    for (const [pattern, handler] of privacyActionRoutes) {
+      const match = req.url.match(pattern);
+      if (!match) continue;
+      if (!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req, res)) return;
+      return privacyDsarOps[handler](req, res, match[1]);
+    }
+  }
+  if (req.url === '/api/v1/privacy/metrics' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.PRIVACY_READ)(req, res)) return;
+    return privacyDsarOps.metrics(req, res);
   }
 
   return notFound(res);
