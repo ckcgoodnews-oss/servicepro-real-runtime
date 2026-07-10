@@ -1,0 +1,38 @@
+openapi: 3.1.0
+info:
+  title: ServicePro API
+  version: 0.42.0
+  description: Tenant-safe ServicePro API contract.
+servers:
+  - url: https://api.example.com
+security:
+  - bearerAuth: []
+paths:
+  /api/v1/customers:
+    get:
+      summary: List customers
+      responses:
+        '200':
+          description: Customer list
+    post:
+      summary: Create customer
+      responses:
+        '201':
+          description: Customer created
+  /api/v1/jobs:
+    get:
+      summary: List jobs
+      responses:
+        '200':
+          description: Job list
+    post:
+      summary: Create job
+      responses:
+        '201':
+          description: Job created
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

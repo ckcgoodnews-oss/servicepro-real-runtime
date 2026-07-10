@@ -1,0 +1,26 @@
+<% layout('layouts/main') %>
+<section class="card">
+  <h1>Tenant Backups</h1>
+  <p class="muted">Create a tenant-scoped JSON backup that can be downloaded or restored later.</p>
+  <form method="post" action="/admin/backups/create">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <button>Create Backup Now</button>
+    <a class="button secondary" href="/admin/exports/tenant.json">Download Live Tenant Export</a>
+  </form>
+</section>
+<section class="card">
+  <h2>Backup History</h2>
+  <table>
+    <thead><tr><th>Created</th><th>File</th><th>Size</th><th></th></tr></thead>
+    <tbody>
+      <% backups.forEach(row => { %>
+        <tr>
+          <td><%= row.created_at %></td>
+          <td><%= row.file_name %></td>
+          <td><%= row.size_bytes %> bytes</td>
+          <td><a href="/admin/backups/<%= row.id %>/download">Download</a></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>

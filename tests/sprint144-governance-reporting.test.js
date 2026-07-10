@@ -1,0 +1,25 @@
+const fs = require('fs');
+const required = ['apps/api/src/services/governanceReportingService.js','apps/api/src/repositories/governanceReportingRepository.js','apps/api/src/routes/governanceReporting.js','scripts/seed-governance-reporting.js','packages/database/postgres/144_governance_reporting.sql','docs/sprint144-governance-reporting.md'];
+for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 144 patch file: ${file}`); process.exit(1); } }
+const svc = require('../apps/api/src/services/governanceReportingService');
+let kpi = svc.normalizeKpiInput({ tenantId: 'tenant_demo', name: 'Open Criticals', direction: 'lower_is_better', warningValue: 5, criticalValue: 10 });
+if (kpi.code !== 'OPEN-CRITICALS') process.exit(1);
+kpi = svc.activateKpi(kpi);
+if (svc.evaluateKpi(kpi, 11) !== 'critical') process.exit(1);
+let dashboard = svc.publishDashboard(svc.normalizeDashboardInput({ tenantId: 'tenant_demo', name: 'Exec Dash' }), '2026-07-07T00:00:00.000Z');
+if (dashboard.status !== 'published') process.exit(1);
+const widget = svc.normalizeWidgetInput({ dashboardId: 'dash1', title: 'Open Criticals', widgetType: 'number' });
+let template = svc.activateReportTemplate(svc.normalizeReportTemplateInput({ tenantId: 'tenant_demo', name: 'Monthly Report', sections: ['summary'] }));
+if (template.status !== 'active') process.exit(1);
+let snapshot = svc.normalizeSnapshotInput({ tenantId: 'tenant_demo', templateId: 'tpl1' });
+snapshot = svc.generateSnapshot(snapshot, { openCriticals: 3 }, 'Good', 'security');
+if (snapshot.status !== 'generated') process.exit(1);
+if (svc.failSnapshot(svc.normalizeSnapshotInput({ tenantId: 'tenant_demo', templateId: 'tpl1' }), 'bad').status !== 'failed') process.exit(1);
+let delivery = svc.sendDelivery(svc.normalizeDeliveryInput({ tenantId: 'tenant_demo', templateId: 'tpl1', recipients: ['a@example.com'] }));
+if (delivery.status !== 'sent') process.exit(1);
+let exportJob = svc.startExport(svc.normalizeExportInput({ tenantId: 'tenant_demo', format: 'csv' }));
+exportJob = svc.completeExport(exportJob, 's3://reports/file.csv');
+if (exportJob.status !== 'completed') process.exit(1);
+const metrics = svc.reportingMetrics({ kpis: [kpi], dashboards: [dashboard], widgets: [widget], templates: [template], snapshots: [snapshot], deliveries: [delivery], exports: [exportJob] });
+if (metrics.activeKpis !== 1 || metrics.publishedDashboards !== 1 || metrics.generatedSnapshots !== 1 || metrics.sentDeliveries !== 1 || metrics.completedExports !== 1) process.exit(1);
+console.log('Sprint 144 governance reporting patch test passed.');

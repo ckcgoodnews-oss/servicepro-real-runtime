@@ -1,0 +1,37 @@
+{
+  "plans": [
+    {
+      "planCode": "starter",
+      "name": "Starter",
+      "maxUsers": 5,
+      "maxActiveJobs": 100,
+      "maxStorageMb": 1024,
+      "apiAccess": false,
+      "aiAccess": false,
+      "mobileAccess": true,
+      "customerPortalAccess": true
+    },
+    {
+      "planCode": "pro",
+      "name": "Pro",
+      "maxUsers": 25,
+      "maxActiveJobs": 1000,
+      "maxStorageMb": 10240,
+      "apiAccess": true,
+      "aiAccess": true,
+      "mobileAccess": true,
+      "customerPortalAccess": true
+    },
+    {
+      "planCode": "enterprise",
+      "name": "Enterprise",
+      "maxUsers": 250,
+      "maxActiveJobs": 100000,
+      "maxStorageMb": 102400,
+      "apiAccess": true,
+      "aiAccess": true,
+      "mobileAccess": true,
+      "customerPortalAccess": true
+    }
+  ]
+}

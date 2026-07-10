@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicepro-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: servicepro-app
+  template:
+    metadata:
+      labels:
+        app: servicepro-app
+    spec:
+      containers:
+        - name: app
+          image: servicepro/app:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: servicepro-secrets
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 20
+            periodSeconds: 30

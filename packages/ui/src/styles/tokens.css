@@ -1,0 +1,10 @@
+:root {
+  --sp-color-primary: #1d72d2;
+  --sp-color-secondary: #102a43;
+  --sp-color-accent: #22c55e;
+  --sp-color-danger: #dc2626;
+  --sp-color-surface: #ffffff;
+  --sp-color-background: #f6f8fb;
+  --sp-radius-md: 10px;
+  --sp-shadow-card: 0 1px 8px rgba(0,0,0,.08);
+}

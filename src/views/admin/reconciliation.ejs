@@ -1,0 +1,26 @@
+<h1>Payment Reconciliation</h1>
+
+<h2>Record Payment</h2>
+<form class="form" method="post" action="/admin/accounting/payments">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <label>Invoice
+    <select name="invoiceId">
+      <% invoices.forEach(inv => { %>
+        <option value="<%= inv.id %>"><%= inv.id %> - $<%= (inv.totalCents / 100).toFixed(2) %></option>
+      <% }) %>
+    </select>
+  </label>
+  <label>Customer ID <input name="customerId" required></label>
+  <label>Method <input name="method" value="cash"></label>
+  <label>Amount <input name="amount" type="number" step="0.01" required></label>
+  <label>Received At <input name="receivedAt" type="datetime-local"></label>
+  <button>Record Payment</button>
+</form>
+
+<h2>Payments</h2>
+<table>
+<tr><th>ID</th><th>Customer</th><th>Invoice</th><th>Method</th><th>Amount</th></tr>
+<% payments.forEach(p => { %>
+<tr><td><%= p.id %></td><td><%= p.customerId %></td><td><%= p.invoiceId %></td><td><%= p.method %></td><td>$<%= Number(p.amount).toFixed(2) %></td></tr>
+<% }) %>
+</table>

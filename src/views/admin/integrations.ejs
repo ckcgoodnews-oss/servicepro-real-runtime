@@ -1,0 +1,26 @@
+<h1>Integration Settings</h1>
+<form class="form" method="post" action="/admin/integrations">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <label>Accounting Provider
+    <select name="accountingProvider">
+      <% ['none','quickbooks','xero','custom'].forEach(v => { %>
+        <option value="<%= v %>" <%= settings.accountingProvider === v ? 'selected' : '' %>><%= v %></option>
+      <% }) %>
+    </select>
+  </label>
+  <label>Email Provider
+    <select name="emailProvider">
+      <% ['internal','smtp','sendgrid','mailgun'].forEach(v => { %>
+        <option value="<%= v %>" <%= settings.emailProvider === v ? 'selected' : '' %>><%= v %></option>
+      <% }) %>
+    </select>
+  </label>
+  <label>SMS Provider
+    <select name="smsProvider">
+      <% ['none','twilio','custom'].forEach(v => { %>
+        <option value="<%= v %>" <%= settings.smsProvider === v ? 'selected' : '' %>><%= v %></option>
+      <% }) %>
+    </select>
+  </label>
+  <button>Save Settings</button>
+</form>

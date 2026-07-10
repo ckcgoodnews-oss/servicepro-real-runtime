@@ -1,0 +1,36 @@
+<h1>API Keys</h1>
+<% if (createdKey) { %>
+  <div class="alert success">
+    <strong>New API Key:</strong>
+    <code><%= createdKey %></code>
+    <p>Copy this now. It will not be shown again.</p>
+  </div>
+<% } %>
+
+<form class="form" method="post" action="/admin/api-keys">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <label>Name <input name="name" required placeholder="Zapier integration"></label>
+  <label>Scopes <input name="scopes" value="customers.read,jobs.read,services.read"></label>
+  <button>Create API Key</button>
+</form>
+
+<h2>Existing Keys</h2>
+<table>
+<tr><th>Name</th><th>Prefix</th><th>Scopes</th><th>Status</th><th>Action</th></tr>
+<% apiKeys.forEach(k => { %>
+<tr>
+  <td><%= k.name %></td>
+  <td><code><%= k.visiblePrefix %>...</code></td>
+  <td><%= k.scopes.join(', ') %></td>
+  <td><%= k.active ? 'Active' : 'Revoked' %></td>
+  <td>
+    <% if (k.active) { %>
+    <form method="post" action="/admin/api-keys/<%= k.id %>/revoke">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button>Revoke</button>
+    </form>
+    <% } %>
+  </td>
+</tr>
+<% }) %>
+</table>

@@ -1,0 +1,21 @@
+<section class="card">
+  <h1>Notification Queue</h1>
+  <p class="muted">Sprint 4 queues email/SMS/internal messages. The Send Stub button marks records sent without contacting an external provider.</p>
+  <table>
+    <tr><th>Created</th><th>Channel</th><th>To</th><th>Subject</th><th>Status</th><th>Action</th></tr>
+    <% rows.forEach(n=>{ %>
+      <tr>
+        <td><%= n.created_at %></td>
+        <td><%= n.channel %></td>
+        <td><%= n.to %></td>
+        <td><%= n.subject %></td>
+        <td><%= n.status %></td>
+        <td>
+          <% if (n.status === 'queued') { %>
+            <form method="post" action="/admin/notifications/<%= n.id %>/send-stub" class="inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button>Send Stub</button></form>
+          <% } %>
+        </td>
+      </tr>
+    <% }) %>
+  </table>
+</section>

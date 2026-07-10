@@ -1,0 +1,1 @@
+Mobile synchronization module documentation.

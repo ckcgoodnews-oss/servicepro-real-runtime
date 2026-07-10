@@ -1,0 +1,17 @@
+<h1>Estimate: <%= estimate.title %></h1>
+  <p><a class="button" href="/admin/estimates/<%= estimate.id %>/print" target="_blank">Print / Save PDF</a></p>
+  <form method="post" action="/admin/estimates/<%= estimate.id %>/send" class="inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button>Queue Email</button></form>
+<section class="card">
+  <p><strong>Customer:</strong> <%= estimate.customer ? estimate.customer.first_name + ' ' + estimate.customer.last_name : 'None' %></p>
+  <p><strong>Service:</strong> <%= estimate.service ? estimate.service.name : 'None' %></p>
+  <p><strong>Status:</strong> <%= estimate.status %></p>
+  <p><strong>Total:</strong> $<%= Number(estimate.total||0).toFixed(2) %></p>
+  <p><%= estimate.description || '' %></p>
+  <form method="post" action="/admin/estimates/<%= estimate.id %>/status" class="inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><select name="status"><% ['draft','sent','approved','declined','expired'].forEach(s=>{ %><option value="<%= s %>" <%= estimate.status===s?'selected':'' %>><%= s %></option><% }) %></select><button>Update Status</button></form>
+  <form method="post" action="/admin/estimates/<%= estimate.id %>/convert-to-job" class="inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button>Convert to Job</button></form>
+</section>
+<section class="card">
+  <h2>Line Items</h2>
+  <table><thead><tr><th>Description</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody><% estimate.items.forEach(i=>{ %><tr><td><%= i.description %></td><td><%= i.quantity %></td><td>$<%= Number(i.unit_price||0).toFixed(2) %></td><td>$<%= Number(i.total||0).toFixed(2) %></td></tr><% }) %></tbody></table>
+  <form method="post" action="/admin/estimates/<%= estimate.id %>/items" class="grid-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label>Description<input name="description" required></label><label>Qty<input name="quantity" type="number" step="0.01" value="1"></label><label>Unit Price<input name="unit_price" type="number" step="0.01" required></label><button>Add Item</button></form>
+</section>

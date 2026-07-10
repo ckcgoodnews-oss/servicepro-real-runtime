@@ -1,0 +1,17 @@
+<h1>Invoice <%= invoice.invoice_number %></h1>
+  <p><a class="button" href="/admin/invoices/<%= invoice.id %>/print" target="_blank">Print / Save PDF</a></p>
+  <form method="post" action="/admin/invoices/<%= invoice.id %>/send" class="inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button>Queue Email</button></form>
+<section class="card">
+  <p><strong>Title:</strong> <%= invoice.title %></p>
+  <p><strong>Customer:</strong> <%= invoice.customer ? invoice.customer.first_name + ' ' + invoice.customer.last_name : 'None' %></p>
+  <p><strong>Job:</strong> <%= invoice.job ? invoice.job.title : 'None' %></p>
+  <p><strong>Status:</strong> <%= invoice.status %></p>
+  <p><strong>Total:</strong> $<%= Number(invoice.total||0).toFixed(2) %></p>
+  <p><strong>Paid:</strong> $<%= Number(invoice.amount_paid||0).toFixed(2) %></p>
+  <form method="post" action="/admin/invoices/<%= invoice.id %>/payment" class="inline"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><input name="amount" type="number" step="0.01" min="0" required placeholder="Payment amount"><button>Record Payment</button></form>
+</section>
+<section class="card">
+  <h2>Line Items</h2>
+  <table><thead><tr><th>Description</th><th>Qty</th><th>Unit</th><th>Total</th></tr></thead><tbody><% invoice.items.forEach(i=>{ %><tr><td><%= i.description %></td><td><%= i.quantity %></td><td>$<%= Number(i.unit_price||0).toFixed(2) %></td><td>$<%= Number(i.total||0).toFixed(2) %></td></tr><% }) %></tbody></table>
+  <form method="post" action="/admin/invoices/<%= invoice.id %>/items" class="grid-form"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label>Description<input name="description" required></label><label>Qty<input name="quantity" type="number" step="0.01" value="1"></label><label>Unit Price<input name="unit_price" type="number" step="0.01" required></label><button>Add Item</button></form>
+</section>

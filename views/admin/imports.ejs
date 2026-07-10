@@ -1,0 +1,18 @@
+<% layout('layouts/main') %>
+<section class="card">
+  <h1>Tenant Import / Restore</h1>
+  <p class="muted">Upload a ServicePro tenant export JSON file. Use merge for safe testing; replace removes existing tenant rows first.</p>
+  <% if (message) { %><p class="success"><%= message %></p><% } %>
+  <% if (error) { %><p class="danger"><%= error %></p><% } %>
+  <form method="post" action="/admin/imports/tenant" enctype="multipart/form-data" class="grid-form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label>Import Mode
+      <select name="mode">
+        <option value="merge">Merge / Upsert</option>
+        <option value="replace">Replace tenant data</option>
+      </select>
+    </label>
+    <label>Export JSON File<input type="file" name="file" accept="application/json,.json" required></label>
+    <button>Import</button>
+  </form>
+</section>

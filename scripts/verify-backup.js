@@ -1,0 +1,1 @@
+require('dotenv').config(); const {listBackups,verifyBackup}=require('../src/services/backups'); const backups=listBackups(); if(!backups.length){ console.error('No backups found.'); process.exit(1); } const result=verifyBackup(backups[0].path); console.log(result); if(!result.ok) process.exit(1);

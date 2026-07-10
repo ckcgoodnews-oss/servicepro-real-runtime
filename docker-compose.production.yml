@@ -1,0 +1,38 @@
+services:
+  app:
+    build: .
+    container_name: servicepro-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - servicepro_uploads:/app/uploads
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: servicepro-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: servicepro
+      POSTGRES_USER: servicepro
+      POSTGRES_PASSWORD: servicepro
+    volumes:
+      - servicepro_pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: servicepro-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - servicepro_redis:/data
+
+volumes:
+  servicepro_pgdata:
+  servicepro_redis:
+  servicepro_uploads:

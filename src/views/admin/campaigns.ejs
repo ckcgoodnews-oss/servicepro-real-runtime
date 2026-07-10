@@ -1,0 +1,25 @@
+<h1>Follow-up Campaigns</h1>
+<form class="form" method="post" action="/admin/campaigns">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <label>Name <input name="name" required></label>
+  <label>Audience
+    <select name="audience">
+      <option value="all_customers">All customers</option>
+      <option value="customers_without_reviews">Customers without reviews</option>
+      <option value="customers_with_reminders">Customers with reminders</option>
+    </select>
+  </label>
+  <label>Channel
+    <select name="channel"><option value="email">Email</option><option value="sms">SMS</option></select>
+  </label>
+  <label>Subject <input name="subject"></label>
+  <label>Body <textarea name="body"></textarea></label>
+  <button>Create Campaign</button>
+</form>
+
+<table>
+<tr><th>Name</th><th>Audience</th><th>Channel</th><th>Status</th></tr>
+<% campaigns.forEach(c => { %>
+<tr><td><a href="/admin/campaigns/<%= c.id %>"><%= c.name %></a></td><td><%= c.audience %></td><td><%= c.channel %></td><td><%= c.status %></td></tr>
+<% }) %>
+</table>

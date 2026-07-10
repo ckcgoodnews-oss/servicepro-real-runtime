@@ -1,0 +1,25 @@
+const fs = require('fs');
+const required = ['apps/api/src/services/soarAutomationService.js','apps/api/src/repositories/soarAutomationRepository.js','apps/api/src/routes/soarAutomation.js','scripts/seed-soar-automation.js','packages/database/postgres/143_soar_automation.sql','docs/sprint143-soar-automation.md'];
+for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 143 patch file: ${file}`); process.exit(1); } }
+const svc = require('../apps/api/src/services/soarAutomationService');
+let playbook = svc.activatePlaybook(svc.normalizePlaybookInput({ tenantId: 'tenant_demo', name: 'Containment', triggerType: 'incident' }));
+if (playbook.code !== 'CONTAINMENT' || playbook.status !== 'active') process.exit(1);
+const connector = svc.normalizeConnectorInput({ tenantId: 'tenant_demo', name: 'IDP', allowedActions: ['revoke_sessions'] });
+if (!svc.canExecuteConnectorAction(connector, 'revoke_sessions')) process.exit(1);
+const stepA = svc.normalizeStepInput({ playbookId: 'pb1', name: 'B', sequence: 2 });
+const stepB = svc.normalizeStepInput({ playbookId: 'pb1', name: 'A', sequence: 1 });
+if ([stepA, stepB].sort(svc.stepSort)[0].name !== 'A') process.exit(1);
+let soarCase = svc.closeCase(svc.startCase(svc.normalizeCaseInput({ tenantId: 'tenant_demo', title: 'Case' })));
+if (soarCase.status !== 'completed') process.exit(1);
+let run = svc.waitApproval(svc.startRun(svc.normalizeRunInput({ tenantId: 'tenant_demo', playbookId: 'pb1' }), 'step1'), 'step1');
+if (run.status !== 'waiting_approval') process.exit(1);
+run = svc.completeRun(run, { ok: true });
+if (run.status !== 'completed') process.exit(1);
+if (svc.rollbackRun(svc.failRun(svc.normalizeRunInput({ tenantId: 'tenant_demo', playbookId: 'pb1' }), 'bad'), 'rollback').status !== 'rolled_back') process.exit(1);
+let approval = svc.approveRunApproval(svc.normalizeApprovalInput({ runId: 'run1', approverId: 'lead' }), 'ok');
+if (approval.status !== 'approved') process.exit(1);
+if (svc.rejectRunApproval({ ...approval, status: 'pending' }, 'no').status !== 'rejected') process.exit(1);
+const log = svc.normalizeLogInput({ runId: 'run1', level: 'error', message: 'bad' });
+const metrics = svc.soarMetrics({ playbooks: [playbook], connectors: [connector], cases: [{...soarCase, status: 'open'}], runs: [run], approvals: [{...approval, status: 'pending'}], logs: [log] });
+if (metrics.activePlaybooks !== 1 || metrics.activeConnectors !== 1 || metrics.openCases !== 1 || metrics.completedRuns !== 1 || metrics.pendingApprovals !== 1 || metrics.errorLogs !== 1) process.exit(1);
+console.log('Sprint 143 SOAR automation patch test passed.');

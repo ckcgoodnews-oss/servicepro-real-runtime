@@ -1,0 +1,1 @@
+<h1>Backups</h1><form method="post" action="/admin/backups"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button>Create Backup</button></form><table><tr><th>Name</th><th>Size</th></tr><% backups.forEach(b=>{ %><tr><td><%= b.name %></td><td><%= b.size %></td></tr><% }) %></table>

@@ -1,0 +1,20 @@
+<% layout('layouts/main') %>
+<section class="card">
+  <h1>Audit Logs</h1>
+  <p class="muted">Tenant-scoped security and operations event history.</p>
+  <table>
+    <thead><tr><th>When</th><th>User</th><th>Action</th><th>Entity</th><th>Entity ID</th><th>Metadata</th></tr></thead>
+    <tbody>
+      <% rows.forEach(row => { %>
+        <tr>
+          <td><%= row.created_at %></td>
+          <td><%= row.user_name %></td>
+          <td><code><%= row.action %></code></td>
+          <td><%= row.entity || '' %></td>
+          <td><small><%= row.entity_id || '' %></small></td>
+          <td><small><%= row.metadata || '' %></small></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</section>

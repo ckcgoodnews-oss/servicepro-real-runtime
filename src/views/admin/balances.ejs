@@ -1,0 +1,12 @@
+<h1>Customer Balances</h1>
+<table>
+<tr><th>Customer</th><th>Invoice Total</th><th>Payment Total</th><th>Balance</th></tr>
+<% rows.forEach(row => { %>
+<tr>
+  <td><%= row.customer.firstName %> <%= row.customer.lastName %></td>
+  <td>$<%= row.invoiceTotal %></td>
+  <td>$<%= row.paymentTotal %></td>
+  <td>$<%= row.balance %></td>
+</tr>
+<% }) %>
+</table>

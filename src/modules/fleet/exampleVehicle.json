@@ -1,0 +1,10 @@
+{
+  "vehicleNumber": "TRUCK-01",
+  "vin": "EXAMPLEVIN00000001",
+  "make": "Ford",
+  "model": "Transit",
+  "modelYear": 2024,
+  "licensePlate": "SERVICE1",
+  "status": "active",
+  "odometerMiles": 12500
+}

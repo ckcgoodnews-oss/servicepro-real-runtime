@@ -1,0 +1,5 @@
+- MFA
+- Secret rotation
+- TLS
+- WAF
+- Least privilege

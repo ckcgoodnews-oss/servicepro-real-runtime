@@ -1,0 +1,24 @@
+{
+  "assemblyCode": "WH-INSTALL-BASIC",
+  "name": "Basic Water Heater Installation",
+  "items": [
+    {
+      "lineType": "labor",
+      "name": "Licensed plumber labor",
+      "quantity": 3,
+      "unitPrice": 125.0
+    },
+    {
+      "lineType": "material",
+      "name": "Supply lines and fittings",
+      "quantity": 1,
+      "unitPrice": 85.0
+    },
+    {
+      "lineType": "permit",
+      "name": "Permit allowance",
+      "quantity": 1,
+      "unitPrice": 75.0
+    }
+  ]
+}

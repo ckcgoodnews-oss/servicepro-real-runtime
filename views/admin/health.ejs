@@ -1,0 +1,18 @@
+<% layout('layouts/main') %>
+<section class="card">
+  <h1>System Health</h1>
+  <p class="muted">Operational checks for local or hosted deployment.</p>
+  <table>
+    <thead><tr><th>Check</th><th>Status</th><th>Value</th></tr></thead>
+    <tbody>
+      <% checks.forEach(check => { %>
+        <tr>
+          <td><%= check.name %></td>
+          <td><span class="badge <%= check.ok ? 'good' : 'bad' %>"><%= check.ok ? 'OK' : 'Needs Attention' %></span></td>
+          <td><%= check.value %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+  <p><a href="/healthz">/healthz</a> · <a href="/readyz">/readyz</a></p>
+</section>

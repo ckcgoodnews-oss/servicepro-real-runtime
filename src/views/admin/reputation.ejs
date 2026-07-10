@@ -1,0 +1,22 @@
+<h1>Reputation Dashboard</h1>
+<div class="kpis">
+  <div><strong><%= metrics.averageRating.toFixed(1) %></strong><span>Average Rating</span></div>
+  <div><strong><%= reviews.length %></strong><span>Total Reviews</span></div>
+  <div><strong><%= metrics.pendingReviewRequests %></strong><span>Pending Requests</span></div>
+  <div><strong><%= metrics.campaignCount %></strong><span>Campaigns</span></div>
+</div>
+
+<div class="grid">
+  <a class="card" href="/admin/reviews"><h3>Reviews</h3></a>
+  <a class="card" href="/admin/review-requests"><h3>Review Requests</h3></a>
+  <a class="card" href="/admin/referrals"><h3>Referral Sources</h3></a>
+  <a class="card" href="/admin/reminders"><h3>Service Reminders</h3></a>
+</div>
+
+<h2>Referral Report</h2>
+<table>
+<tr><th>Source</th><th>Category</th><th>Customers</th></tr>
+<% referralRows.forEach(row => { %>
+<tr><td><%= row.source.name %></td><td><%= row.source.category %></td><td><%= row.count %></td></tr>
+<% }) %>
+</table>

@@ -1,0 +1,9 @@
+<%- include('../layouts/main', {title, body: `
+<h1>Production Hardening</h1>
+<section class="card">
+  <table><thead><tr><th>Check</th><th>Status</th><th>Value</th></tr></thead><tbody>
+    ${checks.map(c=>`<tr><td>${c.name}</td><td>${c.ok?'✅ OK':'⚠️ Needs attention'}</td><td>${c.value}</td></tr>`).join('')}
+  </tbody></table>
+</section>
+<section class="card"><h2>Go-Live Minimum</h2><ul><li>Set NODE_ENV=production</li><li>Use a strong 32+ character SESSION_SECRET</li><li>Put the app behind HTTPS</li><li>Back up data folder or PostgreSQL database</li><li>Change all default passwords</li><li>Configure domain DNS and SSL</li></ul></section>
+` }) %>

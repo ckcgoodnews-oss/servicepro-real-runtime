@@ -1,0 +1,25 @@
+<h1>Edit Job</h1>
+<p><a href="/admin/jobs/<%= job.id %>">← Back to job</a></p>
+<section class="card">
+  <form method="post" action="/admin/jobs/<%= job.id %>" class="grid-form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label>Title<input name="title" value="<%= job.title %>" required></label>
+    <label>Customer<select name="customer_id"><option value="">None</option><% customers.forEach(c=>{ %><option value="<%= c.id %>" <%= job.customer_id===c.id?'selected':'' %>><%= c.first_name %> <%= c.last_name %></option><% }) %></select></label>
+    <label>Service<select name="service_id"><option value="">None</option><% services.forEach(s=>{ %><option value="<%= s.id %>" <%= job.service_id===s.id?'selected':'' %>><%= s.name %></option><% }) %></select></label>
+    <label>Technician<select name="assigned_user_id"><option value="">Unassigned</option><% techs.forEach(t=>{ %><option value="<%= t.id %>" <%= job.assigned_user_id===t.id?'selected':'' %>><%= t.name %></option><% }) %></select></label>
+    <label>Status<select name="status"><% statuses.forEach(s=>{ %><option value="<%= s %>" <%= job.status===s?'selected':'' %>><%= s %></option><% }) %></select></label>
+    <label>Priority<select name="priority"><% ['normal','urgent','emergency'].forEach(p=>{ %><option value="<%= p %>" <%= job.priority===p?'selected':'' %>><%= p %></option><% }) %></select></label>
+    <label>Scheduled<input name="scheduled_at" type="datetime-local" value="<%= job.scheduled_at || '' %>"></label>
+    <label>Estimate<input name="estimated_price" type="number" step="0.01" min="0" value="<%= job.estimated_price || 0 %>"></label>
+    <label>Final Price<input name="final_price" type="number" step="0.01" min="0" value="<%= job.final_price || 0 %>"></label>
+    <label class="span-2">Description<textarea name="description"><%= job.description || '' %></textarea></label>
+    <button>Save Job</button>
+  </form>
+</section>
+<section class="card danger-zone">
+  <h2>Delete Job</h2>
+  <form method="post" action="/admin/jobs/<%= job.id %>/delete" onsubmit="return confirm('Delete this job and its notes/media records?')">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <button class="danger">Delete Job</button>
+  </form>
+</section>

@@ -1,0 +1,2 @@
+# config
+Shared package scaffold.

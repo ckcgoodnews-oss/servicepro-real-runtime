@@ -1,0 +1,51 @@
+<h1><%= job.title %></h1>
+<p><a href="/admin/jobs">← Jobs</a> · <a href="/admin/jobs/<%= job.id %>/edit">Edit job</a></p>
+<section class="grid two">
+  <div class="card">
+    <h2>Job Details</h2>
+    <p><strong>Status:</strong> <%= job.status %></p>
+    <p><strong>Priority:</strong> <%= job.priority %></p>
+    <p><strong>Customer:</strong> <%= customer ? customer.first_name + ' ' + customer.last_name : 'None' %></p>
+    <p><strong>Service:</strong> <%= service ? service.name : 'None' %></p>
+    <p><strong>Technician:</strong> <%= assigned ? assigned.name : 'Unassigned' %></p>
+    <p><strong>Scheduled:</strong> <%= job.scheduled_at || '' %></p>
+    <p><strong>Estimated:</strong> $<%= Number(job.estimated_price || 0).toFixed(2) %></p>
+    <p><strong>Final:</strong> $<%= Number(job.final_price || 0).toFixed(2) %></p>
+    <p><%= job.description || '' %></p>
+    <form method="post" action="/admin/jobs/<%= job.id %>/status">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="hidden" name="return_to" value="/admin/jobs/<%= job.id %>">
+      <label>Update Status<select name="status"><% statuses.forEach(s=>{ %><option value="<%= s %>" <%= job.status===s?'selected':'' %>><%= s %></option><% }) %></select></label>
+      <button>Save Status</button>
+    </form>
+  </div>
+  <div class="card">
+    <h2>Customer Contact</h2>
+    <% if(customer){ %>
+      <p><%= customer.phone || '' %></p>
+      <p><%= customer.email || '' %></p>
+      <p><%= customer.address || '' %><br><%= customer.city || '' %> <%= customer.state || '' %> <%= customer.zip || '' %></p>
+      <p><%= customer.notes || '' %></p>
+    <% } else { %><p>No customer selected.</p><% } %>
+  </div>
+</section>
+<section class="grid two">
+  <div class="card">
+    <h2>Notes</h2>
+    <form method="post" action="/admin/jobs/<%= job.id %>/notes">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <textarea name="note" required placeholder="Add diagnostic notes, customer approval, or technician update"></textarea>
+      <button>Add Note</button>
+    </form>
+    <% notes.forEach(n=>{ %><div class="note"><strong><%= n.user_name %></strong><br><%= n.note %><br><small><%= n.created_at %></small></div><% }) %>
+  </div>
+  <div class="card">
+    <h2>Media</h2>
+    <form method="post" action="/admin/jobs/<%= job.id %>/media" enctype="multipart/form-data">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="file" name="file" accept="image/*,application/pdf" required>
+      <button>Upload</button>
+    </form>
+    <% media.forEach(m=>{ %><div class="note"><a href="<%= m.file_url %>" target="_blank"><%= m.original_name %></a><br><small><%= m.created_at %></small></div><% }) %>
+  </div>
+</section>

@@ -1,0 +1,33 @@
+<h1>Review Requests</h1>
+<form class="form" method="post" action="/admin/review-requests">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <label>Customer
+    <select name="customerId">
+      <% customers.forEach(c => { %><option value="<%= c.id %>"><%= c.firstName %> <%= c.lastName %></option><% }) %>
+    </select>
+  </label>
+  <label>Channel
+    <select name="channel"><option value="email">Email</option><option value="sms">SMS</option></select>
+  </label>
+  <label>Review URL <input name="reviewUrl"></label>
+  <button>Queue Request</button>
+</form>
+
+<table>
+<tr><th>Customer</th><th>Channel</th><th>Status</th><th>Action</th></tr>
+<% requests.forEach(r => { const c = customers.find(x => x.id === r.customerId) || {}; %>
+<tr>
+  <td><%= c.firstName || r.customerId %> <%= c.lastName || '' %></td>
+  <td><%= r.channel %></td>
+  <td><%= r.status %></td>
+  <td>
+    <% if (r.status === 'pending') { %>
+    <form method="post" action="/admin/review-requests/<%= r.id %>/mark-sent">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button>Mark Sent</button>
+    </form>
+    <% } %>
+  </td>
+</tr>
+<% }) %>
+</table>

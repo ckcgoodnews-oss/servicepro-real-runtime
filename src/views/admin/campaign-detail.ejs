@@ -1,0 +1,21 @@
+<h1><%= campaign.name %></h1>
+<div class="card">
+  <p><strong>Audience:</strong> <%= campaign.audience %></p>
+  <p><strong>Channel:</strong> <%= campaign.channel %></p>
+  <p><strong>Status:</strong> <%= campaign.status %></p>
+  <p><strong>Subject:</strong> <%= campaign.subject %></p>
+  <p><%= campaign.body %></p>
+</div>
+
+<h2>Recipient Preview</h2>
+<table>
+<tr><th>Name</th><th>Email</th><th>Phone</th></tr>
+<% recipients.forEach(c => { %>
+<tr><td><%= c.firstName %> <%= c.lastName %></td><td><%= c.email %></td><td><%= c.phone %></td></tr>
+<% }) %>
+</table>
+
+<form method="post" action="/admin/campaigns/<%= campaign.id %>/queue">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <button>Queue Campaign</button>
+</form>

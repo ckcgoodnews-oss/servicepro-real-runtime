@@ -1,0 +1,7 @@
+<h1>Webhook Deliveries</h1>
+<table>
+<tr><th>Event</th><th>Status</th><th>Attempts</th><th>Created</th></tr>
+<% deliveries.forEach(d => { %>
+<tr><td><%= d.eventName %></td><td><%= d.status %></td><td><%= d.attempts %></td><td><%= d.createdAt %></td></tr>
+<% }) %>
+</table>

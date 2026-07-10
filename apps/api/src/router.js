@@ -1,0 +1,293 @@
+const { parseJsonBody, sendJson, notFound } = require('./utils/http');
+const { tenantMiddleware } = require('./middleware/tenant');
+const { authGuard } = require('./middleware/authGuard');
+const { portalAuthGuard } = require('./middleware/portalAuthGuard');
+const { requirePermission } = require('./middleware/requirePermission');
+const { attachAuditCompletion } = require('./middleware/requestAudit');
+const { attachRequestId } = require('./middleware/requestId');
+const { attachRequestMetrics } = require('./middleware/requestMetrics');
+const { applySecurityHeaders } = require('./middleware/securityHeaders');
+const { applyCors } = require('./middleware/cors');
+const { rejectIfPayloadTooLarge } = require('./middleware/bodyLimit');
+const { applyRateLimit } = require('./middleware/rateLimit');
+const { applyRouteValidation } = require('./middleware/routeValidation');
+const { buildHealth, buildReadiness } = require('./services/healthService');
+const { PERMISSIONS } = require('./auth/permissions');
+const { attachRequestContext } = require('./context/requestContext');
+
+const auth = require('./routes/auth');
+const portal = require('./routes/portal');
+const tenantAdmin = require('./routes/tenantAdmin');
+const workflows = require('./routes/workflows');
+const notifications = require('./routes/notifications');
+const reports = require('./routes/reports');
+const exportsRoute = require('./routes/exports');
+const audit = require('./routes/audit');
+const observability = require('./routes/observability');
+const security = require('./routes/security');
+const integrity = require('./routes/integrity');
+const customers = require('./routes/customers');
+const jobs = require('./routes/jobs');
+const services = require('./routes/services');
+const estimates = require('./routes/estimates');
+const invoices = require('./routes/invoices');
+const payments = require('./routes/payments');
+const technicians = require('./routes/technicians');
+const appointments = require('./routes/appointments');
+const dispatch = require('./routes/dispatch');
+const inventory = require('./routes/inventory');
+const materials = require('./routes/materials');
+
+async function router(req, res) {
+  req.context = {};
+  attachRequestId(req, res);
+  applySecurityHeaders(req, res);
+
+  if (applyCors(req, res)) return;
+  if (rejectIfPayloadTooLarge(req, res)) return;
+
+  if (req.url === '/healthz') return sendJson(res, 200, buildHealth());
+  if (req.url === '/readyz') return sendJson(res, 200, buildReadiness());
+
+  tenantMiddleware(req);
+  attachRequestContext(req);
+
+  if (applyRateLimit(req, res)) return;
+
+  attachAuditCompletion(req, res);
+  attachRequestMetrics(req, res);
+
+  try {
+    if (['POST', 'PATCH', 'PUT'].includes(req.method)) req.body = await parseJsonBody(req);
+    else req.body = {};
+  } catch (err) {
+    return sendJson(res, err.status || 400, { error: { code: err.code || 'invalid_json', message: err.message } });
+  }
+
+  if (applyRouteValidation(req, res)) return;
+
+  if (req.url === '/auth/login' && req.method === 'POST') return auth.login(req, res);
+  if (req.url === '/portal/login' && req.method === 'POST') return portal.login(req, res);
+  if (req.url === '/tenant-profile' && req.method === 'GET') return tenantAdmin.getPublicProfile(req, res);
+
+  if (req.url.startsWith('/portal/api/')) {
+    if (!portalAuthGuard(req, res)) return;
+    if (req.url === '/portal/api/me' && req.method === 'GET') return portal.me(req, res);
+    if (req.url === '/portal/api/tenant-profile' && req.method === 'GET') return tenantAdmin.getPublicProfile(req, res);
+    if (req.url === '/portal/api/bookings' && req.method === 'GET') return portal.listBookings(req, res);
+    if (req.url === '/portal/api/bookings' && req.method === 'POST') return portal.createBooking(req, res);
+    if (req.url === '/portal/api/invoices' && req.method === 'GET') return portal.listInvoices(req, res);
+    if (req.url === '/portal/api/estimates' && req.method === 'GET') return portal.listEstimates(req, res);
+    return notFound(res);
+  }
+
+  if (req.url.startsWith('/api/')) {
+    const authorized = await authGuard(req, res);
+    if (!authorized) return;
+  }
+
+  if (req.url === '/api/v1/me' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.USERS_SELF_READ)(req, res)) return;
+    return auth.me(req, res);
+  }
+  if (req.url === '/api/v1/authz' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.ADMIN_AUTHZ_READ)(req, res)) return;
+    return auth.authz(req, res);
+  }
+
+  if (req.url === '/api/v1/workflows' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.WORKFLOWS_READ)(req, res)) return;
+    return workflows.listRules(req, res);
+  }
+  if (req.url === '/api/v1/workflows' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.WORKFLOWS_WRITE)(req, res)) return;
+    return workflows.upsertRule(req, res);
+  }
+  if (req.url === '/api/v1/workflow-events' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.WORKFLOWS_READ)(req, res)) return;
+    return workflows.listEvents(req, res);
+  }
+  const jobTransitionMatch = req.url.match(/^\/api\/v1\/jobs\/([^/]+)\/transition$/);
+  if (jobTransitionMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.WORKFLOWS_TRANSITION)(req, res)) return;
+    return workflows.transitionJob(req, res, jobTransitionMatch[1]);
+  }
+
+  if (req.url === '/api/v1/tenant/settings' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.TENANT_SETTINGS_READ)(req, res)) return;
+    return tenantAdmin.getSettings(req, res);
+  }
+  if (req.url === '/api/v1/tenant/settings' && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.TENANT_SETTINGS_WRITE)(req, res)) return;
+    return tenantAdmin.updateSettings(req, res);
+  }
+  if (req.url === '/api/v1/tenant/branding' && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.TENANT_SETTINGS_WRITE)(req, res)) return;
+    return tenantAdmin.updateBranding(req, res);
+  }
+  if (req.url === '/api/v1/tenant/features' && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.TENANT_SETTINGS_WRITE)(req, res)) return;
+    return tenantAdmin.updateFeatures(req, res);
+  }
+
+  if (req.url === '/api/v1/integrity' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.INTEGRITY_READ)(req, res)) return;
+    return integrity.list(req, res);
+  }
+  if (req.url === '/api/v1/integrity/run' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.INTEGRITY_RUN)(req, res)) return;
+    return integrity.run(req, res);
+  }
+
+  if (req.url === '/api/v1/security/events' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUDIT_READ)(req, res)) return;
+    return security.events(req, res);
+  }
+  if (req.url === '/api/v1/security/rate-limits' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUDIT_READ)(req, res)) return;
+    return security.rateLimits(req, res);
+  }
+
+  if (req.url === '/api/v1/observability/metrics' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUDIT_READ)(req, res)) return;
+    return observability.metrics(req, res);
+  }
+  if (req.url === '/api/v1/observability/summary' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUDIT_READ)(req, res)) return;
+    return observability.summary(req, res);
+  }
+
+  if (req.url === '/api/v1/audit' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUDIT_READ)(req, res)) return;
+    return audit.list(req, res);
+  }
+  if (req.url === '/api/v1/audit' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.AUDIT_WRITE)(req, res)) return;
+    return audit.create(req, res);
+  }
+
+  if (req.url === '/api/v1/exports' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.REPORTS_EXPORT)(req, res)) return;
+    return exportsRoute.list(req, res);
+  }
+  if (req.url === '/api/v1/exports' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.REPORTS_EXPORT)(req, res)) return;
+    return exportsRoute.create(req, res);
+  }
+
+  if (req.url === '/api/v1/reports' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.REPORTS_READ)(req, res)) return;
+    return reports.catalog(req, res);
+  }
+  if (req.url === '/api/v1/reports/dashboard' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.REPORTS_READ)(req, res)) return;
+    return reports.dashboard(req, res);
+  }
+  const reportMatch = req.url.match(/^\/api\/v1\/reports\/([^/]+)$/);
+  if (reportMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.REPORTS_READ)(req, res)) return;
+    return reports.run(req, res, reportMatch[1]);
+  }
+
+  if (req.url === '/api/v1/notifications/templates' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.NOTIFICATIONS_READ)(req, res)) return;
+    return notifications.listTemplates(req, res);
+  }
+  if (req.url === '/api/v1/notifications/templates' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.NOTIFICATIONS_WRITE)(req, res)) return;
+    return notifications.createTemplate(req, res);
+  }
+  if (req.url === '/api/v1/notifications' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.NOTIFICATIONS_READ)(req, res)) return;
+    return notifications.listNotifications(req, res);
+  }
+  if (req.url === '/api/v1/notifications' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.NOTIFICATIONS_WRITE)(req, res)) return;
+    return notifications.queueNotification(req, res);
+  }
+  if (req.url === '/api/v1/notifications/process' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.NOTIFICATIONS_PROCESS)(req, res)) return;
+    return notifications.processQueued(req, res);
+  }
+
+  if (req.url === '/api/v1/portal/accounts' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.PORTAL_ACCOUNTS_READ)(req, res)) return;
+    return portal.listAccounts(req, res);
+  }
+  if (req.url === '/api/v1/portal/accounts' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.PORTAL_ACCOUNTS_WRITE)(req, res)) return;
+    return portal.createAccount(req, res);
+  }
+  if (req.url === '/api/v1/portal/bookings' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.PORTAL_BOOKINGS_READ)(req, res)) return;
+    return Promise.resolve(req.context.repositories.portalBookings.list(req.context.tenantId)).then(data => sendJson(res, 200, { data }));
+  }
+
+  const routeSets = [
+    ['customers', customers, PERMISSIONS.CUSTOMERS_READ, PERMISSIONS.CUSTOMERS_WRITE, PERMISSIONS.CUSTOMERS_DELETE],
+    ['jobs', jobs, PERMISSIONS.JOBS_READ, PERMISSIONS.JOBS_WRITE, PERMISSIONS.JOBS_DELETE],
+    ['services', services, PERMISSIONS.SERVICES_READ, PERMISSIONS.SERVICES_WRITE, PERMISSIONS.SERVICES_DELETE],
+    ['estimates', estimates, PERMISSIONS.ESTIMATES_READ, PERMISSIONS.ESTIMATES_WRITE, PERMISSIONS.ESTIMATES_DELETE],
+    ['invoices', invoices, PERMISSIONS.INVOICES_READ, PERMISSIONS.INVOICES_WRITE, PERMISSIONS.INVOICES_DELETE],
+    ['payments', payments, PERMISSIONS.PAYMENTS_READ, PERMISSIONS.PAYMENTS_WRITE, PERMISSIONS.PAYMENTS_DELETE],
+    ['technicians', technicians, PERMISSIONS.TECHNICIANS_READ, PERMISSIONS.TECHNICIANS_WRITE, PERMISSIONS.TECHNICIANS_WRITE],
+    ['appointments', appointments, PERMISSIONS.SCHEDULE_READ, PERMISSIONS.SCHEDULE_WRITE, PERMISSIONS.SCHEDULE_DELETE],
+    ['inventory', inventory, PERMISSIONS.INVENTORY_READ, PERMISSIONS.INVENTORY_WRITE, PERMISSIONS.INVENTORY_DELETE]
+  ];
+
+  for (const [name, handler, readPerm, writePerm, deletePerm] of routeSets) {
+    if (req.url === `/api/v1/${name}` && req.method === 'GET') {
+      if (!requirePermission(readPerm)(req, res)) return;
+      return handler.list(req, res);
+    }
+    if (req.url === `/api/v1/${name}` && req.method === 'POST') {
+      if (!requirePermission(writePerm)(req, res)) return;
+      return handler.create(req, res);
+    }
+    const adjustMatch = req.url.match(new RegExp(`^/api/v1/${name}/([^/]+)/adjust$`));
+    if (adjustMatch && req.method === 'POST' && handler.adjust) {
+      if (!requirePermission(writePerm)(req, res)) return;
+      return handler.adjust(req, res, adjustMatch[1]);
+    }
+    const match = req.url.match(new RegExp(`^/api/v1/${name}/([^/]+)$`));
+    if (match && req.method === 'GET' && handler.get) {
+      if (!requirePermission(readPerm)(req, res)) return;
+      return handler.get(req, res, match[1]);
+    }
+    if (match && req.method === 'PATCH' && handler.update) {
+      if (!requirePermission(writePerm)(req, res)) return;
+      return handler.update(req, res, match[1]);
+    }
+    if (match && req.method === 'DELETE' && handler.remove) {
+      if (!requirePermission(deletePerm)(req, res)) return;
+      return handler.remove(req, res, match[1]);
+    }
+  }
+
+  if (req.url === '/api/v1/materials' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MATERIALS_READ)(req, res)) return;
+    return materials.list(req, res);
+  }
+  if (req.url === '/api/v1/materials' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.MATERIALS_WRITE)(req, res)) return;
+    return materials.create(req, res);
+  }
+
+  if (req.url === '/api/v1/dispatch' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.DISPATCH_READ)(req, res)) return;
+    return dispatch.list(req, res);
+  }
+  if (req.url === '/api/v1/dispatch' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.DISPATCH_WRITE)(req, res)) return;
+    return dispatch.assign(req, res);
+  }
+  const dispatchMatch = req.url.match(/^\/api\/v1\/dispatch\/([^/]+)\/status$/);
+  if (dispatchMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.DISPATCH_WRITE)(req, res)) return;
+    return dispatch.updateStatus(req, res, dispatchMatch[1]);
+  }
+
+  return notFound(res);
+}
+
+module.exports = { router };

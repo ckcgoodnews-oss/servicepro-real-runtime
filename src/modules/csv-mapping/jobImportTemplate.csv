@@ -1,0 +1,2 @@
+customer_email,job_title,service_type,status,scheduled_date,estimated_price,final_price,notes
+maria@example.com,Kitchen sink clog,Drain Cleaning,completed,2026-07-01,225.00,275.00,Imported example job

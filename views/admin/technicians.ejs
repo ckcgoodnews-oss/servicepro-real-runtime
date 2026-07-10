@@ -1,0 +1,17 @@
+<h1>Technicians</h1>
+<section class="card">
+  <h2>Add Technician</h2>
+  <form method="post" action="/admin/technicians" class="grid-form">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <label>Name<input name="name" required></label>
+    <label>Email<input name="email" type="email" required></label>
+    <label>Temporary Password<input name="password" value="ChangeMe123!"></label>
+    <button>Create Technician</button>
+  </form>
+</section>
+<section class="card">
+  <h2>Technician Accounts</h2>
+  <table><thead><tr><th>Name</th><th>Email</th><th>Active</th></tr></thead><tbody>
+  <% rows.forEach(r=>{ %><tr><td><%= r.name %></td><td><%= r.email %></td><td><%= r.active ? 'Yes' : 'No' %></td></tr><% }) %>
+  </tbody></table>
+</section>

@@ -1,0 +1,19 @@
+<section class="card narrow">
+  <h1>Customer Portal Access</h1>
+  <% if (submitted) { %>
+    <p>If that email matches a customer record, a portal link has been queued for sending.</p>
+    <p class="muted">In this sprint, outbound email is stored in the notification queue for installer/developer review.</p>
+  <% } else { %>
+    <% if (error) { %><p class="alert"><%= error %></p><% } %>
+    <form method="post" action="/portal/request" class="stacked">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <label>Business</label>
+      <select name="tenant_id" required>
+        <% tenants.forEach(t => { %><option value="<%= t.id %>"><%= t.name %></option><% }) %>
+      </select>
+      <label>Email on file</label>
+      <input name="email" type="email" required>
+      <button>Request Portal Link</button>
+    </form>
+  <% } %>
+</section>

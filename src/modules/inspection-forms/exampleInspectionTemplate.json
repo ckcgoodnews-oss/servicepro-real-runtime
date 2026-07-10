@@ -1,0 +1,8 @@
+{
+  "name": "Plumbing Safety Inspection",
+  "fields": [
+    { "key": "water_pressure", "label": "Water pressure checked", "type": "boolean", "required": true },
+    { "key": "visible_leaks", "label": "Visible leaks", "type": "boolean", "required": true },
+    { "key": "notes", "label": "Technician notes", "type": "textarea", "required": false }
+  ]
+}

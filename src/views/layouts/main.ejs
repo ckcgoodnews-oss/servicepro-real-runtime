@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title><%= title %> | <%= appName %></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/public/css/app.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/"><%= currentTenant ? currentTenant.name : appName %></a>
+  <nav>
+    <a href="/">Site</a>
+    <% if (currentUser) { %>
+      <a href="/admin">Admin</a>
+      <a href="/admin/reputation">Reputation</a>
+      <a href="/admin/reminders">Reminders</a>
+      <a href="/admin/campaigns">Campaigns</a>
+      <form class="inline" method="post" action="/auth/logout">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button>Logout</button>
+      </form>
+    <% } else { %>
+      <a href="/auth/login">Login</a>
+    <% } %>
+  </nav>
+</header>
+<main class="container">
+  <% flash.error.forEach(m => { %><div class="alert error"><%= m %></div><% }) %>
+  <% flash.success.forEach(m => { %><div class="alert success"><%= m %></div><% }) %>
+  <%- body %>
+</main>
+</body>
+</html>

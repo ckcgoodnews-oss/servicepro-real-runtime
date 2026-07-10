@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "ServicePro Mobile",
+    "slug": "servicepro-mobile",
+    "version": "0.34.0",
+    "orientation": "portrait",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  }
+}

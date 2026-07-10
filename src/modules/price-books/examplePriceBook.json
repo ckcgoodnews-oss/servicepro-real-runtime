@@ -1,0 +1,24 @@
+{
+  "name": "Standard Plumbing Price Book",
+  "currencyCode": "USD",
+  "items": [
+    {
+      "itemCode": "DRAIN-CLEAN-001",
+      "itemType": "service",
+      "name": "Standard drain cleaning",
+      "unit": "each",
+      "unitCost": 85.0,
+      "unitPrice": 225.0,
+      "taxable": true
+    },
+    {
+      "itemCode": "WH-DIAG-001",
+      "itemType": "service",
+      "name": "Water heater diagnostic",
+      "unit": "each",
+      "unitCost": 45.0,
+      "unitPrice": 149.0,
+      "taxable": true
+    }
+  ]
+}

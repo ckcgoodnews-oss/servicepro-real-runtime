@@ -1,0 +1,26 @@
+<h1>Accounting Settings</h1>
+<form class="form" method="post" action="/admin/accounting">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <label>Default Tax Rate
+    <input name="defaultTaxRate" type="number" step="0.0001" value="<%= settings.defaultTaxRate %>">
+  </label>
+  <label>Accounting Basis
+    <select name="accountingBasis">
+      <option value="cash" <%= settings.accountingBasis === 'cash' ? 'selected' : '' %>>Cash</option>
+      <option value="accrual" <%= settings.accountingBasis === 'accrual' ? 'selected' : '' %>>Accrual</option>
+    </select>
+  </label>
+  <label>Export Format
+    <select name="exportFormat">
+      <option value="csv" <%= settings.exportFormat === 'csv' ? 'selected' : '' %>>CSV</option>
+    </select>
+  </label>
+  <button>Save Settings</button>
+</form>
+
+<div class="grid">
+  <a class="card" href="/admin/accounting/invoices.csv"><h3>Download Invoices CSV</h3></a>
+  <a class="card" href="/admin/accounting/payments.csv"><h3>Download Payments CSV</h3></a>
+  <a class="card" href="/admin/accounting/balances"><h3>Customer Balances</h3></a>
+  <a class="card" href="/admin/accounting/reconciliation"><h3>Payment Reconciliation</h3></a>
+</div>

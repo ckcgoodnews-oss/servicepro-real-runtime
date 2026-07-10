@@ -1,0 +1,35 @@
+<h1>Service Reminders</h1>
+<form class="form" method="post" action="/admin/reminders">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <label>Customer
+    <select name="customerId">
+      <% customers.forEach(c => { %><option value="<%= c.id %>"><%= c.firstName %> <%= c.lastName %></option><% }) %>
+    </select>
+  </label>
+  <label>Service Type <input name="serviceType" value="Annual inspection"></label>
+  <label>Due Date <input name="dueDate" type="date" required></label>
+  <label>Channel
+    <select name="channel"><option value="email">Email</option><option value="sms">SMS</option><option value="phone">Phone</option></select>
+  </label>
+  <button>Create Reminder</button>
+</form>
+
+<table>
+<tr><th>Customer</th><th>Service</th><th>Due</th><th>Status</th><th>Action</th></tr>
+<% reminders.forEach(r => { const c = customers.find(x => x.id === r.customerId) || {}; %>
+<tr>
+  <td><%= c.firstName || r.customerId %> <%= c.lastName || '' %></td>
+  <td><%= r.serviceType %></td>
+  <td><%= r.dueDate %></td>
+  <td><%= r.status %></td>
+  <td>
+    <% if (r.status !== 'completed') { %>
+    <form method="post" action="/admin/reminders/<%= r.id %>/complete">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button>Complete</button>
+    </form>
+    <% } %>
+  </td>
+</tr>
+<% }) %>
+</table>

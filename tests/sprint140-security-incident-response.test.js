@@ -1,0 +1,23 @@
+const fs = require('fs');
+const required = ['apps/api/src/services/securityIncidentResponseService.js','apps/api/src/repositories/securityIncidentResponseRepository.js','apps/api/src/routes/securityIncidentResponse.js','scripts/seed-security-incident-response.js','packages/database/postgres/140_security_incident_response.sql','docs/sprint140-security-incident-response.md'];
+for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 140 patch file: ${file}`); process.exit(1); } }
+const svc = require('../apps/api/src/services/securityIncidentResponseService');
+let incident = svc.normalizeIncidentInput({ tenantId: 'tenant_demo', title: 'Credential compromise', incidentType: 'credential_compromise', affectedUserIds: Array.from({ length: 12 }, (_, i) => `u${i}`), businessImpact: 'customer impact' });
+if (svc.deriveSeverity(incident) !== 'high') process.exit(1);
+incident = svc.startInvestigation(incident, 'soc');
+incident = svc.transitionIncident(incident, 'contained', '2026-07-07T00:00:00.000Z');
+incident = svc.transitionIncident(incident, 'resolved', '2026-07-07T01:00:00.000Z');
+incident = svc.transitionIncident(incident, 'closed', '2026-07-07T02:00:00.000Z');
+if (incident.status !== 'closed' || !incident.closedAt) process.exit(1);
+let task = svc.normalizeTaskInput({ incidentId: 'inc1', title: 'Disable session', taskType: 'containment' });
+if (svc.blockTask(task).status !== 'blocked') process.exit(1);
+task = svc.completeTask(task);
+const evidence = svc.normalizeEvidenceInput({ incidentId: 'inc1', title: 'SIEM logs', evidenceType: 'log' });
+let comm = svc.normalizeCommunicationInput({ incidentId: 'inc1', audience: 'internal', subject: 'Update' });
+comm = svc.sendCommunication(svc.approveCommunication(comm, 'lead'));
+let review = svc.completeReview(svc.normalizeReviewInput({ incidentId: 'inc1' }), 'weak MFA', 'tighten admin controls');
+let action = svc.completeAction(svc.normalizeActionInput({ incidentId: 'inc1', title: 'Enforce MFA', severity: 'high' }));
+if (svc.acceptActionRisk({ ...action, status: 'open' }, 'legacy exception').status !== 'accepted_risk') process.exit(1);
+const metrics = svc.incidentMetrics({ incidents: [{ ...incident, status: 'investigating', severity: 'critical' }], tasks: [{ ...task, status: 'open' }], evidence: [evidence], communications: [comm], reviews: [review], actions: [{ ...action, status: 'open' }] });
+if (metrics.openIncidents !== 1 || metrics.criticalIncidents !== 1 || metrics.sentCommunications !== 1 || metrics.completedReviews !== 1) process.exit(1);
+console.log('Sprint 140 security incident response patch test passed.');

@@ -1,0 +1,20 @@
+{
+  "name": "servicepro-real-runtime",
+  "version": "1.51.0",
+  "main": "apps/api/src/server.js",
+  "scripts": {
+    "dev": "node apps/api/src/server.js",
+    "start": "node apps/api/src/server.js",
+    "start:prod": "NODE_ENV=production node apps/api/src/server.js",
+    "reset": "node scripts/reset-data.js",
+    "migrate": "node scripts/run-migrations.js",
+    "migrations:check": "node scripts/check-migrations.js",
+    "seed:privacy": "node scripts/seed-privacy-dsar-ops.js",
+    "test": "node tests/sprint151-privacy-dsar-ops.test.js",
+    "client:test": "node scripts/api-smoke-client.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "pg": "^8.13.1"
+  }
+}

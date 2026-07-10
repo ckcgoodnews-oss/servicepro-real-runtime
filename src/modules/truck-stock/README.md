@@ -1,0 +1,1 @@
+truck-stock module foundation.

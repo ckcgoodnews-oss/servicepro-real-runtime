@@ -1,0 +1,30 @@
+{
+  "name": "New Lead Follow-up",
+  "trigger": {
+    "triggerType": "lead.created",
+    "configuration": {
+      "source": "any"
+    }
+  },
+  "actions": [
+    {
+      "actionType": "update.lead_score",
+      "configuration": {
+        "scoreDelta": 10
+      }
+    },
+    {
+      "actionType": "send.email",
+      "configuration": {
+        "template": "new_lead_auto_reply"
+      }
+    },
+    {
+      "actionType": "create.follow_up",
+      "configuration": {
+        "reason": "new_lead",
+        "dueInMinutes": 30
+      }
+    }
+  ]
+}

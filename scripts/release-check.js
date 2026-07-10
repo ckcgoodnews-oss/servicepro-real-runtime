@@ -1,0 +1,1 @@
+require('dotenv').config(); const {summary}=require('../src/services/securityAudit'); const s=summary(); console.table(s.rows); if(s.failed){ console.error('Release check failed.'); process.exit(1); } console.log('Release check passed.');

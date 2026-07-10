@@ -1,0 +1,22 @@
+<%- include('../layouts/main', {title, body: `
+<h1>Billing & Plan</h1>
+<section class="grid">
+  <div class="card"><h2>Current Plan</h2><p><strong>${subscription.plan.name}</strong> — ${subscription.status}</p><p>Users: ${usage.users} / ${subscription.plan.max_users}</p><p>Active jobs: ${usage.active_jobs} / ${subscription.plan.max_active_jobs}</p></div>
+  <div class="card"><h2>Plan Enforcement</h2><p>Sprint 5 tracks plan and usage. Sprint 6/7 can enforce hard limits at creation time.</p></div>
+</section>
+<section class="card">
+  <h2>Available Plans</h2>
+  <div class="grid">
+    ${Object.entries(plans).map(([code,p])=>`
+      <div class="card">
+        <h3>${p.name}</h3>
+        <p>$${(p.monthly_cents/100).toFixed(2)} / month</p>
+        <p>Users: ${p.max_users}</p>
+        <p>Active jobs: ${p.max_active_jobs}</p>
+        <form method="post" action="/admin/billing/plan"><input type="hidden" name="_csrf" value="${csrfToken}"><input type="hidden" name="plan_code" value="${code}"><button>Set Plan Locally</button></form>
+        <form method="post" action="/admin/billing/checkout"><input type="hidden" name="_csrf" value="${csrfToken}"><input type="hidden" name="plan_code" value="${code}"><button>Start Stripe Checkout Stub</button></form>
+      </div>`).join('')}
+  </div>
+</section>
+<section class="card"><h2>Billing Events</h2><table><thead><tr><th>Event</th><th>Plan</th><th>Status</th><th>Created</th></tr></thead><tbody>${events.map(e=>`<tr><td>${e.event_type}</td><td>${e.plan_code||''}</td><td>${e.status||''}</td><td>${e.created_at}</td></tr>`).join('')}</tbody></table></section>
+` }) %>

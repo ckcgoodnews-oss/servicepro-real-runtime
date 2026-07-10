@@ -1,0 +1,21 @@
+const fs = require('fs');
+const required = ['apps/api/src/services/threatIntelligenceService.js','apps/api/src/repositories/threatIntelligenceRepository.js','apps/api/src/routes/threatIntelligence.js','scripts/seed-threat-intelligence.js','packages/database/postgres/141_threat_intelligence.sql','docs/sprint141-threat-intelligence.md'];
+for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 141 patch file: ${file}`); process.exit(1); } }
+const svc = require('../apps/api/src/services/threatIntelligenceService');
+let feed = svc.normalizeFeedInput({ tenantId: 'tenant_demo', name: 'Feed A' });
+if (feed.code !== 'FEED-A') process.exit(1);
+feed = svc.activateFeed(svc.pauseFeed(feed));
+let indicator = svc.normalizeIndicatorInput({ tenantId: 'tenant_demo', value: 'EVIL.EXAMPLE', indicatorType: 'domain', confidence: 'high', severity: 'critical', tags: ['phishing'] });
+if (indicator.normalizedValue !== 'evil.example') process.exit(1);
+if (svc.riskScore(indicator) <= 40) process.exit(1);
+indicator = svc.refreshIndicator(indicator);
+const actor = svc.normalizeActorInput({ tenantId: 'tenant_demo', name: 'Actor A' });
+let campaign = svc.activateCampaign(svc.normalizeCampaignInput({ tenantId: 'tenant_demo', name: 'Campaign A', actorId: 'actor1' }));
+const sighting = svc.normalizeSightingInput({ tenantId: 'tenant_demo', indicatorId: 'indicator1', source: 'siem', count: 2 });
+let enrichment = svc.completeEnrichment(svc.normalizeEnrichmentInput({ tenantId: 'tenant_demo', indicatorId: 'indicator1', provider: 'rep' }), { malicious: true }, 99);
+if (enrichment.status !== 'completed' || enrichment.score !== 99) process.exit(1);
+if (svc.failEnrichment(svc.normalizeEnrichmentInput({ tenantId: 'tenant_demo', indicatorId: 'indicator1' }), 'bad').status !== 'failed') process.exit(1);
+let watchlist = svc.retireWatchlist(svc.normalizeWatchlistInput({ tenantId: 'tenant_demo', name: 'Watch', indicatorIds: ['indicator1'] }));
+const metrics = svc.threatIntelMetrics({ feeds: [feed], indicators: [indicator], actors: [actor], campaigns: [campaign], sightings: [sighting], watchlists: [{...watchlist, status: 'active'}] });
+if (metrics.activeFeeds !== 1 || metrics.criticalIndicators !== 1 || metrics.trackedActors !== 1 || metrics.activeCampaigns !== 1 || metrics.sightingsCount !== 2) process.exit(1);
+console.log('Sprint 141 threat intelligence patch test passed.');

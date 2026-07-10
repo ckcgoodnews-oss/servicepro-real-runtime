@@ -1,0 +1,19 @@
+<h1>My Jobs</h1>
+<section class="card">
+  <% if(!jobs.length){ %><p>No assigned open jobs.</p><% } %>
+  <% jobs.forEach(j=>{ %>
+    <div class="job-card">
+      <h2><a href="/admin/jobs/<%= j.id %>"><%= j.title %></a></h2>
+      <p><strong>Customer:</strong> <%= j.first_name || '' %> <%= j.last_name || '' %></p>
+      <p><strong>Service:</strong> <%= j.service_name || '' %></p>
+      <p><strong>Scheduled:</strong> <%= j.scheduled_at || '' %></p>
+      <p><strong>Status:</strong> <%= j.status %></p>
+      <form method="post" action="/admin/jobs/<%= j.id %>/status">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <input type="hidden" name="return_to" value="/admin/technician/jobs">
+        <select name="status"><% statuses.forEach(s=>{ %><option value="<%= s %>" <%= j.status===s?'selected':'' %>><%= s %></option><% }) %></select>
+        <button>Update</button>
+      </form>
+    </div>
+  <% }) %>
+</section>

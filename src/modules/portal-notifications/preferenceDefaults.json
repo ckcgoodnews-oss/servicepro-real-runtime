@@ -1,0 +1,7 @@
+{
+  "emailEnabled": true,
+  "smsEnabled": true,
+  "appointmentUpdates": true,
+  "billingUpdates": true,
+  "marketingUpdates": false
+}

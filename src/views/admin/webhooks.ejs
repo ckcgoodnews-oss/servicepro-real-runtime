@@ -1,0 +1,15 @@
+<h1>Webhooks</h1>
+<form class="form" method="post" action="/admin/webhooks">
+  <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+  <label>Name <input name="name" required></label>
+  <label>Target URL <input name="targetUrl" required placeholder="https://example.com/webhook"></label>
+  <label>Events <input name="events" value="customer.created,job.created,job.updated"></label>
+  <button>Create Webhook</button>
+</form>
+
+<table>
+<tr><th>Name</th><th>Target</th><th>Events</th><th>Status</th></tr>
+<% webhooks.forEach(w => { %>
+<tr><td><%= w.name %></td><td><%= w.targetUrl %></td><td><%= w.events.join(', ') %></td><td><%= w.active ? 'Active' : 'Inactive' %></td></tr>
+<% }) %>
+</table>

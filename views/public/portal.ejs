@@ -1,0 +1,35 @@
+<section class="hero">
+  <h1><%= settings.business_name %> Customer Portal</h1>
+  <p>Welcome, <%= customer.first_name %>. Review your jobs, estimates, and invoices.</p>
+</section>
+<section class="grid3">
+  <div class="card"><h2>Jobs</h2><strong><%= jobs.length %></strong></div>
+  <div class="card"><h2>Estimates</h2><strong><%= estimates.length %></strong></div>
+  <div class="card"><h2>Invoices</h2><strong><%= invoices.length %></strong></div>
+</section>
+<section class="card">
+  <h2>Jobs</h2>
+  <table><tr><th>Title</th><th>Status</th><th>Scheduled</th></tr>
+    <% jobs.forEach(j=>{ %><tr><td><%= j.title %></td><td><%= j.status %></td><td><%= j.scheduled_at || '' %></td></tr><% }) %>
+  </table>
+</section>
+<section class="card">
+  <h2>Estimates</h2>
+  <table><tr><th>Title</th><th>Status</th><th>Total</th></tr>
+    <% estimates.forEach(e=>{ %><tr><td><%= e.title %></td><td><%= e.status %></td><td>$<%= Number(e.total||0).toFixed(2) %></td></tr><% }) %>
+  </table>
+</section>
+<section class="card">
+  <h2>Invoices</h2>
+  <table><tr><th>Number</th><th>Status</th><th>Total</th><th>Paid</th></tr>
+    <% invoices.forEach(i=>{ %><tr><td><%= i.invoice_number %></td><td><%= i.status %></td><td>$<%= Number(i.total||0).toFixed(2) %></td><td>$<%= Number(i.amount_paid||0).toFixed(2) %></td></tr><% }) %>
+  </table>
+</section>
+<section class="card">
+  <h2>Send a Message</h2>
+  <form method="post" action="/portal/<%= token %>/message" class="stacked">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <textarea name="message" rows="4" required placeholder="Type your message for the office"></textarea>
+    <button>Send Message</button>
+  </form>
+</section>

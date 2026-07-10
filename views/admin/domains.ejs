@@ -1,0 +1,16 @@
+<%- include('../layouts/main', {title, body: `
+<h1>Custom Domains</h1>
+<section class="card">
+  <p>Use this when a purchaser wants their own .com domain pointed to this tenant website.</p>
+  <form method="post" action="/admin/domains">
+    <input type="hidden" name="_csrf" value="${csrfToken}">
+    <label>Custom Domain<input name="custom_domain" value="${tenant.custom_domain || tenant.domain || ''}" placeholder="exampleplumbing.com"></label>
+    <label>WWW Domain<input name="www_domain" value="${settings.www_domain || ''}" placeholder="www.exampleplumbing.com"></label>
+    <label>Verification Token<input name="verification_token" value="${settings.verification_token || ''}" placeholder="auto-generated if blank"></label>
+    <button>Save Domain Settings</button>
+  </form>
+</section>
+<section class="card"><h2>DNS Instructions</h2><pre>Root domain A record: point @ to your server IP
+WWW CNAME: point www to your root domain or hosting target
+After DNS resolves, enable HTTPS with Cloudflare or your reverse proxy.</pre><p>SSL status: <strong>${settings.ssl_status || 'not configured'}</strong></p></section>
+` }) %>

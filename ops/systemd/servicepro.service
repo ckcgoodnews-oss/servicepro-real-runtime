@@ -1,0 +1,15 @@
+[Unit]
+Description=ServicePro Node Application
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/servicepro
+ExecStart=/usr/bin/node src/server.js
+Restart=always
+RestartSec=5
+EnvironmentFile=/opt/servicepro/.env
+User=servicepro
+Group=servicepro
+
+[Install]
+WantedBy=multi-user.target

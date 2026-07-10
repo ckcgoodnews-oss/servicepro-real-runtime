@@ -1,0 +1,25 @@
+name: Docker Build
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  docker:
+    name: Build API image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t servicepro-api:${{ github.sha }} .
+
+      - name: Inspect image
+        run: docker image inspect servicepro-api:${{ github.sha }}

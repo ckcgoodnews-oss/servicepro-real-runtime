@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test:
+    name: Node runtime tests
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check migration ordering
+        run: npm run migrations:check
+
+      - name: Run tests
+        run: npm test
+        env:
+          DATA_STORE: json
+          DATA_FILE: ./data/ci-runtime.json
+          JWT_SECRET: ci-test-secret-ci-test-secret-ci-test-secret
+          PORTAL_TOKEN_SECRET: ci-portal-secret-ci-portal-secret-ci-portal

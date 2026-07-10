@@ -1,0 +1,18 @@
+<section class="card">
+  <h1><%= customer.first_name %> <%= customer.last_name %></h1>
+  <p><strong>Phone:</strong> <%= customer.phone || '' %> | <strong>Email:</strong> <%= customer.email || '' %></p>
+  <p><%= customer.address || '' %> <%= customer.city || '' %> <%= customer.state || '' %> <%= customer.zip || '' %></p>
+  <form method="post" action="/admin/customers/<%= customer.id %>/portal-link">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <button>Generate / Queue Portal Link</button>
+  </form>
+</section>
+<section class="grid3">
+  <div class="card"><h2>Jobs</h2><strong><%= jobs.length %></strong></div>
+  <div class="card"><h2>Estimates</h2><strong><%= estimates.length %></strong></div>
+  <div class="card"><h2>Invoices</h2><strong><%= invoices.length %></strong></div>
+</section>
+<section class="card"><h2>Recent Portal Links</h2><table><tr><th>Created</th><th>Expires</th><th>Token</th></tr><% links.forEach(l=>{ %><tr><td><%= l.created_at %></td><td><%= l.expires_at %></td><td><code>/portal/<%= l.token %></code></td></tr><% }) %></table></section>
+<section class="card"><h2>Jobs</h2><table><tr><th>Title</th><th>Status</th><th></th></tr><% jobs.forEach(j=>{ %><tr><td><%= j.title %></td><td><%= j.status %></td><td><a href="/admin/jobs/<%= j.id %>">Open</a></td></tr><% }) %></table></section>
+<section class="card"><h2>Estimates</h2><table><tr><th>Title</th><th>Status</th><th>Total</th><th></th></tr><% estimates.forEach(e=>{ %><tr><td><%= e.title %></td><td><%= e.status %></td><td>$<%= Number(e.total||0).toFixed(2) %></td><td><a href="/admin/estimates/<%= e.id %>">Open</a></td></tr><% }) %></table></section>
+<section class="card"><h2>Invoices</h2><table><tr><th>Number</th><th>Status</th><th>Total</th><th></th></tr><% invoices.forEach(i=>{ %><tr><td><%= i.invoice_number %></td><td><%= i.status %></td><td>$<%= Number(i.total||0).toFixed(2) %></td><td><a href="/admin/invoices/<%= i.id %>">Open</a></td></tr><% }) %></table></section>

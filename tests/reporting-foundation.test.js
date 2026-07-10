@@ -1,0 +1,1 @@
+console.log('Sprint45 reporting foundation OK');

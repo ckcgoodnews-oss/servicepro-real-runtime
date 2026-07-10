@@ -1,0 +1,30 @@
+{
+  "rules": [
+    {
+      "entityType": "customer",
+      "ruleName": "Email exact match",
+      "matchFields": [
+        "email"
+      ],
+      "threshold": 1.0
+    },
+    {
+      "entityType": "customer",
+      "ruleName": "Phone exact match",
+      "matchFields": [
+        "phone"
+      ],
+      "threshold": 1.0
+    },
+    {
+      "entityType": "job",
+      "ruleName": "Customer title date match",
+      "matchFields": [
+        "customer_email",
+        "job_title",
+        "scheduled_date"
+      ],
+      "threshold": 0.9
+    }
+  ]
+}

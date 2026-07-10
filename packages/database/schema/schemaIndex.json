@@ -1,0 +1,50 @@
+{
+  "schemas": [
+    {
+      "order": 1,
+      "name": "core-tenants",
+      "file": "001-core-tenants.sql"
+    },
+    {
+      "order": 10,
+      "name": "auth",
+      "file": "010-auth.sql"
+    },
+    {
+      "order": 20,
+      "name": "crm",
+      "file": "020-crm.sql"
+    },
+    {
+      "order": 30,
+      "name": "jobs",
+      "file": "030-jobs.sql"
+    },
+    {
+      "order": 40,
+      "name": "estimates-invoices",
+      "file": "040-estimates-invoices.sql"
+    },
+    {
+      "order": 50,
+      "name": "inventory",
+      "file": "050-inventory.sql"
+    },
+    {
+      "order": 60,
+      "name": "mobile",
+      "file": "060-mobile.sql"
+    },
+    {
+      "order": 70,
+      "name": "ai",
+      "file": "070-ai.sql"
+    },
+    {
+      "order": 80,
+      "name": "operations",
+      "file": "080-operations.sql"
+    }
+  ],
+  "tenantScopedRequirement": "All tenant-owned tables must include tenant_id and tenant-scoped repository access."
+}

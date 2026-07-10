@@ -1,0 +1,9 @@
+<%- include('../layouts/main', {title, body: `
+<h1>Storage</h1>
+<p>Current storage mode: <strong>${mode}</strong></p>
+<section class="card">
+  <h2>Uploaded Job Files</h2>
+  <table><thead><tr><th>Original Name</th><th>Type</th><th>Size</th><th>Provider</th><th>Link</th><th>Uploaded</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr><td>${r.original_name||''}</td><td>${r.mime_type||''}</td><td>${r.size_bytes||0}</td><td>${r.provider||'local'}</td><td><a href="${r.file_url}" target="_blank">Open</a></td><td>${r.created_at||''}</td></tr>`).join('')}
+  </tbody></table>
+</section>` }) %>

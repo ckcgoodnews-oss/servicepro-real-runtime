@@ -1,0 +1,22 @@
+const fs = require('fs');
+const required = ['apps/api/src/services/siemDetectionEngineeringService.js','apps/api/src/repositories/siemDetectionEngineeringRepository.js','apps/api/src/routes/siemDetectionEngineering.js','scripts/seed-siem-detection-engineering.js','packages/database/postgres/142_siem_detection_engineering.sql','docs/sprint142-siem-detection-engineering.md'];
+for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 142 patch file: ${file}`); process.exit(1); } }
+const svc = require('../apps/api/src/services/siemDetectionEngineeringService');
+let source = svc.activateSource(svc.normalizeLogSourceInput({ tenantId: 'tenant_demo', name: 'IDP Logs', sourceType: 'identity' }));
+if (source.code !== 'IDP-LOGS' || source.status !== 'active') process.exit(1);
+let rule = svc.activateRule(svc.normalizeRuleInput({ tenantId: 'tenant_demo', name: 'Admin Login', ruleType: 'kql', severity: 'high', query: 'SigninLogs' }));
+if (rule.status !== 'active') process.exit(1);
+let test = svc.runRuleTest(svc.normalizeRuleTestInput({ ruleId: 'rule1', expectedMatch: true }), true);
+if (test.status !== 'passed') process.exit(1);
+let alert = svc.normalizeAlertInput({ tenantId: 'tenant_demo', ruleId: 'rule1', title: 'Admin Login', severity: 'critical', entityType: 'user', entityValue: 'admin@example.com' });
+let suppression = svc.normalizeSuppressionInput({ tenantId: 'tenant_demo', ruleId: 'rule1', entityType: 'user', entityValue: 'lab@example.com', reason: 'lab' });
+if (svc.suppressionMatches(suppression, alert)) process.exit(1);
+alert = svc.escalateAlert(svc.investigateAlert(svc.triageAlert(alert, 'analyst'), 'analyst'), 'inc1');
+if (alert.status !== 'escalated') process.exit(1);
+if (svc.markFalsePositive({ ...alert }, 'test').status !== 'false_positive') process.exit(1);
+if (svc.closeAlert({ ...alert }, 'resolved').status !== 'closed') process.exit(1);
+let tuning = svc.applyTuning(svc.approveTuning(svc.normalizeTuningInput({ tenantId: 'tenant_demo', ruleId: 'rule1', summary: 'exclude test', afterQuery: 'SigninLogs | where test == false' }), 'lead'));
+if (tuning.status !== 'applied') process.exit(1);
+const metrics = svc.detectionMetrics({ sources: [source], rules: [rule], tests: [test], alerts: [alert], suppressions: [suppression], tunings: [tuning] });
+if (metrics.activeSources !== 1 || metrics.activeRules !== 1 || metrics.criticalAlerts !== 1 || metrics.activeSuppressions !== 1 || metrics.appliedTunings !== 1) process.exit(1);
+console.log('Sprint 142 SIEM detection engineering patch test passed.');
