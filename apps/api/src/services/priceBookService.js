@@ -67,4 +67,18 @@ function priceBookLineFromItem(item, quantity = 1) {
   };
 }
 
-module.exports = { normalizeCategoryInput, normalizeItemInput, calculateGrossMargin, priceBookLineFromItem };
+function resolveServiceLines(lines = [], services = []) {
+  return lines.map(line => {
+    if (!line.serviceCode) return { ...line };
+    const service = services.find(item => item.code === line.serviceCode);
+    if (!service) throw validationError(`Unknown serviceCode: ${line.serviceCode}`);
+    return priceBookLineFromItem(service, line.quantity);
+  });
+}
+
+async function resolveServiceLinesAsync(tenantId, lines = [], serviceRepository) {
+  const services = await Promise.resolve(serviceRepository.list(tenantId));
+  return resolveServiceLines(lines, services);
+}
+
+module.exports = { normalizeCategoryInput, normalizeItemInput, calculateGrossMargin, priceBookLineFromItem, resolveServiceLines, resolveServiceLinesAsync };

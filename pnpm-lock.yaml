@@ -11,6 +11,9 @@ importers:
       bcryptjs:
         specifier: ^2.4.3
         version: 2.4.3
+      dotenv:
+        specifier: 16.4.7
+        version: 16.4.7
       pg:
         specifier: ^8.13.1
         version: 8.22.0
@@ -19,6 +22,10 @@ packages:
 
   bcryptjs@2.4.3:
     resolution: {integrity: sha512-V/Hy/X9Vt7f3BbPJEi8BdVFMByHi+jNXrYkW3huaybV/kQ0KJg0Y6PkEMbn+zeT+i+SiKZ/HMqJGIIt4LZDqNQ==}
+
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
+    engines: {node: '>=12'}
 
   pg-cloudflare@1.4.0:
     resolution: {integrity: sha512-Vo7z/6rrQYxpNRylp4Tlob2elzbh+N/MOQbxFVWCxS7oEx6jF53GTJFxK2WWpKuBRkmiin4Mt+xofFDjx09R0A==}
@@ -81,6 +88,8 @@ packages:
 snapshots:
 
   bcryptjs@2.4.3: {}
+
+  dotenv@16.4.7: {}
 
   pg-cloudflare@1.4.0:
     optional: true

@@ -28,7 +28,10 @@ function makeSeedData() {
     portalAccounts: [{ id: 'portal_demo_1', tenantId: 'tenant_demo', customerId: 'cust_demo_1', email: 'customer@example.com', passwordHash: bcrypt.hashSync('ChangeMe123!', 10), enabled: true, createdAt: stamp, updatedAt: stamp }],
     portalBookings: [],
     authEvents: [],
-    services: [{ id: 'svc_1', tenantId: 'tenant_demo', code: 'DRAIN-CLEAN', name: 'Drain cleaning', description: 'Standard drain cleaning service', category: 'drain', basePrice: 225, unitCost: 85, taxable: true, active: true, createdAt: stamp, updatedAt: stamp }],
+    services: [
+      { id: 'svc_1', tenantId: 'tenant_demo', code: 'DRAIN-CLEAN', name: 'Drain cleaning', description: 'Standard drain cleaning service', category: 'drain', basePrice: 225, unitCost: 85, taxable: true, active: true, createdAt: stamp, updatedAt: stamp },
+      { id: 'svc_2', tenantId: 'tenant_demo', code: 'WH-DIAG', name: 'Water heater diagnostic', description: 'Diagnostic inspection for water heater issues', category: 'water_heater', basePrice: 149, unitCost: 45, taxable: true, active: true, createdAt: stamp, updatedAt: stamp }
+    ],
     inventoryItems: [{ id: 'item_demo_1', tenantId: 'tenant_demo', sku: 'PVC-TRAP-15', name: '1.5 inch PVC P-Trap', description: 'Standard PVC trap', category: 'drain_parts', unitCost: 4.25, unitPrice: 14.99, quantityOnHand: 25, reorderPoint: 5, active: true, createdAt: stamp, updatedAt: stamp }],
     stockAdjustments: [],
     materialUsage: [],

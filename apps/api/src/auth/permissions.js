@@ -28,8 +28,8 @@ const PERMISSIONS = Object.freeze(Object.fromEntries(discoverPermissionNames().m
 const ROLE_PRESETS = {
   owner: Object.values(PERMISSIONS),
   admin: Object.values(PERMISSIONS),
-  manager: Object.values(PERMISSIONS).filter(value => !value.endsWith('.delete')),
-  technician: Object.values(PERMISSIONS).filter(value => /^(users\.self\.read|jobs\.|schedule\.|dispatch\.|inventory\.read|materials\.|checklists\.|media\.)/.test(value)),
+  manager: Object.values(PERMISSIONS).filter(value => !value.endsWith('.delete') && value !== 'tenant.settings.write'),
+  technician: Object.values(PERMISSIONS).filter(value => /^(users\.self\.read|jobs\.|schedule\.|dispatch\.|inventory\.read|materials\.|checklists\.|media\.|workflows\.transition)/.test(value)),
   billing: Object.values(PERMISSIONS).filter(value => /^(users\.self\.read|customers\.read|estimates\.|invoices\.|payments\.|reports\.|exports\.|privacy\.read)/.test(value)),
   read_only: Object.values(PERMISSIONS).filter(value => value.endsWith('.read'))
 };

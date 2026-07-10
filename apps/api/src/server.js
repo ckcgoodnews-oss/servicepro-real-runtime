@@ -1,4 +1,5 @@
 const http = require('http');
+const { version } = require('../../../package.json');
 const { router } = require('./router');
 const { ensureStore } = require('./store/jsonStore');
 
@@ -17,7 +18,7 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(port, () => {
-  console.log(`ServicePro Sprint 51 API running on http://localhost:${port}`);
+  console.log(`ServicePro ${version} API running on http://localhost:${port}`);
 });
 
 module.exports = { server };

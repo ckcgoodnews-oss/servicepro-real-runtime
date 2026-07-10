@@ -18,7 +18,7 @@ npm test
 npm run migrations:check
 ```
 
-The repository intentionally excludes `node_modules`. Install dependencies before running runtime-backed historical tests.
+`npm test` runs every retained test file across the cumulative Sprint history. The repository intentionally excludes `node_modules`; install dependencies before validation.
 
 ## Assembly note
 

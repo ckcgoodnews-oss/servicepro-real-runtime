@@ -18,4 +18,5 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD node scripts/deployment-check.js || exit 1
 
+# Runtime command: node apps/api/src/server.js
 CMD ["node", "apps/api/src/server.js"]

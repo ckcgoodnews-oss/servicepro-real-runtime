@@ -1,8 +1,10 @@
+const { version } = require('../../../../package.json');
+
 function buildHealth() {
   return {
     ok: true,
     app: process.env.APP_NAME || 'ServicePro',
-    version: process.env.APP_VERSION || '0.68.0',
+    version: process.env.APP_VERSION || version,
     environment: process.env.NODE_ENV || 'development',
     store: process.env.DATA_STORE || 'json',
     uptimeSeconds: Math.round(process.uptime()),
