@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "1.51.0",
+  "version": "1.52.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -10,7 +10,7 @@
     "migrate": "node scripts/run-migrations.js",
     "migrations:check": "node scripts/check-migrations.js",
     "seed:privacy": "node scripts/seed-privacy-dsar-ops.js",
-    "test": "node tests/sprint151-privacy-dsar-ops.test.js",
+    "test": "node tests/sprint152-privacy-case-orchestration.test.js",
     "client:test": "node scripts/api-smoke-client.js"
   },
   "dependencies": {

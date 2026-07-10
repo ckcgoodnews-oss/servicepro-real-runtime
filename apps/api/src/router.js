@@ -37,6 +37,7 @@ const appointments = require('./routes/appointments');
 const dispatch = require('./routes/dispatch');
 const inventory = require('./routes/inventory');
 const materials = require('./routes/materials');
+const privacyCaseOrchestration = require('./routes/privacyCaseOrchestration');
 
 async function router(req, res) {
   req.context = {};
@@ -285,6 +286,33 @@ async function router(req, res) {
   if (dispatchMatch && req.method === 'PATCH') {
     if (!requirePermission(PERMISSIONS.DISPATCH_WRITE)(req, res)) return;
     return dispatch.updateStatus(req, res, dispatchMatch[1]);
+  }
+
+  if (req.url === '/api/v1/privacy/cases' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req, res)) return;
+    return privacyCaseOrchestration.createCase(req, res);
+  }
+  const privacyCaseAction = req.url.match(/^\/api\/v1\/privacy\/cases\/([^/]+)\/(verify|extend|close)$/);
+  if (privacyCaseAction && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req, res)) return;
+    return privacyCaseOrchestration[privacyCaseAction[2]](req, res, privacyCaseAction[1]);
+  }
+  if (req.url === '/api/v1/privacy/case-tasks' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req, res)) return;
+    return privacyCaseOrchestration.createTask(req, res);
+  }
+  const privacyTaskComplete = req.url.match(/^\/api\/v1\/privacy\/case-tasks\/([^/]+)\/complete$/);
+  if (privacyTaskComplete && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req, res)) return;
+    return privacyCaseOrchestration.completeTask(req, res, privacyTaskComplete[1]);
+  }
+  if (req.url === '/api/v1/privacy/case-communications' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req, res)) return;
+    return privacyCaseOrchestration.createCommunication(req, res);
+  }
+  if (req.url === '/api/v1/privacy/case-metrics' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.PRIVACY_READ)(req, res)) return;
+    return privacyCaseOrchestration.metrics(req, res);
   }
 
   return notFound(res);
