@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -147,7 +147,23 @@
     "seed:sprint277": "node scripts/seed-sprint277-ai-quality-evaluation.js",
     "seed:sprint278": "node scripts/seed-sprint278-ai-safety-guardrails.js",
     "seed:sprint279": "node scripts/seed-sprint279-enterprise-intelligence-observability.js",
-    "seed:sprint280": "node scripts/seed-sprint280-enterprise-intelligence-release.js"
+    "seed:sprint280": "node scripts/seed-sprint280-enterprise-intelligence-release.js",
+    "test:phase17": "node scripts/run-tests.js",
+    "seed:sprint281": "node scripts/seed-sprint281-internationalization-foundation.js",
+    "seed:sprint282": "node scripts/seed-sprint282-localization-management.js",
+    "seed:sprint283": "node scripts/seed-sprint283-regional-data-residency.js",
+    "seed:sprint284": "node scripts/seed-sprint284-global-identity-federation.js",
+    "seed:sprint285": "node scripts/seed-sprint285-multi-region-tenant-routing.js",
+    "seed:sprint286": "node scripts/seed-sprint286-cross-region-failover.js",
+    "seed:sprint287": "node scripts/seed-sprint287-edge-synchronization.js",
+    "seed:sprint288": "node scripts/seed-sprint288-regional-configuration-management.js",
+    "seed:sprint289": "node scripts/seed-sprint289-global-notification-localization.js",
+    "seed:sprint290": "node scripts/seed-sprint290-timezone-calendar-localization.js",
+    "seed:sprint291": "node scripts/seed-sprint291-currency-tax-localization.js",
+    "seed:sprint292": "node scripts/seed-sprint292-regional-compliance-packs.js",
+    "seed:sprint293": "node scripts/seed-sprint293-sovereign-cloud-readiness.js",
+    "seed:sprint294": "node scripts/seed-sprint294-global-scale-validation.js",
+    "seed:sprint295": "node scripts/seed-sprint295-global-scale-release.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
