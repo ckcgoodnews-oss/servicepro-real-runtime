@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "2.4.0",
+  "version": "3.0.0-rc1",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -195,7 +195,23 @@
     "seed:sprint322": "node scripts/seed-sprint322-integration-testing-lab.js",
     "seed:sprint323": "node scripts/seed-sprint323-developer-observability.js",
     "seed:sprint324": "node scripts/seed-sprint324-extensibility-certification.js",
-    "seed:sprint325": "node scripts/seed-sprint325-platform-extensibility-release.js"
+    "seed:sprint325": "node scripts/seed-sprint325-platform-extensibility-release.js",
+    "test:phase20": "node scripts/run-tests.js",
+    "seed:sprint326": "node scripts/seed-sprint326-architecture-modernization-assessment.js",
+    "seed:sprint327": "node scripts/seed-sprint327-runtime-framework-upgrade.js",
+    "seed:sprint328": "node scripts/seed-sprint328-frontend-architecture-modernization.js",
+    "seed:sprint329": "node scripts/seed-sprint329-api-versioning-v3.js",
+    "seed:sprint330": "node scripts/seed-sprint330-data-access-modernization.js",
+    "seed:sprint331": "node scripts/seed-sprint331-event-driven-architecture-foundation.js",
+    "seed:sprint332": "node scripts/seed-sprint332-modular-monolith-boundaries.js",
+    "seed:sprint333": "node scripts/seed-sprint333-performance-engineering-v3.js",
+    "seed:sprint334": "node scripts/seed-sprint334-security-architecture-v3.js",
+    "seed:sprint335": "node scripts/seed-sprint335-observability-architecture-v3.js",
+    "seed:sprint336": "node scripts/seed-sprint336-technical-debt-retirement.js",
+    "seed:sprint337": "node scripts/seed-sprint337-compatibility-bridge-v2-v3.js",
+    "seed:sprint338": "node scripts/seed-sprint338-version3-migration-assistant.js",
+    "seed:sprint339": "node scripts/seed-sprint339-version3-release-readiness.js",
+    "seed:sprint340": "node scripts/seed-sprint340-version3-release-candidate.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

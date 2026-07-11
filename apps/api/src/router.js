@@ -62,6 +62,8 @@ const phase18IndustrySolutions = require('./routes/phase18IndustrySolutions');
 
 const phase19PlatformExtensibility = require('./routes/phase19PlatformExtensibility');
 
+const phase20Version3Foundation = require('./routes/phase20Version3Foundation');
+
 async function router(req, res) {
   req.context = {};
   attachRequestId(req, res);
@@ -170,6 +172,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE19_READ : PERMISSIONS.PHASE19_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase19PlatformExtensibility.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/version3-foundation/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE20_READ : PERMISSIONS.PHASE20_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase20Version3Foundation.dispatch(req, res)) return;
   }
 
   return notFound(res);
@@ -562,6 +571,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE19_READ : PERMISSIONS.PHASE19_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase19PlatformExtensibility.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/version3-foundation/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE20_READ : PERMISSIONS.PHASE20_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase20Version3Foundation.dispatch(req, res)) return;
   }
 
   return notFound(res);
