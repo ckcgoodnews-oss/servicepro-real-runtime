@@ -47,6 +47,7 @@ const privacyMonitoring = require('./routes/privacyMonitoring');
 const privacyDataTransfers = require('./routes/privacyDataTransfers');
 const policyManagement = require('./routes/policyManagement');
 const enterpriseRisk = require('./routes/enterpriseRisk');
+const businessContinuity = require('./routes/businessContinuity');
 
 async function router(req, res) {
   req.context = {};
@@ -411,6 +412,9 @@ async function router(req, res) {
   const riskCreates={'/api/v1/governance/risks':'createRisk','/api/v1/governance/risk-kris':'createKri','/api/v1/governance/risk-treatments':'createTreatment'};if(req.method==='POST'&&riskCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return enterpriseRisk[riskCreates[req.url]](req,res)}
   const er=req.url.match(/^\/api\/v1\/governance\/(risks|risk-kris|risk-treatments)\/([^/]+)\/(assess|measure|complete)$/);if(er&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const h={assess:'assessRisk',measure:'measureKri',complete:'completeTreatment'};return enterpriseRisk[h[er[3]]](req,res,er[2])}
   if(req.url==='/api/v1/governance/risk-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return enterpriseRisk.metrics(req,res)}
+  const bcCreates={'/api/v1/governance/continuity-plans':'createPlan','/api/v1/governance/recovery-procedures':'createProcedure','/api/v1/governance/continuity-exercises':'createExercise'};if(req.method==='POST'&&bcCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return businessContinuity[bcCreates[req.url]](req,res)}
+  const bc=req.url.match(/^\/api\/v1\/governance\/(continuity-plans|continuity-exercises)\/([^/]+)\/(approve|activate|start|complete)$/);if(bc&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const h={approve:'approvePlan',activate:'activatePlan',start:'startExercise',complete:'completeExercise'};return businessContinuity[h[bc[3]]](req,res,bc[2])}
+  if(req.url==='/api/v1/governance/continuity-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return businessContinuity.metrics(req,res)}
 
   return notFound(res);
 }
