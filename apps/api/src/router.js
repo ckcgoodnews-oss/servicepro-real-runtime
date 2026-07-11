@@ -42,6 +42,7 @@ const privacyDsarOps = require('./routes/privacyDsarOps');
 const privacyDiscovery = require('./routes/privacyDiscovery');
 const privacyAppeals = require('./routes/privacyAppeals');
 const privacyCompliance = require('./routes/privacyCompliance');
+const privacyRisk = require('./routes/privacyRisk');
 
 async function router(req, res) {
   req.context = {};
@@ -380,6 +381,10 @@ async function router(req, res) {
   const complianceAction=req.url.match(/^\/api\/v1\/privacy\/(compliance-evidence|compliance-reports)\/([^/]+)\/(submit|review|generate|publish)$/);
   if(complianceAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const handlers={submit:'submitEvidence',review:'reviewEvidence',generate:'generateReport',publish:'publishReport'};return privacyCompliance[handlers[complianceAction[3]]](req,res,complianceAction[2]);}
   if(req.url==='/api/v1/privacy/compliance-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return privacyCompliance.metrics(req,res);}
+  if(req.url==='/api/v1/privacy/risk-findings'&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return privacyRisk.createFinding(req,res);}
+  const riskAction=req.url.match(/^\/api\/v1\/privacy\/risk-findings\/([^/]+)\/(remediate|request-exception|approve-exception|resolve)$/);
+  if(riskAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const handlers={remediate:'planRemediation','request-exception':'requestException','approve-exception':'approveException',resolve:'resolveFinding'};return privacyRisk[handlers[riskAction[2]]](req,res,riskAction[1]);}
+  if(req.url==='/api/v1/privacy/risk-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return privacyRisk.metrics(req,res);}
 
   return notFound(res);
 }
