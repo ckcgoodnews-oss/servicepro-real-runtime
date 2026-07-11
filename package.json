@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "1.215.0",
+  "version": "1.230.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -78,7 +78,23 @@
     "seed:sprint212": "node scripts/seed-sprint212-desktop-synchronization.js",
     "seed:sprint213": "node scripts/seed-sprint213-mobile-sdk.js",
     "seed:sprint214": "node scripts/seed-sprint214-command-line-interface.js",
-    "seed:sprint215": "node scripts/seed-sprint215-developer-portal.js"
+    "seed:sprint215": "node scripts/seed-sprint215-developer-portal.js",
+    "test:phase13": "node scripts/run-tests.js",
+    "seed:sprint216": "node scripts/seed-sprint216-executive-dashboards.js",
+    "seed:sprint217": "node scripts/seed-sprint217-financial-analytics.js",
+    "seed:sprint218": "node scripts/seed-sprint218-customer-analytics.js",
+    "seed:sprint219": "node scripts/seed-sprint219-technician-analytics.js",
+    "seed:sprint220": "node scripts/seed-sprint220-operational-kpis.js",
+    "seed:sprint221": "node scripts/seed-sprint221-predictive-analytics.js",
+    "seed:sprint222": "node scripts/seed-sprint222-dashboard-designer.js",
+    "seed:sprint223": "node scripts/seed-sprint223-report-builder.js",
+    "seed:sprint224": "node scripts/seed-sprint224-scheduled-reports.js",
+    "seed:sprint225": "node scripts/seed-sprint225-embedded-bi.js",
+    "seed:sprint226": "node scripts/seed-sprint226-data-governance.js",
+    "seed:sprint227": "node scripts/seed-sprint227-data-catalog.js",
+    "seed:sprint228": "node scripts/seed-sprint228-data-lineage.js",
+    "seed:sprint229": "node scripts/seed-sprint229-data-warehouse-integration.js",
+    "seed:sprint230": "node scripts/seed-sprint230-ai-analytics.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
