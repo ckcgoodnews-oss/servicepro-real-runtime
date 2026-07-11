@@ -9,6 +9,7 @@
     "reset": "node scripts/reset-data.js",
     "migrate": "node scripts/run-migrations.js",
     "migrations:check": "node scripts/check-migrations.js",
+    "db:check": "node scripts/check-postgres-connection.js",
     "seed:privacy": "node scripts/seed-privacy-dsar-ops.js",
     "test": "node scripts/run-tests.js",
     "test:sprint152": "node tests/sprint152-privacy-case-orchestration.test.js",
