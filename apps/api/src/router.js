@@ -45,6 +45,7 @@ const privacyCompliance = require('./routes/privacyCompliance');
 const privacyRisk = require('./routes/privacyRisk');
 const privacyMonitoring = require('./routes/privacyMonitoring');
 const privacyDataTransfers = require('./routes/privacyDataTransfers');
+const policyManagement = require('./routes/policyManagement');
 
 async function router(req, res) {
   req.context = {};
@@ -401,6 +402,11 @@ async function router(req, res) {
     'data-transfers:approve':'approveTransfer','data-transfers:activate':'activateTransfer','data-transfers:suspend':'suspendTransfer','data-transfers:terminate':'terminateTransfer'};
     const handler=handlers[`${transferAction[1]}:${transferAction[3]}`];if(handler)return privacyDataTransfers[handler](req,res,transferAction[2]);}
   if(req.url==='/api/v1/privacy/transfer-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return privacyDataTransfers.metrics(req,res);}
+  const policyCreates={'/api/v1/governance/policies':'createPolicy','/api/v1/governance/policy-versions':'createVersion','/api/v1/governance/policy-acknowledgements':'createAcknowledgement','/api/v1/governance/policy-exceptions':'createException'};
+  if(req.method==='POST'&&policyCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return policyManagement[policyCreates[req.url]](req,res);}
+  const policyAction=req.url.match(/^\/api\/v1\/governance\/(policy-versions|policy-acknowledgements|policy-exceptions)\/([^/]+)\/(submit|decide|publish|acknowledge)$/);
+  if(policyAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const h={'policy-versions:submit':'submitVersion','policy-versions:decide':'decideVersion','policy-versions:publish':'publishVersion','policy-acknowledgements:acknowledge':'acknowledge','policy-exceptions:decide':'decideException'}[`${policyAction[1]}:${policyAction[3]}`];if(h)return policyManagement[h](req,res,policyAction[2]);}
+  if(req.url==='/api/v1/governance/policy-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return policyManagement.metrics(req,res);}
 
   return notFound(res);
 }
