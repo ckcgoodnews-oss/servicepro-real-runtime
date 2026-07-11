@@ -1,0 +1,8 @@
+const svc=require('../apps/api/src/services/phase25EnterpriseFederationEcosystemService');
+const row=svc.normalizeRecord({tenantId:'tenant_demo',domain:'federation-security-certification',name:'Federation Security Certification'});
+if(row.domain!=='federation-security-certification'||row.status!=='draft')process.exit(1);
+const passed=svc.transitionRecord(row,'pass');
+if(passed.status!=='passed')process.exit(1);
+const summary=svc.metrics([passed]);
+if(summary.total!==1||summary.passed!==1||summary.byDomain['federation-security-certification']!==1)process.exit(1);
+console.log('Sprint 414 Federation Security Certification test passed.');

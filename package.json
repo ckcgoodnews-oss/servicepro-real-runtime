@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "3.3.0",
+  "version": "3.4.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -275,7 +275,23 @@
     "seed:sprint397": "node scripts/seed-sprint397-financial-controls-automation.js",
     "seed:sprint398": "node scripts/seed-sprint398-revenue-assurance.js",
     "seed:sprint399": "node scripts/seed-sprint399-growth-experiment-governance.js",
-    "seed:sprint400": "node scripts/seed-sprint400-version-3-3-general-availability.js"
+    "seed:sprint400": "node scripts/seed-sprint400-version-3-3-general-availability.js",
+    "test:phase25": "node scripts/run-tests.js",
+    "seed:sprint401": "node scripts/seed-sprint401-enterprise-organization-federation.js",
+    "seed:sprint402": "node scripts/seed-sprint402-cross-tenant-collaboration.js",
+    "seed:sprint403": "node scripts/seed-sprint403-federated-identity-expansion.js",
+    "seed:sprint404": "node scripts/seed-sprint404-partner-data-exchange.js",
+    "seed:sprint405": "node scripts/seed-sprint405-ecosystem-trust-registry.js",
+    "seed:sprint406": "node scripts/seed-sprint406-enterprise-delegated-administration.js",
+    "seed:sprint407": "node scripts/seed-sprint407-shared-service-operations.js",
+    "seed:sprint408": "node scripts/seed-sprint408-intercompany-workflow-orchestration.js",
+    "seed:sprint409": "node scripts/seed-sprint409-federated-audit-exchange.js",
+    "seed:sprint410": "node scripts/seed-sprint410-partner-compliance-attestations.js",
+    "seed:sprint411": "node scripts/seed-sprint411-external-data-contracts.js",
+    "seed:sprint412": "node scripts/seed-sprint412-ecosystem-event-bus.js",
+    "seed:sprint413": "node scripts/seed-sprint413-marketplace-revenue-federation.js",
+    "seed:sprint414": "node scripts/seed-sprint414-federation-security-certification.js",
+    "seed:sprint415": "node scripts/seed-sprint415-version-3-4-general-availability.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
