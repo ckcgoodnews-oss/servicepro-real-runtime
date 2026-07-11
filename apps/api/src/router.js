@@ -45,11 +45,8 @@ const privacyCompliance = require('./routes/privacyCompliance');
 const privacyRisk = require('./routes/privacyRisk');
 const privacyMonitoring = require('./routes/privacyMonitoring');
 const privacyDataTransfers = require('./routes/privacyDataTransfers');
-const policyManagement = require('./routes/policyManagement');
-const enterpriseRisk = require('./routes/enterpriseRisk');
-const businessContinuity = require('./routes/businessContinuity');
-const vendorRiskManagement = require('./routes/vendorRiskManagement');
-const enterpriseAssetInventory = require('./routes/enterpriseAssetInventory');
+const phase09Governance = require('./routes/phase09Governance');
+const phase10AiPlatform = require('./routes/phase10AiPlatform');
 
 async function router(req, res) {
   req.context = {};
@@ -91,7 +88,14 @@ async function router(req, res) {
     if (req.url === '/portal/api/bookings' && req.method === 'POST') return portal.createBooking(req, res);
     if (req.url === '/portal/api/invoices' && req.method === 'GET') return portal.listInvoices(req, res);
     if (req.url === '/portal/api/estimates' && req.method === 'GET') return portal.listEstimates(req, res);
-    return notFound(res);
+  
+  if (req.url.startsWith('/api/v1/ai-platform/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE10_READ : PERMISSIONS.PHASE10_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase10AiPlatform.dispatch(req, res)) return;
+  }
+
+  return notFound(res);
   }
 
   if (req.url.startsWith('/api/')) {
@@ -406,19 +410,19 @@ async function router(req, res) {
     'data-transfers:approve':'approveTransfer','data-transfers:activate':'activateTransfer','data-transfers:suspend':'suspendTransfer','data-transfers:terminate':'terminateTransfer'};
     const handler=handlers[`${transferAction[1]}:${transferAction[3]}`];if(handler)return privacyDataTransfers[handler](req,res,transferAction[2]);}
   if(req.url==='/api/v1/privacy/transfer-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return privacyDataTransfers.metrics(req,res);}
-  const policyCreates={'/api/v1/governance/policies':'createPolicy','/api/v1/governance/policy-versions':'createVersion','/api/v1/governance/policy-acknowledgements':'createAcknowledgement','/api/v1/governance/policy-exceptions':'createException'};
-  if(req.method==='POST'&&policyCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return policyManagement[policyCreates[req.url]](req,res);}
-  const policyAction=req.url.match(/^\/api\/v1\/governance\/(policy-versions|policy-acknowledgements|policy-exceptions)\/([^/]+)\/(submit|decide|publish|acknowledge)$/);
-  if(policyAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const h={'policy-versions:submit':'submitVersion','policy-versions:decide':'decideVersion','policy-versions:publish':'publishVersion','policy-acknowledgements:acknowledge':'acknowledge','policy-exceptions:decide':'decideException'}[`${policyAction[1]}:${policyAction[3]}`];if(h)return policyManagement[h](req,res,policyAction[2]);}
-  if(req.url==='/api/v1/governance/policy-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return policyManagement.metrics(req,res);}
-  const riskCreates={'/api/v1/governance/risks':'createRisk','/api/v1/governance/risk-kris':'createKri','/api/v1/governance/risk-treatments':'createTreatment'};if(req.method==='POST'&&riskCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return enterpriseRisk[riskCreates[req.url]](req,res)}
-  const er=req.url.match(/^\/api\/v1\/governance\/(risks|risk-kris|risk-treatments)\/([^/]+)\/(assess|measure|complete)$/);if(er&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const h={assess:'assessRisk',measure:'measureKri',complete:'completeTreatment'};return enterpriseRisk[h[er[3]]](req,res,er[2])}
-  if(req.url==='/api/v1/governance/risk-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return enterpriseRisk.metrics(req,res)}
-  const bcCreates={'/api/v1/governance/continuity-plans':'createPlan','/api/v1/governance/recovery-procedures':'createProcedure','/api/v1/governance/continuity-exercises':'createExercise'};if(req.method==='POST'&&bcCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return businessContinuity[bcCreates[req.url]](req,res)}
-  const bc=req.url.match(/^\/api\/v1\/governance\/(continuity-plans|continuity-exercises)\/([^/]+)\/(approve|activate|start|complete)$/);if(bc&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const h={approve:'approvePlan',activate:'activatePlan',start:'startExercise',complete:'completeExercise'};return businessContinuity[h[bc[3]]](req,res,bc[2])}
-  if(req.url==='/api/v1/governance/continuity-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return businessContinuity.metrics(req,res)}
-  const vendorCreates={'/api/v1/governance/vendors':'createVendor','/api/v1/governance/vendor-questionnaires':'createQuestionnaire','/api/v1/governance/vendor-documents':'createDocument','/api/v1/governance/vendor-reviews':'createReview'};if(req.method==='POST'&&vendorCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return vendorRiskManagement[vendorCreates[req.url]](req,res)}const vq=req.url.match(/^\/api\/v1\/governance\/vendor-questionnaires\/([^/]+)\/(submit|review)$/);if(vq&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return vendorRiskManagement[vq[2]==='submit'?'submitQuestionnaire':'reviewQuestionnaire'](req,res,vq[1])}if(req.url==='/api/v1/governance/vendor-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return vendorRiskManagement.metrics(req,res)}
-  const assetCreates={'/api/v1/governance/assets':'createAsset','/api/v1/governance/asset-software':'createSoftware','/api/v1/governance/saas-subscriptions':'createSubscription'};if(req.method==='POST'&&assetCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return enterpriseAssetInventory[assetCreates[req.url]](req,res)}const aa=req.url.match(/^\/api\/v1\/governance\/assets\/([^/]+)\/(transfer|transition)$/);if(aa&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return enterpriseAssetInventory[aa[2]==='transfer'?'transferOwnership':'transitionLifecycle'](req,res,aa[1])}if(req.url==='/api/v1/governance/asset-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return enterpriseAssetInventory.metrics(req,res)}
+
+  if (req.url.startsWith('/api/v1/governance/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.GOVERNANCE_READ : PERMISSIONS.GOVERNANCE_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase09Governance.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/ai-platform/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE10_READ : PERMISSIONS.PHASE10_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase10AiPlatform.dispatch(req, res)) return;
+  }
 
   return notFound(res);
 }
