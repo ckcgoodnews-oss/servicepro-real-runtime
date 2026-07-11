@@ -1,0 +1,5 @@
+const { sendJson }=require('../utils/http');
+function r(req){return req.context.repositories.phase12Marketplace;}
+function wrap(v,res,status=200){Promise.resolve(v).then(data=>sendJson(res,status,{data})).catch(e=>sendJson(res,e.status||500,{error:{code:e.code||'error',message:e.message}}));}
+function dispatch(req,res){const m=req.url.match(/^\/api\/v1\/marketplace\/([^/?]+)(?:\/([^/?]+))?(?:\/([^/?]+))?/);if(!m)return false;const domain=m[1],id=m[2]||'',action=m[3]||'';if(domain==='metrics'&&req.method==='GET'){wrap(r(req).metrics(req.context.tenantId||''),res);return true;}if(!id&&req.method==='POST'){wrap(r(req).create({...req.body,tenantId:req.body.tenantId||req.context.tenantId||'',domain}),res,201);return true;}if(!id&&req.method==='GET'){wrap(r(req).list({tenantId:req.context.tenantId||'',domain}),res);return true;}if(id&&!action&&req.method==='GET'){wrap(r(req).get(id),res);return true;}if(id&&action&&req.method==='POST'){wrap(r(req).transition(id,action),res);return true;}return false;}
+module.exports={dispatch};

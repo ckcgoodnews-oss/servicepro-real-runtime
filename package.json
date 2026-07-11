@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "1.200.0",
+  "version": "1.215.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -62,7 +62,23 @@
     "seed:sprint197": "node scripts/seed-sprint197-tenant-isolation-validation.js",
     "seed:sprint198": "node scripts/seed-sprint198-platform-upgrade-manager.js",
     "seed:sprint199": "node scripts/seed-sprint199-enterprise-backup-manager.js",
-    "seed:sprint200": "node scripts/seed-sprint200-production-readiness-certification.js"
+    "seed:sprint200": "node scripts/seed-sprint200-production-readiness-certification.js",
+    "test:phase12": "node scripts/run-tests.js",
+    "seed:sprint201": "node scripts/seed-sprint201-integration-marketplace.js",
+    "seed:sprint202": "node scripts/seed-sprint202-plugin-sdk.js",
+    "seed:sprint203": "node scripts/seed-sprint203-extension-framework.js",
+    "seed:sprint204": "node scripts/seed-sprint204-public-rest-api.js",
+    "seed:sprint205": "node scripts/seed-sprint205-graphql-api.js",
+    "seed:sprint206": "node scripts/seed-sprint206-webhook-platform.js",
+    "seed:sprint207": "node scripts/seed-sprint207-oauth-partner-portal.js",
+    "seed:sprint208": "node scripts/seed-sprint208-marketplace-billing.js",
+    "seed:sprint209": "node scripts/seed-sprint209-workflow-marketplace.js",
+    "seed:sprint210": "node scripts/seed-sprint210-automation-marketplace.js",
+    "seed:sprint211": "node scripts/seed-sprint211-template-marketplace.js",
+    "seed:sprint212": "node scripts/seed-sprint212-desktop-synchronization.js",
+    "seed:sprint213": "node scripts/seed-sprint213-mobile-sdk.js",
+    "seed:sprint214": "node scripts/seed-sprint214-command-line-interface.js",
+    "seed:sprint215": "node scripts/seed-sprint215-developer-portal.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
