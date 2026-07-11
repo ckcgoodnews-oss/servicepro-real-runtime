@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "1.56.0",
+  "version": "1.57.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -14,6 +14,7 @@
     "test:sprint152": "node tests/sprint152-privacy-case-orchestration.test.js",
     "test:sprint155": "node tests/sprint155-privacy-compliance-reporting.test.js",
     "test:sprint156": "node tests/sprint156-privacy-risk-remediation.test.js",
+    "test:sprint157": "node tests/sprint157-privacy-control-monitoring.test.js",
     "client:test": "node scripts/api-smoke-client.js"
   },
   "dependencies": {

@@ -43,6 +43,7 @@ const privacyDiscovery = require('./routes/privacyDiscovery');
 const privacyAppeals = require('./routes/privacyAppeals');
 const privacyCompliance = require('./routes/privacyCompliance');
 const privacyRisk = require('./routes/privacyRisk');
+const privacyMonitoring = require('./routes/privacyMonitoring');
 
 async function router(req, res) {
   req.context = {};
@@ -385,6 +386,11 @@ async function router(req, res) {
   const riskAction=req.url.match(/^\/api\/v1\/privacy\/risk-findings\/([^/]+)\/(remediate|request-exception|approve-exception|resolve)$/);
   if(riskAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const handlers={remediate:'planRemediation','request-exception':'requestException','approve-exception':'approveException',resolve:'resolveFinding'};return privacyRisk[handlers[riskAction[2]]](req,res,riskAction[1]);}
   if(req.url==='/api/v1/privacy/risk-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return privacyRisk.metrics(req,res);}
+  const monitoringCreates={'/api/v1/privacy/monitoring-controls':'createControl','/api/v1/privacy/monitoring-runs':'createRun','/api/v1/privacy/monitoring-alerts':'createAlert'};
+  if(req.method==='POST'&&monitoringCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return privacyMonitoring[monitoringCreates[req.url]](req,res);}
+  const monitoringAction=req.url.match(/^\/api\/v1\/privacy\/(monitoring-runs|monitoring-alerts)\/([^/]+)\/(complete|acknowledge|resolve)$/);
+  if(monitoringAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const handlers={complete:'completeRun',acknowledge:'acknowledgeAlert',resolve:'resolveAlert'};return privacyMonitoring[handlers[monitoringAction[3]]](req,res,monitoringAction[2]);}
+  if(req.url==='/api/v1/privacy/monitoring-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return privacyMonitoring.metrics(req,res);}
 
   return notFound(res);
 }
