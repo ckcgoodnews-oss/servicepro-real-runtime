@@ -48,6 +48,7 @@ const privacyDataTransfers = require('./routes/privacyDataTransfers');
 const policyManagement = require('./routes/policyManagement');
 const enterpriseRisk = require('./routes/enterpriseRisk');
 const businessContinuity = require('./routes/businessContinuity');
+const vendorRiskManagement = require('./routes/vendorRiskManagement');
 
 async function router(req, res) {
   req.context = {};
@@ -415,6 +416,7 @@ async function router(req, res) {
   const bcCreates={'/api/v1/governance/continuity-plans':'createPlan','/api/v1/governance/recovery-procedures':'createProcedure','/api/v1/governance/continuity-exercises':'createExercise'};if(req.method==='POST'&&bcCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return businessContinuity[bcCreates[req.url]](req,res)}
   const bc=req.url.match(/^\/api\/v1\/governance\/(continuity-plans|continuity-exercises)\/([^/]+)\/(approve|activate|start|complete)$/);if(bc&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const h={approve:'approvePlan',activate:'activatePlan',start:'startExercise',complete:'completeExercise'};return businessContinuity[h[bc[3]]](req,res,bc[2])}
   if(req.url==='/api/v1/governance/continuity-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return businessContinuity.metrics(req,res)}
+  const vendorCreates={'/api/v1/governance/vendors':'createVendor','/api/v1/governance/vendor-questionnaires':'createQuestionnaire','/api/v1/governance/vendor-documents':'createDocument','/api/v1/governance/vendor-reviews':'createReview'};if(req.method==='POST'&&vendorCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return vendorRiskManagement[vendorCreates[req.url]](req,res)}const vq=req.url.match(/^\/api\/v1\/governance\/vendor-questionnaires\/([^/]+)\/(submit|review)$/);if(vq&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return vendorRiskManagement[vq[2]==='submit'?'submitQuestionnaire':'reviewQuestionnaire'](req,res,vq[1])}if(req.url==='/api/v1/governance/vendor-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return vendorRiskManagement.metrics(req,res)}
 
   return notFound(res);
 }
