@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "1.63.0",
+  "version": "1.64.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -22,7 +22,8 @@
     "test:sprint160": "node tests/sprint160-enterprise-risk-register.test.js",
     "test:sprint161": "node tests/sprint161-business-continuity.test.js",
     "test:sprint162": "node tests/sprint162-vendor-risk-management.test.js",
-    "test:sprint163": "node tests/sprint163-enterprise-asset-inventory.test.js"
+    "test:sprint163": "node tests/sprint163-enterprise-asset-inventory.test.js",
+    "test:sprint164": "node tests/sprint164-certificate-lifecycle.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
