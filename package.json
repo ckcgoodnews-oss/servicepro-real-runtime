@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -243,7 +243,23 @@
     "seed:sprint367": "node scripts/seed-sprint367-ai-change-risk-prediction.js",
     "seed:sprint368": "node scripts/seed-sprint368-incident-pattern-intelligence.js",
     "seed:sprint369": "node scripts/seed-sprint369-service-automation-governance.js",
-    "seed:sprint370": "node scripts/seed-sprint370-version-3-1-general-availability.js"
+    "seed:sprint370": "node scripts/seed-sprint370-version-3-1-general-availability.js",
+    "test:phase23": "node scripts/run-tests.js",
+    "seed:sprint371": "node scripts/seed-sprint371-unified-customer-journey.js",
+    "seed:sprint372": "node scripts/seed-sprint372-mobile-offline-workspace.js",
+    "seed:sprint373": "node scripts/seed-sprint373-technician-route-intelligence.js",
+    "seed:sprint374": "node scripts/seed-sprint374-real-time-customer-tracking.js",
+    "seed:sprint375": "node scripts/seed-sprint375-digital-service-check-in.js",
+    "seed:sprint376": "node scripts/seed-sprint376-mobile-forms-and-signatures.js",
+    "seed:sprint377": "node scripts/seed-sprint377-customer-preference-center.js",
+    "seed:sprint378": "node scripts/seed-sprint378-proactive-appointment-communications.js",
+    "seed:sprint379": "node scripts/seed-sprint379-field-collaboration.js",
+    "seed:sprint380": "node scripts/seed-sprint380-mobile-inventory-operations.js",
+    "seed:sprint381": "node scripts/seed-sprint381-customer-self-service-automation.js",
+    "seed:sprint382": "node scripts/seed-sprint382-experience-quality-analytics.js",
+    "seed:sprint383": "node scripts/seed-sprint383-accessibility-for-field-applications.js",
+    "seed:sprint384": "node scripts/seed-sprint384-mobile-security-hardening.js",
+    "seed:sprint385": "node scripts/seed-sprint385-version-3-2-general-availability.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
