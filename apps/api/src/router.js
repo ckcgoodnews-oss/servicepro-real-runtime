@@ -46,6 +46,7 @@ const privacyRisk = require('./routes/privacyRisk');
 const privacyMonitoring = require('./routes/privacyMonitoring');
 const privacyDataTransfers = require('./routes/privacyDataTransfers');
 const phase09Governance = require('./routes/phase09Governance');
+const phase14EnterpriseProduction = require('./routes/phase14EnterpriseProduction');
 const phase13EnterpriseAnalytics = require('./routes/phase13EnterpriseAnalytics');
 const phase12Marketplace = require('./routes/phase12Marketplace');
 const phase11PlatformOperations = require('./routes/phase11PlatformOperations');
@@ -117,6 +118,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE13_READ : PERMISSIONS.PHASE13_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase13EnterpriseAnalytics.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/enterprise-production/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE14_READ : PERMISSIONS.PHASE14_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase14EnterpriseProduction.dispatch(req, res)) return;
   }
 
   return notFound(res);
@@ -467,6 +475,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE13_READ : PERMISSIONS.PHASE13_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase13EnterpriseAnalytics.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/enterprise-production/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE14_READ : PERMISSIONS.PHASE14_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase14EnterpriseProduction.dispatch(req, res)) return;
   }
 
   return notFound(res);

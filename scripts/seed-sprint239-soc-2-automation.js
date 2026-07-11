@@ -1,0 +1,2 @@
+const { getRepositories } = require('../apps/api/src/repositories/repositoryFactory');
+(async()=>{const r=getRepositories().phase14EnterpriseProduction; const row=await r.create({tenantId:process.env.DEFAULT_TENANT_ID||'tenant_demo',domain:'soc-2-automation',name:'Demo SOC 2 Automation'}); console.log(JSON.stringify(row,null,2)); if(r.store&&r.store.close) await r.store.close();})().catch(e=>{console.error(e);process.exit(1)});

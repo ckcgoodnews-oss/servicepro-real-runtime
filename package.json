@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "1.230.0",
+  "version": "1.250.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -94,7 +94,28 @@
     "seed:sprint227": "node scripts/seed-sprint227-data-catalog.js",
     "seed:sprint228": "node scripts/seed-sprint228-data-lineage.js",
     "seed:sprint229": "node scripts/seed-sprint229-data-warehouse-integration.js",
-    "seed:sprint230": "node scripts/seed-sprint230-ai-analytics.js"
+    "seed:sprint230": "node scripts/seed-sprint230-ai-analytics.js",
+    "test:phase14": "node scripts/run-tests.js",
+    "seed:sprint231": "node scripts/seed-sprint231-high-availability.js",
+    "seed:sprint232": "node scripts/seed-sprint232-zero-downtime-deployments.js",
+    "seed:sprint233": "node scripts/seed-sprint233-kubernetes-operations.js",
+    "seed:sprint234": "node scripts/seed-sprint234-horizontal-scaling.js",
+    "seed:sprint235": "node scripts/seed-sprint235-multi-cloud-deployment.js",
+    "seed:sprint236": "node scripts/seed-sprint236-regional-replication.js",
+    "seed:sprint237": "node scripts/seed-sprint237-disaster-recovery-automation.js",
+    "seed:sprint238": "node scripts/seed-sprint238-security-hardening.js",
+    "seed:sprint239": "node scripts/seed-sprint239-soc-2-automation.js",
+    "seed:sprint240": "node scripts/seed-sprint240-iso-27001-automation.js",
+    "seed:sprint241": "node scripts/seed-sprint241-hipaa-extensions.js",
+    "seed:sprint242": "node scripts/seed-sprint242-pci-dss-extensions.js",
+    "seed:sprint243": "node scripts/seed-sprint243-fedramp-readiness.js",
+    "seed:sprint244": "node scripts/seed-sprint244-penetration-testing-automation.js",
+    "seed:sprint245": "node scripts/seed-sprint245-production-optimization.js",
+    "seed:sprint246": "node scripts/seed-sprint246-version-2-upgrade-tooling.js",
+    "seed:sprint247": "node scripts/seed-sprint247-enterprise-installer.js",
+    "seed:sprint248": "node scripts/seed-sprint248-long-term-support.js",
+    "seed:sprint249": "node scripts/seed-sprint249-release-candidate.js",
+    "seed:sprint250": "node scripts/seed-sprint250-version-2-0-general-availability.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
