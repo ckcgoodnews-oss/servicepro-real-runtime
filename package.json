@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "1.57.0",
+  "version": "1.58.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -15,7 +15,9 @@
     "test:sprint155": "node tests/sprint155-privacy-compliance-reporting.test.js",
     "test:sprint156": "node tests/sprint156-privacy-risk-remediation.test.js",
     "test:sprint157": "node tests/sprint157-privacy-control-monitoring.test.js",
-    "client:test": "node scripts/api-smoke-client.js"
+    "client:test": "node scripts/api-smoke-client.js",
+    "seed:privacy-transfers": "node scripts/seed-privacy-data-transfers.js",
+    "test:sprint158": "node tests/sprint158-privacy-data-transfers.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

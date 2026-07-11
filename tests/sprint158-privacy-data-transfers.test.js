@@ -1,0 +1,15 @@
+const fs = require('fs');
+for (const f of ['apps/api/src/services/privacyDataTransferService.js','apps/api/src/repositories/privacyDataTransferRepository.js','apps/api/src/routes/privacyDataTransfers.js','packages/database/postgres/158_privacy_data_transfers.sql']) if (!fs.existsSync(f)) throw new Error(`Missing ${f}`);
+const s = require('../apps/api/src/services/privacyDataTransferService');
+const transfer = { id: 'x1', ...s.normalizeTransfer({ tenantId: 't', name: 'EU to US Analytics', sourceCountry: 'DE', destinationCountry: 'US', mechanism: 'scc', riskLevel: 'high' }) };
+let assessment = { id: 'a1', ...s.normalizeAssessment({ tenantId: 't', transferId: 'x1', riskLevel: 'high' }) };
+assessment = s.approveAssessment(s.submitAssessment(assessment, 'privacy'), 'dpo', 'Approved with encryption.');
+let safeguard = { id: 's1', ...s.normalizeSafeguard({ tenantId: 't', transferId: 'x1', name: 'SCC Module 2', documentUrl: 's3://legal/scc.pdf' }) };
+safeguard = s.activateSafeguard(safeguard);
+let approval = { id: 'p1', ...s.normalizeApproval({ tenantId: 't', transferId: 'x1', assessmentId: 'a1', approver: 'dpo' }) };
+approval = s.approveApproval(approval, 'Approved.');
+if (!s.transferReady({ transfer, assessments: [assessment], safeguards: [safeguard], approvals: [approval] })) process.exit(1);
+const active = s.activateTransfer(s.approveTransfer(transfer));
+const metrics = s.metrics({ transfers: [active], assessments: [assessment], safeguards: [safeguard], approvals: [approval] });
+if (metrics.activeTransfers !== 1 || metrics.highRiskTransfers !== 1 || metrics.approvedAssessments !== 1 || metrics.activeSafeguards !== 1 || metrics.pendingApprovals !== 0) process.exit(1);
+console.log('Sprint 158 privacy data transfer governance test passed.');

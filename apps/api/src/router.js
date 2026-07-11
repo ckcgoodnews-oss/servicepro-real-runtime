@@ -44,6 +44,7 @@ const privacyAppeals = require('./routes/privacyAppeals');
 const privacyCompliance = require('./routes/privacyCompliance');
 const privacyRisk = require('./routes/privacyRisk');
 const privacyMonitoring = require('./routes/privacyMonitoring');
+const privacyDataTransfers = require('./routes/privacyDataTransfers');
 
 async function router(req, res) {
   req.context = {};
@@ -391,6 +392,15 @@ async function router(req, res) {
   const monitoringAction=req.url.match(/^\/api\/v1\/privacy\/(monitoring-runs|monitoring-alerts)\/([^/]+)\/(complete|acknowledge|resolve)$/);
   if(monitoringAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const handlers={complete:'completeRun',acknowledge:'acknowledgeAlert',resolve:'resolveAlert'};return privacyMonitoring[handlers[monitoringAction[3]]](req,res,monitoringAction[2]);}
   if(req.url==='/api/v1/privacy/monitoring-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return privacyMonitoring.metrics(req,res);}
+  const transferCreates={'/api/v1/privacy/data-transfers':'createTransfer','/api/v1/privacy/transfer-assessments':'createAssessment','/api/v1/privacy/transfer-safeguards':'createSafeguard','/api/v1/privacy/transfer-approvals':'createApproval'};
+  if(req.method==='POST'&&transferCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return privacyDataTransfers[transferCreates[req.url]](req,res);}
+  const transferAction=req.url.match(/^\/api\/v1\/privacy\/(data-transfers|transfer-assessments|transfer-safeguards|transfer-approvals)\/([^/]+)\/(submit|approve|reject|activate|suspend|terminate)$/);
+  if(transferAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const handlers={
+    'transfer-assessments:submit':'submitAssessment','transfer-assessments:approve':'approveAssessment','transfer-assessments:reject':'rejectAssessment',
+    'transfer-safeguards:activate':'activateSafeguard','transfer-approvals:approve':'approveApproval','transfer-approvals:reject':'rejectApproval',
+    'data-transfers:approve':'approveTransfer','data-transfers:activate':'activateTransfer','data-transfers:suspend':'suspendTransfer','data-transfers:terminate':'terminateTransfer'};
+    const handler=handlers[`${transferAction[1]}:${transferAction[3]}`];if(handler)return privacyDataTransfers[handler](req,res,transferAction[2]);}
+  if(req.url==='/api/v1/privacy/transfer-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return privacyDataTransfers.metrics(req,res);}
 
   return notFound(res);
 }
