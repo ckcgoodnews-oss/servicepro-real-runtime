@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -259,7 +259,23 @@
     "seed:sprint382": "node scripts/seed-sprint382-experience-quality-analytics.js",
     "seed:sprint383": "node scripts/seed-sprint383-accessibility-for-field-applications.js",
     "seed:sprint384": "node scripts/seed-sprint384-mobile-security-hardening.js",
-    "seed:sprint385": "node scripts/seed-sprint385-version-3-2-general-availability.js"
+    "seed:sprint385": "node scripts/seed-sprint385-version-3-2-general-availability.js",
+    "test:phase24": "node scripts/run-tests.js",
+    "seed:sprint386": "node scripts/seed-sprint386-advanced-revenue-operations.js",
+    "seed:sprint387": "node scripts/seed-sprint387-usage-based-billing.js",
+    "seed:sprint388": "node scripts/seed-sprint388-contract-pricing-automation.js",
+    "seed:sprint389": "node scripts/seed-sprint389-margin-intelligence.js",
+    "seed:sprint390": "node scripts/seed-sprint390-cash-application-automation.js",
+    "seed:sprint391": "node scripts/seed-sprint391-collections-optimization.js",
+    "seed:sprint392": "node scripts/seed-sprint392-tax-operations-expansion.js",
+    "seed:sprint393": "node scripts/seed-sprint393-partner-revenue-sharing.js",
+    "seed:sprint394": "node scripts/seed-sprint394-sales-forecast-intelligence.js",
+    "seed:sprint395": "node scripts/seed-sprint395-customer-lifetime-value.js",
+    "seed:sprint396": "node scripts/seed-sprint396-renewal-and-expansion-management.js",
+    "seed:sprint397": "node scripts/seed-sprint397-financial-controls-automation.js",
+    "seed:sprint398": "node scripts/seed-sprint398-revenue-assurance.js",
+    "seed:sprint399": "node scripts/seed-sprint399-growth-experiment-governance.js",
+    "seed:sprint400": "node scripts/seed-sprint400-version-3-3-general-availability.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
