@@ -39,6 +39,7 @@ const inventory = require('./routes/inventory');
 const materials = require('./routes/materials');
 const privacyCaseOrchestration = require('./routes/privacyCaseOrchestration');
 const privacyDsarOps = require('./routes/privacyDsarOps');
+const privacyDiscovery = require('./routes/privacyDiscovery');
 
 async function router(req, res) {
   req.context = {};
@@ -362,6 +363,11 @@ async function router(req, res) {
     if (!requirePermission(PERMISSIONS.PRIVACY_READ)(req, res)) return;
     return privacyDsarOps.metrics(req, res);
   }
+  const discoveryCreates = {'/api/v1/privacy/discovery-scans':'createScan','/api/v1/privacy/discovered-records':'addRecord','/api/v1/privacy/fulfillment-packages':'createPackage'};
+  if(req.method==='POST'&&discoveryCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return privacyDiscovery[discoveryCreates[req.url]](req,res);}
+  const discoveryAction=req.url.match(/^\/api\/v1\/privacy\/(discovery-scans|fulfillment-packages)\/([^/]+)\/(start|complete|fail|submit|approve|deliver)$/);
+  if(discoveryAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const handlers={start:'startScan',complete:'completeScan',fail:'failScan',submit:'submitPackage',approve:'approvePackage',deliver:'deliverPackage'};return privacyDiscovery[handlers[discoveryAction[3]]](req,res,discoveryAction[2]);}
+  if(req.url==='/api/v1/privacy/discovery-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return privacyDiscovery.metrics(req,res);}
 
   return notFound(res);
 }

@@ -1,0 +1,4 @@
+const svc=require('../apps/api/src/services/privacyDiscoveryService');
+let scan=svc.normalizeScanInput({tenantId:'t1',caseId:'c1',sources:['crm']}); scan=svc.completeScan(svc.startScan(scan),3); if(scan.status!=='completed'||scan.recordsFound!==3)process.exit(1);
+const record=svc.normalizeRecordInput({tenantId:'t1',scanId:'s1',source:'crm',fields:{email:'a@b.com'}}); let pkg=svc.normalizePackageInput({tenantId:'t1',caseId:'c1',recordIds:['r1']}); pkg=svc.deliverPackage(svc.approvePackage(svc.submitPackage(pkg),'dpo'),'secure_link'); if(pkg.status!=='delivered')process.exit(1);
+const m=svc.discoveryMetrics({scans:[scan],records:[record],packages:[pkg]}); if(m.completedScans!==1||m.recordsIncluded!==1||m.packagesDelivered!==1)process.exit(1); console.log('Sprint 153 privacy discovery and fulfillment test passed.');

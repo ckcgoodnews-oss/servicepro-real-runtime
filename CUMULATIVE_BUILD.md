@@ -5,8 +5,8 @@ This repository was assembled in numerical order from the supplied Sprint 1 thro
 ## Build identity
 
 - Package: `servicepro-real-runtime`
-- Version: `1.52.0`
-- Included Sprints: 1-152
+- Version: `1.53.0`
+- Included Sprints: 1-153
 - Runtime entry point: `apps/api/src/server.js`
 - Database migrations: `packages/database/postgres`
 
