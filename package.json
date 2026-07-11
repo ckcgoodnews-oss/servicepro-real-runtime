@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -179,7 +179,23 @@
     "seed:sprint307": "node scripts/seed-sprint307-industry-workflow-templates.js",
     "seed:sprint308": "node scripts/seed-sprint308-industry-analytics-packs.js",
     "seed:sprint309": "node scripts/seed-sprint309-industry-solution-certification.js",
-    "seed:sprint310": "node scripts/seed-sprint310-industry-solutions-release.js"
+    "seed:sprint310": "node scripts/seed-sprint310-industry-solutions-release.js",
+    "test:phase19": "node scripts/run-tests.js",
+    "seed:sprint311": "node scripts/seed-sprint311-custom-object-framework.js",
+    "seed:sprint312": "node scripts/seed-sprint312-visual-workflow-designer.js",
+    "seed:sprint313": "node scripts/seed-sprint313-low-code-form-builder.js",
+    "seed:sprint314": "node scripts/seed-sprint314-business-rule-designer.js",
+    "seed:sprint315": "node scripts/seed-sprint315-plugin-runtime-v2.js",
+    "seed:sprint316": "node scripts/seed-sprint316-plugin-lifecycle-management.js",
+    "seed:sprint317": "node scripts/seed-sprint317-marketplace-publishing-workflow.js",
+    "seed:sprint318": "node scripts/seed-sprint318-extension-security-sandbox.js",
+    "seed:sprint319": "node scripts/seed-sprint319-developer-test-harness.js",
+    "seed:sprint320": "node scripts/seed-sprint320-api-schema-registry.js",
+    "seed:sprint321": "node scripts/seed-sprint321-event-schema-registry.js",
+    "seed:sprint322": "node scripts/seed-sprint322-integration-testing-lab.js",
+    "seed:sprint323": "node scripts/seed-sprint323-developer-observability.js",
+    "seed:sprint324": "node scripts/seed-sprint324-extensibility-certification.js",
+    "seed:sprint325": "node scripts/seed-sprint325-platform-extensibility-release.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -60,6 +60,8 @@ const phase17GlobalScale = require('./routes/phase17GlobalScale');
 
 const phase18IndustrySolutions = require('./routes/phase18IndustrySolutions');
 
+const phase19PlatformExtensibility = require('./routes/phase19PlatformExtensibility');
+
 async function router(req, res) {
   req.context = {};
   attachRequestId(req, res);
@@ -161,6 +163,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE18_READ : PERMISSIONS.PHASE18_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase18IndustrySolutions.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/platform-extensibility/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE19_READ : PERMISSIONS.PHASE19_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase19PlatformExtensibility.dispatch(req, res)) return;
   }
 
   return notFound(res);
@@ -546,6 +555,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE18_READ : PERMISSIONS.PHASE18_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase18IndustrySolutions.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/platform-extensibility/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE19_READ : PERMISSIONS.PHASE19_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase19PlatformExtensibility.dispatch(req, res)) return;
   }
 
   return notFound(res);
