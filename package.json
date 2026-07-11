@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "3.4.0",
+  "version": "4.0.0-rc1",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -291,7 +291,23 @@
     "seed:sprint412": "node scripts/seed-sprint412-ecosystem-event-bus.js",
     "seed:sprint413": "node scripts/seed-sprint413-marketplace-revenue-federation.js",
     "seed:sprint414": "node scripts/seed-sprint414-federation-security-certification.js",
-    "seed:sprint415": "node scripts/seed-sprint415-version-3-4-general-availability.js"
+    "seed:sprint415": "node scripts/seed-sprint415-version-3-4-general-availability.js",
+    "test:phase26": "node scripts/run-tests.js",
+    "seed:sprint416": "node scripts/seed-sprint416-architecture-decomposition.js",
+    "seed:sprint417": "node scripts/seed-sprint417-domain-event-backbone.js",
+    "seed:sprint418": "node scripts/seed-sprint418-api-version-4-foundation.js",
+    "seed:sprint419": "node scripts/seed-sprint419-data-model-modernization.js",
+    "seed:sprint420": "node scripts/seed-sprint420-frontend-platform-modernization.js",
+    "seed:sprint421": "node scripts/seed-sprint421-identity-architecture-version-4.js",
+    "seed:sprint422": "node scripts/seed-sprint422-policy-engine-version-4.js",
+    "seed:sprint423": "node scripts/seed-sprint423-workflow-runtime-version-4.js",
+    "seed:sprint424": "node scripts/seed-sprint424-observability-architecture-version-4.js",
+    "seed:sprint425": "node scripts/seed-sprint425-performance-baseline-version-4.js",
+    "seed:sprint426": "node scripts/seed-sprint426-compatibility-bridge-version-3-to-4.js",
+    "seed:sprint427": "node scripts/seed-sprint427-version-4-migration-assistant.js",
+    "seed:sprint428": "node scripts/seed-sprint428-version-4-security-baseline.js",
+    "seed:sprint429": "node scripts/seed-sprint429-version-4-release-readiness.js",
+    "seed:sprint430": "node scripts/seed-sprint430-version-4-release-candidate.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
