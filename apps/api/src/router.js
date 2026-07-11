@@ -54,6 +54,8 @@ const phase10AiPlatform = require('./routes/phase10AiPlatform');
 
 const phase15PostGaLts = require('./routes/phase15PostGaLts');
 
+const phase16EnterpriseIntelligence = require('./routes/phase16EnterpriseIntelligence');
+
 async function router(req, res) {
   req.context = {};
   attachRequestId(req, res);
@@ -134,6 +136,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE15_READ : PERMISSIONS.PHASE15_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase15PostGaLts.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/enterprise-intelligence/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE16_READ : PERMISSIONS.PHASE16_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase16EnterpriseIntelligence.dispatch(req, res)) return;
   }
 
   return notFound(res);
@@ -498,6 +507,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE15_READ : PERMISSIONS.PHASE15_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase15PostGaLts.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/enterprise-intelligence/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE16_READ : PERMISSIONS.PHASE16_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase16EnterpriseIntelligence.dispatch(req, res)) return;
   }
 
   return notFound(res);

@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -131,7 +131,23 @@
     "seed:sprint262": "node scripts/seed-sprint262-capacity-cost-optimization.js",
     "seed:sprint263": "node scripts/seed-sprint263-operational-resilience-exercises.js",
     "seed:sprint264": "node scripts/seed-sprint264-version-2-0-1-release-readiness.js",
-    "seed:sprint265": "node scripts/seed-sprint265-version-2-0-1-maintenance-release.js"
+    "seed:sprint265": "node scripts/seed-sprint265-version-2-0-1-maintenance-release.js",
+    "test:phase16": "node scripts/run-tests.js",
+    "seed:sprint266": "node scripts/seed-sprint266-admin-ai-copilot.js",
+    "seed:sprint267": "node scripts/seed-sprint267-technician-ai-copilot.js",
+    "seed:sprint268": "node scripts/seed-sprint268-autonomous-workflow-recommendations.js",
+    "seed:sprint269": "node scripts/seed-sprint269-semantic-enterprise-search.js",
+    "seed:sprint270": "node scripts/seed-sprint270-enterprise-knowledge-graph.js",
+    "seed:sprint271": "node scripts/seed-sprint271-reasoning-orchestration.js",
+    "seed:sprint272": "node scripts/seed-sprint272-agent-tool-registry.js",
+    "seed:sprint273": "node scripts/seed-sprint273-human-in-the-loop-controls.js",
+    "seed:sprint274": "node scripts/seed-sprint274-natural-language-reporting.js",
+    "seed:sprint275": "node scripts/seed-sprint275-ai-memory-management.js",
+    "seed:sprint276": "node scripts/seed-sprint276-model-routing-optimization.js",
+    "seed:sprint277": "node scripts/seed-sprint277-ai-quality-evaluation.js",
+    "seed:sprint278": "node scripts/seed-sprint278-ai-safety-guardrails.js",
+    "seed:sprint279": "node scripts/seed-sprint279-enterprise-intelligence-observability.js",
+    "seed:sprint280": "node scripts/seed-sprint280-enterprise-intelligence-release.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
