@@ -46,6 +46,7 @@ const privacyRisk = require('./routes/privacyRisk');
 const privacyMonitoring = require('./routes/privacyMonitoring');
 const privacyDataTransfers = require('./routes/privacyDataTransfers');
 const policyManagement = require('./routes/policyManagement');
+const enterpriseRisk = require('./routes/enterpriseRisk');
 
 async function router(req, res) {
   req.context = {};
@@ -407,6 +408,9 @@ async function router(req, res) {
   const policyAction=req.url.match(/^\/api\/v1\/governance\/(policy-versions|policy-acknowledgements|policy-exceptions)\/([^/]+)\/(submit|decide|publish|acknowledge)$/);
   if(policyAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const h={'policy-versions:submit':'submitVersion','policy-versions:decide':'decideVersion','policy-versions:publish':'publishVersion','policy-acknowledgements:acknowledge':'acknowledge','policy-exceptions:decide':'decideException'}[`${policyAction[1]}:${policyAction[3]}`];if(h)return policyManagement[h](req,res,policyAction[2]);}
   if(req.url==='/api/v1/governance/policy-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return policyManagement.metrics(req,res);}
+  const riskCreates={'/api/v1/governance/risks':'createRisk','/api/v1/governance/risk-kris':'createKri','/api/v1/governance/risk-treatments':'createTreatment'};if(req.method==='POST'&&riskCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return enterpriseRisk[riskCreates[req.url]](req,res)}
+  const er=req.url.match(/^\/api\/v1\/governance\/(risks|risk-kris|risk-treatments)\/([^/]+)\/(assess|measure|complete)$/);if(er&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const h={assess:'assessRisk',measure:'measureKri',complete:'completeTreatment'};return enterpriseRisk[h[er[3]]](req,res,er[2])}
+  if(req.url==='/api/v1/governance/risk-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return enterpriseRisk.metrics(req,res)}
 
   return notFound(res);
 }
