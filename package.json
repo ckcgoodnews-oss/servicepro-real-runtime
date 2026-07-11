@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "1.185.0",
+  "version": "1.200.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -46,7 +46,23 @@
     "seed:sprint182": "node scripts/seed-sprint182-forecasting-engine.js",
     "seed:sprint183": "node scripts/seed-sprint183-ai-cost-governance.js",
     "seed:sprint184": "node scripts/seed-sprint184-ai-explainability.js",
-    "seed:sprint185": "node scripts/seed-sprint185-enterprise-ai-governance.js"
+    "seed:sprint185": "node scripts/seed-sprint185-enterprise-ai-governance.js",
+    "test:phase11": "node scripts/run-tests.js",
+    "seed:sprint186": "node scripts/seed-sprint186-platform-health-dashboard.js",
+    "seed:sprint187": "node scripts/seed-sprint187-background-job-scheduler.js",
+    "seed:sprint188": "node scripts/seed-sprint188-notification-orchestration.js",
+    "seed:sprint189": "node scripts/seed-sprint189-api-gateway.js",
+    "seed:sprint190": "node scripts/seed-sprint190-rate-limiting.js",
+    "seed:sprint191": "node scripts/seed-sprint191-regional-deployments.js",
+    "seed:sprint192": "node scripts/seed-sprint192-distributed-cache.js",
+    "seed:sprint193": "node scripts/seed-sprint193-performance-monitoring.js",
+    "seed:sprint194": "node scripts/seed-sprint194-observability.js",
+    "seed:sprint195": "node scripts/seed-sprint195-distributed-tracing.js",
+    "seed:sprint196": "node scripts/seed-sprint196-feature-flags.js",
+    "seed:sprint197": "node scripts/seed-sprint197-tenant-isolation-validation.js",
+    "seed:sprint198": "node scripts/seed-sprint198-platform-upgrade-manager.js",
+    "seed:sprint199": "node scripts/seed-sprint199-enterprise-backup-manager.js",
+    "seed:sprint200": "node scripts/seed-sprint200-production-readiness-certification.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

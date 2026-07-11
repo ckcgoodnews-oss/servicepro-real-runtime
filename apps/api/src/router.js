@@ -46,6 +46,7 @@ const privacyRisk = require('./routes/privacyRisk');
 const privacyMonitoring = require('./routes/privacyMonitoring');
 const privacyDataTransfers = require('./routes/privacyDataTransfers');
 const phase09Governance = require('./routes/phase09Governance');
+const phase11PlatformOperations = require('./routes/phase11PlatformOperations');
 const phase10AiPlatform = require('./routes/phase10AiPlatform');
 
 async function router(req, res) {
@@ -93,6 +94,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE10_READ : PERMISSIONS.PHASE10_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase10AiPlatform.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/platform-operations/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE11_READ : PERMISSIONS.PHASE11_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase11PlatformOperations.dispatch(req, res)) return;
   }
 
   return notFound(res);
@@ -422,6 +430,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE10_READ : PERMISSIONS.PHASE10_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase10AiPlatform.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/platform-operations/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE11_READ : PERMISSIONS.PHASE11_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase11PlatformOperations.dispatch(req, res)) return;
   }
 
   return notFound(res);
