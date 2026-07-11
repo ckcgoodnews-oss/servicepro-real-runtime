@@ -58,6 +58,8 @@ const phase16EnterpriseIntelligence = require('./routes/phase16EnterpriseIntelli
 
 const phase17GlobalScale = require('./routes/phase17GlobalScale');
 
+const phase18IndustrySolutions = require('./routes/phase18IndustrySolutions');
+
 async function router(req, res) {
   req.context = {};
   attachRequestId(req, res);
@@ -152,6 +154,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE17_READ : PERMISSIONS.PHASE17_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase17GlobalScale.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/industry-solutions/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE18_READ : PERMISSIONS.PHASE18_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase18IndustrySolutions.dispatch(req, res)) return;
   }
 
   return notFound(res);
@@ -530,6 +539,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE17_READ : PERMISSIONS.PHASE17_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase17GlobalScale.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/industry-solutions/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE18_READ : PERMISSIONS.PHASE18_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase18IndustrySolutions.dispatch(req, res)) return;
   }
 
   return notFound(res);

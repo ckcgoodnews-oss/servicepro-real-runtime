@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -163,7 +163,23 @@
     "seed:sprint292": "node scripts/seed-sprint292-regional-compliance-packs.js",
     "seed:sprint293": "node scripts/seed-sprint293-sovereign-cloud-readiness.js",
     "seed:sprint294": "node scripts/seed-sprint294-global-scale-validation.js",
-    "seed:sprint295": "node scripts/seed-sprint295-global-scale-release.js"
+    "seed:sprint295": "node scripts/seed-sprint295-global-scale-release.js",
+    "test:phase18": "node scripts/run-tests.js",
+    "seed:sprint296": "node scripts/seed-sprint296-industry-solution-framework.js",
+    "seed:sprint297": "node scripts/seed-sprint297-healthcare-service-operations.js",
+    "seed:sprint298": "node scripts/seed-sprint298-manufacturing-maintenance-operations.js",
+    "seed:sprint299": "node scripts/seed-sprint299-government-service-operations.js",
+    "seed:sprint300": "node scripts/seed-sprint300-utilities-field-operations.js",
+    "seed:sprint301": "node scripts/seed-sprint301-transportation-fleet-operations.js",
+    "seed:sprint302": "node scripts/seed-sprint302-property-facilities-operations.js",
+    "seed:sprint303": "node scripts/seed-sprint303-telecommunications-field-operations.js",
+    "seed:sprint304": "node scripts/seed-sprint304-education-campus-operations.js",
+    "seed:sprint305": "node scripts/seed-sprint305-retail-multi-site-operations.js",
+    "seed:sprint306": "node scripts/seed-sprint306-industry-compliance-packs.js",
+    "seed:sprint307": "node scripts/seed-sprint307-industry-workflow-templates.js",
+    "seed:sprint308": "node scripts/seed-sprint308-industry-analytics-packs.js",
+    "seed:sprint309": "node scripts/seed-sprint309-industry-solution-certification.js",
+    "seed:sprint310": "node scripts/seed-sprint310-industry-solutions-release.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
