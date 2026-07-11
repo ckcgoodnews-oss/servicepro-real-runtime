@@ -49,6 +49,7 @@ const policyManagement = require('./routes/policyManagement');
 const enterpriseRisk = require('./routes/enterpriseRisk');
 const businessContinuity = require('./routes/businessContinuity');
 const vendorRiskManagement = require('./routes/vendorRiskManagement');
+const enterpriseAssetInventory = require('./routes/enterpriseAssetInventory');
 
 async function router(req, res) {
   req.context = {};
@@ -417,6 +418,7 @@ async function router(req, res) {
   const bc=req.url.match(/^\/api\/v1\/governance\/(continuity-plans|continuity-exercises)\/([^/]+)\/(approve|activate|start|complete)$/);if(bc&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const h={approve:'approvePlan',activate:'activatePlan',start:'startExercise',complete:'completeExercise'};return businessContinuity[h[bc[3]]](req,res,bc[2])}
   if(req.url==='/api/v1/governance/continuity-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return businessContinuity.metrics(req,res)}
   const vendorCreates={'/api/v1/governance/vendors':'createVendor','/api/v1/governance/vendor-questionnaires':'createQuestionnaire','/api/v1/governance/vendor-documents':'createDocument','/api/v1/governance/vendor-reviews':'createReview'};if(req.method==='POST'&&vendorCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return vendorRiskManagement[vendorCreates[req.url]](req,res)}const vq=req.url.match(/^\/api\/v1\/governance\/vendor-questionnaires\/([^/]+)\/(submit|review)$/);if(vq&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return vendorRiskManagement[vq[2]==='submit'?'submitQuestionnaire':'reviewQuestionnaire'](req,res,vq[1])}if(req.url==='/api/v1/governance/vendor-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return vendorRiskManagement.metrics(req,res)}
+  const assetCreates={'/api/v1/governance/assets':'createAsset','/api/v1/governance/asset-software':'createSoftware','/api/v1/governance/saas-subscriptions':'createSubscription'};if(req.method==='POST'&&assetCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return enterpriseAssetInventory[assetCreates[req.url]](req,res)}const aa=req.url.match(/^\/api\/v1\/governance\/assets\/([^/]+)\/(transfer|transition)$/);if(aa&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return enterpriseAssetInventory[aa[2]==='transfer'?'transferOwnership':'transitionLifecycle'](req,res,aa[1])}if(req.url==='/api/v1/governance/asset-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return enterpriseAssetInventory.metrics(req,res)}
 
   return notFound(res);
 }
