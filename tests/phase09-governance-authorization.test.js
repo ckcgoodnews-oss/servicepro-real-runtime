@@ -1,0 +1,10 @@
+const fs = require('fs');
+const { PERMISSIONS, ROLE_PRESETS } = require('../apps/api/src/auth/permissions');
+if (PERMISSIONS.GOVERNANCE_READ !== 'governance.read') throw new Error('Missing governance.read permission');
+if (PERMISSIONS.GOVERNANCE_WRITE !== 'governance.write') throw new Error('Missing governance.write permission');
+if (!ROLE_PRESETS.owner.includes(PERMISSIONS.GOVERNANCE_WRITE)) throw new Error('Owner lacks governance.write');
+const router = fs.readFileSync('apps/api/src/router.js', 'utf8');
+const governance = router.slice(router.indexOf("const policyCreates="));
+if (governance.includes('PERMISSIONS.PRIVACY_')) throw new Error('Governance routes must not use privacy permissions');
+if (!governance.includes('PERMISSIONS.GOVERNANCE_READ') || !governance.includes('PERMISSIONS.GOVERNANCE_WRITE')) throw new Error('Governance route permissions are incomplete');
+console.log('Phase 9 governance authorization test passed.');
