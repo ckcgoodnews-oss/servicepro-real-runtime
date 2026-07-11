@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "4.0.0-rc1",
+  "version": "4.0.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -307,7 +307,23 @@
     "seed:sprint427": "node scripts/seed-sprint427-version-4-migration-assistant.js",
     "seed:sprint428": "node scripts/seed-sprint428-version-4-security-baseline.js",
     "seed:sprint429": "node scripts/seed-sprint429-version-4-release-readiness.js",
-    "seed:sprint430": "node scripts/seed-sprint430-version-4-release-candidate.js"
+    "seed:sprint430": "node scripts/seed-sprint430-version-4-release-candidate.js",
+    "test:phase27": "node scripts/run-tests.js",
+    "seed:sprint431": "node scripts/seed-sprint431-version-4-rc-telemetry.js",
+    "seed:sprint432": "node scripts/seed-sprint432-version-4-regression-triage.js",
+    "seed:sprint433": "node scripts/seed-sprint433-api-version-4-compatibility-certification.js",
+    "seed:sprint434": "node scripts/seed-sprint434-database-version-4-upgrade-certification.js",
+    "seed:sprint435": "node scripts/seed-sprint435-tenant-version-4-migration-dry-runs.js",
+    "seed:sprint436": "node scripts/seed-sprint436-version-4-load-certification.js",
+    "seed:sprint437": "node scripts/seed-sprint437-version-4-dependency-remediation.js",
+    "seed:sprint438": "node scripts/seed-sprint438-version-4-accessibility-certification.js",
+    "seed:sprint439": "node scripts/seed-sprint439-version-4-disaster-recovery-certification.js",
+    "seed:sprint440": "node scripts/seed-sprint440-version-4-administrator-documentation.js",
+    "seed:sprint441": "node scripts/seed-sprint441-version-4-customer-pilot.js",
+    "seed:sprint442": "node scripts/seed-sprint442-version-4-defect-closure.js",
+    "seed:sprint443": "node scripts/seed-sprint443-version-4-production-readiness.js",
+    "seed:sprint444": "node scripts/seed-sprint444-version-4-ga-orchestration.js",
+    "seed:sprint445": "node scripts/seed-sprint445-version-4-general-availability.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

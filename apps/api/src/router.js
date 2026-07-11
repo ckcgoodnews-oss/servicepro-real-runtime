@@ -64,6 +64,7 @@ const phase19PlatformExtensibility = require('./routes/phase19PlatformExtensibil
 
 const phase20Version3Foundation = require('./routes/phase20Version3Foundation');
 const phase21Version3Ga = require('./routes/phase21Version3Ga');
+const phase27Version4Ga = require('./routes/phase27Version4Ga');
 const phase26Version4FoundationRc = require('./routes/phase26Version4FoundationRc');
 const phase25EnterpriseFederationEcosystem = require('./routes/phase25EnterpriseFederationEcosystem');
 const phase24FinancialGrowthOperations = require('./routes/phase24FinancialGrowthOperations');
@@ -186,6 +187,7 @@ async function router(req, res) {
     if (!requirePermission(permission)(req, res)) return;
     if (phase20Version3Foundation.dispatch(req, res)) return;
     if (phase21Version3Ga.dispatch(req, res)) return;
+    if (phase27Version4Ga.dispatch(req, res)) return;
     if (phase26Version4FoundationRc.dispatch(req, res)) return;
     if (phase25EnterpriseFederationEcosystem.dispatch(req, res)) return;
     if (phase24FinancialGrowthOperations.dispatch(req, res)) return;
@@ -591,6 +593,7 @@ async function router(req, res) {
     if (!requirePermission(permission)(req, res)) return;
     if (phase20Version3Foundation.dispatch(req, res)) return;
     if (phase21Version3Ga.dispatch(req, res)) return;
+    if (phase27Version4Ga.dispatch(req, res)) return;
     if (phase26Version4FoundationRc.dispatch(req, res)) return;
     if (phase25EnterpriseFederationEcosystem.dispatch(req, res)) return;
     if (phase24FinancialGrowthOperations.dispatch(req, res)) return;
