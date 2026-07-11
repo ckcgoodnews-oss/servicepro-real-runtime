@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -227,7 +227,23 @@
     "seed:sprint352": "node scripts/seed-sprint352-release-candidate-defect-closure.js",
     "seed:sprint353": "node scripts/seed-sprint353-production-deployment-readiness.js",
     "seed:sprint354": "node scripts/seed-sprint354-version3-ga-release-orchestration.js",
-    "seed:sprint355": "node scripts/seed-sprint355-version3-general-availability.js"
+    "seed:sprint355": "node scripts/seed-sprint355-version3-general-availability.js",
+    "test:phase22": "node scripts/run-tests.js",
+    "seed:sprint356": "node scripts/seed-sprint356-autonomous-service-desk.js",
+    "seed:sprint357": "node scripts/seed-sprint357-intelligent-ticket-classification.js",
+    "seed:sprint358": "node scripts/seed-sprint358-ai-resolution-recommendations.js",
+    "seed:sprint359": "node scripts/seed-sprint359-automated-dispatch-optimization.js",
+    "seed:sprint360": "node scripts/seed-sprint360-predictive-sla-risk.js",
+    "seed:sprint361": "node scripts/seed-sprint361-technician-copilot.js",
+    "seed:sprint362": "node scripts/seed-sprint362-customer-intent-detection.js",
+    "seed:sprint363": "node scripts/seed-sprint363-workflow-self-healing.js",
+    "seed:sprint364": "node scripts/seed-sprint364-knowledge-gap-detection.js",
+    "seed:sprint365": "node scripts/seed-sprint365-service-quality-scoring.js",
+    "seed:sprint366": "node scripts/seed-sprint366-automated-root-cause-analysis.js",
+    "seed:sprint367": "node scripts/seed-sprint367-ai-change-risk-prediction.js",
+    "seed:sprint368": "node scripts/seed-sprint368-incident-pattern-intelligence.js",
+    "seed:sprint369": "node scripts/seed-sprint369-service-automation-governance.js",
+    "seed:sprint370": "node scripts/seed-sprint370-version-3-1-general-availability.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
