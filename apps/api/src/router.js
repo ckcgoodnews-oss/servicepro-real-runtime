@@ -63,6 +63,7 @@ const phase18IndustrySolutions = require('./routes/phase18IndustrySolutions');
 const phase19PlatformExtensibility = require('./routes/phase19PlatformExtensibility');
 
 const phase20Version3Foundation = require('./routes/phase20Version3Foundation');
+const phase21Version3Ga = require('./routes/phase21Version3Ga');
 
 async function router(req, res) {
   req.context = {};
@@ -179,6 +180,7 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE20_READ : PERMISSIONS.PHASE20_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase20Version3Foundation.dispatch(req, res)) return;
+    if (phase21Version3Ga.dispatch(req, res)) return;
   }
 
   return notFound(res);
@@ -578,6 +580,7 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE20_READ : PERMISSIONS.PHASE20_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase20Version3Foundation.dispatch(req, res)) return;
+    if (phase21Version3Ga.dispatch(req, res)) return;
   }
 
   return notFound(res);
