@@ -2,12 +2,15 @@ const { createPolicyManagementRepository } = require('../apps/api/src/repositori
 const data = { governancePolicies: [], governancePolicyVersions: [], governancePolicyAcknowledgements: [], governancePolicyExceptions: [] };
 const repo = createPolicyManagementRepository({ type: 'json', read: () => data, write: () => {} });
 const policyA = repo.createPolicy({ tenantId: 'tenant-a', code: 'A', title: 'A', owner: 'owner' });
+if (repo.createVersion({ tenantId: 'tenant-b', policyId: policyA.id, content: 'forged' }) !== null) throw new Error('Cross-tenant policy relationship succeeded');
 const versionA = repo.createVersion({ tenantId: 'tenant-a', policyId: policyA.id, content: 'content' });
 if (repo.submitVersion('tenant-b', versionA.id) !== null) throw new Error('Cross-tenant version mutation succeeded');
 if (data.governancePolicyVersions[0].status !== 'draft') throw new Error('Cross-tenant mutation changed state');
 if (!repo.submitVersion('tenant-a', versionA.id)) throw new Error('Same-tenant version mutation failed');
 const ack = repo.createAcknowledgement({ tenantId: 'tenant-a', policyId: policyA.id, versionId: versionA.id, subjectId: 'user' });
+if (repo.createAcknowledgement({ tenantId: 'tenant-b', policyId: policyA.id, versionId: versionA.id, subjectId: 'evil' }) !== null) throw new Error('Cross-tenant acknowledgement relationship succeeded');
 if (repo.acknowledge('tenant-b', ack.id, 'attested') !== null) throw new Error('Cross-tenant acknowledgement succeeded');
 const exception = repo.createException({ tenantId: 'tenant-a', policyId: policyA.id, requestor: 'user', reason: 'reason' });
+if (repo.createException({ tenantId: 'tenant-b', policyId: policyA.id, requestor: 'evil', reason: 'forged' }) !== null) throw new Error('Cross-tenant exception relationship succeeded');
 if (repo.decideException('tenant-b', exception.id, 'approved', 'owner') !== null) throw new Error('Cross-tenant exception decision succeeded');
 console.log('Phase 9 policy tenant isolation test passed.');
