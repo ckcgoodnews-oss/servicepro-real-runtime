@@ -41,6 +41,7 @@ const privacyCaseOrchestration = require('./routes/privacyCaseOrchestration');
 const privacyDsarOps = require('./routes/privacyDsarOps');
 const privacyDiscovery = require('./routes/privacyDiscovery');
 const privacyAppeals = require('./routes/privacyAppeals');
+const privacyCompliance = require('./routes/privacyCompliance');
 
 async function router(req, res) {
   req.context = {};
@@ -374,6 +375,11 @@ async function router(req, res) {
   const appealAction=req.url.match(/^\/api\/v1\/privacy\/(appeals|regulator-inquiries)\/([^/]+)\/(review|decide|submit|close)$/);
   if(appealAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const handlers={review:'startReview',decide:'decideAppeal',submit:'submitInquiry',close:'closeInquiry'};return privacyAppeals[handlers[appealAction[3]]](req,res,appealAction[2]);}
   if(req.url==='/api/v1/privacy/appeals-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return privacyAppeals.metrics(req,res);}
+  const complianceCreates={'/api/v1/privacy/compliance-evidence':'createEvidence','/api/v1/privacy/compliance-reports':'createReport'};
+  if(req.method==='POST'&&complianceCreates[req.url]){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;return privacyCompliance[complianceCreates[req.url]](req,res);}
+  const complianceAction=req.url.match(/^\/api\/v1\/privacy\/(compliance-evidence|compliance-reports)\/([^/]+)\/(submit|review|generate|publish)$/);
+  if(complianceAction&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PRIVACY_WRITE)(req,res))return;const handlers={submit:'submitEvidence',review:'reviewEvidence',generate:'generateReport',publish:'publishReport'};return privacyCompliance[handlers[complianceAction[3]]](req,res,complianceAction[2]);}
+  if(req.url==='/api/v1/privacy/compliance-metrics'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PRIVACY_READ)(req,res))return;return privacyCompliance.metrics(req,res);}
 
   return notFound(res);
 }
