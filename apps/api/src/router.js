@@ -52,6 +52,8 @@ const phase12Marketplace = require('./routes/phase12Marketplace');
 const phase11PlatformOperations = require('./routes/phase11PlatformOperations');
 const phase10AiPlatform = require('./routes/phase10AiPlatform');
 
+const phase15PostGaLts = require('./routes/phase15PostGaLts');
+
 async function router(req, res) {
   req.context = {};
   attachRequestId(req, res);
@@ -125,6 +127,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE14_READ : PERMISSIONS.PHASE14_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase14EnterpriseProduction.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/post-ga-lts/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE15_READ : PERMISSIONS.PHASE15_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase15PostGaLts.dispatch(req, res)) return;
   }
 
   return notFound(res);
@@ -482,6 +491,13 @@ async function router(req, res) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE14_READ : PERMISSIONS.PHASE14_WRITE;
     if (!requirePermission(permission)(req, res)) return;
     if (phase14EnterpriseProduction.dispatch(req, res)) return;
+  }
+
+
+  if (req.url.startsWith('/api/v1/post-ga-lts/')) {
+    const permission = req.method === 'GET' ? PERMISSIONS.PHASE15_READ : PERMISSIONS.PHASE15_WRITE;
+    if (!requirePermission(permission)(req, res)) return;
+    if (phase15PostGaLts.dispatch(req, res)) return;
   }
 
   return notFound(res);

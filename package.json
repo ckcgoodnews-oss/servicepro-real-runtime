@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "1.250.0",
+  "version": "2.0.1",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -115,7 +115,23 @@
     "seed:sprint247": "node scripts/seed-sprint247-enterprise-installer.js",
     "seed:sprint248": "node scripts/seed-sprint248-long-term-support.js",
     "seed:sprint249": "node scripts/seed-sprint249-release-candidate.js",
-    "seed:sprint250": "node scripts/seed-sprint250-version-2-0-general-availability.js"
+    "seed:sprint250": "node scripts/seed-sprint250-version-2-0-general-availability.js",
+    "test:phase15": "node scripts/run-tests.js",
+    "seed:sprint251": "node scripts/seed-sprint251-production-telemetry-baseline.js",
+    "seed:sprint252": "node scripts/seed-sprint252-post-ga-defect-intake.js",
+    "seed:sprint253": "node scripts/seed-sprint253-hotfix-release-management.js",
+    "seed:sprint254": "node scripts/seed-sprint254-customer-impact-incident-coordination.js",
+    "seed:sprint255": "node scripts/seed-sprint255-upgrade-compatibility-scanner.js",
+    "seed:sprint256": "node scripts/seed-sprint256-migration-rollback-verification.js",
+    "seed:sprint257": "node scripts/seed-sprint257-tenant-upgrade-orchestration.js",
+    "seed:sprint258": "node scripts/seed-sprint258-long-term-support-channels.js",
+    "seed:sprint259": "node scripts/seed-sprint259-deprecation-end-of-life-management.js",
+    "seed:sprint260": "node scripts/seed-sprint260-support-entitlement-enforcement.js",
+    "seed:sprint261": "node scripts/seed-sprint261-customer-health-churn-risk.js",
+    "seed:sprint262": "node scripts/seed-sprint262-capacity-cost-optimization.js",
+    "seed:sprint263": "node scripts/seed-sprint263-operational-resilience-exercises.js",
+    "seed:sprint264": "node scripts/seed-sprint264-version-2-0-1-release-readiness.js",
+    "seed:sprint265": "node scripts/seed-sprint265-version-2-0-1-maintenance-release.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
