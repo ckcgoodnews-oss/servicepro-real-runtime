@@ -1,0 +1,13 @@
+-- Sprint 585: Waste Stream Tracking
+CREATE TABLE IF NOT EXISTS phase37_waste_stream_tracking_records (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id text NOT NULL,
+  name text NOT NULL,
+  status text NOT NULL DEFAULT 'draft',
+  owner text NOT NULL DEFAULT '',
+  evidence jsonb NOT NULL DEFAULT '{}'::jsonb,
+  details jsonb NOT NULL DEFAULT '{}'::jsonb,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS idx_phase37_waste_stream_tracking_tenant_status ON phase37_waste_stream_tracking_records (tenant_id,status);
