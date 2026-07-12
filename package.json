@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -339,7 +339,23 @@
     "seed:sprint548": "node scripts/seed-sprint548-production-readiness-reviews.js",
     "seed:sprint549": "node scripts/seed-sprint549-maintenance-release-orchestration.js",
     "seed:sprint550": "node scripts/seed-sprint550-version-5.0.1-maintenance-release.js",
-    "test:phase34": "node scripts/run-tests.js"
+    "test:phase34": "node scripts/run-tests.js",
+    "seed:sprint551": "node scripts/seed-sprint551-agent-registry.js",
+    "seed:sprint552": "node scripts/seed-sprint552-agent-skills-catalog.js",
+    "seed:sprint553": "node scripts/seed-sprint553-agent-identity-and-access.js",
+    "seed:sprint554": "node scripts/seed-sprint554-agent-task-planning.js",
+    "seed:sprint555": "node scripts/seed-sprint555-human-approval-gates.js",
+    "seed:sprint556": "node scripts/seed-sprint556-multi-agent-coordination.js",
+    "seed:sprint557": "node scripts/seed-sprint557-agent-memory-governance.js",
+    "seed:sprint558": "node scripts/seed-sprint558-agent-tool-permissions.js",
+    "seed:sprint559": "node scripts/seed-sprint559-agent-simulation-sandbox.js",
+    "seed:sprint560": "node scripts/seed-sprint560-agent-quality-evaluation.js",
+    "seed:sprint561": "node scripts/seed-sprint561-agent-cost-controls.js",
+    "seed:sprint562": "node scripts/seed-sprint562-agent-incident-response.js",
+    "seed:sprint563": "node scripts/seed-sprint563-agent-audit-trails.js",
+    "seed:sprint564": "node scripts/seed-sprint564-agent-workforce-analytics.js",
+    "seed:sprint565": "node scripts/seed-sprint565-enterprise-agent-operations.js",
+    "test:phase35": "node scripts/run-tests.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -77,6 +77,7 @@ const phase30ConnectedAssetsEdge = require('./routes/phase30ConnectedAssetsEdge'
 const phase29AutonomousServiceOperations = require('./routes/phase29AutonomousServiceOperations');
 const phase28Version4PostGaReliability = require('./routes/phase28Version4PostGaReliability');
 const phase34Version5PostGaAssurance = require('./routes/phase34Version5PostGaAssurance');
+const phase35AgenticWorkforceOrchestration = require('./routes/phase35AgenticWorkforceOrchestration');
 
 async function router(req, res) {
   req.context = {};
@@ -201,6 +202,7 @@ async function router(req, res) {
     if (phase23CustomerExperienceFieldMobility.dispatch(req, res)) return;
     if (phase22ServiceIntelligenceAutomation.dispatch(req, res)) return;
     if (phase33Version5Ga.dispatch(req, res)) return;
+    if (phase35AgenticWorkforceOrchestration.dispatch(req, res)) return;
     if (phase34Version5PostGaAssurance.dispatch(req, res)) return;
     if (phase32Version5FoundationRc.dispatch(req, res)) return;
     if (phase31WorkforceCommerceNetwork.dispatch(req, res)) return;
@@ -614,6 +616,7 @@ async function router(req, res) {
     if (phase23CustomerExperienceFieldMobility.dispatch(req, res)) return;
     if (phase22ServiceIntelligenceAutomation.dispatch(req, res)) return;
     if (phase33Version5Ga.dispatch(req, res)) return;
+    if (phase35AgenticWorkforceOrchestration.dispatch(req, res)) return;
     if (phase34Version5PostGaAssurance.dispatch(req, res)) return;
     if (phase32Version5FoundationRc.dispatch(req, res)) return;
     if (phase31WorkforceCommerceNetwork.dispatch(req, res)) return;
