@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -355,7 +355,23 @@
     "seed:sprint563": "node scripts/seed-sprint563-agent-audit-trails.js",
     "seed:sprint564": "node scripts/seed-sprint564-agent-workforce-analytics.js",
     "seed:sprint565": "node scripts/seed-sprint565-enterprise-agent-operations.js",
-    "test:phase35": "node scripts/run-tests.js"
+    "test:phase35": "node scripts/run-tests.js",
+    "seed:sprint566": "node scripts/seed-sprint566-spatial-asset-maps.js",
+    "seed:sprint567": "node scripts/seed-sprint567-robot-fleet-registry.js",
+    "seed:sprint568": "node scripts/seed-sprint568-robot-mission-planning.js",
+    "seed:sprint569": "node scripts/seed-sprint569-robot-safety-zones.js",
+    "seed:sprint570": "node scripts/seed-sprint570-robot-telemetry-ingestion.js",
+    "seed:sprint571": "node scripts/seed-sprint571-robot-maintenance-planning.js",
+    "seed:sprint572": "node scripts/seed-sprint572-digital-twin-synchronization.js",
+    "seed:sprint573": "node scripts/seed-sprint573-computer-vision-inspections.js",
+    "seed:sprint574": "node scripts/seed-sprint574-autonomous-route-optimization.js",
+    "seed:sprint575": "node scripts/seed-sprint575-edge-robotics-command.js",
+    "seed:sprint576": "node scripts/seed-sprint576-robot-operator-handoff.js",
+    "seed:sprint577": "node scripts/seed-sprint577-robot-incident-management.js",
+    "seed:sprint578": "node scripts/seed-sprint578-robot-compliance-evidence.js",
+    "seed:sprint579": "node scripts/seed-sprint579-robot-fleet-analytics.js",
+    "seed:sprint580": "node scripts/seed-sprint580-spatial-robotics-command-center.js",
+    "test:phase36": "node scripts/run-tests.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
