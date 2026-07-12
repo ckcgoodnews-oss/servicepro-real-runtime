@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "5.3.0",
+  "version": "6.0.0-rc.1",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -387,7 +387,23 @@
     "seed:sprint593": "node scripts/seed-sprint593-customer-sustainability-reporting.js",
     "seed:sprint594": "node scripts/seed-sprint594-sustainability-analytics.js",
     "seed:sprint595": "node scripts/seed-sprint595-enterprise-sustainability-operations.js",
-    "test:phase37": "node scripts/run-tests.js"
+    "test:phase37": "node scripts/run-tests.js",
+    "seed:sprint596": "node scripts/seed-sprint596-architecture-modernization.js",
+    "seed:sprint597": "node scripts/seed-sprint597-runtime-platform-upgrade.js",
+    "seed:sprint598": "node scripts/seed-sprint598-api-v6-foundation.js",
+    "seed:sprint599": "node scripts/seed-sprint599-data-model-modernization.js",
+    "seed:sprint600": "node scripts/seed-sprint600-frontend-platform-modernization.js",
+    "seed:sprint601": "node scripts/seed-sprint601-identity-platform-modernization.js",
+    "seed:sprint602": "node scripts/seed-sprint602-event-platform-modernization.js",
+    "seed:sprint603": "node scripts/seed-sprint603-observability-platform-upgrade.js",
+    "seed:sprint604": "node scripts/seed-sprint604-security-architecture-upgrade.js",
+    "seed:sprint605": "node scripts/seed-sprint605-migration-tooling-v6.js",
+    "seed:sprint606": "node scripts/seed-sprint606-compatibility-validation-v6.js",
+    "seed:sprint607": "node scripts/seed-sprint607-performance-certification-v6.js",
+    "seed:sprint608": "node scripts/seed-sprint608-release-candidate-operations.js",
+    "seed:sprint609": "node scripts/seed-sprint609-version-6-rc-readiness.js",
+    "seed:sprint610": "node scripts/seed-sprint610-version-6-release-candidate.js",
+    "test:phase38": "node scripts/run-tests.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
