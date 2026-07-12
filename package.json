@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "4.0.1",
+  "version": "4.1.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
