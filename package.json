@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -451,7 +451,23 @@
     "seed:sprint652": "node scripts/seed-sprint652-simulation-experiment-management.js",
     "seed:sprint653": "node scripts/seed-sprint653-simulation-results-analytics.js",
     "seed:sprint654": "node scripts/seed-sprint654-digital-twin-governance.js",
-    "seed:sprint655": "node scripts/seed-sprint655-digital-twin-release-readiness.js"
+    "seed:sprint655": "node scripts/seed-sprint655-digital-twin-release-readiness.js",
+    "test:phase42": "node scripts/run-tests.js",
+    "seed:sprint656": "node scripts/seed-sprint656-autonomous-operations-agents.js",
+    "seed:sprint657": "node scripts/seed-sprint657-self-healing-workflows.js",
+    "seed:sprint658": "node scripts/seed-sprint658-autonomous-scheduling.js",
+    "seed:sprint659": "node scripts/seed-sprint659-autonomous-inventory.js",
+    "seed:sprint660": "node scripts/seed-sprint660-autonomous-routing.js",
+    "seed:sprint661": "node scripts/seed-sprint661-continuous-optimization.js",
+    "seed:sprint662": "node scripts/seed-sprint662-agent-approval-policies.js",
+    "seed:sprint663": "node scripts/seed-sprint663-agent-risk-controls.js",
+    "seed:sprint664": "node scripts/seed-sprint664-agent-performance-management.js",
+    "seed:sprint665": "node scripts/seed-sprint665-autonomous-incident-response.js",
+    "seed:sprint666": "node scripts/seed-sprint666-autonomous-capacity-management.js",
+    "seed:sprint667": "node scripts/seed-sprint667-autonomous-financial-controls.js",
+    "seed:sprint668": "node scripts/seed-sprint668-autonomous-compliance-monitoring.js",
+    "seed:sprint669": "node scripts/seed-sprint669-autonomous-operations-governance.js",
+    "seed:sprint670": "node scripts/seed-sprint670-autonomous-enterprise-readiness.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
