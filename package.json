@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -435,7 +435,23 @@
     "seed:sprint637": "node scripts/seed-sprint637-automation-observability.js",
     "seed:sprint638": "node scripts/seed-sprint638-automation-capacity-planning.js",
     "seed:sprint639": "node scripts/seed-sprint639-orchestration-resilience.js",
-    "seed:sprint640": "node scripts/seed-sprint640-hyperautomation-release-readiness.js"
+    "seed:sprint640": "node scripts/seed-sprint640-hyperautomation-release-readiness.js",
+    "test:phase41": "node scripts/run-tests.js",
+    "seed:sprint641": "node scripts/seed-sprint641-asset-digital-twins.js",
+    "seed:sprint642": "node scripts/seed-sprint642-facility-digital-twins.js",
+    "seed:sprint643": "node scripts/seed-sprint643-telemetry-synchronization.js",
+    "seed:sprint644": "node scripts/seed-sprint644-simulation-model-registry.js",
+    "seed:sprint645": "node scripts/seed-sprint645-what-if-analysis.js",
+    "seed:sprint646": "node scripts/seed-sprint646-failure-simulation.js",
+    "seed:sprint647": "node scripts/seed-sprint647-capacity-simulation.js",
+    "seed:sprint648": "node scripts/seed-sprint648-maintenance-simulation.js",
+    "seed:sprint649": "node scripts/seed-sprint649-energy-simulation.js",
+    "seed:sprint650": "node scripts/seed-sprint650-twin-version-management.js",
+    "seed:sprint651": "node scripts/seed-sprint651-twin-security-controls.js",
+    "seed:sprint652": "node scripts/seed-sprint652-simulation-experiment-management.js",
+    "seed:sprint653": "node scripts/seed-sprint653-simulation-results-analytics.js",
+    "seed:sprint654": "node scripts/seed-sprint654-digital-twin-governance.js",
+    "seed:sprint655": "node scripts/seed-sprint655-digital-twin-release-readiness.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
