@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "6.4.0",
+  "version": "7.0.0-rc1",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -483,7 +483,23 @@
     "seed:sprint682": "node scripts/seed-sprint682-regional-capacity-management.js",
     "seed:sprint683": "node scripts/seed-sprint683-global-service-catalog-federation.js",
     "seed:sprint684": "node scripts/seed-sprint684-sovereign-cloud-governance.js",
-    "seed:sprint685": "node scripts/seed-sprint685-global-federation-readiness.js"
+    "seed:sprint685": "node scripts/seed-sprint685-global-federation-readiness.js",
+    "test:phase44": "node scripts/run-tests.js",
+    "seed:sprint686": "node scripts/seed-sprint686-version-7-architecture-baseline.js",
+    "seed:sprint687": "node scripts/seed-sprint687-api-v7-contracts.js",
+    "seed:sprint688": "node scripts/seed-sprint688-version-7-data-model.js",
+    "seed:sprint689": "node scripts/seed-sprint689-version-7-security-baseline.js",
+    "seed:sprint690": "node scripts/seed-sprint690-version-7-observability.js",
+    "seed:sprint691": "node scripts/seed-sprint691-version-7-performance-baseline.js",
+    "seed:sprint692": "node scripts/seed-sprint692-version-7-dependency-modernization.js",
+    "seed:sprint693": "node scripts/seed-sprint693-version-7-accessibility-baseline.js",
+    "seed:sprint694": "node scripts/seed-sprint694-version-7-upgrade-framework.js",
+    "seed:sprint695": "node scripts/seed-sprint695-version-7-rollback-framework.js",
+    "seed:sprint696": "node scripts/seed-sprint696-version-7-compatibility-validation.js",
+    "seed:sprint697": "node scripts/seed-sprint697-version-7-load-certification.js",
+    "seed:sprint698": "node scripts/seed-sprint698-version-7-release-candidate-operations.js",
+    "seed:sprint699": "node scripts/seed-sprint699-version-7-rc-readiness.js",
+    "seed:sprint700": "node scripts/seed-sprint700-version-7-release-candidate.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
