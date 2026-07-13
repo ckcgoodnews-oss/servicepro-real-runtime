@@ -82,6 +82,7 @@ const phase36SpatialRoboticsOperations = require('./routes/phase36SpatialRobotic
 const phase37SustainabilityCircularOperations = require('./routes/phase37SustainabilityCircularOperations');
 const phase38Version6FoundationRc = require('./routes/phase38Version6FoundationRc');
 const phase39Version6Ga = require('./routes/phase39Version6Ga');
+const phase45Version7Ga = require('./routes/phase45Version7Ga');
 const phase44Version7FoundationRc = require('./routes/phase44Version7FoundationRc');
 const phase43GlobalFederationSovereignCloud = require('./routes/phase43GlobalFederationSovereignCloud');
 const phase42AutonomousEnterpriseOperations = require('./routes/phase42AutonomousEnterpriseOperations');
@@ -212,6 +213,7 @@ async function router(req, res) {
     if (phase22ServiceIntelligenceAutomation.dispatch(req, res)) return;
     if (phase33Version5Ga.dispatch(req, res)) return;
     if (phase39Version6Ga.dispatch(req, res)) return;
+    if (phase45Version7Ga.dispatch(req, res)) return;
     if (phase44Version7FoundationRc.dispatch(req, res)) return;
     if (phase43GlobalFederationSovereignCloud.dispatch(req, res)) return;
     if (phase42AutonomousEnterpriseOperations.dispatch(req, res)) return;
@@ -635,6 +637,7 @@ async function router(req, res) {
     if (phase22ServiceIntelligenceAutomation.dispatch(req, res)) return;
     if (phase33Version5Ga.dispatch(req, res)) return;
     if (phase39Version6Ga.dispatch(req, res)) return;
+    if (phase45Version7Ga.dispatch(req, res)) return;
     if (phase44Version7FoundationRc.dispatch(req, res)) return;
     if (phase43GlobalFederationSovereignCloud.dispatch(req, res)) return;
     if (phase42AutonomousEnterpriseOperations.dispatch(req, res)) return;

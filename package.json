@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "7.0.0-rc1",
+  "version": "7.0.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -499,7 +499,23 @@
     "seed:sprint697": "node scripts/seed-sprint697-version-7-load-certification.js",
     "seed:sprint698": "node scripts/seed-sprint698-version-7-release-candidate-operations.js",
     "seed:sprint699": "node scripts/seed-sprint699-version-7-rc-readiness.js",
-    "seed:sprint700": "node scripts/seed-sprint700-version-7-release-candidate.js"
+    "seed:sprint700": "node scripts/seed-sprint700-version-7-release-candidate.js",
+    "test:phase45": "node scripts/run-tests.js",
+    "seed:sprint701": "node scripts/seed-sprint701-version-7-rc-telemetry.js",
+    "seed:sprint702": "node scripts/seed-sprint702-version-7-regression-triage.js",
+    "seed:sprint703": "node scripts/seed-sprint703-api-v7-compatibility.js",
+    "seed:sprint704": "node scripts/seed-sprint704-database-v7-upgrade-certification.js",
+    "seed:sprint705": "node scripts/seed-sprint705-tenant-v7-migration-dry-runs.js",
+    "seed:sprint706": "node scripts/seed-sprint706-version-7-load-certification.js",
+    "seed:sprint707": "node scripts/seed-sprint707-version-7-dependency-remediation.js",
+    "seed:sprint708": "node scripts/seed-sprint708-version-7-accessibility-certification.js",
+    "seed:sprint709": "node scripts/seed-sprint709-version-7-disaster-recovery-certification.js",
+    "seed:sprint710": "node scripts/seed-sprint710-version-7-administrator-documentation.js",
+    "seed:sprint711": "node scripts/seed-sprint711-version-7-customer-pilot.js",
+    "seed:sprint712": "node scripts/seed-sprint712-version-7-defect-closure.js",
+    "seed:sprint713": "node scripts/seed-sprint713-version-7-production-readiness.js",
+    "seed:sprint714": "node scripts/seed-sprint714-version-7-ga-orchestration.js",
+    "seed:sprint715": "node scripts/seed-sprint715-version-7-general-availability.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
