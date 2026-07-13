@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -467,7 +467,23 @@
     "seed:sprint667": "node scripts/seed-sprint667-autonomous-financial-controls.js",
     "seed:sprint668": "node scripts/seed-sprint668-autonomous-compliance-monitoring.js",
     "seed:sprint669": "node scripts/seed-sprint669-autonomous-operations-governance.js",
-    "seed:sprint670": "node scripts/seed-sprint670-autonomous-enterprise-readiness.js"
+    "seed:sprint670": "node scripts/seed-sprint670-autonomous-enterprise-readiness.js",
+    "test:phase43": "node scripts/run-tests.js",
+    "seed:sprint671": "node scripts/seed-sprint671-sovereign-cloud-regions.js",
+    "seed:sprint672": "node scripts/seed-sprint672-regional-data-residency.js",
+    "seed:sprint673": "node scripts/seed-sprint673-global-identity-federation.js",
+    "seed:sprint674": "node scripts/seed-sprint674-cross-region-service-federation.js",
+    "seed:sprint675": "node scripts/seed-sprint675-multi-cloud-orchestration.js",
+    "seed:sprint676": "node scripts/seed-sprint676-regional-policy-enforcement.js",
+    "seed:sprint677": "node scripts/seed-sprint677-cross-border-data-controls.js",
+    "seed:sprint678": "node scripts/seed-sprint678-global-routing-and-failover.js",
+    "seed:sprint679": "node scripts/seed-sprint679-regional-encryption-domains.js",
+    "seed:sprint680": "node scripts/seed-sprint680-sovereign-key-management.js",
+    "seed:sprint681": "node scripts/seed-sprint681-federated-audit-and-compliance.js",
+    "seed:sprint682": "node scripts/seed-sprint682-regional-capacity-management.js",
+    "seed:sprint683": "node scripts/seed-sprint683-global-service-catalog-federation.js",
+    "seed:sprint684": "node scripts/seed-sprint684-sovereign-cloud-governance.js",
+    "seed:sprint685": "node scripts/seed-sprint685-global-federation-readiness.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
