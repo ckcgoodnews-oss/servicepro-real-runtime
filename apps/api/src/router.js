@@ -82,6 +82,7 @@ const phase36SpatialRoboticsOperations = require('./routes/phase36SpatialRobotic
 const phase37SustainabilityCircularOperations = require('./routes/phase37SustainabilityCircularOperations');
 const phase38Version6FoundationRc = require('./routes/phase38Version6FoundationRc');
 const phase39Version6Ga = require('./routes/phase39Version6Ga');
+const phase40HyperautomationEnterpriseOrchestration = require('./routes/phase40HyperautomationEnterpriseOrchestration');
 
 async function router(req, res) {
   req.context = {};
@@ -207,6 +208,7 @@ async function router(req, res) {
     if (phase22ServiceIntelligenceAutomation.dispatch(req, res)) return;
     if (phase33Version5Ga.dispatch(req, res)) return;
     if (phase39Version6Ga.dispatch(req, res)) return;
+    if (phase40HyperautomationEnterpriseOrchestration.dispatch(req, res)) return;
     if (phase38Version6FoundationRc.dispatch(req, res)) return;
     if (phase37SustainabilityCircularOperations.dispatch(req, res)) return;
     if (phase36SpatialRoboticsOperations.dispatch(req, res)) return;
@@ -625,6 +627,7 @@ async function router(req, res) {
     if (phase22ServiceIntelligenceAutomation.dispatch(req, res)) return;
     if (phase33Version5Ga.dispatch(req, res)) return;
     if (phase39Version6Ga.dispatch(req, res)) return;
+    if (phase40HyperautomationEnterpriseOrchestration.dispatch(req, res)) return;
     if (phase38Version6FoundationRc.dispatch(req, res)) return;
     if (phase37SustainabilityCircularOperations.dispatch(req, res)) return;
     if (phase36SpatialRoboticsOperations.dispatch(req, res)) return;
