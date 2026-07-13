@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "6.0.0",
+  "version": "6.1.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -419,7 +419,23 @@
     "seed:sprint623": "node scripts/seed-sprint623-version-6-production-readiness.js",
     "seed:sprint624": "node scripts/seed-sprint624-version-6-ga-orchestration.js",
     "seed:sprint625": "node scripts/seed-sprint625-version-6-general-availability.js",
-    "test:phase39": "node scripts/run-tests.js"
+    "test:phase39": "node scripts/run-tests.js",
+    "test:phase40": "node scripts/run-tests.js",
+    "seed:sprint626": "node scripts/seed-sprint626-enterprise-process-orchestration.js",
+    "seed:sprint627": "node scripts/seed-sprint627-event-driven-automation.js",
+    "seed:sprint628": "node scripts/seed-sprint628-process-mining.js",
+    "seed:sprint629": "node scripts/seed-sprint629-rpa-integration.js",
+    "seed:sprint630": "node scripts/seed-sprint630-business-rule-engine.js",
+    "seed:sprint631": "node scripts/seed-sprint631-workflow-analytics.js",
+    "seed:sprint632": "node scripts/seed-sprint632-intelligent-scheduling.js",
+    "seed:sprint633": "node scripts/seed-sprint633-sla-optimization.js",
+    "seed:sprint634": "node scripts/seed-sprint634-automation-governance.js",
+    "seed:sprint635": "node scripts/seed-sprint635-human-in-the-loop-approvals.js",
+    "seed:sprint636": "node scripts/seed-sprint636-cross-system-transaction-coordination.js",
+    "seed:sprint637": "node scripts/seed-sprint637-automation-observability.js",
+    "seed:sprint638": "node scripts/seed-sprint638-automation-capacity-planning.js",
+    "seed:sprint639": "node scripts/seed-sprint639-orchestration-resilience.js",
+    "seed:sprint640": "node scripts/seed-sprint640-hyperautomation-release-readiness.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
