@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -371,7 +371,23 @@
     "seed:sprint578": "node scripts/seed-sprint578-robot-compliance-evidence.js",
     "seed:sprint579": "node scripts/seed-sprint579-robot-fleet-analytics.js",
     "seed:sprint580": "node scripts/seed-sprint580-spatial-robotics-command-center.js",
-    "test:phase36": "node scripts/run-tests.js"
+    "test:phase36": "node scripts/run-tests.js",
+    "seed:sprint581": "node scripts/seed-sprint581-carbon-accounting.js",
+    "seed:sprint582": "node scripts/seed-sprint582-energy-consumption-tracking.js",
+    "seed:sprint583": "node scripts/seed-sprint583-fleet-emissions-management.js",
+    "seed:sprint584": "node scripts/seed-sprint584-supplier-sustainability-scoring.js",
+    "seed:sprint585": "node scripts/seed-sprint585-waste-stream-tracking.js",
+    "seed:sprint586": "node scripts/seed-sprint586-circular-asset-lifecycle.js",
+    "seed:sprint587": "node scripts/seed-sprint587-repair-versus-replace-optimization.js",
+    "seed:sprint588": "node scripts/seed-sprint588-recycled-materials-inventory.js",
+    "seed:sprint589": "node scripts/seed-sprint589-environmental-compliance-reporting.js",
+    "seed:sprint590": "node scripts/seed-sprint590-water-usage-monitoring.js",
+    "seed:sprint591": "node scripts/seed-sprint591-sustainability-target-management.js",
+    "seed:sprint592": "node scripts/seed-sprint592-green-service-routing.js",
+    "seed:sprint593": "node scripts/seed-sprint593-customer-sustainability-reporting.js",
+    "seed:sprint594": "node scripts/seed-sprint594-sustainability-analytics.js",
+    "seed:sprint595": "node scripts/seed-sprint595-enterprise-sustainability-operations.js",
+    "test:phase37": "node scripts/run-tests.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
