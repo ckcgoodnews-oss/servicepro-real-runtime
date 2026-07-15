@@ -44,6 +44,13 @@ export function saveSession(session: AuthSession, remember: boolean) {
   const storage = remember ? window.localStorage : window.sessionStorage;
   storage.setItem(sessionKey, JSON.stringify(session));
   window.localStorage.setItem(tenantKey, session.user.tenantId || tenantId());
+  window.dispatchEvent(new Event('servicepro:session'));
+}
+
+export function updateSessionUser(patch: Partial<AuthUser>) {
+  const session = readSession(); if (!session) return;
+  const remembered = window.localStorage.getItem(sessionKey) !== null;
+  saveSession({ ...session, user: { ...session.user, ...patch } }, remembered);
 }
 
 async function refreshSession(session: AuthSession) {

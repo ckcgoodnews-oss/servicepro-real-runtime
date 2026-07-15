@@ -22,6 +22,7 @@ const workflows = require('./routes/workflows');
 const notifications = require('./routes/notifications');
 const reports = require('./routes/reports');
 const dashboard = require('./routes/dashboard');
+const profile = require('./routes/profile');
 const exportsRoute = require('./routes/exports');
 const audit = require('./routes/audit');
 const observability = require('./routes/observability');
@@ -347,6 +348,14 @@ async function router(req, res) {
     if (!requirePermission(PERMISSIONS.REPORTS_READ)(req, res)) return;
     return reports.dashboard(req, res);
   }
+  if (req.url === '/api/v1/profile' && req.method === 'GET') return profile.get(req,res);
+  if (req.url === '/api/v1/profile' && req.method === 'PATCH') return profile.update(req,res);
+  if (req.url === '/api/v1/profile/password' && req.method === 'POST') return profile.changePassword(req,res);
+  if (req.url === '/api/v1/profile/mfa' && req.method === 'PATCH') return profile.setMfa(req,res);
+  if (req.url === '/api/v1/profile/tokens' && req.method === 'GET') return profile.listTokens(req,res);
+  if (req.url === '/api/v1/profile/tokens' && req.method === 'POST') return profile.createToken(req,res);
+  const profileTokenMatch=req.url.match(/^\/api\/v1\/profile\/tokens\/([^/]+)$/);
+  if(profileTokenMatch && req.method==='DELETE') return profile.revokeToken(req,res,profileTokenMatch[1]);
   if (req.url === '/api/v1/dashboard/summary' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.REPORTS_READ)(req, res)) return;
     return dashboard.summary(req, res);

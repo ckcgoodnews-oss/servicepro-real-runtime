@@ -1,5 +1,6 @@
 const { sendJson } = require('../utils/http');
-const { verifyAccessToken } = require('../services/tokenService');
+const { verifyAccessToken, hashToken } = require('../services/tokenService');
+const { permissionsForRoles } = require('../auth/permissions');
 
 async function authGuard(req, res) {
   const auth = req.headers.authorization || '';
@@ -10,10 +11,15 @@ async function authGuard(req, res) {
     return false;
   }
 
-  const claims = verifyAccessToken(token);
+  let claims = verifyAccessToken(token);
   if (!claims) {
-    sendJson(res, 401, { error: { code: 'unauthorized', message: 'Invalid or expired bearer token' } });
-    return false;
+    const apiIdentity = await req.context.repositories.users.findByApiToken(req.context.tenantId, hashToken(token));
+    if (!apiIdentity) {
+      sendJson(res, 401, { error: { code: 'unauthorized', message: 'Invalid or expired bearer token' } });
+      return false;
+    }
+    const user = apiIdentity.user; const roles = user.roles || [];
+    claims = { userId:user.id,tenantId:user.tenantId,email:user.email,roles,permissions:Array.from(new Set([...permissionsForRoles(roles),...(user.permissions || [])])),apiTokenId:apiIdentity.tokenId };
   }
 
   if (claims.tenantId !== req.context.tenantId) {
@@ -31,6 +37,7 @@ async function authGuard(req, res) {
   req.context.roles = claims.roles || [];
   req.context.permissions = claims.permissions || [];
   req.context.sessionId = claims.sessionId || '';
+  req.context.apiTokenId = claims.apiTokenId || '';
   return true;
 }
 

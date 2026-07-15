@@ -54,6 +54,20 @@ git commit -m "Sprint 719: add application navigation framework"
 git push origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 720 continuation:
+
+```powershell
+npm run test:sprint720
+npm run migrations:check
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+git add -- apps/api/src/middleware/authGuard.js apps/api/src/repositories/userRepository.js apps/api/src/routes/profile.js apps/api/src/router.js apps/api/src/services/validationSchemaService.js apps/api/src/store/jsonStoreAdapter.js apps/web/src/app apps/web/src/auth/session.ts apps/web/src/components/AppShell.tsx apps/web/src/components/ProfileWorkspace.tsx packages/database/postgres/720_user_profile_experience.sql tests/sprint716-frontend-foundation.test.js tests/sprint717-web-identity-integration.test.js tests/sprint719-navigation-framework.test.js tests/sprint720-user-profile-experience.test.js SPRINT720_REQUIRED_WIRING.md PHASE46_RELEASE_NOTES.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 720: add user profile experience"
+git push origin codex/sprint-716-frontend-foundation
+```
+
 After review:
 
 ```powershell

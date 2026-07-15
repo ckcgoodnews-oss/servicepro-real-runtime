@@ -37,7 +37,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const results = useMemo(() => navigation.filter(item => item.label.toLowerCase().includes(query.toLowerCase())), [query]);
 
   useEffect(() => {
-    setSession(readSession());
+    const sync=()=>setSession(readSession()); sync(); window.addEventListener('servicepro:session',sync); return ()=>window.removeEventListener('servicepro:session',sync);
   }, []);
 
   useEffect(() => {

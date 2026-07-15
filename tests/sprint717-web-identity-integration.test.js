@@ -8,7 +8,7 @@ const required = [
   'apps/web/src/auth/session.ts',
   'apps/web/src/components/AuthGuard.tsx',
   'apps/web/src/components/IdentityForm.tsx',
-  'apps/web/src/app/dashboard/layout.tsx',
+  'apps/web/src/app/(workspace)/layout.tsx',
   'apps/web/src/app/forgot-password/page.tsx',
   'apps/web/src/app/reset-password/page.tsx',
   'apps/web/src/app/invite/page.tsx'

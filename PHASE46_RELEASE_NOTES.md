@@ -36,3 +36,11 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added breadcrumbs, keyboard-accessible global search, and route shortcuts.
 - Added theme, notifications, profile, settings, and sign-out controls.
 - Added a local website testing guide and repeatable development login seed.
+
+## Sprint 720 — User Profile
+
+- Added a protected profile and preferences workspace under the shared application shell.
+- Added persisted identity, avatar, timezone, locale, and notification settings.
+- Added current-password verification, password-policy enforcement, and session revocation.
+- Added email-based MFA controls and hashed, one-time-display personal API tokens.
+- Added JSON/PostgreSQL persistence parity, API-token authentication, migration, and regression coverage.

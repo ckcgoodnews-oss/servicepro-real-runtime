@@ -51,6 +51,9 @@ const routeValidators = {
   'POST /auth/password-reset/confirm': input => validateRequired(input, ['token', 'password']),
   'POST /auth/invitations/accept': input => validateRequired(input, ['token', 'password']),
   'POST /auth/mfa/verify': input => validateRequired(input, ['challengeId', 'code']),
+  'POST /api/v1/profile/password': input => validateRequired(input, ['currentPassword', 'newPassword']),
+  'PATCH /api/v1/profile/mfa': input => validateRequired(input, ['enabled']),
+  'POST /api/v1/profile/tokens': input => validateRequired(input, ['name']),
   'POST /api/v1/customers': input => {
     validateRequired(input, ['firstName', 'lastName']);
     validateEmail(input, 'email');
