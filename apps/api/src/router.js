@@ -21,6 +21,7 @@ const tenantAdmin = require('./routes/tenantAdmin');
 const workflows = require('./routes/workflows');
 const notifications = require('./routes/notifications');
 const reports = require('./routes/reports');
+const reportSchedules = require('./routes/reportSchedules');
 const dashboard = require('./routes/dashboard');
 const profile = require('./routes/profile');
 const organization = require('./routes/organization');
@@ -351,6 +352,11 @@ async function router(req, res) {
     if (!requirePermission(PERMISSIONS.REPORTS_READ)(req, res)) return;
     return reports.dashboard(req, res);
   }
+  if(req.url==='/api/v1/reports/schedules'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.REPORTS_READ)(req,res))return;return reportSchedules.list(req,res);}
+  if(req.url==='/api/v1/reports/schedules'&&req.method==='POST'){if(!requirePermission(PERMISSIONS.REPORTS_WRITE)(req,res))return;return reportSchedules.create(req,res);}
+  const reportScheduleMatch=req.url.match(/^\/api\/v1\/reports\/schedules\/([^/]+)$/);
+  if(reportScheduleMatch&&req.method==='PATCH'){if(!requirePermission(PERMISSIONS.REPORTS_WRITE)(req,res))return;return reportSchedules.update(req,res,reportScheduleMatch[1]);}
+  if(reportScheduleMatch&&req.method==='DELETE'){if(!requirePermission(PERMISSIONS.REPORTS_WRITE)(req,res))return;return reportSchedules.remove(req,res,reportScheduleMatch[1]);}
 
   if (req.url === '/api/v1/organization' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.ORGANIZATION_READ)(req, res)) return;

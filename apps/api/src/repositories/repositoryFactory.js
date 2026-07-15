@@ -34,6 +34,7 @@ const KEY_ALIASES = {
   priceBook: 'priceBook',
   purchaseOrder: 'purchaseOrders',
   report: 'reports',
+  reportSchedule: 'reportSchedules',
   securityEvent: 'securityEvents',
   service: 'services',
   serviceAgreement: 'serviceAgreements',

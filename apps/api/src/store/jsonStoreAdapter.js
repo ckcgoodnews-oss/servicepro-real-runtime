@@ -23,6 +23,7 @@ function makeSeedData() {
     requestMetrics: [],
     auditEvents: [],
     exportRuns: [],
+    reportSchedules: [{id:'rptsched_demo_1',tenantId:'tenant_demo',reportKey:'revenue',frequency:'weekly',format:'csv',recipients:['owner@example.com'],nextRunAt:new Date(Date.now()+86400000).toISOString(),lastRunAt:'',active:true,createdAt:stamp,updatedAt:stamp}],
     messageTemplates: [{ id: 'tmpl_booking', tenantId: 'tenant_demo', templateKey: 'booking_requested', name: 'Booking Requested', channel: 'email', subject: 'Service request received', body: 'Hello {{customerName}}, we received your {{serviceType}} request for {{requestedDate}}.', active: true, createdAt: stamp, updatedAt: stamp }],
     notifications: [
       { id:'ntf_demo_dispatch',tenantId:'tenant_demo',channel:'push',toAddress:'owner@example.com',toName:'Business Owner',subject:'Tomorrow’s first call is assigned',body:'Chris is scheduled for Maria Johnson’s kitchen sink service at 10:00 AM.',templateKey:'',status:'sent',errorMessage:'',readAt:'',createdAt:stamp,updatedAt:stamp,sentAt:stamp },
@@ -71,7 +72,7 @@ function createJsonStore() {
     read() {
       ensureFile();
       const data = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
-      for (const key of ['tenantSettings','workflowRules','workflowEvents','users','integrityRuns','securityEvents','requestMetrics','auditEvents','exportRuns','messageTemplates','notifications','portalAccounts','portalBookings','authEvents','authSessions','passwordResetTokens','invitations','mfaChallenges','userApiTokens','organizationUnits','knowledgeArticles','customerAssets','assetServiceHistory','mediaAttachments','services','inventoryItems','stockAdjustments','materialUsage','customers','jobs','technicians','appointments','dispatchAssignments','estimates','invoices','payments']) {
+      for (const key of ['tenantSettings','workflowRules','workflowEvents','users','integrityRuns','securityEvents','requestMetrics','auditEvents','exportRuns','reportSchedules','messageTemplates','notifications','portalAccounts','portalBookings','authEvents','authSessions','passwordResetTokens','invitations','mfaChallenges','userApiTokens','organizationUnits','knowledgeArticles','customerAssets','assetServiceHistory','mediaAttachments','services','inventoryItems','stockAdjustments','materialUsage','customers','jobs','technicians','appointments','dispatchAssignments','estimates','invoices','payments']) {
         if (!data[key]) data[key] = [];
       }
       return data;

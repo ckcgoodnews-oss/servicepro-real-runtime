@@ -79,3 +79,10 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added persistent email, browser push, dispatch, billing, and product preference controls.
 - Added browser permission handling and reusable accessible toast confirmations.
 - Added tenant and recipient isolation, PostgreSQL read-state indexing, and technician inbox access.
+
+## Sprint 726 — Reporting
+
+- Added a protected reporting workspace with revenue, work-order, inventory, and operations summaries.
+- Added responsive CSS charts with visible values and export actions for operational and financial reports.
+- Added CSV download history backed by the existing tenant-scoped export engine.
+- Added persisted daily, weekly, and monthly report delivery schedules with pause and resume controls.

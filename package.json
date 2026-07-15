@@ -531,7 +531,8 @@
     "test:sprint722": "node tests/sprint722-asset-management.test.js",
     "test:sprint723": "node tests/sprint723-work-order-experience.test.js",
     "test:sprint724": "node tests/sprint724-knowledge-center.test.js",
-    "test:sprint725": "node tests/sprint725-notification-center.test.js"
+    "test:sprint725": "node tests/sprint725-notification-center.test.js",
+    "test:sprint726": "node tests/sprint726-reporting-experience.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
