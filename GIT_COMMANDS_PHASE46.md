@@ -166,6 +166,20 @@ git commit -m "Sprint 727: add multi-industry marketplace"
 git push origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 728 continuation:
+
+```powershell
+npm run test:sprint728
+npm run migrations:check
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+git add -- apps/api/src/data/serviceMarketplaceCatalog.js apps/api/src/store/jsonStoreAdapter.js apps/web/src/components/MarketplaceWorkspace.tsx packages/database/postgres/728_expanded_service_catalog.sql tests/sprint728-expanded-service-catalog.test.js SPRINT728_REQUIRED_WIRING.md PHASE46_RELEASE_NOTES.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 728: expand service industry catalog"
+git push origin codex/sprint-716-frontend-foundation
+```
+
 After review:
 
 ```powershell

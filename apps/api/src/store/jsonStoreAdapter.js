@@ -3,19 +3,9 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const { defaultTenantSettings } = require('../services/tenantSettingsService');
 const { defaultWorkflowRules } = require('../services/workflowService');
+const { defaultMarketplaceItems } = require('../data/serviceMarketplaceCatalog');
 
 const dataFile = path.resolve(process.env.DATA_FILE || './data/servicepro-runtime.json');
-
-function defaultMarketplaceItems(stamp) { return [
-  {id:'market_plumbing',code:'pack-plumbing',name:'Plumbing Operations Pack',itemType:'service_pack',category:'industry',description:'Pricebook categories, equipment types, checklists, and job templates for residential and commercial plumbing.',provider:'ServicePro',industries:['plumbing'],features:['Drain and sewer','Water heaters','Fixture service'],accentColor:'#247d70',status:'published',createdAt:stamp,updatedAt:stamp},
-  {id:'market_hvac',code:'pack-hvac',name:'HVAC Service Pack',itemType:'service_pack',category:'industry',description:'Maintenance plans, diagnostic checklists, equipment lifecycle fields, and seasonal service templates.',provider:'ServicePro',industries:['hvac'],features:['Heating and cooling','Maintenance agreements','Equipment commissioning'],accentColor:'#3c7ec4',status:'published',createdAt:stamp,updatedAt:stamp},
-  {id:'market_carpet',code:'pack-carpet',name:'Carpet & Upholstery Pack',itemType:'service_pack',category:'industry',description:'Room measurements, treatment notes, material tracking, and repeat-cleaning workflows.',provider:'ServicePro',industries:['carpet_cleaning'],features:['Room-based estimates','Treatment tracking','Recurring service'],accentColor:'#9b6f4f',status:'published',createdAt:stamp,updatedAt:stamp},
-  {id:'market_landscape',code:'pack-landscape',name:'Landscaping Operations Pack',itemType:'service_pack',category:'industry',description:'Property zones, crew visits, seasonal services, and material usage for lawn and landscape teams.',provider:'ServicePro',industries:['landscaping'],features:['Property zones','Crew routing','Seasonal work'],accentColor:'#56843f',status:'published',createdAt:stamp,updatedAt:stamp},
-  {id:'market_accounting',code:'connector-accounting',name:'Accounting Connector',itemType:'connector',category:'finance',description:'Synchronize customers, invoices, payments, and tax-ready summaries with your accounting platform.',provider:'ServicePro',industries:['all'],features:['Invoice sync','Payment matching','Customer sync'],accentColor:'#7256a1',status:'published',createdAt:stamp,updatedAt:stamp},
-  {id:'market_payments',code:'connector-payments',name:'Payments Connector',itemType:'connector',category:'payments',description:'Accept cards and bank payments while keeping ServicePro invoice balances current.',provider:'ServicePro',industries:['all'],features:['Card payments','Bank payments','Automatic reconciliation'],accentColor:'#315ea8',status:'published',createdAt:stamp,updatedAt:stamp},
-  {id:'market_theme',code:'theme-evergreen',name:'Evergreen Workspace Theme',itemType:'theme',category:'appearance',description:'A calm, high-contrast workspace theme designed for field-service offices and mobile crews.',provider:'ServicePro',industries:['all'],features:['Accessible contrast','Office and field views','Light and dark modes'],accentColor:'#1c7c68',status:'published',createdAt:stamp,updatedAt:stamp},
-  {id:'market_comms',code:'extension-communications',name:'Customer Communications',itemType:'extension',category:'customer_experience',description:'Reusable appointment, arrival, estimate, invoice, and follow-up messages for any service business.',provider:'ServicePro',industries:['all'],features:['Appointment reminders','On-my-way alerts','Review requests'],accentColor:'#c77a2e',status:'published',createdAt:stamp,updatedAt:stamp}
-]; }
 
 function makeSeedData() {
   const stamp = new Date().toISOString();
@@ -85,7 +75,12 @@ function createJsonStore() {
     read() {
       ensureFile();
       const data = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
-      if (!data.serviceMarketplaceItems) data.serviceMarketplaceItems = defaultMarketplaceItems(new Date().toISOString());
+      const catalog = defaultMarketplaceItems(new Date().toISOString());
+      if (!Array.isArray(data.serviceMarketplaceItems)) data.serviceMarketplaceItems = catalog;
+      else {
+        const existingCodes = new Set(data.serviceMarketplaceItems.map(item => item.code));
+        data.serviceMarketplaceItems.push(...catalog.filter(item => !existingCodes.has(item.code)));
+      }
       for (const key of ['tenantSettings','workflowRules','workflowEvents','users','integrityRuns','securityEvents','requestMetrics','auditEvents','exportRuns','reportSchedules','serviceMarketplaceInstallations','messageTemplates','notifications','portalAccounts','portalBookings','authEvents','authSessions','passwordResetTokens','invitations','mfaChallenges','userApiTokens','organizationUnits','knowledgeArticles','customerAssets','assetServiceHistory','mediaAttachments','services','inventoryItems','stockAdjustments','materialUsage','customers','jobs','technicians','appointments','dispatchAssignments','estimates','invoices','payments']) {
         if (!data[key]) data[key] = [];
       }

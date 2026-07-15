@@ -93,3 +93,10 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added initial plumbing, HVAC, carpet and upholstery cleaning, and landscaping packs.
 - Kept core customer, scheduling, dispatch, billing, asset, notification, and reporting concepts reusable across all service businesses.
 - Added tenant-isolated installation and removal flows with JSON/PostgreSQL persistence parity.
+
+## Sprint 728 — Expanded Service Catalog
+
+- Expanded the marketplace from four to 30 installable service-industry packs.
+- Added electrical, residential and commercial cleaning, pest control, roofing, garage door, appliance repair, handyman, painting, pressure washing, pool and spa, locksmith and security, tree care, snow removal, irrigation, septic, chimney, solar, home inspection, restoration, moving, junk removal, window and gutter cleaning, flooring, property maintenance, and fencing workflows.
+- Added automatic catalog upgrades that preserve existing tenant installations.
+- Made the industry filter data-driven so additional trades can be published without another frontend change.
