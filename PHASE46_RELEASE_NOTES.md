@@ -44,3 +44,10 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added current-password verification, password-policy enforcement, and session revocation.
 - Added email-based MFA controls and hashed, one-time-display personal API tokens.
 - Added JSON/PostgreSQL persistence parity, API-token authentication, migration, and regression coverage.
+
+## Sprint 721 — Organization Management
+
+- Added a protected organization-management workspace with summary filters and responsive editing flows.
+- Added organizations, business units, departments, locations, and teams with reporting relationships.
+- Added tenant-isolated CRUD APIs, role-derived permissions, and child-safe deletion rules.
+- Added JSON/PostgreSQL persistence parity, migration wiring, and regression coverage.

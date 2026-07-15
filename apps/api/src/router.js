@@ -23,6 +23,7 @@ const notifications = require('./routes/notifications');
 const reports = require('./routes/reports');
 const dashboard = require('./routes/dashboard');
 const profile = require('./routes/profile');
+const organization = require('./routes/organization');
 const exportsRoute = require('./routes/exports');
 const audit = require('./routes/audit');
 const observability = require('./routes/observability');
@@ -347,6 +348,24 @@ async function router(req, res) {
   if (req.url === '/api/v1/reports/dashboard' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.REPORTS_READ)(req, res)) return;
     return reports.dashboard(req, res);
+  }
+
+  if (req.url === '/api/v1/organization' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.ORGANIZATION_READ)(req, res)) return;
+    return organization.list(req, res);
+  }
+  if (req.url === '/api/v1/organization' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.ORGANIZATION_WRITE)(req, res)) return;
+    return organization.create(req, res);
+  }
+  const organizationMatch = req.url.match(/^\/api\/v1\/organization\/([^/]+)$/);
+  if (organizationMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.ORGANIZATION_WRITE)(req, res)) return;
+    return organization.update(req, res, organizationMatch[1]);
+  }
+  if (organizationMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.ORGANIZATION_DELETE)(req, res)) return;
+    return organization.remove(req, res, organizationMatch[1]);
   }
   if (req.url === '/api/v1/profile' && req.method === 'GET') return profile.get(req,res);
   if (req.url === '/api/v1/profile' && req.method === 'PATCH') return profile.update(req,res);

@@ -14,6 +14,7 @@ const navigation = [
   { label: 'Schedule', href: '/schedule', icon: '◫' },
   { label: 'Customers', href: '/customers', icon: '◎' },
   { label: 'Assets', href: '/assets', icon: '◇' },
+  { label: 'Organization', href: '/organization', icon: '◎' },
   { label: 'Reports', href: '/reports', icon: '↗' },
 ];
 

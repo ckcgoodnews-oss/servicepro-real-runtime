@@ -26,6 +26,7 @@ const KEY_ALIASES = {
   messageTemplate: 'messageTemplates',
   metric: 'metrics',
   notification: 'notifications',
+  organizationUnit: 'organizationUnits',
   payment: 'payments',
   portalAccount: 'portalAccounts',
   portalBooking: 'portalBookings',
