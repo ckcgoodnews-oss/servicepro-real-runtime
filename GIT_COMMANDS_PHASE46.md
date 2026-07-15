@@ -193,6 +193,19 @@ git commit -m "Sprint 728: add documentation portal"
 git push origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 729 continuation:
+
+```powershell
+npm run test:sprint729
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+git add -- apps/web/src/app/accessibility.css apps/web/src/app/globals.css apps/web/src/app/page.tsx apps/web/src/components/AccessibilityControls.tsx apps/web/src/components/AppShell.tsx tests/sprint729-accessibility.test.js SPRINT729_REQUIRED_WIRING.md PHASE46_RELEASE_NOTES.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 729: improve website accessibility"
+git push origin codex/sprint-716-frontend-foundation
+```
+
 After review:
 
 ```powershell

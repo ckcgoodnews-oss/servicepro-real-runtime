@@ -5,6 +5,7 @@
 @import './reports.css';
 @import './marketplace.css';
 @import './docs.css';
+@import './accessibility.css';
 :root{--ink:#102c2a;--muted:#657b77;--line:#dce6e3;--paper:#fbfcfa;--surface:#fff;--mist:#eef5f1;--green:#1c7c68;--green-dark:#10594d;--lime:#b9e55b;--blue:#3177c9;--amber:#e7a42b;--red:#d9574d;--shadow:0 20px 60px rgba(18,55,49,.12)}
 [data-theme="dark"]{--ink:#edf7f3;--muted:#9db3ad;--line:#29463f;--paper:#0d1917;--surface:#14231f;--mist:#192d28;--green:#54baa4;--green-dark:#95d9ca;--shadow:0 20px 60px rgba(0,0,0,.3)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--paper);font-family:'DM Sans',sans-serif}a{color:inherit;text-decoration:none}button,input{font:inherit}.page-width{width:min(1180px,calc(100% - 48px));margin-inline:auto}.brand{display:inline-flex;align-items:center;gap:10px}.brand-mark{display:grid;place-items:center;width:35px;height:35px;background:var(--green);color:white;border-radius:9px;transform:rotate(-5deg)}.brand-mark span{font:800 12px Manrope;transform:rotate(5deg)}.brand-name{font:800 20px Manrope;letter-spacing:-.8px}.brand-name span,.public-footer strong span{color:var(--green)}

@@ -1,0 +1,11 @@
+const assert=require('assert');const fs=require('fs');const path=require('path');
+const read=file=>fs.readFileSync(path.join(__dirname,'..',file),'utf8');
+const shell=read('apps/web/src/components/AppShell.tsx');
+for(const contract of ['Skip to main content','id="main-content"','aria-live="polite"','aria-atomic="true"','AccessibilityControls','aria-current'])assert.match(shell,new RegExp(contract));
+const controls=read('apps/web/src/components/AccessibilityControls.tsx');
+for(const contract of ['Accessibility settings','aria-pressed','High contrast','Reduce motion','prefers-reduced-motion','localStorage','Escape'])assert.match(controls,new RegExp(contract));
+const css=read('apps/web/src/app/accessibility.css');
+for(const contract of [':focus-visible','data-contrast=high','data-motion=reduce','prefers-reduced-motion:reduce','prefers-contrast:more','forced-colors:active'])assert.match(css,new RegExp(contract.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')));
+const home=read('apps/web/src/app/page.tsx');assert.match(home,/Skip to main content/);assert.match(home,/id="main-content"/);
+assert.match(read('apps/web/src/app/layout.tsx'),/<html lang="en"/);
+console.log('Sprint 729 accessibility test passed.');

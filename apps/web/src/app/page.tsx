@@ -9,8 +9,7 @@ const solutions = [
 ] as const;
 
 export default function HomePage() {
-  return <main>
-    <PublicHeader />
+  return <><a className="skip-link" href="#main-content">Skip to main content</a><PublicHeader/><main id="main-content" tabIndex={-1}>
     <section className="hero page-width">
       <div className="hero-copy"><p className="eyebrow"><span /> Field operations, finally in sync</p><h1>Run every service call like your <em>best one.</em></h1><p className="hero-lede">ServicePro connects your office, field teams, assets, and customers—so excellent work becomes the everyday standard.</p><div className="hero-actions"><Link className="button" href="/login">Explore the workspace <span aria-hidden="true">→</span></Link><Link className="button-secondary" href="#solutions">See how it works</Link></div><p className="hero-note">No credit card · Guided setup · Cancel anytime</p></div>
       <div className="hero-product" aria-label="ServicePro dispatch overview preview">
@@ -21,6 +20,5 @@ export default function HomePage() {
     <section className="outcomes page-width" aria-label="Customer outcomes"><p>Built for teams that keep the world working</p><div>{outcomes.map(([value, label]) => <span key={label}><strong>{value}</strong>{label}</span>)}</div></section>
     <section className="solutions page-width" id="solutions"><div className="section-heading"><p className="eyebrow"><span /> One operating system</p><h2>From first call to final invoice.</h2><p>Less chasing. More knowing. Every person gets the context they need to move the work forward.</p></div><div className="solution-grid">{solutions.map(([number, title, description]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{description}</p><Link href="/login">Explore capability →</Link></article>)}</div></section>
     <section className="cta-band" id="pricing"><div className="page-width"><div><p className="eyebrow light"><span /> Ready when you are</p><h2>Make tomorrow’s schedule your smoothest yet.</h2></div><Link className="button button-light" href="/login">Open ServicePro →</Link></div></section>
-    <footer className="public-footer page-width" id="resources"><div><strong>Service<span>Pro</span></strong><p>Field service, under control.</p></div><p>© 2026 Aardvark Enterprises. All rights reserved.</p></footer>
-  </main>;
+  </main><footer className="public-footer page-width" id="resources"><div><strong>Service<span>Pro</span></strong><p>Field service, under control.</p></div><p>© 2026 Aardvark Enterprises. All rights reserved.</p></footer></>;
 }

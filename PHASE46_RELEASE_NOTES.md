@@ -108,3 +108,11 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added step-by-step tutorials for dispatch, recurring service, and scheduled reporting.
 - Added authenticated API examples for request formatting, work orders, and marketplace installations.
 - Added in-product Version 8 release notes and responsive article navigation.
+
+## Sprint 729 — Accessibility
+
+- Added keyboard-visible skip navigation and consistent focus indicators across public and authenticated pages.
+- Added semantic main landmarks, current-page navigation state, and polite screen-reader route announcements.
+- Added a keyboard-accessible display settings panel with high-contrast and reduced-motion modes.
+- Added automatic support for reduced-motion, increased-contrast, and Windows forced-colors system preferences.
+- Kept accessibility display preferences device-local and independent from tenant business data.

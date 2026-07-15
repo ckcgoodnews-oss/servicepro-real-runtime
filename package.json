@@ -535,7 +535,8 @@
     "test:sprint726": "node tests/sprint726-reporting-experience.test.js",
     "test:sprint727": "node tests/sprint727-marketplace-experience.test.js",
     "test:sprint728": "node tests/sprint728-expanded-service-catalog.test.js",
-    "test:sprint728-docs": "node tests/sprint728-documentation-portal.test.js"
+    "test:sprint728-docs": "node tests/sprint728-documentation-portal.test.js",
+    "test:sprint729": "node tests/sprint729-accessibility.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
