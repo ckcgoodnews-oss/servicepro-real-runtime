@@ -520,8 +520,9 @@
     "web:build": "npm --prefix apps/web run build",
     "web:build:pages": "npm --prefix apps/web run build:pages",
     "web:typecheck": "npm --prefix apps/web run typecheck",
-    "web:test": "node tests/sprint716-frontend-foundation.test.js",
-    "test:sprint716": "node tests/sprint716-frontend-foundation.test.js"
+    "web:test": "node tests/sprint716-frontend-foundation.test.js && node tests/sprint717-web-identity-integration.test.js",
+    "test:sprint716": "node tests/sprint716-frontend-foundation.test.js",
+    "test:sprint717": "node tests/sprint717-web-identity-integration.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
