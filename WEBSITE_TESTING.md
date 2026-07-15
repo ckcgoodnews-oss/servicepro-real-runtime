@@ -8,13 +8,15 @@ Use two PowerShell windows from the repository root.
 Set-Location "I:\REPO\servicepro-cumulative"
 $env:DATA_STORE = "json"
 $env:DATA_FILE = "./data/servicepro-runtime.json"
-$env:PORT = "10000"
+$env:PORT = "10001"
 $env:JWT_SECRET = "local-development-secret-change-before-production"
 node scripts/seed-auth.js
 node apps/api/src/server.js
 ```
 
-Leave that window running. The health check should respond at `http://localhost:10000/healthz`.
+Leave that window running. The health check should respond at `http://localhost:10001/healthz`.
+
+Port `10001` is intentionally used for local JSON testing so it does not collide with a locally running production API on port `10000`.
 
 ## 2. Start the website
 

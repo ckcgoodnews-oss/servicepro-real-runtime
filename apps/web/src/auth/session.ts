@@ -18,7 +18,7 @@ const sessionKey = 'servicepro.auth.session';
 const tenantKey = 'servicepro.auth.tenant';
 
 export function apiUrl(path: string) {
-  const base = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:10000').replace(/\/$/, '');
+  const base = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:10001').replace(/\/$/, '');
   return `${base}${path}`;
 }
 
