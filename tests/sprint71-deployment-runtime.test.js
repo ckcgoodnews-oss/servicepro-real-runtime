@@ -1,4 +1,4 @@
-const fs = require('fs');
+﻿const fs = require('fs');
 
 const required = [
   'Dockerfile',
@@ -46,9 +46,19 @@ if (invalid.ok || !invalid.errors.some(e => e.includes('JWT_SECRET'))) {
 }
 
 const dockerfile = fs.readFileSync('Dockerfile', 'utf8');
-if (!dockerfile.includes('HEALTHCHECK') || !dockerfile.includes('node apps/api/src/server.js')) {
+
+const hasHealthCheck = dockerfile.includes('HEALTHCHECK');
+
+const hasRuntimeCommand =
+  dockerfile.includes('node apps/api/src/server.js') ||
+  /CMD\s*\[\s*["']node["']\s*,\s*["']apps\/api\/src\/server\.js["']\s*\]/i.test(
+    dockerfile
+  );
+
+if (!hasHealthCheck || !hasRuntimeCommand) {
   console.error('Dockerfile is missing healthcheck or runtime command.');
   process.exit(1);
 }
 
 console.log('Sprint 71 deployment runtime patch test passed.');
+
