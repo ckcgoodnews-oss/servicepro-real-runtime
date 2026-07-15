@@ -42,3 +42,11 @@ jobs:
           DATA_FILE: ./data/ci-runtime.json
           JWT_SECRET: ci-test-secret-ci-test-secret-ci-test-secret
           PORTAL_TOKEN_SECRET: ci-portal-secret-ci-portal-secret-ci-portal
+
+      - name: Install web dependencies
+        run: npm ci --prefix apps/web
+
+      - name: Build web application
+        run: npm run web:build
+        env:
+          NEXT_PUBLIC_API_BASE_URL: http://localhost:10000

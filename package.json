@@ -515,7 +515,13 @@
     "seed:sprint712": "node scripts/seed-sprint712-version-7-defect-closure.js",
     "seed:sprint713": "node scripts/seed-sprint713-version-7-production-readiness.js",
     "seed:sprint714": "node scripts/seed-sprint714-version-7-ga-orchestration.js",
-    "seed:sprint715": "node scripts/seed-sprint715-version-7-general-availability.js"
+    "seed:sprint715": "node scripts/seed-sprint715-version-7-general-availability.js",
+    "web:dev": "npm --prefix apps/web run dev",
+    "web:build": "npm --prefix apps/web run build",
+    "web:build:pages": "npm --prefix apps/web run build:pages",
+    "web:typecheck": "npm --prefix apps/web run typecheck",
+    "web:test": "node tests/sprint716-frontend-foundation.test.js",
+    "test:sprint716": "node tests/sprint716-frontend-foundation.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
