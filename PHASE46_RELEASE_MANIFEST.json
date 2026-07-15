@@ -1,0 +1,25 @@
+{
+  "phase": 46,
+  "name": "Enterprise Web Experience",
+  "version": "8.0.0-alpha.1",
+  "tag": "v8.0.0-alpha.1",
+  "status": "complete",
+  "sprints": { "first": 716, "last": 730 },
+  "serviceModel": {
+    "core": "multi-industry field service",
+    "industryPacks": 30,
+    "marketplaceItems": 34
+  },
+  "deploymentTargets": {
+    "render": { "type": "Next.js standalone", "config": "apps/web/render.yaml", "healthCheck": "/" },
+    "cloudflarePages": { "type": "static export", "config": "apps/web/wrangler.toml", "output": "apps/web/out" }
+  },
+  "workspaceRoutes": [
+    "/dashboard", "/work-orders", "/schedule", "/customers", "/assets", "/knowledge",
+    "/notifications", "/organization", "/reports", "/marketplace", "/docs", "/settings", "/profile"
+  ],
+  "releaseChecks": [
+    "migration ordering", "web type checking", "Render production build", "Cloudflare Pages export",
+    "complete Node regression suite", "navigation route coverage", "deployment contract validation"
+  ]
+}

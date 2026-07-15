@@ -206,6 +206,22 @@ git commit -m "Sprint 729: improve website accessibility"
 git push origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 730 phase completion:
+
+```powershell
+npm run release:validate:phase46
+npm run migrations:check
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+git add -- .github/workflows/ci.yml apps/web/README.md apps/web/wrangler.toml apps/web/src/app/(workspace)/schedule/page.tsx apps/web/src/app/(workspace)/customers/page.tsx apps/web/src/app/(workspace)/settings/page.tsx apps/web/src/app/customers.css apps/web/src/app/settings.css apps/web/src/app/globals.css apps/web/src/components/CustomerWorkspace.tsx apps/web/src/components/WorkOrderWorkspace.tsx scripts/validate-phase46-release.js tests/sprint730-phase-completion.test.js PHASE46_RELEASE_MANIFEST.json PHASE46_DEPLOYMENT.md SPRINT730_REQUIRED_WIRING.md PHASE46_RELEASE_NOTES.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 730: complete Phase 46 web experience"
+git push origin codex/sprint-716-frontend-foundation
+git tag -a v8.0.0-alpha.1 -m "ServicePro Phase 46 Enterprise Web Experience"
+git push origin v8.0.0-alpha.1
+```
+
 After review:
 
 ```powershell

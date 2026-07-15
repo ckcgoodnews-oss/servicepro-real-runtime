@@ -50,3 +50,8 @@ jobs:
         run: npm run web:build
         env:
           NEXT_PUBLIC_API_BASE_URL: http://localhost:10000
+
+      - name: Build Cloudflare Pages export
+        run: npm run web:build:pages
+        env:
+          NEXT_PUBLIC_API_BASE_URL: http://localhost:10000

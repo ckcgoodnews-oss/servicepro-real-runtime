@@ -2,6 +2,8 @@
 
 Version 8 browser experience, Sprints 716–730.
 
+Status: Phase complete — `v8.0.0-alpha.1`.
+
 ## Sprint 716 — Frontend Foundation
 
 - Next.js 15 and TypeScript application in `apps/web`.
@@ -116,3 +118,11 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added a keyboard-accessible display settings panel with high-contrast and reduced-motion modes.
 - Added automatic support for reduced-motion, increased-contrast, and Windows forced-colors system preferences.
 - Kept accessibility display preferences device-local and independent from tenant business data.
+
+## Sprint 730 — Phase Completion
+
+- Closed missing Schedule, Customers, and Settings navigation destinations with functional authenticated pages.
+- Added a machine-readable release manifest and an executable Phase 46 release validator.
+- Validated the Render standalone and Cloudflare Pages static-export deployment contracts.
+- Added Cloudflare Pages configuration and expanded CI to build both website targets.
+- Completed deployment documentation, release notes, phase packaging, and the `v8.0.0-alpha.1` tag gate.

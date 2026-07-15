@@ -536,7 +536,9 @@
     "test:sprint727": "node tests/sprint727-marketplace-experience.test.js",
     "test:sprint728": "node tests/sprint728-expanded-service-catalog.test.js",
     "test:sprint728-docs": "node tests/sprint728-documentation-portal.test.js",
-    "test:sprint729": "node tests/sprint729-accessibility.test.js"
+    "test:sprint729": "node tests/sprint729-accessibility.test.js",
+    "test:sprint730": "node tests/sprint730-phase-completion.test.js",
+    "release:validate:phase46": "node scripts/validate-phase46-release.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
