@@ -9,8 +9,8 @@ function sign(payload) {
   return crypto.createHmac('sha256', secret).update(payload).digest('base64url');
 }
 
-function issueAccessToken({ userId, tenantId, email, roles = [], permissions = [] }) {
-  const ttl = Number(process.env.ACCESS_TOKEN_TTL_SECONDS || 3600);
+function issueAccessToken({ userId, tenantId, email, roles = [], permissions = [], sessionId }) {
+  const ttl = Number(process.env.ACCESS_TOKEN_TTL_SECONDS || 900);
   const header = { alg: 'HS256', typ: 'JWT' };
   const now = Math.floor(Date.now() / 1000);
   const claims = {
@@ -19,6 +19,7 @@ function issueAccessToken({ userId, tenantId, email, roles = [], permissions = [
     email,
     roles,
     permissions,
+    sessionId,
     iat: now,
     exp: now + ttl
   };
@@ -35,7 +36,9 @@ function verifyAccessToken(token) {
 
   const [encodedHeader, encodedClaims, signature] = parts;
   const expected = sign(`${encodedHeader}.${encodedClaims}`);
-  if (!crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))) return null;
+  const actualBuffer = Buffer.from(signature);
+  const expectedBuffer = Buffer.from(expected);
+  if (actualBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(actualBuffer, expectedBuffer)) return null;
 
   try {
     const claims = JSON.parse(Buffer.from(encodedClaims, 'base64url').toString('utf8'));
@@ -46,4 +49,7 @@ function verifyAccessToken(token) {
   }
 }
 
-module.exports = { issueAccessToken, verifyAccessToken };
+function issueOpaqueToken(bytes = 32) { return crypto.randomBytes(bytes).toString('base64url'); }
+function hashToken(token) { return crypto.createHash('sha256').update(String(token || '')).digest('hex'); }
+
+module.exports = { issueAccessToken, verifyAccessToken, issueOpaqueToken, hashToken };

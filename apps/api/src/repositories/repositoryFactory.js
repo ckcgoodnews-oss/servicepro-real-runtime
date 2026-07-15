@@ -8,6 +8,7 @@ const KEY_ALIASES = {
   assetServiceHistory: 'assetServiceHistory',
   audit: 'audit',
   authEvent: 'authEvents',
+  authSession: 'authSessions',
   checklist: 'checklists',
   communication: 'communications',
   customer: 'customers',

@@ -44,6 +44,13 @@ function validateLineItems(input) {
 }
 
 const routeValidators = {
+  'POST /auth/login': input => { validateRequired(input, ['email', 'password']); validateEmail(input, 'email'); },
+  'POST /auth/register': input => { validateRequired(input, ['email', 'name', 'password']); validateEmail(input, 'email'); },
+  'POST /auth/refresh': input => validateRequired(input, ['refreshToken']),
+  'POST /auth/password-reset/request': input => { validateRequired(input, ['email']); validateEmail(input, 'email'); },
+  'POST /auth/password-reset/confirm': input => validateRequired(input, ['token', 'password']),
+  'POST /auth/invitations/accept': input => validateRequired(input, ['token', 'password']),
+  'POST /auth/mfa/verify': input => validateRequired(input, ['challengeId', 'code']),
   'POST /api/v1/customers': input => {
     validateRequired(input, ['firstName', 'lastName']);
     validateEmail(input, 'email');

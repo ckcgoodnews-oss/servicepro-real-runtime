@@ -18,7 +18,7 @@ const sessionKey = 'servicepro.auth.session';
 const tenantKey = 'servicepro.auth.tenant';
 
 export function apiUrl(path: string) {
-  const base = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000').replace(/\/$/, '');
+  const base = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:10000').replace(/\/$/, '');
   return `${base}${path}`;
 }
 
@@ -46,6 +46,16 @@ export function saveSession(session: AuthSession, remember: boolean) {
   window.localStorage.setItem(tenantKey, session.user.tenantId || tenantId());
 }
 
+async function refreshSession(session: AuthSession) {
+  if (!session.refreshToken) return null;
+  const response = await fetch(apiUrl('/auth/refresh'), { method: 'POST', headers: { 'content-type': 'application/json', 'x-tenant-id': session.user.tenantId }, body: JSON.stringify({ refreshToken: session.refreshToken }) });
+  if (!response.ok) return null;
+  const body = await response.json();
+  const remembered = window.localStorage.getItem(sessionKey) !== null;
+  saveSession(body.data as AuthSession, remembered);
+  return body.data as AuthSession;
+}
+
 export function clearSession() {
   if (typeof window === 'undefined') return;
   window.localStorage.removeItem(sessionKey);
@@ -58,5 +68,13 @@ export async function authFetch(path: string, init: RequestInit = {}) {
   headers.set('content-type', 'application/json');
   headers.set('x-tenant-id', session?.user.tenantId || tenantId());
   if (session?.accessToken) headers.set('authorization', `Bearer ${session.accessToken}`);
-  return fetch(apiUrl(path), { ...init, headers });
+  let response = await fetch(apiUrl(path), { ...init, headers });
+  if (response.status === 401 && session?.refreshToken && path !== '/auth/refresh') {
+    const refreshed = await refreshSession(session);
+    if (refreshed) {
+      headers.set('authorization', `Bearer ${refreshed.accessToken}`);
+      response = await fetch(apiUrl(path), { ...init, headers });
+    }
+  }
+  return response;
 }

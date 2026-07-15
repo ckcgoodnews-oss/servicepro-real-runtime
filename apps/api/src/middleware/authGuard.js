@@ -21,10 +21,16 @@ async function authGuard(req, res) {
     return false;
   }
 
+  if (claims.sessionId && !(await req.context.repositories.authSessions.isActive(claims.sessionId, claims.tenantId, claims.userId))) {
+    sendJson(res, 401, { error: { code: 'session_revoked', message: 'Session is expired or revoked' } });
+    return false;
+  }
+
   req.context.userId = claims.userId;
   req.context.email = claims.email;
   req.context.roles = claims.roles || [];
   req.context.permissions = claims.permissions || [];
+  req.context.sessionId = claims.sessionId || '';
   return true;
 }
 

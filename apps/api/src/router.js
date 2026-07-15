@@ -118,6 +118,16 @@ async function router(req, res) {
   if (applyRouteValidation(req, res)) return;
 
   if (req.url === '/auth/login' && req.method === 'POST') return auth.login(req, res);
+  if (req.url === '/auth/register' && req.method === 'POST') return auth.register(req, res);
+  if (req.url === '/auth/refresh' && req.method === 'POST') return auth.refresh(req, res);
+  if (req.url === '/auth/password-reset/request' && req.method === 'POST') return auth.requestPasswordReset(req, res);
+  if (req.url === '/auth/password-reset/confirm' && req.method === 'POST') return auth.confirmPasswordReset(req, res);
+  if (req.url === '/auth/invitations/accept' && req.method === 'POST') return auth.acceptInvitation(req, res);
+  if (req.url === '/auth/mfa/verify' && req.method === 'POST') return auth.verifyMfa(req, res);
+  if (req.url === '/auth/logout' && req.method === 'POST') {
+    if (!(await authGuard(req, res))) return;
+    return auth.logout(req, res);
+  }
   if (req.url === '/portal/login' && req.method === 'POST') return portal.login(req, res);
   if (req.url === '/tenant-profile' && req.method === 'GET') return tenantAdmin.getPublicProfile(req, res);
 

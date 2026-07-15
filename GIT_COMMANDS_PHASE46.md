@@ -14,6 +14,20 @@ git commit -m "Sprint 716: add enterprise web foundation"
 git push -u origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 717 continuation:
+
+```powershell
+npm run web:test
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+npm run migrations:check
+git add -- apps/api apps/web packages/database/postgres/717_enterprise_web_identity.sql tests/sprint717-enterprise-web-auth.test.js PHASE46_RELEASE_NOTES.md SPRINT717_REQUIRED_WIRING.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 717B: complete enterprise web authentication"
+git push origin codex/sprint-716-frontend-foundation
+```
+
 After review:
 
 ```powershell

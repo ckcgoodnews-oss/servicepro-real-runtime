@@ -11,5 +11,13 @@ Version 8 browser experience, Sprints 716–730.
 - Independent Render and Cloudflare Pages build modes.
 - CI, contract tests, environment documentation, and deployment wiring.
 
-The Sprint 716 login form is intentionally a visual shell. Authentication,
-session enforcement, recovery, invitations, and MFA arrive in Sprint 717.
+## Sprint 717 — Authentication Experience
+
+- Live tenant-aware login, optional registration, logout, and protected dashboard routes.
+- Short-lived access tokens with rotating, revocable refresh sessions.
+- Password recovery and invitation acceptance backed by hashed, expiring, one-time tokens.
+- MFA challenge and verification screen with one-time challenge storage.
+- Shared password-policy validation and generic recovery responses that resist account enumeration.
+- PostgreSQL migration plus JSON/PostgreSQL repository parity and regression tests.
+
+Production password-reset, invitation, and MFA messages require a configured delivery provider; raw tokens and codes are never returned in production.

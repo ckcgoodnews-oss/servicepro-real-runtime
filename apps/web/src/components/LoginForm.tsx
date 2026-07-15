@@ -21,6 +21,11 @@ export function LoginForm() {
       });
       const body = await response.json();
       if (!response.ok) throw new Error(body.error?.message || 'Unable to sign in');
+      if (body.data.mfaRequired) {
+        window.sessionStorage.setItem('servicepro.auth.pendingMfa', JSON.stringify(body.data));
+        router.replace(`/mfa?challenge=${encodeURIComponent(body.data.challengeId)}`);
+        return;
+      }
       const session: AuthSession = {
         accessToken: body.data.accessToken,
         refreshToken: body.data.refreshToken,
