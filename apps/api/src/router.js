@@ -21,6 +21,7 @@ const tenantAdmin = require('./routes/tenantAdmin');
 const workflows = require('./routes/workflows');
 const notifications = require('./routes/notifications');
 const reports = require('./routes/reports');
+const dashboard = require('./routes/dashboard');
 const exportsRoute = require('./routes/exports');
 const audit = require('./routes/audit');
 const observability = require('./routes/observability');
@@ -345,6 +346,10 @@ async function router(req, res) {
   if (req.url === '/api/v1/reports/dashboard' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.REPORTS_READ)(req, res)) return;
     return reports.dashboard(req, res);
+  }
+  if (req.url === '/api/v1/dashboard/summary' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.REPORTS_READ)(req, res)) return;
+    return dashboard.summary(req, res);
   }
   const reportMatch = req.url.match(/^\/api\/v1\/reports\/([^/]+)$/);
   if (reportMatch && req.method === 'GET') {

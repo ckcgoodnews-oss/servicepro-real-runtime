@@ -522,7 +522,8 @@
     "web:typecheck": "npm --prefix apps/web run typecheck",
     "web:test": "node tests/sprint716-frontend-foundation.test.js && node tests/sprint717-web-identity-integration.test.js && node tests/sprint717-enterprise-web-auth.test.js",
     "test:sprint716": "node tests/sprint716-frontend-foundation.test.js",
-    "test:sprint717": "node tests/sprint717-web-identity-integration.test.js && node tests/sprint717-enterprise-web-auth.test.js"
+    "test:sprint717": "node tests/sprint717-web-identity-integration.test.js && node tests/sprint717-enterprise-web-auth.test.js",
+    "test:sprint718": "node tests/sprint718-live-dashboard.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

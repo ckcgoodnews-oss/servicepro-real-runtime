@@ -28,6 +28,19 @@ git commit -m "Sprint 717B: complete enterprise web authentication"
 git push origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 718 continuation:
+
+```powershell
+npm run test:sprint718
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+git add -- apps/api/src/routes/dashboard.js apps/api/src/router.js apps/web/src/app/dashboard apps/web/src/components/DashboardOverview.tsx apps/web/src/app/globals.css tests/sprint718-live-dashboard.test.js SPRINT718_REQUIRED_WIRING.md PHASE46_RELEASE_NOTES.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 718: connect live operations dashboard"
+git push origin codex/sprint-716-frontend-foundation
+```
+
 After review:
 
 ```powershell

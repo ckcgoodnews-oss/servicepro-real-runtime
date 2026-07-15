@@ -21,3 +21,10 @@ Version 8 browser experience, Sprints 716–730.
 - PostgreSQL migration plus JSON/PostgreSQL repository parity and regression tests.
 
 Production password-reset, invitation, and MFA messages require a configured delivery provider; raw tokens and codes are never returned in production.
+
+## Sprint 718 — Live Operations Dashboard
+
+- Replaced demonstration KPI values with a tenant-scoped dashboard summary API.
+- Added open-work, today’s appointments, active-customer, and outstanding-balance KPIs.
+- Added prioritized attention items, recent work, activity, notifications, quick actions, and favorites.
+- Added loading, error, and empty states while retaining responsive layouts.
