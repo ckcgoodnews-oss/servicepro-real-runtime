@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const { validationError } = require('../errors/domainError');
 
-const ALLOWED_ENTITY_TYPES = ['job', 'customer', 'asset', 'invoice', 'estimate', 'checklist', 'payment', 'agreement'];
+const ALLOWED_ENTITY_TYPES = ['job', 'customer', 'asset', 'knowledge', 'invoice', 'estimate', 'checklist', 'payment', 'agreement'];
 const IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic'];
 const DOCUMENT_MIME_TYPES = ['application/pdf', 'text/plain', 'text/csv'];
 

@@ -21,6 +21,7 @@ const KEY_ALIASES = {
   inventoryTransfer: 'inventoryTransfers',
   invoice: 'invoices',
   job: 'jobs',
+  knowledgeArticle: 'knowledgeArticles',
   materialUsage: 'materialUsage',
   mediaAttachment: 'mediaAttachments',
   messageTemplate: 'messageTemplates',

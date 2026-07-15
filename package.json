@@ -529,7 +529,8 @@
     "test:sprint720": "node tests/sprint720-user-profile-experience.test.js",
     "test:sprint721": "node tests/sprint721-organization-management.test.js",
     "test:sprint722": "node tests/sprint722-asset-management.test.js",
-    "test:sprint723": "node tests/sprint723-work-order-experience.test.js"
+    "test:sprint723": "node tests/sprint723-work-order-experience.test.js",
+    "test:sprint724": "node tests/sprint724-knowledge-center.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -25,6 +25,7 @@ const dashboard = require('./routes/dashboard');
 const profile = require('./routes/profile');
 const organization = require('./routes/organization');
 const customerAssets = require('./routes/customerAssets');
+const knowledge = require('./routes/knowledge');
 const exportsRoute = require('./routes/exports');
 const audit = require('./routes/audit');
 const observability = require('./routes/observability');
@@ -403,6 +404,14 @@ async function router(req, res) {
     if (!requirePermission(PERMISSIONS.ASSETS_WRITE)(req, res)) return;
     return customerAssets.update(req, res, assetMatch[1]);
   }
+  if (req.url === '/api/v1/knowledge' && req.method === 'GET') { if (!requirePermission(PERMISSIONS.KNOWLEDGE_READ)(req, res)) return; return knowledge.list(req, res); }
+  if (req.url === '/api/v1/knowledge' && req.method === 'POST') { if (!requirePermission(PERMISSIONS.KNOWLEDGE_WRITE)(req, res)) return; return knowledge.create(req, res); }
+  const knowledgeAttachmentMatch = req.url.match(/^\/api\/v1\/knowledge\/([^/]+)\/attachments$/);
+  if (knowledgeAttachmentMatch && req.method === 'GET') { if (!requirePermission(PERMISSIONS.KNOWLEDGE_READ)(req, res)) return; return knowledge.listAttachments(req, res, knowledgeAttachmentMatch[1]); }
+  if (knowledgeAttachmentMatch && req.method === 'POST') { if (!requirePermission(PERMISSIONS.KNOWLEDGE_WRITE)(req, res)) return; return knowledge.createAttachment(req, res, knowledgeAttachmentMatch[1]); }
+  const knowledgeMatch = req.url.match(/^\/api\/v1\/knowledge\/([^/]+)$/);
+  if (knowledgeMatch && req.method === 'GET') { if (!requirePermission(PERMISSIONS.KNOWLEDGE_READ)(req, res)) return; return knowledge.get(req, res, knowledgeMatch[1]); }
+  if (knowledgeMatch && req.method === 'PATCH') { if (!requirePermission(PERMISSIONS.KNOWLEDGE_WRITE)(req, res)) return; return knowledge.update(req, res, knowledgeMatch[1]); }
   if (req.url === '/api/v1/profile' && req.method === 'GET') return profile.get(req,res);
   if (req.url === '/api/v1/profile' && req.method === 'PATCH') return profile.update(req,res);
   if (req.url === '/api/v1/profile/password' && req.method === 'POST') return profile.changePassword(req,res);

@@ -110,6 +110,20 @@ git commit -m "Sprint 723: add work order experience"
 git push origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 724 continuation:
+
+```powershell
+npm run test:sprint724
+npm run migrations:check
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+git add -- apps/api/src/repositories/knowledgeArticleRepository.js apps/api/src/repositories/repositoryFactory.js apps/api/src/routes/knowledge.js apps/api/src/router.js apps/api/src/services/mediaService.js apps/api/src/auth/permissions.js apps/api/src/store/jsonStoreAdapter.js apps/web/src/app/(workspace)/knowledge/page.tsx apps/web/src/components/KnowledgeWorkspace.tsx apps/web/src/components/AppShell.tsx apps/web/src/app/globals.css apps/web/src/app/knowledge.css packages/database/postgres/724_knowledge_center.sql tests/sprint724-knowledge-center.test.js SPRINT724_REQUIRED_WIRING.md PHASE46_RELEASE_NOTES.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 724: add knowledge center"
+git push origin codex/sprint-716-frontend-foundation
+```
+
 After review:
 
 ```powershell

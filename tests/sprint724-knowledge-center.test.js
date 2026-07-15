@@ -1,0 +1,14 @@
+const assert = require('assert');
+const fs = require('fs'); const path = require('path');
+const { createKnowledgeArticleRepository } = require('../apps/api/src/repositories/knowledgeArticleRepository');
+const { createMediaAttachmentRepository } = require('../apps/api/src/repositories/mediaAttachmentRepository');
+let state = { knowledgeArticles: [], mediaAttachments: [] }; const store = { type: 'json', read: () => structuredClone(state), write: data => { state = structuredClone(data); } };
+const articles = createKnowledgeArticleRepository(store); const media = createMediaAttachmentRepository(store);
+const manual = articles.create('tenant_a', { title: 'Water heater service guide', articleType: 'manual', category: 'water_heater', aiSummary: 'Verify gas supply and venting before testing ignition.', tags: ['ignition'] });
+assert.strictEqual(articles.list('tenant_a').length, 1); assert.strictEqual(articles.list('tenant_b').length, 0); assert.strictEqual(articles.findById('tenant_b', manual.id), null);
+assert.strictEqual(articles.update('tenant_a', manual.id, { status: 'archived' }).status, 'archived'); assert.throws(() => articles.create('tenant_a', { title: '', articleType: 'manual' }), /title is required/);
+const file = media.create('tenant_a', { entityType: 'knowledge', entityId: manual.id, filename: 'guide.pdf', mimeType: 'application/pdf' }); assert.strictEqual(file.entityType, 'knowledge'); assert.strictEqual(media.list('tenant_b', { entityType: 'knowledge' }).length, 0);
+const read = filePath => fs.readFileSync(path.join(__dirname, '..', filePath), 'utf8'); const component = read('apps/web/src/components/KnowledgeWorkspace.tsx');
+for (const label of ['Search knowledge', 'AI summary', 'Attachments', 'Publish resource']) assert.match(component, new RegExp(label));
+assert.match(read('apps/api/src/router.js'), /KNOWLEDGE_READ/); assert.match(read('packages/database/postgres/724_knowledge_center.sql'), /knowledge_articles/);
+console.log('Sprint 724 knowledge center test passed.');

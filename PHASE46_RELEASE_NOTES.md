@@ -65,3 +65,10 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added customer-aware search, priority indicators, technician assignments, and schedule windows.
 - Connected status actions to the validated workflow-transition API and assignment conflict detection.
 - Added responsive operations layouts, production query indexes, and regression coverage.
+
+## Sprint 724 — Knowledge Center
+
+- Added a protected searchable library for field articles and equipment manuals.
+- Added equipment metadata, tags, full procedures, editorial AI summaries, and verification guidance.
+- Added tenant-isolated JSON/PostgreSQL persistence, authenticated permissions, and production search indexes.
+- Added attachment metadata workflows for knowledge resources and technician read access.
