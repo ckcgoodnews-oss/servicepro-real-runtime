@@ -86,3 +86,10 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added responsive CSS charts with visible values and export actions for operational and financial reports.
 - Added CSV download history backed by the existing tenant-scoped export engine.
 - Added persisted daily, weekly, and monthly report delivery schedules with pause and resume controls.
+
+## Sprint 727 — Marketplace UI
+
+- Added a protected marketplace for industry packs, connectors, extensions, and workspace themes.
+- Added initial plumbing, HVAC, carpet and upholstery cleaning, and landscaping packs.
+- Kept core customer, scheduling, dispatch, billing, asset, notification, and reporting concepts reusable across all service businesses.
+- Added tenant-isolated installation and removal flows with JSON/PostgreSQL persistence parity.

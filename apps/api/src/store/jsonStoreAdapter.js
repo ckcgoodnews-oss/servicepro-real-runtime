@@ -6,6 +6,17 @@ const { defaultWorkflowRules } = require('../services/workflowService');
 
 const dataFile = path.resolve(process.env.DATA_FILE || './data/servicepro-runtime.json');
 
+function defaultMarketplaceItems(stamp) { return [
+  {id:'market_plumbing',code:'pack-plumbing',name:'Plumbing Operations Pack',itemType:'service_pack',category:'industry',description:'Pricebook categories, equipment types, checklists, and job templates for residential and commercial plumbing.',provider:'ServicePro',industries:['plumbing'],features:['Drain and sewer','Water heaters','Fixture service'],accentColor:'#247d70',status:'published',createdAt:stamp,updatedAt:stamp},
+  {id:'market_hvac',code:'pack-hvac',name:'HVAC Service Pack',itemType:'service_pack',category:'industry',description:'Maintenance plans, diagnostic checklists, equipment lifecycle fields, and seasonal service templates.',provider:'ServicePro',industries:['hvac'],features:['Heating and cooling','Maintenance agreements','Equipment commissioning'],accentColor:'#3c7ec4',status:'published',createdAt:stamp,updatedAt:stamp},
+  {id:'market_carpet',code:'pack-carpet',name:'Carpet & Upholstery Pack',itemType:'service_pack',category:'industry',description:'Room measurements, treatment notes, material tracking, and repeat-cleaning workflows.',provider:'ServicePro',industries:['carpet_cleaning'],features:['Room-based estimates','Treatment tracking','Recurring service'],accentColor:'#9b6f4f',status:'published',createdAt:stamp,updatedAt:stamp},
+  {id:'market_landscape',code:'pack-landscape',name:'Landscaping Operations Pack',itemType:'service_pack',category:'industry',description:'Property zones, crew visits, seasonal services, and material usage for lawn and landscape teams.',provider:'ServicePro',industries:['landscaping'],features:['Property zones','Crew routing','Seasonal work'],accentColor:'#56843f',status:'published',createdAt:stamp,updatedAt:stamp},
+  {id:'market_accounting',code:'connector-accounting',name:'Accounting Connector',itemType:'connector',category:'finance',description:'Synchronize customers, invoices, payments, and tax-ready summaries with your accounting platform.',provider:'ServicePro',industries:['all'],features:['Invoice sync','Payment matching','Customer sync'],accentColor:'#7256a1',status:'published',createdAt:stamp,updatedAt:stamp},
+  {id:'market_payments',code:'connector-payments',name:'Payments Connector',itemType:'connector',category:'payments',description:'Accept cards and bank payments while keeping ServicePro invoice balances current.',provider:'ServicePro',industries:['all'],features:['Card payments','Bank payments','Automatic reconciliation'],accentColor:'#315ea8',status:'published',createdAt:stamp,updatedAt:stamp},
+  {id:'market_theme',code:'theme-evergreen',name:'Evergreen Workspace Theme',itemType:'theme',category:'appearance',description:'A calm, high-contrast workspace theme designed for field-service offices and mobile crews.',provider:'ServicePro',industries:['all'],features:['Accessible contrast','Office and field views','Light and dark modes'],accentColor:'#1c7c68',status:'published',createdAt:stamp,updatedAt:stamp},
+  {id:'market_comms',code:'extension-communications',name:'Customer Communications',itemType:'extension',category:'customer_experience',description:'Reusable appointment, arrival, estimate, invoice, and follow-up messages for any service business.',provider:'ServicePro',industries:['all'],features:['Appointment reminders','On-my-way alerts','Review requests'],accentColor:'#c77a2e',status:'published',createdAt:stamp,updatedAt:stamp}
+]; }
+
 function makeSeedData() {
   const stamp = new Date().toISOString();
   const sampleLine = { code: 'DRAIN-CLEAN', name: 'Drain cleaning', description: 'Standard drain cleaning service', quantity: 1, unitPrice: 225, unitCost: 85, taxable: true, lineSubtotal: 225, lineCost: 85 };
@@ -24,6 +35,8 @@ function makeSeedData() {
     auditEvents: [],
     exportRuns: [],
     reportSchedules: [{id:'rptsched_demo_1',tenantId:'tenant_demo',reportKey:'revenue',frequency:'weekly',format:'csv',recipients:['owner@example.com'],nextRunAt:new Date(Date.now()+86400000).toISOString(),lastRunAt:'',active:true,createdAt:stamp,updatedAt:stamp}],
+    serviceMarketplaceItems: defaultMarketplaceItems(stamp),
+    serviceMarketplaceInstallations: [],
     messageTemplates: [{ id: 'tmpl_booking', tenantId: 'tenant_demo', templateKey: 'booking_requested', name: 'Booking Requested', channel: 'email', subject: 'Service request received', body: 'Hello {{customerName}}, we received your {{serviceType}} request for {{requestedDate}}.', active: true, createdAt: stamp, updatedAt: stamp }],
     notifications: [
       { id:'ntf_demo_dispatch',tenantId:'tenant_demo',channel:'push',toAddress:'owner@example.com',toName:'Business Owner',subject:'Tomorrow’s first call is assigned',body:'Chris is scheduled for Maria Johnson’s kitchen sink service at 10:00 AM.',templateKey:'',status:'sent',errorMessage:'',readAt:'',createdAt:stamp,updatedAt:stamp,sentAt:stamp },
@@ -72,7 +85,8 @@ function createJsonStore() {
     read() {
       ensureFile();
       const data = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
-      for (const key of ['tenantSettings','workflowRules','workflowEvents','users','integrityRuns','securityEvents','requestMetrics','auditEvents','exportRuns','reportSchedules','messageTemplates','notifications','portalAccounts','portalBookings','authEvents','authSessions','passwordResetTokens','invitations','mfaChallenges','userApiTokens','organizationUnits','knowledgeArticles','customerAssets','assetServiceHistory','mediaAttachments','services','inventoryItems','stockAdjustments','materialUsage','customers','jobs','technicians','appointments','dispatchAssignments','estimates','invoices','payments']) {
+      if (!data.serviceMarketplaceItems) data.serviceMarketplaceItems = defaultMarketplaceItems(new Date().toISOString());
+      for (const key of ['tenantSettings','workflowRules','workflowEvents','users','integrityRuns','securityEvents','requestMetrics','auditEvents','exportRuns','reportSchedules','serviceMarketplaceInstallations','messageTemplates','notifications','portalAccounts','portalBookings','authEvents','authSessions','passwordResetTokens','invitations','mfaChallenges','userApiTokens','organizationUnits','knowledgeArticles','customerAssets','assetServiceHistory','mediaAttachments','services','inventoryItems','stockAdjustments','materialUsage','customers','jobs','technicians','appointments','dispatchAssignments','estimates','invoices','payments']) {
         if (!data[key]) data[key] = [];
       }
       return data;

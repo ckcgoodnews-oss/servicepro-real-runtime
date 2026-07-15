@@ -18,6 +18,7 @@ const navigation = [
   { label: 'Notifications', href: '/notifications', icon: '!' },
   { label: 'Organization', href: '/organization', icon: '◎' },
   { label: 'Reports', href: '/reports', icon: '↗' },
+  { label: 'Marketplace', href: '/marketplace', icon: '+' },
 ];
 
 const titleCase = (value: string) => value.replace(/-/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());

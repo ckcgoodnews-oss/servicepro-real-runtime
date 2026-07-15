@@ -22,6 +22,7 @@ const workflows = require('./routes/workflows');
 const notifications = require('./routes/notifications');
 const reports = require('./routes/reports');
 const reportSchedules = require('./routes/reportSchedules');
+const serviceMarketplace = require('./routes/serviceMarketplace');
 const dashboard = require('./routes/dashboard');
 const profile = require('./routes/profile');
 const organization = require('./routes/organization');
@@ -357,6 +358,11 @@ async function router(req, res) {
   const reportScheduleMatch=req.url.match(/^\/api\/v1\/reports\/schedules\/([^/]+)$/);
   if(reportScheduleMatch&&req.method==='PATCH'){if(!requirePermission(PERMISSIONS.REPORTS_WRITE)(req,res))return;return reportSchedules.update(req,res,reportScheduleMatch[1]);}
   if(reportScheduleMatch&&req.method==='DELETE'){if(!requirePermission(PERMISSIONS.REPORTS_WRITE)(req,res))return;return reportSchedules.remove(req,res,reportScheduleMatch[1]);}
+  if(req.url==='/api/v1/app-marketplace'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.MARKETPLACE_READ)(req,res))return;return serviceMarketplace.catalog(req,res);}
+  if(req.url==='/api/v1/app-marketplace/installations'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.MARKETPLACE_READ)(req,res))return;return serviceMarketplace.installations(req,res);}
+  if(req.url==='/api/v1/app-marketplace/installations'&&req.method==='POST'){if(!requirePermission(PERMISSIONS.MARKETPLACE_WRITE)(req,res))return;return serviceMarketplace.install(req,res);}
+  const serviceMarketplaceInstallMatch=req.url.match(/^\/api\/v1\/app-marketplace\/installations\/([^/]+)$/);
+  if(serviceMarketplaceInstallMatch&&req.method==='DELETE'){if(!requirePermission(PERMISSIONS.MARKETPLACE_WRITE)(req,res))return;return serviceMarketplace.uninstall(req,res,serviceMarketplaceInstallMatch[1]);}
 
   if (req.url === '/api/v1/organization' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.ORGANIZATION_READ)(req, res)) return;
