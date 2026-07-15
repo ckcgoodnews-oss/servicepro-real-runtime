@@ -12,6 +12,8 @@ function response(){return{setHeader(){},end(raw){this.body=raw?JSON.parse(raw):
   const store={type:'json',read:()=>data,write:()=>{}}; const users=createUserRepository(store);
   const base={context:{tenantId:'tenant_demo',userId:'user-1',repositories:{users}}};
   let res=response(); await profile.update({...base,body:{name:'Business Owner',timezone:'UTC',locale:'en-US',notificationPreferences:{product:true}}},res); assert.equal(res.body.data.name,'Business Owner'); assert.equal(res.body.data.notificationPreferences.product,true);
+  res=response(); await profile.update({...base,body:{name:'Business Owner',avatarUrl:'javascript:alert(1)'}},res); assert.equal(res.statusCode,400); assert.equal(res.body.error.code,'validation_failed');
+  res=response(); await profile.update({...base,body:{name:'Business Owner',timezone:'Not/AZone'}},res); assert.equal(res.statusCode,400); assert.equal(res.body.error.code,'validation_failed');
   res=response(); await profile.setMfa({...base,body:{enabled:true}},res); assert.equal(res.body.data.mfaEnabled,true);
   res=response(); await profile.createToken({...base,body:{name:'Automation'}},res); const raw=res.body.data.token; assert.match(raw,/^sp_live_/); assert.equal(data.userApiTokens.length,1); assert.notEqual(data.userApiTokens[0].tokenHash,raw);
   const guardReq={headers:{authorization:`Bearer ${raw}`},context:{tenantId:'tenant_demo',repositories:{users,authSessions:{isActive:async()=>true}}}}; res=response(); assert.equal(await authGuard(guardReq,res),true); assert.equal(guardReq.context.userId,'user-1');
