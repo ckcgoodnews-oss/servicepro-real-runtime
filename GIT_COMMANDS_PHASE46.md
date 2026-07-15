@@ -41,6 +41,19 @@ git commit -m "Sprint 718: connect live operations dashboard"
 git push origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 719 continuation:
+
+```powershell
+npm run test:sprint719
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+git add -- apps/web/src/app/dashboard apps/web/src/components/AppShell.tsx apps/web/src/app/globals.css tests/sprint719-navigation-framework.test.js SPRINT719_REQUIRED_WIRING.md WEBSITE_TESTING.md PHASE46_RELEASE_NOTES.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 719: add application navigation framework"
+git push origin codex/sprint-716-frontend-foundation
+```
+
 After review:
 
 ```powershell

@@ -28,3 +28,11 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added open-work, today’s appointments, active-customer, and outstanding-balance KPIs.
 - Added prioritized attention items, recent work, activity, notifications, quick actions, and favorites.
 - Added loading, error, and empty states while retaining responsive layouts.
+
+## Sprint 719 — Navigation Framework
+
+- Moved authenticated application chrome into a reusable protected layout.
+- Added responsive sidebar and mobile drawer navigation with tenant context.
+- Added breadcrumbs, keyboard-accessible global search, and route shortcuts.
+- Added theme, notifications, profile, settings, and sign-out controls.
+- Added a local website testing guide and repeatable development login seed.
