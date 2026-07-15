@@ -94,9 +94,17 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Kept core customer, scheduling, dispatch, billing, asset, notification, and reporting concepts reusable across all service businesses.
 - Added tenant-isolated installation and removal flows with JSON/PostgreSQL persistence parity.
 
-## Sprint 728 — Expanded Service Catalog
+## Sprint 728 Supplemental — Expanded Service Catalog
 
 - Expanded the marketplace from four to 30 installable service-industry packs.
 - Added electrical, residential and commercial cleaning, pest control, roofing, garage door, appliance repair, handyman, painting, pressure washing, pool and spa, locksmith and security, tree care, snow removal, irrigation, septic, chimney, solar, home inspection, restoration, moving, junk removal, window and gutter cleaning, flooring, property maintenance, and fencing workflows.
 - Added automatic catalog upgrades that preserve existing tenant installations.
 - Made the industry filter data-driven so additional trades can be published without another frontend change.
+
+## Sprint 728 — Documentation Portal
+
+- Added a protected, searchable product documentation portal.
+- Added operating guides for workspace setup, daily service operations, and multi-industry service packs.
+- Added step-by-step tutorials for dispatch, recurring service, and scheduled reporting.
+- Added authenticated API examples for request formatting, work orders, and marketplace installations.
+- Added in-product Version 8 release notes and responsive article navigation.

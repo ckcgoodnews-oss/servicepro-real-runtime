@@ -1,0 +1,10 @@
+const assert=require('assert');const fs=require('fs');const path=require('path');
+const read=file=>fs.readFileSync(path.join(__dirname,'..',file),'utf8');
+const page=read('apps/web/src/app/(workspace)/docs/page.tsx');assert.match(page,/DocumentationWorkspace/);assert.match(page,/Documentation/);
+const component=read('apps/web/src/components/DocumentationWorkspace.tsx');
+for(const deliverable of ['All documentation','Guides','Tutorials','API reference','Release notes','Search documentation'])assert.match(component,new RegExp(deliverable));
+for(const subject of ['Set up your service workspace','Create and dispatch your first work order','Authentication and request format','Sprint 728'])assert.match(component,new RegExp(subject));
+assert.match(component,/navigator\.clipboard\.writeText/);assert.match(component,/GET \/api\/v1\/app-marketplace/);assert.match(component,/Authorization: Bearer/);
+const shell=read('apps/web/src/components/AppShell.tsx');assert.match(shell,/Documentation.*\/docs/);
+const css=read('apps/web/src/app/docs.css');assert.match(css,/\.docs-layout/);assert.match(css,/@media\(max-width:850px\)/);
+console.log('Sprint 728 documentation portal test passed.');

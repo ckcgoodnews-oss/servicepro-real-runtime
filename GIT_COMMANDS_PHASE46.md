@@ -180,6 +180,19 @@ git commit -m "Sprint 728: expand service industry catalog"
 git push origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 728 documentation portal continuation:
+
+```powershell
+npm run test:sprint728-docs
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+git add -- apps/web/src/app/(workspace)/docs/page.tsx apps/web/src/app/docs.css apps/web/src/app/globals.css apps/web/src/components/AppShell.tsx apps/web/src/components/DocumentationWorkspace.tsx tests/sprint728-documentation-portal.test.js SPRINT728_DOCUMENTATION_REQUIRED_WIRING.md PHASE46_RELEASE_NOTES.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 728: add documentation portal"
+git push origin codex/sprint-716-frontend-foundation
+```
+
 After review:
 
 ```powershell
