@@ -51,3 +51,10 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added organizations, business units, departments, locations, and teams with reporting relationships.
 - Added tenant-isolated CRUD APIs, role-derived permissions, and child-safe deletion rules.
 - Added JSON/PostgreSQL persistence parity, migration wiring, and regression coverage.
+
+## Sprint 722 — Asset Management
+
+- Added a protected asset browser with customer, serial, location, status, and type search and filtering.
+- Added equipment details, warranty state, age, lifecycle controls, and customer context.
+- Added service-history timelines and attachment metadata workflows in the asset workspace.
+- Activated the existing tenant-isolated asset repositories through authenticated APIs and added production search indexes.

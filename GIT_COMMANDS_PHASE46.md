@@ -82,6 +82,20 @@ git commit -m "Sprint 721: add organization management"
 git push origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 722 continuation:
+
+```powershell
+npm run test:sprint722
+npm run migrations:check
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+git add -- apps/api/src/router.js apps/api/src/routes/customerAssets.js apps/api/src/services/validationSchemaService.js apps/api/src/store/jsonStoreAdapter.js apps/web/src/app/(workspace)/assets/page.tsx apps/web/src/components/AssetWorkspace.tsx apps/web/src/app/globals.css packages/database/postgres/722_asset_management_experience.sql tests/sprint722-asset-management.test.js SPRINT722_REQUIRED_WIRING.md PHASE46_RELEASE_NOTES.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 722: add asset management experience"
+git push origin codex/sprint-716-frontend-foundation
+```
+
 After review:
 
 ```powershell

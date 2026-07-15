@@ -34,6 +34,9 @@ function makeSeedData() {
     mfaChallenges: [],
     userApiTokens: [],
     organizationUnits: [],
+    customerAssets: [{ id:'asset_demo_1',tenantId:'tenant_demo',customerId:'cust_demo_1',jobId:'job_demo_1',assetType:'water_heater',name:'Bradford White 50-gallon',manufacturer:'Bradford White',model:'RG250T6N',serialNumber:'BW-2024-1842',installedDate:'2024-03-18',warrantyExpiresAt:'2030-03-18',location:'Utility room',status:'active',notes:'Annual flush recommended.',metadata:{},createdAt:stamp,updatedAt:stamp }],
+    assetServiceHistory: [{ id:'assethist_demo_1',tenantId:'tenant_demo',assetId:'asset_demo_1',jobId:'job_demo_1',serviceDate:'2026-06-24',eventType:'inspection',summary:'Annual safety inspection',technicianId:'tech_demo_1',notes:'Operating normally; anode rod at 70%.',metadata:{},createdAt:stamp,updatedAt:stamp }],
+    mediaAttachments: [{ id:'media_demo_1',tenantId:'tenant_demo',entityType:'asset',entityId:'asset_demo_1',filename:'installation-manual.pdf',originalFilename:'installation-manual.pdf',mimeType:'application/pdf',mediaKind:'document',sizeBytes:284000,storageProvider:'local',storageKey:'tenant_demo/asset/asset_demo_1/installation-manual.pdf',checksumSha256:'',caption:'Installation manual',description:'Manufacturer installation and service guide.',visibility:'internal',tags:['manual'],metadata:{},createdBy:'user_owner',createdAt:stamp,updatedAt:stamp }],
     services: [
       { id: 'svc_1', tenantId: 'tenant_demo', code: 'DRAIN-CLEAN', name: 'Drain cleaning', description: 'Standard drain cleaning service', category: 'drain', basePrice: 225, unitCost: 85, taxable: true, active: true, createdAt: stamp, updatedAt: stamp },
       { id: 'svc_2', tenantId: 'tenant_demo', code: 'WH-DIAG', name: 'Water heater diagnostic', description: 'Diagnostic inspection for water heater issues', category: 'water_heater', basePrice: 149, unitCost: 45, taxable: true, active: true, createdAt: stamp, updatedAt: stamp }
@@ -64,7 +67,7 @@ function createJsonStore() {
     read() {
       ensureFile();
       const data = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
-      for (const key of ['tenantSettings','workflowRules','workflowEvents','users','integrityRuns','securityEvents','requestMetrics','auditEvents','exportRuns','messageTemplates','notifications','portalAccounts','portalBookings','authEvents','authSessions','passwordResetTokens','invitations','mfaChallenges','userApiTokens','organizationUnits','services','inventoryItems','stockAdjustments','materialUsage','customers','jobs','technicians','appointments','dispatchAssignments','estimates','invoices','payments']) {
+      for (const key of ['tenantSettings','workflowRules','workflowEvents','users','integrityRuns','securityEvents','requestMetrics','auditEvents','exportRuns','messageTemplates','notifications','portalAccounts','portalBookings','authEvents','authSessions','passwordResetTokens','invitations','mfaChallenges','userApiTokens','organizationUnits','customerAssets','assetServiceHistory','mediaAttachments','services','inventoryItems','stockAdjustments','materialUsage','customers','jobs','technicians','appointments','dispatchAssignments','estimates','invoices','payments']) {
         if (!data[key]) data[key] = [];
       }
       return data;

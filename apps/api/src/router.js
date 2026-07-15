@@ -24,6 +24,7 @@ const reports = require('./routes/reports');
 const dashboard = require('./routes/dashboard');
 const profile = require('./routes/profile');
 const organization = require('./routes/organization');
+const customerAssets = require('./routes/customerAssets');
 const exportsRoute = require('./routes/exports');
 const audit = require('./routes/audit');
 const observability = require('./routes/observability');
@@ -366,6 +367,41 @@ async function router(req, res) {
   if (organizationMatch && req.method === 'DELETE') {
     if (!requirePermission(PERMISSIONS.ORGANIZATION_DELETE)(req, res)) return;
     return organization.remove(req, res, organizationMatch[1]);
+  }
+  if (req.url === '/api/v1/assets' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.ASSETS_READ)(req, res)) return;
+    return customerAssets.list(req, res);
+  }
+  if (req.url === '/api/v1/assets' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.ASSETS_WRITE)(req, res)) return;
+    return customerAssets.create(req, res);
+  }
+  const assetHistoryMatch = req.url.match(/^\/api\/v1\/assets\/([^/]+)\/history$/);
+  if (assetHistoryMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.ASSETS_READ)(req, res)) return;
+    return customerAssets.listHistory(req, res, assetHistoryMatch[1]);
+  }
+  if (assetHistoryMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.ASSETS_WRITE)(req, res)) return;
+    return customerAssets.createHistory(req, res, assetHistoryMatch[1]);
+  }
+  const assetAttachmentMatch = req.url.match(/^\/api\/v1\/assets\/([^/]+)\/attachments$/);
+  if (assetAttachmentMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.ASSETS_READ)(req, res)) return;
+    return customerAssets.listAttachments(req, res, assetAttachmentMatch[1]);
+  }
+  if (assetAttachmentMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.ASSETS_WRITE)(req, res)) return;
+    return customerAssets.createAttachment(req, res, assetAttachmentMatch[1]);
+  }
+  const assetMatch = req.url.match(/^\/api\/v1\/assets\/([^/]+)$/);
+  if (assetMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.ASSETS_READ)(req, res)) return;
+    return customerAssets.get(req, res, assetMatch[1]);
+  }
+  if (assetMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.ASSETS_WRITE)(req, res)) return;
+    return customerAssets.update(req, res, assetMatch[1]);
   }
   if (req.url === '/api/v1/profile' && req.method === 'GET') return profile.get(req,res);
   if (req.url === '/api/v1/profile' && req.method === 'PATCH') return profile.update(req,res);
