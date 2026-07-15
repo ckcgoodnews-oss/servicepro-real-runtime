@@ -96,6 +96,20 @@ git commit -m "Sprint 722: add asset management experience"
 git push origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 723 continuation:
+
+```powershell
+npm run test:sprint723
+npm run migrations:check
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+git add -- apps/api/src/store/jsonStoreAdapter.js apps/web/src/app/(workspace)/work-orders/page.tsx apps/web/src/components/WorkOrderWorkspace.tsx apps/web/src/app/globals.css packages/database/postgres/723_work_order_experience.sql tests/sprint723-work-order-experience.test.js SPRINT723_REQUIRED_WIRING.md PHASE46_RELEASE_NOTES.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 723: add work order experience"
+git push origin codex/sprint-716-frontend-foundation
+```
+
 After review:
 
 ```powershell

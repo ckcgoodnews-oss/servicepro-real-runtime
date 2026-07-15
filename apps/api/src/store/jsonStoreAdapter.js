@@ -47,7 +47,7 @@ function makeSeedData() {
     customers: [{ id: 'cust_demo_1', tenantId: 'tenant_demo', firstName: 'Maria', lastName: 'Johnson', phone: '555-0101', email: 'maria@example.com', createdAt: stamp, updatedAt: stamp }],
     jobs: [{ id: 'job_demo_1', tenantId: 'tenant_demo', customerId: 'cust_demo_1', title: 'Kitchen sink clog', status: 'open', priority: 'normal', createdAt: stamp, updatedAt: stamp }],
     technicians: [{ id: 'tech_demo_1', tenantId: 'tenant_demo', name: 'Chris Technician', email: 'tech@example.com', phone: '555-0202', skills: ['drain'], active: true, createdAt: stamp, updatedAt: stamp }],
-    appointments: [],
+    appointments: [{ id:'appt_demo_1',tenantId:'tenant_demo',jobId:'job_demo_1',customerId:'cust_demo_1',technicianId:'tech_demo_1',startTime:new Date(new Date().setHours(10,0,0,0)).toISOString(),endTime:new Date(new Date().setHours(12,0,0,0)).toISOString(),status:'scheduled',notes:'Customer requested text on arrival.',createdAt:stamp,updatedAt:stamp }],
     dispatchAssignments: [],
     estimates: [{ id: 'est_demo_1', tenantId: 'tenant_demo', customerId: 'cust_demo_1', jobId: 'job_demo_1', status: 'draft', taxRate: 0.07, lines: [sampleLine], subtotal: 225, tax: 15.75, total: 240.75, marginPercent: 62.22, createdAt: stamp, updatedAt: stamp }],
     invoices: [{ id: 'inv_demo_1', tenantId: 'tenant_demo', customerId: 'cust_demo_1', jobId: 'job_demo_1', status: 'sent', taxRate: 0.07, lines: [sampleLine], subtotal: 225, tax: 15.75, total: 240.75, paidAmount: 0, balanceDue: 240.75, createdAt: stamp, updatedAt: stamp }],

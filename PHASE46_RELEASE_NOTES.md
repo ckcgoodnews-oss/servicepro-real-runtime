@@ -58,3 +58,10 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added equipment details, warranty state, age, lifecycle controls, and customer context.
 - Added service-history timelines and attachment metadata workflows in the asset workspace.
 - Activated the existing tenant-isolated asset repositories through authenticated APIs and added production search indexes.
+
+## Sprint 723 — Work Orders
+
+- Added list, Kanban, and seven-day calendar views for tenant work orders.
+- Added customer-aware search, priority indicators, technician assignments, and schedule windows.
+- Connected status actions to the validated workflow-transition API and assignment conflict detection.
+- Added responsive operations layouts, production query indexes, and regression coverage.
