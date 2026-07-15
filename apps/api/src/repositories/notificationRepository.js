@@ -14,8 +14,11 @@ function ensureNotifications(data) {
 
 function createJsonNotificationRepository(store) {
   return {
-    list(tenantId) {
-      return ensureNotifications(store.read()).notifications.filter(n => n.tenantId === tenantId);
+    list(tenantId, filters = {}) {
+      return ensureNotifications(store.read()).notifications
+        .filter(n => n.tenantId === tenantId)
+        .filter(n => !filters.toAddress || String(n.toAddress).toLowerCase() === String(filters.toAddress).toLowerCase())
+        .sort((a, b) => String(b.createdAt).localeCompare(String(a.createdAt)));
     },
     pending(tenantId, limit = 25) {
       return ensureNotifications(store.read()).notifications
@@ -39,6 +42,7 @@ function createJsonNotificationRepository(store) {
         createdAt: now(),
         updatedAt: now(),
         sentAt: ''
+        ,readAt: ''
       };
       data.notifications.push(notification);
       store.write(data);
@@ -54,6 +58,16 @@ function createJsonNotificationRepository(store) {
       if (status === 'sent') data.notifications[idx].sentAt = now();
       store.write(data);
       return data.notifications[idx];
+    },
+    markRead(tenantId, id, toAddress) {
+      const data = ensureNotifications(store.read());
+      const row = data.notifications.find(n => n.tenantId === tenantId && n.id === id && (!toAddress || String(n.toAddress).toLowerCase() === String(toAddress).toLowerCase()));
+      if (!row) return null; row.readAt = row.readAt || now(); row.updatedAt = now(); store.write(data); return row;
+    },
+    markAllRead(tenantId, toAddress) {
+      const data = ensureNotifications(store.read()); const stamp = now(); let count = 0;
+      for (const row of data.notifications) if (row.tenantId === tenantId && String(row.toAddress).toLowerCase() === String(toAddress).toLowerCase() && !row.readAt) { row.readAt = stamp; row.updatedAt = stamp; count += 1; }
+      if (count) store.write(data); return count;
     }
   };
 }
@@ -62,11 +76,13 @@ function createPostgresNotificationRepository(store) {
   const selectSql = `SELECT id::text, tenant_id as "tenantId", channel, to_address as "toAddress",
     to_name as "toName", subject, body, template_key as "templateKey", status,
     error_message as "errorMessage", created_at as "createdAt", updated_at as "updatedAt",
-    sent_at as "sentAt" FROM notification_queue`;
+    sent_at as "sentAt", read_at as "readAt" FROM notification_queue`;
 
   return {
-    async list(tenantId) {
-      const result = await store.query(`${selectSql} WHERE tenant_id = $1 ORDER BY created_at DESC`, [tenantId]);
+    async list(tenantId, filters = {}) {
+      const params = [tenantId]; let where = 'WHERE tenant_id = $1';
+      if (filters.toAddress) { params.push(filters.toAddress); where += ` AND lower(to_address) = lower($${params.length})`; }
+      const result = await store.query(`${selectSql} ${where} ORDER BY created_at DESC`, params);
       return result.rows;
     },
     async pending(tenantId, limit = 25) {
@@ -81,7 +97,7 @@ function createPostgresNotificationRepository(store) {
          RETURNING id::text, tenant_id as "tenantId", channel, to_address as "toAddress",
                    to_name as "toName", subject, body, template_key as "templateKey", status,
                    error_message as "errorMessage", created_at as "createdAt", updated_at as "updatedAt",
-                   sent_at as "sentAt"`,
+                   sent_at as "sentAt", read_at as "readAt"`,
         [tenantId, input.channel, input.toAddress, input.toName || '', input.subject || '', input.body, input.templateKey || '', input.status || 'queued']
       );
       return result.rows[0];
@@ -94,10 +110,17 @@ function createPostgresNotificationRepository(store) {
          RETURNING id::text, tenant_id as "TenantId", channel, to_address as "toAddress",
                    to_name as "toName", subject, body, template_key as "templateKey", status,
                    error_message as "errorMessage", created_at as "createdAt", updated_at as "updatedAt",
-                   sent_at as "sentAt"`,
+                   sent_at as "sentAt", read_at as "readAt"`,
         [tenantId, id, status, errorMessage]
       );
       return result.rows[0] || null;
+    },
+    async markRead(tenantId, id, toAddress) {
+      const updated = await store.query(`UPDATE notification_queue SET read_at=COALESCE(read_at,now()),updated_at=now() WHERE tenant_id=$1 AND id=$2 AND lower(to_address)=lower($3) RETURNING id::text,tenant_id as "tenantId",channel,to_address as "toAddress",to_name as "toName",subject,body,template_key as "templateKey",status,error_message as "errorMessage",created_at as "createdAt",updated_at as "updatedAt",sent_at as "sentAt",read_at as "readAt"`, [tenantId,id,toAddress]);
+      return updated.rows[0] || null;
+    },
+    async markAllRead(tenantId, toAddress) {
+      const result = await store.query(`UPDATE notification_queue SET read_at=now(),updated_at=now() WHERE tenant_id=$1 AND lower(to_address)=lower($2) AND read_at IS NULL`, [tenantId,toAddress]); return result.rowCount;
     }
   };
 }

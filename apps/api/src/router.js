@@ -450,6 +450,15 @@ async function router(req, res) {
     if (!requirePermission(PERMISSIONS.NOTIFICATIONS_PROCESS)(req, res)) return;
     return notifications.processQueued(req, res);
   }
+  if (req.url === '/api/v1/notifications/read-all' && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.NOTIFICATIONS_READ)(req, res)) return;
+    return notifications.markAllRead(req, res);
+  }
+  const notificationReadMatch = req.url.match(/^\/api\/v1\/notifications\/([^/]+)\/read$/);
+  if (notificationReadMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.NOTIFICATIONS_READ)(req, res)) return;
+    return notifications.markRead(req, res, notificationReadMatch[1]);
+  }
 
   if (req.url === '/api/v1/portal/accounts' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.PORTAL_ACCOUNTS_READ)(req, res)) return;

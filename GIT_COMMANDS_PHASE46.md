@@ -124,6 +124,20 @@ git commit -m "Sprint 724: add knowledge center"
 git push origin codex/sprint-716-frontend-foundation
 ```
 
+Sprint 725 continuation:
+
+```powershell
+npm run test:sprint725
+npm run migrations:check
+npm run web:typecheck
+npm run web:build
+npm run web:build:pages
+npm test
+git add -- apps/api/src/auth/permissions.js apps/api/src/repositories/notificationRepository.js apps/api/src/routes/notifications.js apps/api/src/router.js apps/api/src/store/jsonStoreAdapter.js apps/web/src/app/(workspace)/notifications/page.tsx apps/web/src/app/globals.css apps/web/src/app/notifications.css apps/web/src/app/notification-button.css apps/web/src/components/AppShell.tsx apps/web/src/components/NotificationsWorkspace.tsx apps/web/src/components/ToastRegion.tsx packages/database/postgres/725_notification_center.sql tests/sprint725-notification-center.test.js SPRINT725_REQUIRED_WIRING.md PHASE46_RELEASE_NOTES.md GIT_COMMANDS_PHASE46.md package.json
+git commit -m "Sprint 725: add notification center"
+git push origin codex/sprint-716-frontend-foundation
+```
+
 After review:
 
 ```powershell

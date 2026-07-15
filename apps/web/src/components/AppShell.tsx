@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { type ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { type AuthSession, readSession } from '@/auth/session';
+import { authFetch, type AuthSession, readSession } from '@/auth/session';
 import { BrandMark } from '@/components/BrandMark';
 import { LogoutButton } from '@/components/LogoutButton';
 import { ThemeToggle } from '@/components/ThemeToggle';
@@ -15,6 +15,7 @@ const navigation = [
   { label: 'Customers', href: '/customers', icon: '◎' },
   { label: 'Assets', href: '/assets', icon: '◇' },
   { label: 'Knowledge', href: '/knowledge', icon: 'K' },
+  { label: 'Notifications', href: '/notifications', icon: '!' },
   { label: 'Organization', href: '/organization', icon: '◎' },
   { label: 'Reports', href: '/reports', icon: '↗' },
 ];
@@ -30,6 +31,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [session, setSession] = useState<AuthSession | null>(null);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const userName = session?.user.name || session?.user.email || 'ServicePro user';
   const initials = userName.split(/\s|@/).filter(Boolean).slice(0, 2).map(part => part[0]?.toUpperCase()).join('') || 'SP';
   const crumbs = pathname.split('/').filter(Boolean).map((part, index, all) => ({
@@ -41,6 +43,12 @@ export function AppShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     const sync=()=>setSession(readSession()); sync(); window.addEventListener('servicepro:session',sync); return ()=>window.removeEventListener('servicepro:session',sync);
   }, []);
+
+  useEffect(() => {
+    if (!session) return;
+    const sync=()=>authFetch('/api/v1/notifications').then(response=>response.ok?response.json():null).then(body=>setUnreadNotifications(body?.data?.filter((row:{readAt?:string})=>!row.readAt).length||0)).catch(()=>{});
+    sync(); window.addEventListener('servicepro:notifications',sync); return ()=>window.removeEventListener('servicepro:notifications',sync);
+  }, [session]);
 
   useEffect(() => {
     function shortcut(event: KeyboardEvent) {
@@ -79,7 +87,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <section className="workspace">
       <header className="workspace-header">
         <div className="header-context"><button className="menu-button" type="button" aria-label="Open navigation" aria-expanded={mobileOpen} onClick={() => setMobileOpen(true)}>☰</button><div><nav className="breadcrumbs" aria-label="Breadcrumb">{crumbs.map((crumb, index) => <span key={crumb.href}>{index > 0 && <i>/</i>}<Link href={crumb.href} aria-current={index === crumbs.length - 1 ? 'page' : undefined}>{crumb.label}</Link></span>)}</nav><strong>{crumbs.at(-1)?.label || 'Workspace'}</strong></div></div>
-        <div className="workspace-actions"><button className="search-button" type="button" onClick={() => setSearchOpen(true)} aria-haspopup="dialog">⌕ <span>Search anything</span><kbd>Ctrl K</kbd></button><ThemeToggle /><button className="icon-button" type="button" aria-label="Notifications">♢<i /></button><div className="profile-wrap"><button className="profile-button" type="button" aria-label="Open profile menu" aria-expanded={profileOpen} onClick={() => setProfileOpen(value => !value)}><b>{initials}</b></button>{profileOpen && <div className="profile-menu"><strong>{userName}</strong><small>{session?.user.email}</small><Link href="/profile">Profile and preferences</Link><Link href="/settings">Workspace settings</Link><LogoutButton /></div>}</div></div>
+        <div className="workspace-actions"><button className="search-button" type="button" onClick={() => setSearchOpen(true)} aria-haspopup="dialog">⌕ <span>Search anything</span><kbd>Ctrl K</kbd></button><ThemeToggle /><Link className="icon-button notification-button" href="/notifications" aria-label={`${unreadNotifications} unread notifications`}>♢{unreadNotifications>0&&<i />}</Link><div className="profile-wrap"><button className="profile-button" type="button" aria-label="Open profile menu" aria-expanded={profileOpen} onClick={() => setProfileOpen(value => !value)}><b>{initials}</b></button>{profileOpen && <div className="profile-menu"><strong>{userName}</strong><small>{session?.user.email}</small><Link href="/profile">Profile and preferences</Link><Link href="/settings">Workspace settings</Link><LogoutButton /></div>}</div></div>
       </header>
       {children}
     </section>

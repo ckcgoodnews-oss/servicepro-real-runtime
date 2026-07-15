@@ -72,3 +72,10 @@ Production password-reset, invitation, and MFA messages require a configured del
 - Added equipment metadata, tags, full procedures, editorial AI summaries, and verification guidance.
 - Added tenant-isolated JSON/PostgreSQL persistence, authenticated permissions, and production search indexes.
 - Added attachment metadata workflows for knowledge resources and technician read access.
+
+## Sprint 725 — Notification Center
+
+- Added a protected user-specific inbox with unread counts, filtering, and individual or bulk read actions.
+- Added persistent email, browser push, dispatch, billing, and product preference controls.
+- Added browser permission handling and reusable accessible toast confirmations.
+- Added tenant and recipient isolation, PostgreSQL read-state indexing, and technician inbox access.

@@ -24,7 +24,10 @@ function makeSeedData() {
     auditEvents: [],
     exportRuns: [],
     messageTemplates: [{ id: 'tmpl_booking', tenantId: 'tenant_demo', templateKey: 'booking_requested', name: 'Booking Requested', channel: 'email', subject: 'Service request received', body: 'Hello {{customerName}}, we received your {{serviceType}} request for {{requestedDate}}.', active: true, createdAt: stamp, updatedAt: stamp }],
-    notifications: [],
+    notifications: [
+      { id:'ntf_demo_dispatch',tenantId:'tenant_demo',channel:'push',toAddress:'owner@example.com',toName:'Business Owner',subject:'Tomorrow’s first call is assigned',body:'Chris is scheduled for Maria Johnson’s kitchen sink service at 10:00 AM.',templateKey:'',status:'sent',errorMessage:'',readAt:'',createdAt:stamp,updatedAt:stamp,sentAt:stamp },
+      { id:'ntf_demo_invoice',tenantId:'tenant_demo',channel:'email',toAddress:'owner@example.com',toName:'Business Owner',subject:'Invoice remains outstanding',body:'Invoice INV-DEMO-1 has a balance of $240.75. Review the account before the next visit.',templateKey:'',status:'sent',errorMessage:'',readAt:'',createdAt:stamp,updatedAt:stamp,sentAt:stamp }
+    ],
     portalAccounts: [{ id: 'portal_demo_1', tenantId: 'tenant_demo', customerId: 'cust_demo_1', email: 'customer@example.com', passwordHash: bcrypt.hashSync('ChangeMe123!', 10), enabled: true, createdAt: stamp, updatedAt: stamp }],
     portalBookings: [],
     authEvents: [],

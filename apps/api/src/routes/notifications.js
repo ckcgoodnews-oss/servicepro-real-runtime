@@ -16,8 +16,18 @@ function createTemplate(req, res) {
 }
 
 function listNotifications(req, res) {
-  Promise.resolve(req.context.repositories.notifications.list(tenant(req)))
+  Promise.resolve(req.context.repositories.notifications.list(tenant(req), { toAddress: req.context.email }))
     .then(data => sendJson(res, 200, { data }));
+}
+
+function markRead(req, res, id) {
+  Promise.resolve(req.context.repositories.notifications.markRead(tenant(req), id, req.context.email))
+    .then(data => data ? sendJson(res, 200, { data }) : sendJson(res, 404, { error: { code: 'not_found', message: 'Notification not found' } }));
+}
+
+function markAllRead(req, res) {
+  Promise.resolve(req.context.repositories.notifications.markAllRead(tenant(req), req.context.email))
+    .then(count => sendJson(res, 200, { data: { count } }));
 }
 
 function queueNotification(req, res) {
@@ -60,4 +70,4 @@ function processQueued(req, res) {
     .catch(err => sendJson(res, err.status || 500, { error: { code: err.code || 'error', message: err.message } }));
 }
 
-module.exports = { listTemplates, createTemplate, listNotifications, queueNotification, processQueued };
+module.exports = { listTemplates, createTemplate, listNotifications, queueNotification, processQueued, markRead, markAllRead };
