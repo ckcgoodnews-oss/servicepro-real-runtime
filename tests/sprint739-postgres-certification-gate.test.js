@@ -50,4 +50,9 @@ assert.match(observabilityMigration, /evaluation_window text NOT NULL DEFAULT '3
 assert.ok(!/^\s*window\s+text/im.test(observabilityMigration), 'Observability migration must not use the reserved window identifier');
 const observabilityRepository = fs.readFileSync('apps/api/src/repositories/observabilityRepository.js', 'utf8');
 assert.match(observabilityRepository, /evaluation_window as "window"/);
+const marketplaceMigration = fs.readFileSync('packages/database/postgres/106_marketplace_integration_runtime.sql', 'utf8');
+assert.match(marketplaceMigration, /ADD COLUMN IF NOT EXISTS installation_id uuid/);
+assert.match(marketplaceMigration, /ALTER COLUMN tenant_id TYPE text USING tenant_id::text/);
+assert.match(marketplaceMigration, /column_name = 'event'/);
+assert.match(marketplaceMigration, /column_name = 'enabled'/);
 console.log('Sprint 739 PostgreSQL certification gate test passed.');

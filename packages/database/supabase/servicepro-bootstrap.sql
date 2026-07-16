@@ -3648,6 +3648,51 @@ CREATE TABLE IF NOT EXISTS webhook_subscriptions (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- Migration 045 created a smaller webhook_subscriptions table. Upgrade that
+-- legacy shape before the runtime indexes below reference the newer columns.
+ALTER TABLE webhook_subscriptions
+  ALTER COLUMN id SET DEFAULT gen_random_uuid(),
+  ALTER COLUMN tenant_id TYPE text USING tenant_id::text,
+  ADD COLUMN IF NOT EXISTS installation_id uuid,
+  ADD COLUMN IF NOT EXISTS event_name text,
+  ADD COLUMN IF NOT EXISTS status text,
+  ADD COLUMN IF NOT EXISTS signing_secret_ref text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS last_delivered_at timestamptz,
+  ADD COLUMN IF NOT EXISTS failure_count integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
+
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = current_schema() AND table_name = 'webhook_subscriptions' AND column_name = 'event'
+  ) THEN
+    EXECUTE 'UPDATE webhook_subscriptions SET event_name = COALESCE(event_name, event)';
+  END IF;
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = current_schema() AND table_name = 'webhook_subscriptions' AND column_name = 'enabled'
+  ) THEN
+    EXECUTE 'UPDATE webhook_subscriptions SET status = COALESCE(status, CASE WHEN enabled THEN ''active'' ELSE ''disabled'' END)';
+  END IF;
+END $$;
+
+UPDATE webhook_subscriptions
+SET installation_id = COALESCE(installation_id, gen_random_uuid()),
+    event_name = COALESCE(event_name, ''),
+    target_url = COALESCE(target_url, ''),
+    status = COALESCE(status, 'active');
+
+ALTER TABLE webhook_subscriptions
+  ALTER COLUMN tenant_id SET NOT NULL,
+  ALTER COLUMN installation_id SET NOT NULL,
+  ALTER COLUMN event_name SET NOT NULL,
+  ALTER COLUMN target_url SET NOT NULL,
+  ALTER COLUMN status SET NOT NULL,
+  ALTER COLUMN status SET DEFAULT 'active';
+
 CREATE TABLE IF NOT EXISTS integration_sync_runs (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id text NOT NULL,

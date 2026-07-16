@@ -75,3 +75,4 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Upgraded the legacy scheduler route table to the complete executable route-planning schema.
 - Upgraded the legacy SLA policy table while preserving its original completion targets.
 - Replaced the reserved PostgreSQL `window` identifier in the SLO schema while preserving the API's `window` contract.
+- Upgraded legacy webhook subscriptions to the complete marketplace integration schema before indexing them.
