@@ -40,10 +40,23 @@ async function waitForHealth() {
   throw lastError || new Error('API health check timed out');
 }
 
+async function verifyFreshDemoLogin() {
+  const response = await fetch(`http://127.0.0.1:${port}/auth/login`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json', 'x-tenant-id': 'tenant_demo' },
+    body: JSON.stringify({ email: 'owner@example.com', password: 'ChangeMe123!' })
+  });
+  const body = await response.json();
+  if (!response.ok || !body.data?.accessToken || body.data?.user?.email !== 'owner@example.com') {
+    throw new Error(`Fresh demo login failed with status ${response.status}`);
+  }
+}
+
 (async () => {
   try {
     const result = await waitForHealth();
-    console.log(`Online API smoke test passed: ok=${result.health.ok}, ready=${result.readiness.ready}, store=${result.health.store || 'json'}.`);
+    await verifyFreshDemoLogin();
+    console.log(`Online API smoke test passed: ok=${result.health.ok}, ready=${result.readiness.ready}, store=${result.health.store || 'json'}, demoLogin=true.`);
   } catch (error) {
     console.error(stderr || error.message);
     process.exitCode = 1;

@@ -47,3 +47,10 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Formalized separate local API, local website, and local smoke-test commands.
 - Added a local-versus-live testing guide with acceptance criteria and safe data guidance.
 - Aligned the API runtime and website package metadata on release `8.0.0-alpha.1`.
+
+## Sprint 737 — Fresh-deployment authentication recovery
+
+- Removed the legacy customer/job-only JSON initializer from API startup.
+- Initialized the authoritative repository datastore before the API accepts traffic.
+- Expanded the production-mode API smoke test to authenticate the documented demo owner against a brand-new temporary datastore.
+- Added regression coverage for the Render login failure and updated online troubleshooting guidance.

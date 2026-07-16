@@ -17,7 +17,7 @@ The repository now includes a Render Blueprint for an isolated online alpha. It 
 
 The Blueprint is pinned to `codex/sprint-716-frontend-foundation`. Each push runs the full GitHub CI workflow, and Render deploys the commit only after those checks pass. See `LIVE_TESTING.md` for the local and live test loop.
 
-Before an online deploy, run `npm run deploy:validate:online` and `npm run deploy:smoke:api` from the repository root.
+Before an online deploy, run `npm run deploy:validate:online` and `npm run deploy:smoke:api` from the repository root. The API smoke test starts with an empty temporary datastore and verifies health, readiness, and the documented demo owner login, which catches missing seed data before Render deployment.
 
 After deployment, set `SMOKE_WEB_URL` and `SMOKE_API_URL`, then run `node scripts/smoke-deployed-app.js`. Add `SMOKE_EMAIL`, `SMOKE_PASSWORD`, and `SMOKE_REQUIRE_AUTH=true` to include login, dashboard, and logout checks. The runner never prints credentials or access tokens. The same check can be started manually from GitHub Actions with the **Online alpha smoke** workflow.
 
@@ -35,7 +35,7 @@ Before a production launch, complete the PostgreSQL adapter certification, provi
 
 - A `CORS` browser error means the website origin and API `CORS_ALLOWED_ORIGINS` do not match. The committed service names are wired together already; update both values if Render requires a different service name.
 - A website build can only use the API URL present in `NEXT_PUBLIC_API_BASE_URL` at build time. After changing it, rebuild the web service.
-- A `401` login response after a redeploy usually means the API data file was recreated. Use the documented demo account and do not reuse an old browser session.
+- A `401` response for the documented demo account means the API is stale or its seed initialization failed. Confirm CI includes the fresh-deployment login test, deploy the latest passing commit to the API service, and retry in a new browser session.
 - Check the API `/healthz` and `/readyz` endpoints before diagnosing the website. Health confirms the process is running; readiness confirms it can safely receive application traffic.
 
 ## Promotion path
