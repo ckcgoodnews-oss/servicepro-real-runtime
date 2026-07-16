@@ -2,12 +2,13 @@ const fs = require('fs');
 const path = require('path');
 const { createPostgresStore } = require('../apps/api/src/store/postgresStoreAdapter');
 
-async function main() {
-  const store = createPostgresStore();
+async function runMigrations(store, logger = console) {
   const migrationsDir = path.resolve('packages/database/postgres');
   const files = fs.readdirSync(migrationsDir)
-    .filter(file => file.endsWith('.sql'))
+    .filter(file => /^\d{3}_.+\.sql$/.test(file))
     .sort();
+  let appliedCount = 0;
+  let skippedCount = 0;
 
   await store.query(`
     CREATE TABLE IF NOT EXISTS postgres_runtime_migrations (
@@ -23,12 +24,13 @@ async function main() {
     );
 
     if (applied.rowCount > 0) {
-      console.log(`Skipping already applied migration ${file}`);
+      logger.log(`Skipping already applied migration ${file}`);
+      skippedCount += 1;
       continue;
     }
 
     const sql = fs.readFileSync(path.join(migrationsDir, file), 'utf8');
-    console.log(`Applying migration ${file}`);
+    logger.log(`Applying migration ${file}`);
     await store.transaction(async tx => {
       await tx.query(sql);
       await tx.query(
@@ -36,13 +38,27 @@ async function main() {
         [file]
       );
     });
+    appliedCount += 1;
   }
 
-  await store.close();
-  console.log('Migrations complete.');
+  return { total: files.length, applied: appliedCount, skipped: skippedCount, latest: files[files.length - 1] };
 }
 
-main().catch(err => {
-  console.error(err);
-  process.exit(1);
-});
+async function main() {
+  const store = createPostgresStore();
+  try {
+    const result = await runMigrations(store);
+    console.log(`Migrations complete. Applied ${result.applied}; skipped ${result.skipped}; latest ${result.latest}.`);
+  } finally {
+    await store.close();
+  }
+}
+
+if (require.main === module) {
+  main().catch(err => {
+    console.error(err);
+    process.exit(1);
+  });
+}
+
+module.exports = { runMigrations };

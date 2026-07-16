@@ -3,9 +3,12 @@ const { getRepositories, resetRepositoriesForTest } = require('../apps/api/src/r
 async function main() {
   resetRepositoriesForTest();
   const repos = getRepositories();
-  await repos.users.createSeedOwner('tenant_demo', 'owner@example.com', 'ChangeMe123!');
+  const tenantId = process.env.DEFAULT_TENANT_ID || 'tenant_demo';
+  const email = process.env.OWNER_EMAIL || 'owner@example.com';
+  const password = process.env.OWNER_PASSWORD || 'ChangeMe123!';
+  await repos.users.createSeedOwner(tenantId, email, password);
   if (repos.store.close) await repos.store.close();
-  console.log('Auth seed complete: owner@example.com / ChangeMe123!');
+  console.log(`Auth seed complete for ${email} in ${tenantId}.`);
 }
 
 main().catch(err => {

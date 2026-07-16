@@ -29,7 +29,7 @@ If the smoke runner reports a missing `/system-status` route, an old API version
 
 This first online connection uses the seeded JSON store in Render's temporary filesystem. It is appropriate for functional testing, and it makes the demo login available on a fresh deploy. Data entered during testing can disappear after a restart or redeploy. Do not enter real customer, payment, employee, or confidential data.
 
-Before a production launch, complete the PostgreSQL adapter certification, provision persistent storage, rotate/remove all demo credentials, configure a custom domain, and merge the release through `main` with passing CI.
+Before a production launch, complete the PostgreSQL adapter certification, provision persistent storage, rotate/remove all demo credentials, configure a custom domain, and merge the release through `main` with passing CI. See `SUPABASE_DEPLOYMENT.md` for the dedicated-project-per-company setup and complete migration bundle.
 
 ## Troubleshooting
 

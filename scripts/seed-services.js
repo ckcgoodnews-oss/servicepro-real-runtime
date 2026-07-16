@@ -3,6 +3,7 @@ const { getRepositories, resetRepositoriesForTest } = require('../apps/api/src/r
 async function main() {
   resetRepositoriesForTest();
   const repos = getRepositories();
+  const tenantId = process.env.DEFAULT_TENANT_ID || 'tenant_demo';
 
   const services = [
     { code: 'DRAIN-CLEAN', name: 'Drain cleaning', description: 'Standard drain cleaning service', category: 'drain', basePrice: 225, unitCost: 85, taxable: true },
@@ -11,9 +12,9 @@ async function main() {
   ];
 
   for (const service of services) {
-    const existing = await repos.services.findByCode('tenant_demo', service.code);
+    const existing = await repos.services.findByCode(tenantId, service.code);
     if (!existing) {
-      await repos.services.create('tenant_demo', service);
+      await repos.services.create(tenantId, service);
       console.log(`Created service ${service.code}`);
     } else {
       console.log(`Service already exists ${service.code}`);
@@ -21,7 +22,7 @@ async function main() {
   }
 
   if (repos.store.close) await repos.store.close();
-  console.log('Service catalog seed complete.');
+  console.log(`Service catalog seed complete for ${tenantId}.`);
 }
 
 main().catch(err => {

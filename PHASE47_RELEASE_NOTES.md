@@ -54,3 +54,11 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Initialized the authoritative repository datastore before the API accepts traffic.
 - Expanded the production-mode API smoke test to authenticate the documented demo owner against a brand-new temporary datastore.
 - Added regression coverage for the Render login failure and updated online troubleshooting guidance.
+
+## Sprint 738 — Supabase company provisioning
+
+- Added a guarded provisioning command for a dedicated Supabase project per company.
+- Made migration execution reusable and resumable while retaining per-file migration tracking.
+- Added a generated single-file Supabase bootstrap containing all 679 PostgreSQL migrations.
+- Added configurable company tenant, owner, and service seeding without logging passwords.
+- Documented the one-database-per-API deployment model and the Render environment required for persistent Supabase storage.
