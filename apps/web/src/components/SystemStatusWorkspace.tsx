@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { apiUrl, readSession } from '@/auth/session';
 
 type Health = { ok:boolean; app:string; version:string; environment:string; store:string; uptimeSeconds:number; timestamp:string };
-type Readiness = { ready:boolean; checks:Record<string,boolean>; timestamp:string };
+type Readiness = { ready:boolean; checks:Record<string,boolean>; issues?:string[]; warnings?:string[]; timestamp:string };
 type StatusState = { health:Health|null; readiness:Readiness|null; latencyMs:number|null; checkedAt:string; error:string };
 
 const initial:StatusState={health:null,readiness:null,latencyMs:null,checkedAt:'',error:''};
@@ -34,9 +34,10 @@ export function SystemStatusWorkspace(){
       const controller=new AbortController();const timeout=window.setTimeout(()=>controller.abort(),8000);
       const [healthResponse,readinessResponse]=await Promise.all([fetch(apiUrl('/healthz'),{signal:controller.signal}),fetch(apiUrl('/readyz'),{signal:controller.signal})]);
       window.clearTimeout(timeout);
-      if(!healthResponse.ok||!readinessResponse.ok)throw new Error(`API returned ${healthResponse.status}/${readinessResponse.status}`);
       const [health,readiness]=await Promise.all([healthResponse.json(),readinessResponse.json()]);
-      setStatus({health,readiness,latencyMs:Math.round(performance.now()-started),checkedAt:new Date().toISOString(),error:''});
+      if(!healthResponse.ok)throw new Error(`API health returned ${healthResponse.status}`);
+      const readinessError=readinessResponse.ok?'':readiness.issues?.join('; ')||`API readiness returned ${readinessResponse.status}`;
+      setStatus({health,readiness,latencyMs:Math.round(performance.now()-started),checkedAt:new Date().toISOString(),error:readinessError});
     }catch(problem){
       const message=problem instanceof DOMException&&problem.name==='AbortError'?'API check timed out after 8 seconds':problem instanceof Error?problem.message:'API check failed';
       setStatus(current=>({...current,health:null,readiness:null,latencyMs:null,checkedAt:new Date().toISOString(),error:message}));

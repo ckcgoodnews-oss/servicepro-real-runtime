@@ -17,3 +17,10 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Added safe copyable diagnostics that exclude credentials and access tokens.
 - Added prominent temporary-data guidance when the alpha API reports JSON storage.
 - Added System Status entry points in the workspace sidebar and Settings.
+
+## Sprint 733 — Production readiness enforcement
+
+- Replaced the always-ready API response with real configuration and data-store checks.
+- Added PostgreSQL query and JSON read verification without exposing connection details.
+- Changed `/readyz` to return HTTP 503 when the deployment should not receive traffic.
+- Pointed the Render API health gate at `/readyz` and expanded the local deployment smoke test to verify both liveness and readiness.

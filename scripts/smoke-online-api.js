@@ -28,10 +28,10 @@ async function waitForHealth() {
   let lastError;
   for (let attempt = 0; attempt < 30; attempt += 1) {
     try {
-      const response = await fetch(`http://127.0.0.1:${port}/healthz`);
-      const body = await response.json();
-      if (response.ok && body.ok === true) return body;
-      lastError = new Error(`Health check returned ${response.status}`);
+      const [healthResponse,readinessResponse] = await Promise.all([fetch(`http://127.0.0.1:${port}/healthz`),fetch(`http://127.0.0.1:${port}/readyz`)]);
+      const [health,readiness] = await Promise.all([healthResponse.json(),readinessResponse.json()]);
+      if (healthResponse.ok && readinessResponse.ok && health.ok === true && readiness.ready === true) return { health, readiness };
+      lastError = new Error(`Health checks returned ${healthResponse.status}/${readinessResponse.status}`);
     } catch (error) {
       lastError = error;
     }
@@ -42,8 +42,8 @@ async function waitForHealth() {
 
 (async () => {
   try {
-    const health = await waitForHealth();
-    console.log(`Online API smoke test passed: ok=${health.ok}, store=${health.store || 'json'}.`);
+    const result = await waitForHealth();
+    console.log(`Online API smoke test passed: ok=${result.health.ok}, ready=${result.readiness.ready}, store=${result.health.store || 'json'}.`);
   } catch (error) {
     console.error(stderr || error.message);
     process.exitCode = 1;

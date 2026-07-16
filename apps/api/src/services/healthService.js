@@ -1,4 +1,6 @@
 const { version } = require('../../../../package.json');
+const { validateRuntimeConfig } = require('./configValidationService');
+const { getRepositories } = require('../repositories/repositoryFactory');
 
 function buildHealth() {
   return {
@@ -12,15 +14,37 @@ function buildHealth() {
   };
 }
 
-function buildReadiness() {
+async function buildReadiness(options = {}) {
+  const configuration = options.configuration || validateRuntimeConfig();
+  const store = options.store || getRepositories().store;
+  let dataStore = false;
+
+  try {
+    if (store.type === 'postgres') await store.query('SELECT 1 AS ready');
+    else store.read();
+    dataStore = true;
+  } catch (_) {
+    dataStore = false;
+  }
+
+  const checks = {
+    configuration: configuration.ok,
+    runtime: true,
+    dataStore
+  };
+
   return {
-    ready: true,
-    checks: {
-      configuration: true,
-      runtime: true
-    },
+    ready: Object.values(checks).every(Boolean),
+    checks,
+    store: store.type || process.env.DATA_STORE || 'json',
+    issues: [...configuration.errors, ...(dataStore ? [] : ['Data store check failed'])],
+    warnings: configuration.warnings,
     timestamp: new Date().toISOString()
   };
 }
 
-module.exports = { buildHealth, buildReadiness };
+function readinessHttpStatus(readiness) {
+  return readiness.ready ? 200 : 503;
+}
+
+module.exports = { buildHealth, buildReadiness, readinessHttpStatus };

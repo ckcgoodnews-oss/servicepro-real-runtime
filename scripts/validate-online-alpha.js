@@ -16,7 +16,7 @@ function validateOnlineAlpha() {
   }
   assert.strictEqual((blueprint.match(/branch: codex\/sprint-716-frontend-foundation/g) || []).length, 2);
   assert.strictEqual((blueprint.match(/autoDeployTrigger: off/g) || []).length, 2);
-  for (const contract of ['healthCheckPath: /healthz', 'JWT_SECRET', 'PORTAL_TOKEN_SECRET', 'CORS_ALLOWED_ORIGINS', 'NEXT_PUBLIC_API_BASE_URL']) {
+  for (const contract of ['healthCheckPath: /readyz', 'JWT_SECRET', 'PORTAL_TOKEN_SECRET', 'CORS_ALLOWED_ORIGINS', 'NEXT_PUBLIC_API_BASE_URL']) {
     assert.match(blueprint, new RegExp(contract));
   }
   assert.match(guide, /temporary filesystem/);

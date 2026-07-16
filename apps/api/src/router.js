@@ -11,7 +11,7 @@ const { applyCors } = require('./middleware/cors');
 const { rejectIfPayloadTooLarge } = require('./middleware/bodyLimit');
 const { applyRateLimit } = require('./middleware/rateLimit');
 const { applyRouteValidation } = require('./middleware/routeValidation');
-const { buildHealth, buildReadiness } = require('./services/healthService');
+const { buildHealth, buildReadiness, readinessHttpStatus } = require('./services/healthService');
 const { PERMISSIONS } = require('./auth/permissions');
 const { attachRequestContext } = require('./context/requestContext');
 
@@ -105,7 +105,10 @@ async function router(req, res) {
   if (rejectIfPayloadTooLarge(req, res)) return;
 
   if (req.url === '/healthz') return sendJson(res, 200, buildHealth());
-  if (req.url === '/readyz') return sendJson(res, 200, buildReadiness());
+  if (req.url === '/readyz') {
+    const readiness = await buildReadiness();
+    return sendJson(res, readinessHttpStatus(readiness), readiness);
+  }
 
   tenantMiddleware(req);
   attachRequestContext(req);
