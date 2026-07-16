@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS consent_subjects (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS consent_records (
+CREATE TABLE IF NOT EXISTS preference_consent_records (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id text NOT NULL,
   subject_id uuid NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS consent_audit_events (
 
 CREATE INDEX IF NOT EXISTS idx_consent_purposes_tenant_status ON consent_purposes (tenant_id, status, purpose_type);
 CREATE INDEX IF NOT EXISTS idx_consent_subjects_tenant_email ON consent_subjects (tenant_id, email, status);
-CREATE INDEX IF NOT EXISTS idx_consent_records_subject_status ON consent_records (subject_id, status, purpose_id);
+CREATE INDEX IF NOT EXISTS idx_preference_consent_records_subject_status ON preference_consent_records (subject_id, status, purpose_id);
 CREATE INDEX IF NOT EXISTS idx_consent_preferences_subject_key ON consent_preferences (subject_id, preference_key, status);
 CREATE INDEX IF NOT EXISTS idx_consent_withdrawals_consent ON consent_withdrawals (consent_id, withdrawn_at DESC);
 CREATE INDEX IF NOT EXISTS idx_consent_audit_tenant_time ON consent_audit_events (tenant_id, occurred_at DESC);

@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS vendor_risk_remediations (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS vendor_risk_reviews (
+CREATE TABLE IF NOT EXISTS vendor_assessment_reviews (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   vendor_id uuid NOT NULL,
   tenant_id text NOT NULL DEFAULT '',
@@ -114,4 +114,4 @@ CREATE INDEX IF NOT EXISTS idx_vendor_risk_services_vendor_status ON vendor_risk
 CREATE INDEX IF NOT EXISTS idx_vendor_risk_assessments_vendor_status ON vendor_risk_assessments (vendor_id, status, residual_risk);
 CREATE INDEX IF NOT EXISTS idx_vendor_risk_attestations_vendor_status ON vendor_risk_attestations (vendor_id, status, requested_at DESC);
 CREATE INDEX IF NOT EXISTS idx_vendor_risk_remediations_vendor_status ON vendor_risk_remediations (vendor_id, status, due_at);
-CREATE INDEX IF NOT EXISTS idx_vendor_risk_reviews_vendor_status ON vendor_risk_reviews (vendor_id, status, scheduled_at DESC);
+CREATE INDEX IF NOT EXISTS idx_vendor_assessment_reviews_vendor_status ON vendor_assessment_reviews (vendor_id, status, scheduled_at DESC);

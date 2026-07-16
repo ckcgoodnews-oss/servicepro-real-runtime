@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS follow_up_tasks (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS review_requests (
+CREATE TABLE IF NOT EXISTS crm_review_requests (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL,
   customer_id uuid NOT NULL,

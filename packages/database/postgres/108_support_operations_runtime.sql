@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS support_escalations (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS knowledge_articles (
+CREATE TABLE IF NOT EXISTS support_knowledge_articles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   slug text NOT NULL UNIQUE,
   title text NOT NULL,
@@ -99,5 +99,5 @@ CREATE TABLE IF NOT EXISTS customer_health_signals (
 CREATE INDEX IF NOT EXISTS idx_support_tickets_tenant_status ON support_tickets (tenant_id, status, priority, opened_at DESC);
 CREATE INDEX IF NOT EXISTS idx_support_comments_ticket ON support_ticket_comments (ticket_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_support_escalations_ticket_status ON support_escalations (ticket_id, status, escalated_at DESC);
-CREATE INDEX IF NOT EXISTS idx_knowledge_articles_status_category ON knowledge_articles (status, category, title);
+CREATE INDEX IF NOT EXISTS idx_support_knowledge_articles_status_category ON support_knowledge_articles (status, category, title);
 CREATE INDEX IF NOT EXISTS idx_customer_health_tenant_type ON customer_health_signals (tenant_id, signal_type, observed_at DESC);

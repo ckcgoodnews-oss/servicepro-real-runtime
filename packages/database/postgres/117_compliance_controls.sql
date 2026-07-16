@@ -1,6 +1,6 @@
 -- Sprint 117 PostgreSQL migration: compliance control mapping runtime.
 
-CREATE TABLE IF NOT EXISTS compliance_frameworks (
+CREATE TABLE IF NOT EXISTS compliance_mapping_frameworks (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code text NOT NULL UNIQUE,
   name text NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS compliance_frameworks (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS compliance_controls (
+CREATE TABLE IF NOT EXISTS compliance_mapping_controls (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   framework_id uuid NOT NULL,
   control_code text NOT NULL,
@@ -91,8 +91,8 @@ CREATE TABLE IF NOT EXISTS compliance_corrective_actions (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_compliance_frameworks_status ON compliance_frameworks (status, name);
-CREATE INDEX IF NOT EXISTS idx_compliance_controls_framework_status ON compliance_controls (framework_id, status, control_code);
+CREATE INDEX IF NOT EXISTS idx_compliance_mapping_frameworks_status ON compliance_mapping_frameworks (status, name);
+CREATE INDEX IF NOT EXISTS idx_compliance_mapping_controls_framework_status ON compliance_mapping_controls (framework_id, status, control_code);
 CREATE INDEX IF NOT EXISTS idx_compliance_evidence_control ON compliance_evidence_mappings (control_id, collected_at DESC);
 CREATE INDEX IF NOT EXISTS idx_compliance_tests_control_status ON compliance_test_runs (control_id, status, planned_at DESC);
 CREATE INDEX IF NOT EXISTS idx_compliance_gaps_control_status ON compliance_gaps (control_id, status, severity, due_at);

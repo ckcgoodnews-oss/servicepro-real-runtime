@@ -433,7 +433,7 @@ CREATE TABLE IF NOT EXISTS follow_up_tasks (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS review_requests (
+CREATE TABLE IF NOT EXISTS crm_review_requests (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id uuid NOT NULL,
   customer_id uuid NOT NULL,
@@ -3908,7 +3908,7 @@ CREATE TABLE IF NOT EXISTS support_escalations (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS knowledge_articles (
+CREATE TABLE IF NOT EXISTS support_knowledge_articles (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   slug text NOT NULL UNIQUE,
   title text NOT NULL,
@@ -3941,7 +3941,7 @@ CREATE TABLE IF NOT EXISTS customer_health_signals (
 CREATE INDEX IF NOT EXISTS idx_support_tickets_tenant_status ON support_tickets (tenant_id, status, priority, opened_at DESC);
 CREATE INDEX IF NOT EXISTS idx_support_comments_ticket ON support_ticket_comments (ticket_id, created_at);
 CREATE INDEX IF NOT EXISTS idx_support_escalations_ticket_status ON support_escalations (ticket_id, status, escalated_at DESC);
-CREATE INDEX IF NOT EXISTS idx_knowledge_articles_status_category ON knowledge_articles (status, category, title);
+CREATE INDEX IF NOT EXISTS idx_support_knowledge_articles_status_category ON support_knowledge_articles (status, category, title);
 CREATE INDEX IF NOT EXISTS idx_customer_health_tenant_type ON customer_health_signals (tenant_id, signal_type, observed_at DESC);
 INSERT INTO postgres_runtime_migrations (version) VALUES ('108_support_operations_runtime.sql') ON CONFLICT (version) DO NOTHING;
 COMMIT;
@@ -4751,7 +4751,7 @@ COMMIT;
 BEGIN;
 -- Sprint 117 PostgreSQL migration: compliance control mapping runtime.
 
-CREATE TABLE IF NOT EXISTS compliance_frameworks (
+CREATE TABLE IF NOT EXISTS compliance_mapping_frameworks (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code text NOT NULL UNIQUE,
   name text NOT NULL,
@@ -4764,7 +4764,7 @@ CREATE TABLE IF NOT EXISTS compliance_frameworks (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS compliance_controls (
+CREATE TABLE IF NOT EXISTS compliance_mapping_controls (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   framework_id uuid NOT NULL,
   control_code text NOT NULL,
@@ -4842,8 +4842,8 @@ CREATE TABLE IF NOT EXISTS compliance_corrective_actions (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_compliance_frameworks_status ON compliance_frameworks (status, name);
-CREATE INDEX IF NOT EXISTS idx_compliance_controls_framework_status ON compliance_controls (framework_id, status, control_code);
+CREATE INDEX IF NOT EXISTS idx_compliance_mapping_frameworks_status ON compliance_mapping_frameworks (status, name);
+CREATE INDEX IF NOT EXISTS idx_compliance_mapping_controls_framework_status ON compliance_mapping_controls (framework_id, status, control_code);
 CREATE INDEX IF NOT EXISTS idx_compliance_evidence_control ON compliance_evidence_mappings (control_id, collected_at DESC);
 CREATE INDEX IF NOT EXISTS idx_compliance_tests_control_status ON compliance_test_runs (control_id, status, planned_at DESC);
 CREATE INDEX IF NOT EXISTS idx_compliance_gaps_control_status ON compliance_gaps (control_id, status, severity, due_at);
@@ -5830,7 +5830,7 @@ COMMIT;
 BEGIN;
 -- Sprint 129 PostgreSQL migration: privacy rights and DSAR operations.
 
-CREATE TABLE IF NOT EXISTS privacy_requests (
+CREATE TABLE IF NOT EXISTS dsar_privacy_requests (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id text NOT NULL,
   request_number text NOT NULL,
@@ -5928,7 +5928,7 @@ CREATE TABLE IF NOT EXISTS privacy_fulfillments (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_privacy_requests_tenant_status ON privacy_requests (tenant_id, status, request_type, due_at);
+CREATE INDEX IF NOT EXISTS idx_dsar_privacy_requests_tenant_status ON dsar_privacy_requests (tenant_id, status, request_type, due_at);
 CREATE INDEX IF NOT EXISTS idx_privacy_verifications_request_status ON privacy_identity_verifications (request_id, status);
 CREATE INDEX IF NOT EXISTS idx_privacy_search_tasks_request_status ON privacy_search_tasks (request_id, status);
 CREATE INDEX IF NOT EXISTS idx_privacy_packages_request_status ON privacy_response_packages (request_id, status);
@@ -5972,7 +5972,7 @@ CREATE TABLE IF NOT EXISTS consent_subjects (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS consent_records (
+CREATE TABLE IF NOT EXISTS preference_consent_records (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id text NOT NULL,
   subject_id uuid NOT NULL,
@@ -6035,7 +6035,7 @@ CREATE TABLE IF NOT EXISTS consent_audit_events (
 
 CREATE INDEX IF NOT EXISTS idx_consent_purposes_tenant_status ON consent_purposes (tenant_id, status, purpose_type);
 CREATE INDEX IF NOT EXISTS idx_consent_subjects_tenant_email ON consent_subjects (tenant_id, email, status);
-CREATE INDEX IF NOT EXISTS idx_consent_records_subject_status ON consent_records (subject_id, status, purpose_id);
+CREATE INDEX IF NOT EXISTS idx_preference_consent_records_subject_status ON preference_consent_records (subject_id, status, purpose_id);
 CREATE INDEX IF NOT EXISTS idx_consent_preferences_subject_key ON consent_preferences (subject_id, preference_key, status);
 CREATE INDEX IF NOT EXISTS idx_consent_withdrawals_consent ON consent_withdrawals (consent_id, withdrawn_at DESC);
 CREATE INDEX IF NOT EXISTS idx_consent_audit_tenant_time ON consent_audit_events (tenant_id, occurred_at DESC);
@@ -6708,7 +6708,7 @@ CREATE TABLE IF NOT EXISTS vendor_risk_remediations (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS vendor_risk_reviews (
+CREATE TABLE IF NOT EXISTS vendor_assessment_reviews (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   vendor_id uuid NOT NULL,
   tenant_id text NOT NULL DEFAULT '',
@@ -6728,7 +6728,7 @@ CREATE INDEX IF NOT EXISTS idx_vendor_risk_services_vendor_status ON vendor_risk
 CREATE INDEX IF NOT EXISTS idx_vendor_risk_assessments_vendor_status ON vendor_risk_assessments (vendor_id, status, residual_risk);
 CREATE INDEX IF NOT EXISTS idx_vendor_risk_attestations_vendor_status ON vendor_risk_attestations (vendor_id, status, requested_at DESC);
 CREATE INDEX IF NOT EXISTS idx_vendor_risk_remediations_vendor_status ON vendor_risk_remediations (vendor_id, status, due_at);
-CREATE INDEX IF NOT EXISTS idx_vendor_risk_reviews_vendor_status ON vendor_risk_reviews (vendor_id, status, scheduled_at DESC);
+CREATE INDEX IF NOT EXISTS idx_vendor_assessment_reviews_vendor_status ON vendor_assessment_reviews (vendor_id, status, scheduled_at DESC);
 INSERT INTO postgres_runtime_migrations (version) VALUES ('136_vendor_risk.sql') ON CONFLICT (version) DO NOTHING;
 COMMIT;
 -- END SERVICEPRO MIGRATION 136_vendor_risk.sql
@@ -7078,7 +7078,7 @@ CREATE TABLE IF NOT EXISTS patch_deployments (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS vulnerability_exceptions (
+CREATE TABLE IF NOT EXISTS patch_vulnerability_exceptions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id text NOT NULL,
   asset_vulnerability_id uuid NOT NULL,
@@ -7102,7 +7102,7 @@ CREATE INDEX IF NOT EXISTS idx_asset_vulnerabilities_tenant_status ON asset_vuln
 CREATE INDEX IF NOT EXISTS idx_patch_catalog_tenant_status ON patch_catalog (tenant_id, status, vendor, product);
 CREATE INDEX IF NOT EXISTS idx_patch_windows_tenant_status ON patch_maintenance_windows (tenant_id, status, starts_at);
 CREATE INDEX IF NOT EXISTS idx_patch_deployments_tenant_status ON patch_deployments (tenant_id, status, scheduled_at);
-CREATE INDEX IF NOT EXISTS idx_vulnerability_exceptions_status ON vulnerability_exceptions (tenant_id, status, expires_at);
+CREATE INDEX IF NOT EXISTS idx_patch_vulnerability_exceptions_status ON patch_vulnerability_exceptions (tenant_id, status, expires_at);
 INSERT INTO postgres_runtime_migrations (version) VALUES ('139_vulnerability_management.sql') ON CONFLICT (version) DO NOTHING;
 COMMIT;
 -- END SERVICEPRO MIGRATION 139_vulnerability_management.sql
@@ -7110,13 +7110,13 @@ COMMIT;
 -- BEGIN SERVICEPRO MIGRATION 140_security_incident_response.sql
 BEGIN;
 -- Sprint 140 PostgreSQL migration: security incident response.
-CREATE TABLE IF NOT EXISTS security_incidents (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id text NOT NULL, incident_number text NOT NULL, title text NOT NULL, description text NOT NULL DEFAULT '', status text NOT NULL DEFAULT 'reported', severity text NOT NULL DEFAULT 'medium', incident_type text NOT NULL DEFAULT 'other', source text NOT NULL DEFAULT '', reported_by text NOT NULL DEFAULT '', owner text NOT NULL DEFAULT '', reported_at timestamptz NOT NULL, detected_at timestamptz NOT NULL, contained_at timestamptz, resolved_at timestamptz, closed_at timestamptz, affected_asset_ids jsonb NOT NULL DEFAULT '[]'::jsonb, affected_user_ids jsonb NOT NULL DEFAULT '[]'::jsonb, related_alert_ids jsonb NOT NULL DEFAULT '[]'::jsonb, related_vulnerability_ids jsonb NOT NULL DEFAULT '[]'::jsonb, business_impact text NOT NULL DEFAULT '', metadata jsonb NOT NULL DEFAULT '{}'::jsonb, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS response_security_incidents (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id text NOT NULL, incident_number text NOT NULL, title text NOT NULL, description text NOT NULL DEFAULT '', status text NOT NULL DEFAULT 'reported', severity text NOT NULL DEFAULT 'medium', incident_type text NOT NULL DEFAULT 'other', source text NOT NULL DEFAULT '', reported_by text NOT NULL DEFAULT '', owner text NOT NULL DEFAULT '', reported_at timestamptz NOT NULL, detected_at timestamptz NOT NULL, contained_at timestamptz, resolved_at timestamptz, closed_at timestamptz, affected_asset_ids jsonb NOT NULL DEFAULT '[]'::jsonb, affected_user_ids jsonb NOT NULL DEFAULT '[]'::jsonb, related_alert_ids jsonb NOT NULL DEFAULT '[]'::jsonb, related_vulnerability_ids jsonb NOT NULL DEFAULT '[]'::jsonb, business_impact text NOT NULL DEFAULT '', metadata jsonb NOT NULL DEFAULT '{}'::jsonb, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE IF NOT EXISTS security_incident_tasks (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), incident_id uuid NOT NULL, tenant_id text NOT NULL DEFAULT '', title text NOT NULL, description text NOT NULL DEFAULT '', task_type text NOT NULL DEFAULT 'other', status text NOT NULL DEFAULT 'open', owner text NOT NULL DEFAULT '', due_at timestamptz, completed_at timestamptz, metadata jsonb NOT NULL DEFAULT '{}'::jsonb, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE IF NOT EXISTS security_incident_evidence (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), incident_id uuid NOT NULL, tenant_id text NOT NULL DEFAULT '', evidence_type text NOT NULL DEFAULT 'other', title text NOT NULL, description text NOT NULL DEFAULT '', file_url text NOT NULL DEFAULT '', hash text NOT NULL DEFAULT '', collected_by text NOT NULL DEFAULT '', collected_at timestamptz NOT NULL, chain_of_custody jsonb NOT NULL DEFAULT '[]'::jsonb, metadata jsonb NOT NULL DEFAULT '{}'::jsonb, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE IF NOT EXISTS security_incident_communications (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), incident_id uuid NOT NULL, tenant_id text NOT NULL DEFAULT '', audience text NOT NULL, channel text NOT NULL DEFAULT 'email', subject text NOT NULL DEFAULT '', body text NOT NULL DEFAULT '', status text NOT NULL DEFAULT 'draft', approved_by text NOT NULL DEFAULT '', approved_at timestamptz, sent_at timestamptz, metadata jsonb NOT NULL DEFAULT '{}'::jsonb, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE IF NOT EXISTS security_incident_reviews (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), incident_id uuid NOT NULL, tenant_id text NOT NULL DEFAULT '', status text NOT NULL DEFAULT 'scheduled', facilitator text NOT NULL DEFAULT '', scheduled_at timestamptz NOT NULL, completed_at timestamptz, root_cause text NOT NULL DEFAULT '', lessons_learned text NOT NULL DEFAULT '', metadata jsonb NOT NULL DEFAULT '{}'::jsonb, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
 CREATE TABLE IF NOT EXISTS security_incident_actions (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), incident_id uuid NOT NULL, review_id uuid, tenant_id text NOT NULL DEFAULT '', title text NOT NULL, description text NOT NULL DEFAULT '', status text NOT NULL DEFAULT 'open', severity text NOT NULL DEFAULT 'medium', owner text NOT NULL DEFAULT '', due_at timestamptz, completed_at timestamptz, accepted_reason text NOT NULL DEFAULT '', metadata jsonb NOT NULL DEFAULT '{}'::jsonb, created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now());
-CREATE INDEX IF NOT EXISTS idx_security_incidents_tenant_status ON security_incidents (tenant_id, status, severity, reported_at DESC);
+CREATE INDEX IF NOT EXISTS idx_response_security_incidents_tenant_status ON response_security_incidents (tenant_id, status, severity, reported_at DESC);
 CREATE INDEX IF NOT EXISTS idx_security_incident_tasks_incident_status ON security_incident_tasks (incident_id, status, due_at);
 CREATE INDEX IF NOT EXISTS idx_security_incident_evidence_incident ON security_incident_evidence (incident_id, evidence_type);
 CREATE INDEX IF NOT EXISTS idx_security_incident_comms_incident_status ON security_incident_communications (incident_id, status);
@@ -7679,7 +7679,7 @@ CREATE TABLE IF NOT EXISTS billing_subscriptions (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS billing_invoices (
+CREATE TABLE IF NOT EXISTS monetization_invoices (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id text NOT NULL,
   customer_tenant_id text NOT NULL,
@@ -7755,7 +7755,7 @@ CREATE TABLE IF NOT EXISTS billing_dunning (
 CREATE INDEX IF NOT EXISTS idx_billing_plans_tenant_status ON billing_plans (tenant_id, status, billing_interval);
 CREATE INDEX IF NOT EXISTS idx_billing_entitlements_plan_key ON billing_entitlements (plan_id, key);
 CREATE INDEX IF NOT EXISTS idx_billing_subscriptions_customer_status ON billing_subscriptions (customer_tenant_id, status, current_period_end);
-CREATE INDEX IF NOT EXISTS idx_billing_invoices_customer_status ON billing_invoices (customer_tenant_id, status, due_at);
+CREATE INDEX IF NOT EXISTS idx_monetization_invoices_customer_status ON monetization_invoices (customer_tenant_id, status, due_at);
 CREATE INDEX IF NOT EXISTS idx_billing_payments_invoice_status ON billing_payments (invoice_id, status, attempted_at DESC);
 CREATE INDEX IF NOT EXISTS idx_billing_credits_customer_status ON billing_credits (customer_tenant_id, status, expires_at);
 CREATE INDEX IF NOT EXISTS idx_billing_dunning_invoice_status ON billing_dunning (invoice_id, status, scheduled_at);

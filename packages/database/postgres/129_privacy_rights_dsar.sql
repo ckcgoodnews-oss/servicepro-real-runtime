@@ -1,6 +1,6 @@
 -- Sprint 129 PostgreSQL migration: privacy rights and DSAR operations.
 
-CREATE TABLE IF NOT EXISTS privacy_requests (
+CREATE TABLE IF NOT EXISTS dsar_privacy_requests (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id text NOT NULL,
   request_number text NOT NULL,
@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS privacy_fulfillments (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_privacy_requests_tenant_status ON privacy_requests (tenant_id, status, request_type, due_at);
+CREATE INDEX IF NOT EXISTS idx_dsar_privacy_requests_tenant_status ON dsar_privacy_requests (tenant_id, status, request_type, due_at);
 CREATE INDEX IF NOT EXISTS idx_privacy_verifications_request_status ON privacy_identity_verifications (request_id, status);
 CREATE INDEX IF NOT EXISTS idx_privacy_search_tasks_request_status ON privacy_search_tasks (request_id, status);
 CREATE INDEX IF NOT EXISTS idx_privacy_packages_request_status ON privacy_response_packages (request_id, status);

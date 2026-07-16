@@ -62,4 +62,22 @@ assert.ok(!/CREATE TABLE IF NOT EXISTS legal_holds\s*\(/.test(documentRetentionM
 const ediscoveryMigration = fs.readFileSync('packages/database/postgres/127_legal_hold_ediscovery.sql', 'utf8');
 assert.match(ediscoveryMigration, /CREATE TABLE IF NOT EXISTS ediscovery_legal_holds/);
 assert.ok(!/CREATE TABLE IF NOT EXISTS legal_holds\s*\(/.test(ediscoveryMigration));
+const consentMigration = fs.readFileSync('packages/database/postgres/130_consent_preferences.sql', 'utf8');
+assert.match(consentMigration, /CREATE TABLE IF NOT EXISTS preference_consent_records/);
+assert.match(consentMigration, /ON preference_consent_records \(subject_id, status, purpose_id\)/);
+assert.ok(!/CREATE TABLE IF NOT EXISTS consent_records\s*\(/.test(consentMigration));
+
+const tableDeclarations = new Map();
+for (const file of fs.readdirSync('packages/database/postgres').filter((name) => name.endsWith('.sql')).sort()) {
+  const source = fs.readFileSync(`packages/database/postgres/${file}`, 'utf8');
+  for (const match of source.matchAll(/CREATE\s+TABLE(?:\s+IF\s+NOT\s+EXISTS)?\s+([a-zA-Z_][a-zA-Z0-9_]*)/gi)) {
+    const table = match[1].toLowerCase();
+    tableDeclarations.set(table, [...(tableDeclarations.get(table) || []), file]);
+  }
+}
+const duplicateTables = [...tableDeclarations.entries()]
+  .filter(([, files]) => files.length > 1)
+  .map(([table]) => table)
+  .sort();
+assert.deepStrictEqual(duplicateTables, ['customers', 'jobs', 'route_plans', 'sla_policies', 'webhook_subscriptions']);
 console.log('Sprint 739 PostgreSQL certification gate test passed.');

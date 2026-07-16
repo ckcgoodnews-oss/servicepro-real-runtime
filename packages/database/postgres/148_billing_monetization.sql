@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS billing_subscriptions (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS billing_invoices (
+CREATE TABLE IF NOT EXISTS monetization_invoices (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id text NOT NULL,
   customer_tenant_id text NOT NULL,
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS billing_dunning (
 CREATE INDEX IF NOT EXISTS idx_billing_plans_tenant_status ON billing_plans (tenant_id, status, billing_interval);
 CREATE INDEX IF NOT EXISTS idx_billing_entitlements_plan_key ON billing_entitlements (plan_id, key);
 CREATE INDEX IF NOT EXISTS idx_billing_subscriptions_customer_status ON billing_subscriptions (customer_tenant_id, status, current_period_end);
-CREATE INDEX IF NOT EXISTS idx_billing_invoices_customer_status ON billing_invoices (customer_tenant_id, status, due_at);
+CREATE INDEX IF NOT EXISTS idx_monetization_invoices_customer_status ON monetization_invoices (customer_tenant_id, status, due_at);
 CREATE INDEX IF NOT EXISTS idx_billing_payments_invoice_status ON billing_payments (invoice_id, status, attempted_at DESC);
 CREATE INDEX IF NOT EXISTS idx_billing_credits_customer_status ON billing_credits (customer_tenant_id, status, expires_at);
 CREATE INDEX IF NOT EXISTS idx_billing_dunning_invoice_status ON billing_dunning (invoice_id, status, scheduled_at);
