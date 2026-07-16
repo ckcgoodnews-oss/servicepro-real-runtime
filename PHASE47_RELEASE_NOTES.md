@@ -95,3 +95,9 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Recorded the tested tenant, datastore, application version, endpoints, authentication status, checks, and UTC completion time.
 - Added atomic report-file creation without persisting credentials or access tokens.
 - Retained manual GitHub smoke certifications as 30-day workflow artifacts.
+
+### Sprint 742 — Company deployment manifest
+
+- Added a secret-safe manifest generator for dedicated Supabase-project-per-company deployments.
+- Captures tenant identity, Supabase project reference, Render configuration requirements, URLs, expected release, and authenticated smoke-test contract.
+- Uses atomic report writes and explicitly excludes database credentials, owner passwords, smoke passwords, and access tokens.

@@ -51,3 +51,7 @@ After the online alpha is accepted:
 3. Replace branch-pinned alpha services with production services that deploy only after checks pass.
 4. Move the API to certified persistent PostgreSQL storage.
 5. Set the production website origin in `CORS_ALLOWED_ORIGINS`, then smoke-test login and every primary workspace route.
+
+## Company deployment manifest
+
+Before deploying a new company's Render services, run `npm run company:manifest` with the company's `.env.company.local`. Review the generated report under `reports/company-deployments` and confirm that the tenant ID, Supabase project reference, API URL, web URL, expected version, and PostgreSQL store are correct.

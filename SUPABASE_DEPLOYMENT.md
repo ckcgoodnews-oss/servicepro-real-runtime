@@ -76,3 +76,14 @@ Never commit a Supabase database password, connection string, service-role key, 
 Supabase connection guidance: https://supabase.com/docs/guides/database/connecting-to-postgres
 
 Supabase migration guidance: https://supabase.com/docs/guides/deployment/database-migrations
+
+## Sprint 742: company deployment manifest
+
+After provisioning a dedicated Supabase project, generate the company deployment record:
+
+```powershell
+$env:COMPANY_ENV_FILE = '.env.company.local'
+npm run company:manifest
+```
+
+The default output is `reports/company-deployments/<tenant-id>.json`. It records the dedicated Supabase project reference, tenant identity, expected PostgreSQL store, deployment URLs, required Render variables, and smoke-test contract. It does not contain the database URL or owner password and is safe to retain as a deployment audit artifact.
