@@ -24,3 +24,10 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Added PostgreSQL query and JSON read verification without exposing connection details.
 - Changed `/readyz` to return HTTP 503 when the deployment should not receive traffic.
 - Pointed the Render API health gate at `/readyz` and expanded the local deployment smoke test to verify both liveness and readiness.
+
+## Sprint 734 — Deployed application smoke testing
+
+- Added a reusable smoke runner for website routes, API health, readiness, and CORS.
+- Added optional credential-backed login, dashboard, and logout verification without logging secrets or tokens.
+- Added a manual GitHub Actions entry point for testing any approved website and API URL.
+- Added isolated mock-server regression coverage for the complete deployed application flow.

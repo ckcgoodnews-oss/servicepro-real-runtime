@@ -19,6 +19,8 @@ The Blueprint is pinned to `codex/sprint-716-frontend-foundation` and has automa
 
 Before an online deploy, run `npm run deploy:validate:online` and `npm run deploy:smoke:api` from the repository root.
 
+After deployment, set `SMOKE_WEB_URL` and `SMOKE_API_URL`, then run `node scripts/smoke-deployed-app.js`. Add `SMOKE_EMAIL`, `SMOKE_PASSWORD`, and `SMOKE_REQUIRE_AUTH=true` to include login, dashboard, and logout checks. The runner never prints credentials or access tokens. The same check can be started manually from GitHub Actions with the **Online alpha smoke** workflow.
+
 ## Alpha data warning
 
 This first online connection uses the seeded JSON store in Render's temporary filesystem. It is appropriate for functional testing, and it makes the demo login available on a fresh deploy. Data entered during testing can disappear after a restart or redeploy. Do not enter real customer, payment, employee, or confidential data.

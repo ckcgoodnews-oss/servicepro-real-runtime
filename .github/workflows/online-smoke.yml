@@ -1,0 +1,44 @@
+name: Online alpha smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      web_url:
+        description: Public HTTPS website origin
+        required: true
+        default: https://servicepro-web-alpha-ckcgoodnews.onrender.com
+        type: string
+      api_url:
+        description: Public HTTPS API origin
+        required: true
+        default: https://servicepro-api-alpha-ckcgoodnews.onrender.com
+        type: string
+      authenticated:
+        description: Include login, dashboard, and logout checks
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+  smoke:
+    name: Verify deployed application
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Run online smoke checks
+        run: node scripts/smoke-deployed-app.js
+        env:
+          SMOKE_WEB_URL: ${{ inputs.web_url }}
+          SMOKE_API_URL: ${{ inputs.api_url }}
+          SMOKE_REQUIRE_AUTH: ${{ inputs.authenticated }}
+          SMOKE_EMAIL: ${{ secrets.ONLINE_SMOKE_EMAIL }}
+          SMOKE_PASSWORD: ${{ secrets.ONLINE_SMOKE_PASSWORD }}
+          SMOKE_TENANT_ID: tenant_demo
