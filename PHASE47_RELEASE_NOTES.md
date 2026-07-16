@@ -70,3 +70,4 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Added owner and service seeding to the clean-database pipeline.
 - Added production-mode PostgreSQL API readiness, login, and authenticated-dashboard smoke coverage.
 - Replaced invalid expression-based table constraints with PostgreSQL-compatible unique indexes and added actionable migration failure annotations.
+- Added the missing UUID-to-text tenant-key upgrade required by the executable runtime and reporting views.

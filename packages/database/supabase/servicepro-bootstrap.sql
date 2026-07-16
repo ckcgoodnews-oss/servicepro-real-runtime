@@ -738,6 +738,12 @@ CREATE TABLE IF NOT EXISTS postgres_runtime_migrations (
   applied_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- Sprint 52 created these tenant columns as UUIDs. The executable runtime uses
+-- stable string tenant keys, so existing databases must be upgraded explicitly;
+-- CREATE TABLE IF NOT EXISTS above cannot change the earlier column type.
+ALTER TABLE customers ALTER COLUMN tenant_id TYPE text USING tenant_id::text;
+ALTER TABLE jobs ALTER COLUMN tenant_id TYPE text USING tenant_id::text;
+
 CREATE INDEX IF NOT EXISTS idx_customers_tenant_name
 ON customers (tenant_id, last_name, first_name);
 

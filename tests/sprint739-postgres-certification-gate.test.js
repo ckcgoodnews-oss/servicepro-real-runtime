@@ -30,4 +30,7 @@ for (const migration of ['055_auth_runtime.sql', '063_customer_portal_runtime.sq
   assert.match(source, /CREATE UNIQUE INDEX/i);
 }
 assert.match(fs.readFileSync('scripts/run-migrations.js', 'utf8'), /PostgreSQL migration failure/);
+const runtimeMigration = fs.readFileSync('packages/database/postgres/054_postgres_runtime.sql', 'utf8');
+assert.match(runtimeMigration, /ALTER TABLE customers ALTER COLUMN tenant_id TYPE text USING tenant_id::text/);
+assert.match(runtimeMigration, /ALTER TABLE jobs ALTER COLUMN tenant_id TYPE text USING tenant_id::text/);
 console.log('Sprint 739 PostgreSQL certification gate test passed.');
