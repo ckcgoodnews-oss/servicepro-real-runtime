@@ -42,7 +42,7 @@ function Wait-Http {
 $started = @()
 try {
     if (-not $SkipStart) {
-        $apiCommand = "set PORT=$ApiPort&& npm run dev > `"$apiLog`" 2>&1"
+        $apiCommand = "set PORT=$ApiPort&& set CORS_ALLOWED_ORIGINS=$webUrl&& npm run dev > `"$apiLog`" 2>&1"
         $api = Start-Process -FilePath 'cmd.exe' -ArgumentList '/d','/s','/c',$apiCommand -WorkingDirectory $RepoPath -PassThru
         $started += $api
 
@@ -89,4 +89,5 @@ try {
 finally {
     foreach ($p in $started) { if ($p -and -not $p.HasExited) { Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue } }
 }
+
 
