@@ -178,14 +178,14 @@ function createPostgresObservabilityRepository(store) {
       const params = [tenantId];
       let where = 'WHERE tenant_id=$1';
       if (filters.serviceName) { params.push(filters.serviceName); where += ` AND service_name=$${params.length}`; }
-      return rows(`SELECT id::text, tenant_id as "tenantId", code, service_name as "serviceName", name, description, target_percent::float as "targetPercent", window, measurement_type as "measurementType", active, metadata, created_at as "createdAt", updated_at as "updatedAt" FROM service_slos ${where} ORDER BY name`, params);
+      return rows(`SELECT id::text, tenant_id as "tenantId", code, service_name as "serviceName", name, description, target_percent::float as "targetPercent", evaluation_window as "window", measurement_type as "measurementType", active, metadata, created_at as "createdAt", updated_at as "updatedAt" FROM service_slos ${where} ORDER BY name`, params);
     },
     async createSlo(tenantId, input) {
       const x = normalizeSloInput(input);
-      return (await rows(`INSERT INTO service_slos (tenant_id, code, service_name, name, description, target_percent, window, measurement_type, active, metadata) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb) RETURNING id::text, tenant_id as "tenantId", code, service_name as "serviceName", name, description, target_percent::float as "targetPercent", window, measurement_type as "measurementType", active, metadata, created_at as "createdAt", updated_at as "updatedAt"`, [tenantId, x.code, x.serviceName, x.name, x.description, x.targetPercent, x.window, x.measurementType, x.active, JSON.stringify(x.metadata || {})]))[0];
+      return (await rows(`INSERT INTO service_slos (tenant_id, code, service_name, name, description, target_percent, evaluation_window, measurement_type, active, metadata) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb) RETURNING id::text, tenant_id as "tenantId", code, service_name as "serviceName", name, description, target_percent::float as "targetPercent", evaluation_window as "window", measurement_type as "measurementType", active, metadata, created_at as "createdAt", updated_at as "updatedAt"`, [tenantId, x.code, x.serviceName, x.name, x.description, x.targetPercent, x.window, x.measurementType, x.active, JSON.stringify(x.metadata || {})]))[0];
     },
     async evaluateSlo(tenantId, input = {}) {
-      const slo = (await rows(`SELECT id::text, tenant_id as "tenantId", code, service_name as "serviceName", name, description, target_percent::float as "targetPercent", window, measurement_type as "measurementType", active, metadata, created_at as "createdAt", updated_at as "updatedAt" FROM service_slos WHERE tenant_id=$1 AND id=$2 LIMIT 1`, [tenantId, input.sloId]))[0];
+      const slo = (await rows(`SELECT id::text, tenant_id as "tenantId", code, service_name as "serviceName", name, description, target_percent::float as "targetPercent", evaluation_window as "window", measurement_type as "measurementType", active, metadata, created_at as "createdAt", updated_at as "updatedAt" FROM service_slos WHERE tenant_id=$1 AND id=$2 LIMIT 1`, [tenantId, input.sloId]))[0];
       return slo ? evaluateSlo(slo, input.measurements || []) : null;
     },
     async listAlerts() { return []; },

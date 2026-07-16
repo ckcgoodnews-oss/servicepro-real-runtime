@@ -74,3 +74,4 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Replaced unsupported conditional constraint syntax with idempotent PostgreSQL catalog checks.
 - Upgraded the legacy scheduler route table to the complete executable route-planning schema.
 - Upgraded the legacy SLA policy table while preserving its original completion targets.
+- Replaced the reserved PostgreSQL `window` identifier in the SLO schema while preserving the API's `window` contract.

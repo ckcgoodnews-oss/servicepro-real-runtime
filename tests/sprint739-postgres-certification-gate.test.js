@@ -45,4 +45,9 @@ const slaMigration = fs.readFileSync('packages/database/postgres/089_sla_runtime
 assert.match(slaMigration, /RENAME COLUMN completion_minutes TO resolution_minutes/);
 assert.match(slaMigration, /ALTER COLUMN tenant_id TYPE text USING tenant_id::text/);
 for (const column of ['name', 'active', 'metadata', 'created_at']) assert.ok(slaMigration.includes(`ADD COLUMN IF NOT EXISTS ${column}`));
+const observabilityMigration = fs.readFileSync('packages/database/postgres/104_observability_incident_runtime.sql', 'utf8');
+assert.match(observabilityMigration, /evaluation_window text NOT NULL DEFAULT '30d'/);
+assert.ok(!/^\s*window\s+text/im.test(observabilityMigration), 'Observability migration must not use the reserved window identifier');
+const observabilityRepository = fs.readFileSync('apps/api/src/repositories/observabilityRepository.js', 'utf8');
+assert.match(observabilityRepository, /evaluation_window as "window"/);
 console.log('Sprint 739 PostgreSQL certification gate test passed.');

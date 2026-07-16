@@ -3414,7 +3414,7 @@ CREATE TABLE IF NOT EXISTS service_slos (
   name text NOT NULL,
   description text NOT NULL DEFAULT '',
   target_percent numeric(8,4) NOT NULL DEFAULT 99.9,
-  window text NOT NULL DEFAULT '30d',
+  evaluation_window text NOT NULL DEFAULT '30d',
   measurement_type text NOT NULL DEFAULT 'availability',
   active boolean NOT NULL DEFAULT true,
   metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
