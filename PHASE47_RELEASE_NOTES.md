@@ -101,3 +101,9 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Added a secret-safe manifest generator for dedicated Supabase-project-per-company deployments.
 - Captures tenant identity, Supabase project reference, Render configuration requirements, URLs, expected release, and authenticated smoke-test contract.
 - Uses atomic report writes and explicitly excludes database credentials, owner passwords, smoke passwords, and access tokens.
+
+### Sprint 743 — Downloaded toolkit installer
+
+- Added a PowerShell installer that locates an exact sprint ZIP in `I:\REPO`.
+- Added guarded extraction, APPLY execution, verification, ambiguity detection, and retained staging output.
+- Added Sprint 743 regression coverage.

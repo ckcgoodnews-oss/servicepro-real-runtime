@@ -556,7 +556,8 @@
     "test-env:api": "node scripts/start-local-test-api.js",
     "test-env:web": "npm --prefix apps/web run dev",
     "test-env:smoke": "node scripts/smoke-deployed-app.js",
-    "company:manifest": "node scripts/generate-company-deployment-manifest.js"
+    "company:manifest": "node scripts/generate-company-deployment-manifest.js",
+    "test:sprint743": "node tests/sprint743-downloaded-toolkit-installer.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

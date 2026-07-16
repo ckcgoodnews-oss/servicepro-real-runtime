@@ -55,3 +55,18 @@ After the online alpha is accepted:
 ## Company deployment manifest
 
 Before deploying a new company's Render services, run `npm run company:manifest` with the company's `.env.company.local`. Review the generated report under `reports/company-deployments` and confirm that the tenant ID, Supabase project reference, API URL, web URL, expected version, and PostgreSQL store are correct.
+
+## Sprint 743: apply a downloaded sprint ZIP automatically
+
+After downloading a toolkit into `I:\REPO`, apply it without manually opening the ZIP:
+
+```powershell
+Set-Location I:\REPO\servicepro-cumulative
+
+.\scripts\apply-downloaded-sprint.ps1 `
+  -Sprint 743 `
+  -DownloadPath 'I:\REPO' `
+  -RepoPath 'I:\REPO\servicepro-cumulative'
+```
+
+The installer extracts the archive under `I:\REPO\servicepro-toolkit-staging`, invokes the sprint APPLY script, and then runs its VERIFY script. It refuses ambiguous ZIP matches and preserves the extracted toolkit for audit and rollback.
