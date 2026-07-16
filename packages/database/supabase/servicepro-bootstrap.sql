@@ -4240,7 +4240,7 @@ COMMIT;
 BEGIN;
 -- Sprint 112 PostgreSQL migration: document retention and compliance controls.
 
-CREATE TABLE IF NOT EXISTS retention_policies (
+CREATE TABLE IF NOT EXISTS document_retention_policies (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   code text NOT NULL UNIQUE,
   name text NOT NULL,
@@ -4270,7 +4270,7 @@ CREATE TABLE IF NOT EXISTS document_classifications (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS legal_holds (
+CREATE TABLE IF NOT EXISTS document_legal_holds (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   document_id text NOT NULL,
   tenant_id text NOT NULL DEFAULT '',
@@ -4317,9 +4317,9 @@ CREATE TABLE IF NOT EXISTS compliance_export_jobs (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_retention_policies_type_status ON retention_policies (document_type, status);
+CREATE INDEX IF NOT EXISTS idx_retention_policies_type_status ON document_retention_policies (document_type, status);
 CREATE INDEX IF NOT EXISTS idx_document_classifications_tenant_type ON document_classifications (tenant_id, document_type, classification_level);
-CREATE INDEX IF NOT EXISTS idx_legal_holds_document_status ON legal_holds (document_id, status);
+CREATE INDEX IF NOT EXISTS idx_legal_holds_document_status ON document_legal_holds (document_id, status);
 CREATE INDEX IF NOT EXISTS idx_retention_reviews_tenant_status_due ON retention_reviews (tenant_id, status, due_at);
 CREATE INDEX IF NOT EXISTS idx_compliance_export_jobs_tenant_status ON compliance_export_jobs (tenant_id, status, requested_at DESC);
 INSERT INTO postgres_runtime_migrations (version) VALUES ('112_document_retention_compliance.sql') ON CONFLICT (version) DO NOTHING;
@@ -5634,7 +5634,7 @@ CREATE TABLE IF NOT EXISTS legal_matters (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS legal_holds (
+CREATE TABLE IF NOT EXISTS ediscovery_legal_holds (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   matter_id uuid NOT NULL,
   tenant_id text NOT NULL DEFAULT '',
@@ -5719,7 +5719,7 @@ CREATE TABLE IF NOT EXISTS legal_export_jobs (
 );
 
 CREATE INDEX IF NOT EXISTS idx_legal_matters_tenant_status ON legal_matters (tenant_id, status, matter_type, opened_at DESC);
-CREATE INDEX IF NOT EXISTS idx_legal_holds_matter_status ON legal_holds (matter_id, status);
+CREATE INDEX IF NOT EXISTS idx_legal_holds_matter_status ON ediscovery_legal_holds (matter_id, status);
 CREATE INDEX IF NOT EXISTS idx_legal_custodians_hold_status ON legal_hold_custodians (hold_id, status);
 CREATE INDEX IF NOT EXISTS idx_legal_scopes_hold_type ON legal_preservation_scopes (hold_id, scope_type, preserved);
 CREATE INDEX IF NOT EXISTS idx_legal_collections_hold_status ON legal_collection_jobs (hold_id, status, requested_at DESC);

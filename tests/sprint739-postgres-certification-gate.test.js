@@ -55,4 +55,11 @@ assert.match(marketplaceMigration, /ADD COLUMN IF NOT EXISTS installation_id uui
 assert.match(marketplaceMigration, /ALTER COLUMN tenant_id TYPE text USING tenant_id::text/);
 assert.match(marketplaceMigration, /column_name = 'event'/);
 assert.match(marketplaceMigration, /column_name = 'enabled'/);
+const documentRetentionMigration = fs.readFileSync('packages/database/postgres/112_document_retention_compliance.sql', 'utf8');
+assert.match(documentRetentionMigration, /CREATE TABLE IF NOT EXISTS document_retention_policies/);
+assert.match(documentRetentionMigration, /CREATE TABLE IF NOT EXISTS document_legal_holds/);
+assert.ok(!/CREATE TABLE IF NOT EXISTS legal_holds\s*\(/.test(documentRetentionMigration));
+const ediscoveryMigration = fs.readFileSync('packages/database/postgres/127_legal_hold_ediscovery.sql', 'utf8');
+assert.match(ediscoveryMigration, /CREATE TABLE IF NOT EXISTS ediscovery_legal_holds/);
+assert.ok(!/CREATE TABLE IF NOT EXISTS legal_holds\s*\(/.test(ediscoveryMigration));
 console.log('Sprint 739 PostgreSQL certification gate test passed.');

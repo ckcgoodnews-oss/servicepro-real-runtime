@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS legal_matters (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE IF NOT EXISTS legal_holds (
+CREATE TABLE IF NOT EXISTS ediscovery_legal_holds (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   matter_id uuid NOT NULL,
   tenant_id text NOT NULL DEFAULT '',
@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS legal_export_jobs (
 );
 
 CREATE INDEX IF NOT EXISTS idx_legal_matters_tenant_status ON legal_matters (tenant_id, status, matter_type, opened_at DESC);
-CREATE INDEX IF NOT EXISTS idx_legal_holds_matter_status ON legal_holds (matter_id, status);
+CREATE INDEX IF NOT EXISTS idx_legal_holds_matter_status ON ediscovery_legal_holds (matter_id, status);
 CREATE INDEX IF NOT EXISTS idx_legal_custodians_hold_status ON legal_hold_custodians (hold_id, status);
 CREATE INDEX IF NOT EXISTS idx_legal_scopes_hold_type ON legal_preservation_scopes (hold_id, scope_type, preserved);
 CREATE INDEX IF NOT EXISTS idx_legal_collections_hold_status ON legal_collection_jobs (hold_id, status, requested_at DESC);
