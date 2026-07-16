@@ -766,8 +766,7 @@ CREATE TABLE IF NOT EXISTS runtime_users (
   status text NOT NULL DEFAULT 'active',
   last_login_at timestamptz,
   created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE (tenant_id, lower(email))
+  updated_at timestamptz NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS runtime_auth_sessions (
@@ -793,7 +792,7 @@ CREATE TABLE IF NOT EXISTS runtime_auth_events (
   created_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_runtime_users_tenant_email
+CREATE UNIQUE INDEX IF NOT EXISTS idx_runtime_users_tenant_email
 ON runtime_users (tenant_id, lower(email));
 
 CREATE INDEX IF NOT EXISTS idx_runtime_auth_events_tenant_time
@@ -1159,9 +1158,11 @@ CREATE TABLE IF NOT EXISTS portal_accounts (
   password_hash text NOT NULL,
   enabled boolean NOT NULL DEFAULT true,
   created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE (tenant_id, lower(email))
+  updated_at timestamptz NOT NULL DEFAULT now()
 );
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_portal_accounts_tenant_email
+ON portal_accounts (tenant_id, lower(email));
 
 CREATE TABLE IF NOT EXISTS portal_booking_requests (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),

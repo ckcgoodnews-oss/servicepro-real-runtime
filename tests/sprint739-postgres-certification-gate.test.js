@@ -23,4 +23,11 @@ for (const contract of ["DATA_STORE: 'postgres'", '/readyz', "body.store === 'po
 }
 assert.ok(!smoke.includes('console.log(password)'));
 assert.ok(!smoke.includes('console.log(body.data.accessToken)'));
+
+for (const migration of ['055_auth_runtime.sql', '063_customer_portal_runtime.sql']) {
+  const source = fs.readFileSync(`packages/database/postgres/${migration}`, 'utf8');
+  assert.ok(!/UNIQUE\s*\([^)]*lower\s*\(/i.test(source), `${migration} must use a unique expression index`);
+  assert.match(source, /CREATE UNIQUE INDEX/i);
+}
+assert.match(fs.readFileSync('scripts/run-migrations.js', 'utf8'), /PostgreSQL migration failure/);
 console.log('Sprint 739 PostgreSQL certification gate test passed.');

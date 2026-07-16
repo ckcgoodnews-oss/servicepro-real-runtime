@@ -31,13 +31,20 @@ async function runMigrations(store, logger = console) {
 
     const sql = fs.readFileSync(path.join(migrationsDir, file), 'utf8');
     logger.log(`Applying migration ${file}`);
-    await store.transaction(async tx => {
-      await tx.query(sql);
-      await tx.query(
-        'INSERT INTO postgres_runtime_migrations (version) VALUES ($1)',
-        [file]
-      );
-    });
+    try {
+      await store.transaction(async tx => {
+        await tx.query(sql);
+        await tx.query(
+          'INSERT INTO postgres_runtime_migrations (version) VALUES ($1)',
+          [file]
+        );
+      });
+    } catch (error) {
+      const detail = `Migration ${file} failed: ${error.message}`;
+      if (process.env.GITHUB_ACTIONS === 'true') logger.error(`::error title=PostgreSQL migration failure::${detail.replace(/[\r\n]+/g, ' ')}`);
+      error.message = detail;
+      throw error;
+    }
     appliedCount += 1;
   }
 
