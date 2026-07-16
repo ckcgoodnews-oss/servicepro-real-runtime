@@ -33,4 +33,7 @@ assert.match(fs.readFileSync('scripts/run-migrations.js', 'utf8'), /PostgreSQL m
 const runtimeMigration = fs.readFileSync('packages/database/postgres/054_postgres_runtime.sql', 'utf8');
 assert.match(runtimeMigration, /ALTER TABLE customers ALTER COLUMN tenant_id TYPE text USING tenant_id::text/);
 assert.match(runtimeMigration, /ALTER TABLE jobs ALTER COLUMN tenant_id TYPE text USING tenant_id::text/);
+const integrityMigration = fs.readFileSync('packages/database/postgres/070_validation_integrity_runtime.sql', 'utf8');
+assert.ok(!integrityMigration.includes('ADD CONSTRAINT IF NOT EXISTS'));
+assert.match(integrityMigration, /SELECT 1 FROM pg_constraint/);
 console.log('Sprint 739 PostgreSQL certification gate test passed.');

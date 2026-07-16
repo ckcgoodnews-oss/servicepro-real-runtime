@@ -1446,12 +1446,18 @@ ON integrity_check_runs (tenant_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_integrity_check_runs_tenant_status
 ON integrity_check_runs (tenant_id, status, created_at DESC);
 
-ALTER TABLE invoices
-  ADD CONSTRAINT IF NOT EXISTS invoices_nonnegative_total CHECK (total >= 0),
-  ADD CONSTRAINT IF NOT EXISTS invoices_nonnegative_paid CHECK (paid_amount >= 0);
-
-ALTER TABLE inventory_items
-  ADD CONSTRAINT IF NOT EXISTS inventory_nonnegative_quantity CHECK (quantity_on_hand >= 0);
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'invoices_nonnegative_total' AND conrelid = 'invoices'::regclass) THEN
+    ALTER TABLE invoices ADD CONSTRAINT invoices_nonnegative_total CHECK (total >= 0);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'invoices_nonnegative_paid' AND conrelid = 'invoices'::regclass) THEN
+    ALTER TABLE invoices ADD CONSTRAINT invoices_nonnegative_paid CHECK (paid_amount >= 0);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'inventory_nonnegative_quantity' AND conrelid = 'inventory_items'::regclass) THEN
+    ALTER TABLE inventory_items ADD CONSTRAINT inventory_nonnegative_quantity CHECK (quantity_on_hand >= 0);
+  END IF;
+END $$;
 INSERT INTO postgres_runtime_migrations (version) VALUES ('070_validation_integrity_runtime.sql') ON CONFLICT (version) DO NOTHING;
 COMMIT;
 -- END SERVICEPRO MIGRATION 070_validation_integrity_runtime.sql
