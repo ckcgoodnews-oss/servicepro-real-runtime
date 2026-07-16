@@ -17,6 +17,24 @@ CREATE TABLE IF NOT EXISTS sla_policies (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- Sprint 47 introduced the initial SLA table. Preserve its completion target
+-- while upgrading the table to the executable runtime contract.
+ALTER TABLE sla_policies RENAME COLUMN completion_minutes TO resolution_minutes;
+ALTER TABLE sla_policies ALTER COLUMN id SET DEFAULT gen_random_uuid();
+ALTER TABLE sla_policies ALTER COLUMN tenant_id TYPE text USING tenant_id::text;
+ALTER TABLE sla_policies ALTER COLUMN priority SET DEFAULT 'normal';
+ALTER TABLE sla_policies ALTER COLUMN response_minutes SET DEFAULT 60;
+ALTER TABLE sla_policies ALTER COLUMN resolution_minutes SET DEFAULT 1440;
+ALTER TABLE sla_policies ADD COLUMN IF NOT EXISTS name text NOT NULL DEFAULT '';
+ALTER TABLE sla_policies ADD COLUMN IF NOT EXISTS description text NOT NULL DEFAULT '';
+ALTER TABLE sla_policies ADD COLUMN IF NOT EXISTS warning_before_minutes integer NOT NULL DEFAULT 15;
+ALTER TABLE sla_policies ADD COLUMN IF NOT EXISTS applies_to_service_type text NOT NULL DEFAULT '';
+ALTER TABLE sla_policies ADD COLUMN IF NOT EXISTS applies_to_agreement_tier text NOT NULL DEFAULT '';
+ALTER TABLE sla_policies ADD COLUMN IF NOT EXISTS active boolean NOT NULL DEFAULT true;
+ALTER TABLE sla_policies ADD COLUMN IF NOT EXISTS metadata jsonb NOT NULL DEFAULT '{}'::jsonb;
+ALTER TABLE sla_policies ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
+ALTER TABLE sla_policies ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS sla_timers (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id text NOT NULL,

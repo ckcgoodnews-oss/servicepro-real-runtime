@@ -73,3 +73,4 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Added the missing UUID-to-text tenant-key upgrade required by the executable runtime and reporting views.
 - Replaced unsupported conditional constraint syntax with idempotent PostgreSQL catalog checks.
 - Upgraded the legacy scheduler route table to the complete executable route-planning schema.
+- Upgraded the legacy SLA policy table while preserving its original completion targets.

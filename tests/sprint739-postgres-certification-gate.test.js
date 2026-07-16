@@ -41,4 +41,8 @@ assert.match(routeMigration, /ALTER TABLE route_plans ALTER COLUMN tenant_id TYP
 for (const column of ['technician_id', 'territory_id', 'total_distance_miles', 'metadata', 'created_at']) {
   assert.ok(routeMigration.includes(`ADD COLUMN IF NOT EXISTS ${column}`), `Route migration must upgrade ${column}`);
 }
+const slaMigration = fs.readFileSync('packages/database/postgres/089_sla_runtime.sql', 'utf8');
+assert.match(slaMigration, /RENAME COLUMN completion_minutes TO resolution_minutes/);
+assert.match(slaMigration, /ALTER COLUMN tenant_id TYPE text USING tenant_id::text/);
+for (const column of ['name', 'active', 'metadata', 'created_at']) assert.ok(slaMigration.includes(`ADD COLUMN IF NOT EXISTS ${column}`));
 console.log('Sprint 739 PostgreSQL certification gate test passed.');
