@@ -13,6 +13,7 @@ The repository now includes a Render Blueprint for an isolated online alpha. It 
 4. Wait for both services to report **Live**. Free services can take several minutes to build and can spin down when idle.
 5. Open `https://servicepro-api-alpha-ckcgoodnews.onrender.com/healthz`. It should return JSON with `"ok": true`.
 6. Open `https://servicepro-web-alpha-ckcgoodnews.onrender.com/login` and sign in with the demo owner account documented in `WEBSITE_TESTING.md`.
+7. Open `/system-status` from the workspace sidebar and confirm every readiness check passes.
 
 The Blueprint is pinned to `codex/sprint-716-frontend-foundation` and has automatic deploys disabled. New commits will not replace the online alpha until a deploy is started from the Render dashboard. This prevents unfinished branch work from being published accidentally.
 

@@ -10,3 +10,10 @@
 - Added an executable deployment-contract validator, production-mode API health smoke test, and regression test.
 
 The next delivery step is to create the Render Blueprint from the connected GitHub repository, validate the public alpha, then certify persistent PostgreSQL before production promotion.
+
+## Sprint 732 — In-app deployment diagnostics
+
+- Added a System Status workspace for browser-to-API connectivity, health, readiness, latency, runtime, version, storage, and authentication checks.
+- Added safe copyable diagnostics that exclude credentials and access tokens.
+- Added prominent temporary-data guidance when the alpha API reports JSON storage.
+- Added System Status entry points in the workspace sidebar and Settings.

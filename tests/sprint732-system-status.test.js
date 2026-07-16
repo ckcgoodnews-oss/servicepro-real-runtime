@@ -1,0 +1,4 @@
+const assert=require('assert');const fs=require('fs');const path=require('path');const root=path.resolve(__dirname,'..');const read=file=>fs.readFileSync(path.join(root,file),'utf8');
+const component=read('apps/web/src/components/SystemStatusWorkspace.tsx');for(const contract of ['/healthz','/readyz','apiUrl','API health','Authenticated session','Copy safe diagnostics','temporary JSON storage'])assert.ok(component.includes(contract),`${contract} is required`);
+assert.match(read('apps/web/src/app/(workspace)/system-status/page.tsx'),/SystemStatusWorkspace/);assert.match(read('apps/web/src/components/AppShell.tsx'),/href="\/system-status"/);assert.match(read('apps/web/src/app/(workspace)/settings/page.tsx'),/System status/);assert.match(read('apps/web/src/app/globals.css'),/status\.css/);assert.match(read('PHASE47_RELEASE_NOTES.md'),/Sprint 732/);
+console.log('Sprint 732 system status test passed.');

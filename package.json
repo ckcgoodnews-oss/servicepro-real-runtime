@@ -541,7 +541,8 @@
     "release:validate:phase46": "node scripts/validate-phase46-release.js",
     "test:sprint731": "node tests/sprint731-online-alpha-deployment.test.js",
     "deploy:validate:online": "node scripts/validate-online-alpha.js",
-    "deploy:smoke:api": "node scripts/smoke-online-api.js"
+    "deploy:smoke:api": "node scripts/smoke-online-api.js",
+    "test:sprint732": "node tests/sprint732-system-status.test.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
