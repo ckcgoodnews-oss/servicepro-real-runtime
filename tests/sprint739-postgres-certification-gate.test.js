@@ -36,4 +36,9 @@ assert.match(runtimeMigration, /ALTER TABLE jobs ALTER COLUMN tenant_id TYPE tex
 const integrityMigration = fs.readFileSync('packages/database/postgres/070_validation_integrity_runtime.sql', 'utf8');
 assert.ok(!integrityMigration.includes('ADD CONSTRAINT IF NOT EXISTS'));
 assert.match(integrityMigration, /SELECT 1 FROM pg_constraint/);
+const routeMigration = fs.readFileSync('packages/database/postgres/088_route_planning_runtime.sql', 'utf8');
+assert.match(routeMigration, /ALTER TABLE route_plans ALTER COLUMN tenant_id TYPE text USING tenant_id::text/);
+for (const column of ['technician_id', 'territory_id', 'total_distance_miles', 'metadata', 'created_at']) {
+  assert.ok(routeMigration.includes(`ADD COLUMN IF NOT EXISTS ${column}`), `Route migration must upgrade ${column}`);
+}
 console.log('Sprint 739 PostgreSQL certification gate test passed.');

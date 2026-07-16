@@ -2340,6 +2340,26 @@ CREATE TABLE IF NOT EXISTS route_plans (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- Sprint 47 introduced a minimal route_plans table. Upgrade that table when it
+-- already exists instead of relying on CREATE TABLE IF NOT EXISTS to reshape it.
+ALTER TABLE route_plans ALTER COLUMN id SET DEFAULT gen_random_uuid();
+ALTER TABLE route_plans ALTER COLUMN tenant_id TYPE text USING tenant_id::text;
+ALTER TABLE route_plans ALTER COLUMN status SET DEFAULT 'draft';
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS technician_id uuid;
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS territory_id uuid;
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS start_location_name text NOT NULL DEFAULT '';
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS start_latitude numeric(10,7);
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS start_longitude numeric(10,7);
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS end_location_name text NOT NULL DEFAULT '';
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS end_latitude numeric(10,7);
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS end_longitude numeric(10,7);
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS total_distance_miles numeric(12,2) NOT NULL DEFAULT 0;
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS total_drive_minutes integer NOT NULL DEFAULT 0;
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS notes text NOT NULL DEFAULT '';
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS metadata jsonb NOT NULL DEFAULT '{}'::jsonb;
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now();
+ALTER TABLE route_plans ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS route_stops (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tenant_id text NOT NULL,
