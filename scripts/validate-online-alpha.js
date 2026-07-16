@@ -15,7 +15,7 @@ function validateOnlineAlpha() {
     assert.match(blueprint, new RegExp(`name: ${service}`));
   }
   assert.strictEqual((blueprint.match(/branch: codex\/sprint-716-frontend-foundation/g) || []).length, 2);
-  assert.strictEqual((blueprint.match(/autoDeployTrigger: off/g) || []).length, 2);
+  assert.strictEqual((blueprint.match(/autoDeployTrigger: checksPass/g) || []).length, 2);
   for (const contract of ['healthCheckPath: /readyz', 'JWT_SECRET', 'PORTAL_TOKEN_SECRET', 'CORS_ALLOWED_ORIGINS', 'NEXT_PUBLIC_API_BASE_URL']) {
     assert.match(blueprint, new RegExp(contract));
   }
@@ -25,12 +25,12 @@ function validateOnlineAlpha() {
   assert.match(releaseNotes, /Sprint 731/);
   assert.match(releaseNotes, /Render online alpha foundation/);
 
-  return { services: 2, branchPinned: true, autoDeploy: false };
+  return { services: 2, branchPinned: true, autoDeploy: 'checksPass' };
 }
 
 if (require.main === module) {
   const result = validateOnlineAlpha();
-  console.log(`Online alpha validation passed: ${result.services} services, branch pinned, automatic deploys disabled.`);
+  console.log(`Online alpha validation passed: ${result.services} services, branch pinned, deploys require passing checks.`);
 }
 
 module.exports = { validateOnlineAlpha };

@@ -15,7 +15,7 @@ The repository now includes a Render Blueprint for an isolated online alpha. It 
 6. Open `https://servicepro-web-alpha-ckcgoodnews.onrender.com/login` and sign in with the demo owner account documented in `WEBSITE_TESTING.md`.
 7. Open `/system-status` from the workspace sidebar and confirm every readiness check passes.
 
-The Blueprint is pinned to `codex/sprint-716-frontend-foundation` and has automatic deploys disabled. New commits will not replace the online alpha until a deploy is started from the Render dashboard. This prevents unfinished branch work from being published accidentally.
+The Blueprint is pinned to `codex/sprint-716-frontend-foundation`. Each push runs the full GitHub CI workflow, and Render deploys the commit only after those checks pass. See `LIVE_TESTING.md` for the local and live test loop.
 
 Before an online deploy, run `npm run deploy:validate:online` and `npm run deploy:smoke:api` from the repository root.
 
@@ -23,7 +23,7 @@ After deployment, set `SMOKE_WEB_URL` and `SMOKE_API_URL`, then run `node script
 
 Free Render services can take longer to answer their first request after being idle. Set `SMOKE_TIMEOUT_MS=90000` for a 90-second cold-start window; subsequent checks should complete much faster.
 
-If the smoke runner reports a missing `/system-status` route, an old API version, or a stale readiness contract, open each Render service and choose **Manual Deploy → Deploy latest commit**. Automatic deploys remain disabled for this alpha.
+If the smoke runner reports a missing `/system-status` route, an old API version, or a stale readiness contract after CI has passed, open each Render service and choose **Manual Deploy → Deploy latest commit**.
 
 ## Alpha data warning
 

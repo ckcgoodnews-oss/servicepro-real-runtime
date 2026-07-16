@@ -1,0 +1,6 @@
+const assert=require('assert');const fs=require('fs');const read=file=>fs.readFileSync(file,'utf8');
+const render=read('render.yaml');assert.strictEqual((render.match(/autoDeployTrigger:\s*checksPass/g)||[]).length,2);assert.ok(!render.includes('autoDeployTrigger: off'));
+const ci=read('.github/workflows/ci.yml');assert.match(ci,/codex\/sprint-716-frontend-foundation/);assert.match(ci,/npm test/);assert.match(ci,/npm run web:build/);
+const pkg=JSON.parse(read('package.json'));const webPkg=JSON.parse(read('apps/web/package.json'));assert.strictEqual(pkg.version,'8.0.0-alpha.1');assert.strictEqual(pkg.version,webPkg.version);assert.strictEqual(pkg.scripts['test-env:api'],'node scripts/start-local-test-api.js');assert.strictEqual(pkg.scripts['test-env:web'],'npm --prefix apps/web run dev');assert.strictEqual(pkg.scripts['test-env:smoke'],'node scripts/smoke-deployed-app.js');assert.ok(fs.existsSync('scripts/start-local-test-api.js'));
+const guide=read('LIVE_TESTING.md');for(const contract of ['Local test environment','Live Render environment','GitHub CI','/system-status','temporary JSON storage'])assert.ok(guide.includes(contract));assert.match(read('PHASE47_RELEASE_NOTES.md'),/Sprint 736/);
+console.log('Sprint 736 continuous testing test passed.');

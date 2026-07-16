@@ -39,3 +39,11 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Kept the shorter local default so local failures still return quickly.
 - Added release-version and data-store readiness contract checks so an older Render deployment is reported clearly.
 - Set the alpha API's reported release version independently from package installation metadata.
+
+## Sprint 736 — Continuous local and live testing
+
+- Added the release branch to the full GitHub CI push gate.
+- Configured both Render services to deploy only after GitHub checks pass.
+- Formalized separate local API, local website, and local smoke-test commands.
+- Added a local-versus-live testing guide with acceptance criteria and safe data guidance.
+- Aligned the API runtime and website package metadata on release `8.0.0-alpha.1`.

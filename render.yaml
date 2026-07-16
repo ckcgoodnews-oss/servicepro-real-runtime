@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: free
     branch: codex/sprint-716-frontend-foundation
-    autoDeployTrigger: off
+    autoDeployTrigger: checksPass
     buildCommand: npm ci --omit=dev
     startCommand: npm start
     healthCheckPath: /readyz
@@ -34,7 +34,7 @@ services:
     plan: free
     rootDir: apps/web
     branch: codex/sprint-716-frontend-foundation
-    autoDeployTrigger: off
+    autoDeployTrigger: checksPass
     buildCommand: npm ci && npm run build
     startCommand: npm run start
     healthCheckPath: /

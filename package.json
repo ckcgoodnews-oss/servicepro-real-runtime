@@ -1,6 +1,6 @@
 {
   "name": "servicepro-real-runtime",
-  "version": "7.0.0",
+  "version": "8.0.0-alpha.1",
   "main": "apps/api/src/server.js",
   "scripts": {
     "dev": "node apps/api/src/server.js",
@@ -543,7 +543,10 @@
     "deploy:validate:online": "node scripts/validate-online-alpha.js",
     "deploy:smoke:api": "node scripts/smoke-online-api.js",
     "test:sprint732": "node tests/sprint732-system-status.test.js",
-    "test:sprint733": "node tests/sprint733-real-readiness.test.js"
+    "test:sprint733": "node tests/sprint733-real-readiness.test.js",
+    "test-env:api": "node scripts/start-local-test-api.js",
+    "test-env:web": "npm --prefix apps/web run dev",
+    "test-env:smoke": "node scripts/smoke-deployed-app.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
