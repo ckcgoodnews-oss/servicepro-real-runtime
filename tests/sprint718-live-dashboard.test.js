@@ -6,7 +6,7 @@ const dashboard = require('../apps/api/src/routes/dashboard');
 function response() { return { setHeader(){}, end(raw){ this.body=JSON.parse(raw); } }; }
 
 (async () => {
-  const now=new Date(); const today=new Date(now.getTime()+60000).toISOString(); const yesterday=new Date(now.getTime()-86400000).toISOString();
+  const now=new Date(); const sameCalendarDay=new Date(now); sameCalendarDay.setHours(12,0,0,0); const today=sameCalendarDay.toISOString(); const yesterday=new Date(sameCalendarDay.getTime()-86400000).toISOString();
   assert.equal(dashboard.sameDay(today,now),true); assert.equal(dashboard.sameDay(yesterday,now),false);
   const req={context:{tenantId:'tenant_a',repositories:{
     jobs:{list:async()=>[{id:'j1',customerId:'c1',title:'Main line leak',status:'open',priority:'urgent',updatedAt:today},{id:'j2',customerId:'c1',title:'Completed',status:'completed',priority:'normal',updatedAt:yesterday}]},

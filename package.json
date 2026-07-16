@@ -538,7 +538,10 @@
     "test:sprint728-docs": "node tests/sprint728-documentation-portal.test.js",
     "test:sprint729": "node tests/sprint729-accessibility.test.js",
     "test:sprint730": "node tests/sprint730-phase-completion.test.js",
-    "release:validate:phase46": "node scripts/validate-phase46-release.js"
+    "release:validate:phase46": "node scripts/validate-phase46-release.js",
+    "test:sprint731": "node tests/sprint731-online-alpha-deployment.test.js",
+    "deploy:validate:online": "node scripts/validate-online-alpha.js",
+    "deploy:smoke:api": "node scripts/smoke-online-api.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: servicepro-api-alpha-ckcgoodnews
+    runtime: node
+    plan: free
+    branch: codex/sprint-716-frontend-foundation
+    autoDeployTrigger: off
+    buildCommand: npm ci --omit=dev
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NODE_ENV
+        value: production
+      - key: DEFAULT_TENANT_ID
+        value: tenant_demo
+      - key: DATA_STORE
+        value: json
+      - key: DATA_FILE
+        value: /tmp/servicepro-runtime.json
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://servicepro-web-alpha-ckcgoodnews.onrender.com
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PORTAL_TOKEN_SECRET
+        generateValue: true
+
+  - type: web
+    name: servicepro-web-alpha-ckcgoodnews
+    runtime: node
+    plan: free
+    rootDir: apps/web
+    branch: codex/sprint-716-frontend-foundation
+    autoDeployTrigger: off
+    buildCommand: npm ci && npm run build
+    startCommand: npm run start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: NEXT_PUBLIC_API_BASE_URL
+        value: https://servicepro-api-alpha-ckcgoodnews.onrender.com
