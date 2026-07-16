@@ -31,3 +31,11 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Added optional credential-backed login, dashboard, and logout verification without logging secrets or tokens.
 - Added a manual GitHub Actions entry point for testing any approved website and API URL.
 - Added isolated mock-server regression coverage for the complete deployed application flow.
+
+## Sprint 735 — Render cold-start verification
+
+- Added a configurable request window to the deployed application smoke runner.
+- Set the GitHub online smoke workflow to allow 90 seconds for free-tier Render cold starts.
+- Kept the shorter local default so local failures still return quickly.
+- Added release-version and data-store readiness contract checks so an older Render deployment is reported clearly.
+- Set the alpha API's reported release version independently from package installation metadata.

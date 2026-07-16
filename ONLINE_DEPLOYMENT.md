@@ -21,6 +21,10 @@ Before an online deploy, run `npm run deploy:validate:online` and `npm run deplo
 
 After deployment, set `SMOKE_WEB_URL` and `SMOKE_API_URL`, then run `node scripts/smoke-deployed-app.js`. Add `SMOKE_EMAIL`, `SMOKE_PASSWORD`, and `SMOKE_REQUIRE_AUTH=true` to include login, dashboard, and logout checks. The runner never prints credentials or access tokens. The same check can be started manually from GitHub Actions with the **Online alpha smoke** workflow.
 
+Free Render services can take longer to answer their first request after being idle. Set `SMOKE_TIMEOUT_MS=90000` for a 90-second cold-start window; subsequent checks should complete much faster.
+
+If the smoke runner reports a missing `/system-status` route, an old API version, or a stale readiness contract, open each Render service and choose **Manual Deploy → Deploy latest commit**. Automatic deploys remain disabled for this alpha.
+
 ## Alpha data warning
 
 This first online connection uses the seeded JSON store in Render's temporary filesystem. It is appropriate for functional testing, and it makes the demo login available on a fresh deploy. Data entered during testing can disappear after a restart or redeploy. Do not enter real customer, payment, employee, or confidential data.

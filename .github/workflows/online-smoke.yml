@@ -42,3 +42,5 @@ jobs:
           SMOKE_EMAIL: ${{ secrets.ONLINE_SMOKE_EMAIL }}
           SMOKE_PASSWORD: ${{ secrets.ONLINE_SMOKE_PASSWORD }}
           SMOKE_TENANT_ID: tenant_demo
+          SMOKE_TIMEOUT_MS: 90000
+          SMOKE_EXPECTED_VERSION: 8.0.0-alpha.1
