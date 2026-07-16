@@ -62,3 +62,10 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Added a generated single-file Supabase bootstrap containing all 679 PostgreSQL migrations.
 - Added configurable company tenant, owner, and service seeding without logging passwords.
 - Documented the one-database-per-API deployment model and the Render environment required for persistent Supabase storage.
+
+## Sprint 739 — PostgreSQL deployment certification gate
+
+- Added a PostgreSQL 16 workflow to every release-branch push.
+- Certified the complete migration manifest before database installation.
+- Added owner and service seeding to the clean-database pipeline.
+- Added production-mode PostgreSQL API readiness, login, and authenticated-dashboard smoke coverage.

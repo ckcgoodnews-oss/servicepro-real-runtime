@@ -21,6 +21,8 @@ The existing online alpha is not using Supabase yet. Its Render API currently ha
 
 The provisioner applies all 679 migrations in order, records each one in `postgres_runtime_migrations`, removes demo-only rows, registers the company tenant, writes company settings, and creates the initial owner. It never prints the database password or owner password.
 
+The release branch also runs the same migration set against a clean PostgreSQL 16 service in GitHub Actions. That gate seeds an owner and services, starts the production API with `DATA_STORE=postgres`, verifies `/readyz`, signs in, and loads the authenticated dashboard before a commit is accepted for company deployment.
+
 Provisioning refuses a database that already has ServicePro migrations. This prevents accidentally overwriting the test project. For a reviewed retry of a partially provisioned new project, set `ALLOW_EXISTING_DATABASE=true` in the local company environment file.
 
 ## SQL Editor fallback

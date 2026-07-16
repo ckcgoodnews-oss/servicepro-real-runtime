@@ -545,10 +545,12 @@
     "test:sprint731": "node tests/sprint731-online-alpha-deployment.test.js",
     "deploy:validate:online": "node scripts/validate-online-alpha.js",
     "deploy:smoke:api": "node scripts/smoke-online-api.js",
+    "deploy:smoke:postgres": "node scripts/smoke-postgres-api.js",
     "test:sprint732": "node tests/sprint732-system-status.test.js",
     "test:sprint733": "node tests/sprint733-real-readiness.test.js",
     "test:sprint737": "node tests/sprint737-fresh-deployment-login.test.js",
     "test:sprint738": "node tests/sprint738-supabase-company-provisioning.test.js",
+    "test:sprint739": "node tests/sprint739-postgres-certification-gate.test.js",
     "test-env:api": "node scripts/start-local-test-api.js",
     "test-env:web": "npm --prefix apps/web run dev",
     "test-env:smoke": "node scripts/smoke-deployed-app.js"

@@ -1,6 +1,9 @@
 name: PostgreSQL Smoke
 
 on:
+  push:
+    branches:
+      - codex/sprint-716-frontend-foundation
   pull_request:
     branches:
       - main
@@ -8,8 +11,17 @@ on:
 
 jobs:
   postgres-smoke:
-    name: PostgreSQL migration smoke
+    name: PostgreSQL migration and login smoke
     runs-on: ubuntu-latest
+    env:
+      DATA_STORE: postgres
+      DATABASE_URL: postgresql://servicepro:servicepro@localhost:5432/servicepro
+      DATABASE_SSL: "false"
+      DEFAULT_TENANT_ID: tenant_demo
+      OWNER_EMAIL: owner@example.com
+      OWNER_PASSWORD: ChangeMe123!
+      JWT_SECRET: ci-test-secret-ci-test-secret-ci-test-secret
+      PORTAL_TOKEN_SECRET: ci-portal-secret-ci-portal-secret-ci-portal
 
     services:
       postgres:
@@ -37,22 +49,19 @@ jobs:
           cache: npm
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
+
+      - name: Validate migration manifest
+        run: npm run migrations:check
 
       - name: Run migrations
         run: npm run migrate
-        env:
-          DATA_STORE: postgres
-          DATABASE_URL: postgresql://servicepro:servicepro@localhost:5432/servicepro
-          DATABASE_SSL: "false"
-          JWT_SECRET: ci-test-secret-ci-test-secret-ci-test-secret
-          PORTAL_TOKEN_SECRET: ci-portal-secret-ci-portal-secret-ci-portal
+
+      - name: Seed owner
+        run: npm run seed:auth
 
       - name: Seed services
         run: npm run seed:services
-        env:
-          DATA_STORE: postgres
-          DATABASE_URL: postgresql://servicepro:servicepro@localhost:5432/servicepro
-          DATABASE_SSL: "false"
-          JWT_SECRET: ci-test-secret-ci-test-secret-ci-test-secret
-          PORTAL_TOKEN_SECRET: ci-portal-secret-ci-portal-secret-ci-portal
+
+      - name: Verify PostgreSQL API readiness and login
+        run: npm run deploy:smoke:postgres
