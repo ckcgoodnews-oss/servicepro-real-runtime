@@ -79,3 +79,4 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Isolated document-retention and eDiscovery legal-hold tables from the earlier data-governance schema, preventing incompatible table-name collisions.
 - Isolated preference-management consent records from the earlier privacy-automation consent schema.
 - Removed eight additional cross-feature table-name collisions and added a whole-manifest duplicate-table regression gate.
+- Corrected dotted v5.0.1 SQL identifiers and added a whole-manifest safe-identifier regression gate.

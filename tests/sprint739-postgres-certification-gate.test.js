@@ -80,4 +80,10 @@ const duplicateTables = [...tableDeclarations.entries()]
   .map(([table]) => table)
   .sort();
 assert.deepStrictEqual(duplicateTables, ['customers', 'jobs', 'route_plans', 'sla_policies', 'webhook_subscriptions']);
+for (const file of fs.readdirSync('packages/database/postgres').filter((name) => name.endsWith('.sql'))) {
+  const source = fs.readFileSync(`packages/database/postgres/${file}`, 'utf8');
+  for (const match of source.matchAll(/CREATE\s+(?:UNIQUE\s+)?(?:TABLE|INDEX)(?:\s+IF\s+NOT\s+EXISTS)?\s+([^\s(]+)/gi)) {
+    assert.match(match[1], /^[a-zA-Z_][a-zA-Z0-9_]*$/, `${file} contains an unsafe unquoted SQL identifier: ${match[1]}`);
+  }
+}
 console.log('Sprint 739 PostgreSQL certification gate test passed.');
