@@ -47,6 +47,30 @@ CORS_ALLOWED_ORIGINS=<company website origin>
 
 Point the company website's `NEXT_PUBLIC_API_BASE_URL` at that dedicated API service, deploy, then verify `/readyz`, login, dashboard data, and logout.
 
+Run the production smoke with the company-specific tenant and require PostgreSQL explicitly:
+
+```powershell
+$env:SMOKE_WEB_URL='https://company.example.com'
+$env:SMOKE_API_URL='https://api.company.example.com'
+$env:SMOKE_TENANT_ID='company_tenant'
+$env:SMOKE_EXPECTED_STORE='postgres'
+$env:SMOKE_REQUIRE_AUTH='true'
+$env:SMOKE_EMAIL='<company owner email>'
+$env:SMOKE_PASSWORD='<company owner password>'
+node scripts/smoke-deployed-app.js
+```
+
+The smoke fails if readiness reports temporary JSON storage or if authentication resolves to a different tenant. The GitHub **Online alpha smoke** workflow exposes the same tenant and datastore controls for an approved manual run.
+
+To retain a sanitized certification report for release evidence, also set a report path:
+
+```powershell
+$env:SMOKE_REPORT_PATH='reports/online-smoke/deployment-certification.json'
+node scripts/smoke-deployed-app.js
+```
+
+The JSON report contains the checked URLs, tenant key, datastore, deployed version, authentication status, completed checks, and UTC completion time. It never contains the owner email, password, access token, or refresh token. The GitHub **Online alpha smoke** workflow uploads the same report as a 30-day deployment certification artifact.
+
 Never commit a Supabase database password, connection string, service-role key, JWT secret, or owner password. Rotate the initial owner password after first login and enable backups before entering customer data.
 
 Supabase connection guidance: https://supabase.com/docs/guides/database/connecting-to-postgres

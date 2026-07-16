@@ -18,6 +18,19 @@ on:
         required: true
         default: false
         type: boolean
+      tenant_id:
+        description: Company tenant key sent to the API
+        required: true
+        default: tenant_demo
+        type: string
+      expected_store:
+        description: Required deployed datastore
+        required: true
+        default: json
+        type: choice
+        options:
+          - json
+          - postgres
 
 jobs:
   smoke:
@@ -35,12 +48,23 @@ jobs:
 
       - name: Run online smoke checks
         run: node scripts/smoke-deployed-app.js
+
+      - name: Upload deployment certification
+        if: always() && hashFiles('reports/online-smoke/deployment-certification.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployment-certification-${{ github.run_id }}
+          path: reports/online-smoke/deployment-certification.json
+          if-no-files-found: error
+          retention-days: 30
         env:
           SMOKE_WEB_URL: ${{ inputs.web_url }}
           SMOKE_API_URL: ${{ inputs.api_url }}
           SMOKE_REQUIRE_AUTH: ${{ inputs.authenticated }}
           SMOKE_EMAIL: ${{ secrets.ONLINE_SMOKE_EMAIL }}
           SMOKE_PASSWORD: ${{ secrets.ONLINE_SMOKE_PASSWORD }}
-          SMOKE_TENANT_ID: tenant_demo
+          SMOKE_TENANT_ID: ${{ inputs.tenant_id }}
+          SMOKE_EXPECTED_STORE: ${{ inputs.expected_store }}
           SMOKE_TIMEOUT_MS: 90000
           SMOKE_EXPECTED_VERSION: 8.0.0-alpha.1
+          SMOKE_REPORT_PATH: reports/online-smoke/deployment-certification.json

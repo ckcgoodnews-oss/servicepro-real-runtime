@@ -80,3 +80,18 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Isolated preference-management consent records from the earlier privacy-automation consent schema.
 - Removed eight additional cross-feature table-name collisions and added a whole-manifest duplicate-table regression gate.
 - Corrected dotted v5.0.1 SQL identifiers and added a whole-manifest safe-identifier regression gate.
+
+## Sprint 740 — Persistent company deployment smoke
+
+- Added explicit JSON-versus-PostgreSQL verification to the deployed application smoke test.
+- Added authenticated tenant verification to prevent a company smoke test from silently resolving to another tenant.
+- Made the manual online workflow accept a company tenant key and required datastore.
+- Documented the local and GitHub verification flow for each dedicated Supabase-backed company deployment.
+
+
+## Sprint 741 — Deployment certification artifacts
+
+- Added sanitized JSON certification reports to deployed company smoke tests.
+- Recorded the tested tenant, datastore, application version, endpoints, authentication status, checks, and UTC completion time.
+- Added atomic report-file creation without persisting credentials or access tokens.
+- Retained manual GitHub smoke certifications as 30-day workflow artifacts.

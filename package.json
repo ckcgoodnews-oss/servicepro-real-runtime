@@ -551,6 +551,8 @@
     "test:sprint737": "node tests/sprint737-fresh-deployment-login.test.js",
     "test:sprint738": "node tests/sprint738-supabase-company-provisioning.test.js",
     "test:sprint739": "node tests/sprint739-postgres-certification-gate.test.js",
+    "test:sprint740": "node tests/sprint740-persistent-company-deployment-smoke.test.js",
+    "test:sprint741": "node tests/sprint741-deployment-certification-artifact.test.js",
     "test-env:api": "node scripts/start-local-test-api.js",
     "test-env:web": "npm --prefix apps/web run dev",
     "test-env:smoke": "node scripts/smoke-deployed-app.js"

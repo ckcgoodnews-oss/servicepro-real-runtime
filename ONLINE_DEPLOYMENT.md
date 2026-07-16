@@ -21,6 +21,10 @@ Before an online deploy, run `npm run deploy:validate:online` and `npm run deplo
 
 After deployment, set `SMOKE_WEB_URL` and `SMOKE_API_URL`, then run `node scripts/smoke-deployed-app.js`. Add `SMOKE_EMAIL`, `SMOKE_PASSWORD`, and `SMOKE_REQUIRE_AUTH=true` to include login, dashboard, and logout checks. The runner never prints credentials or access tokens. The same check can be started manually from GitHub Actions with the **Online alpha smoke** workflow.
 
+For the temporary alpha, choose `tenant_demo` and expected store `json`. For a provisioned company deployment, enter that company's tenant key and choose expected store `postgres`; the smoke rejects temporary storage and cross-tenant authentication.
+
+Each manual workflow run now retains a sanitized `deployment-certification.json` artifact for 30 days. Use it as deployment evidence; it records the tested tenant, datastore, version, endpoints, authentication status, checks, and UTC completion time without credentials or tokens.
+
 Free Render services can take longer to answer their first request after being idle. Set `SMOKE_TIMEOUT_MS=90000` for a 90-second cold-start window; subsequent checks should complete much faster.
 
 If the smoke runner reports a missing `/system-status` route, an old API version, or a stale readiness contract after CI has passed, open each Render service and choose **Manual Deploy → Deploy latest commit**.
