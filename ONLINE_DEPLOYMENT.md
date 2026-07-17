@@ -200,3 +200,36 @@ source materials, and SHA-256 digests.
 The attestation uses an in-toto-style statement structure and records the
 provenance digest as its subject.
 
+
+## Sprint 752 — Release Attestation Verification and Policy Gate
+
+Sprint 752 independently verifies release provenance and attestation integrity,
+then evaluates release-promotion policy.
+
+Run the complete gate:
+
+```powershell
+npm run release:gate
+```
+
+The gate validates:
+
+- clean repository state;
+- approved branch patterns;
+- passed release verification;
+- passed release attestation;
+- exact current commit matching;
+- provenance SHA-256 integrity;
+- required attestation materials;
+- material size and checksum integrity;
+- application identity;
+- CI execution when `RELEASE_REQUIRE_CI=true`.
+
+Generated evidence:
+
+- `reports/release/release-policy-gate.json`
+- `reports/release/release-policy-gate.md`
+
+Local execution defaults to `RELEASE_REQUIRE_CI=false`. The GitHub Actions
+workflow requires CI provenance.
+
