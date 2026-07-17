@@ -142,3 +142,36 @@ The hardening step validates certification status, source cleanliness, commit
 format, artifact records, summary portability, and SHA-256 evidence integrity.
 The GitHub Actions workflow retains hardened evidence for 180 days.
 
+
+## Sprint 750 — Release Evidence Verification and Reproducibility
+
+Sprint 750 independently verifies the release evidence created by Sprints 748
+and 749.
+
+Run the complete reproducibility pipeline:
+
+```powershell
+npm run release:reproduce
+```
+
+The command executes:
+
+1. `npm run release:certify`
+2. `npm run release:evidence:harden`
+3. `npm run release:evidence:verify`
+
+Verification confirms:
+
+- the repository is clean;
+- certification and build manifests match the current commit;
+- certification status is passed;
+- checksum records match current files;
+- evidence-manifest sizes and SHA-256 values are correct;
+- certified artifacts match build-manifest artifacts;
+- the certification summary is portable ASCII.
+
+Generated verification evidence:
+
+- `reports/release/release-evidence-verification.json`
+- `reports/release/release-reproducibility-report.md`
+

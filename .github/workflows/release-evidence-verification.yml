@@ -1,0 +1,52 @@
+name: Release Evidence Verification
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'release/**'
+      - 'codex/sprint-750-release-evidence-verification-reproducibility'
+
+permissions:
+  contents: read
+
+jobs:
+  reproduce:
+    name: Reproduce and verify release evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    env:
+      CI: 'true'
+      NODE_ENV: production
+      ALLOW_LOCAL_PRODUCTION_BUILD: 'true'
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:3000
+
+    steps:
+      - name: Check out exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Reproduce and verify evidence
+        run: npm run release:reproduce
+
+      - name: Upload reproducibility evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-reproducibility-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 180
+          path: |
+            reports/release/
+            reports/build/release-manifest.json

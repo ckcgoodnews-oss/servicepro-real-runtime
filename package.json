@@ -569,7 +569,9 @@
                     "build:render:verify":  "node scripts/verify-render-deployment.js",
                     "test:sprint747":  "node tests/sprint747-root-build-orchestration.test.js",
                     "release:certify":  "node scripts/certify-production-release.js",
-                    "release:evidence:harden":  "node scripts/harden-release-evidence.js"
+                    "release:evidence:harden":  "node scripts/harden-release-evidence.js",
+                    "release:evidence:verify":  "node scripts/verify-release-evidence.js",
+                    "release:reproduce":  "npm run release:certify \u0026\u0026 npm run release:evidence:harden \u0026\u0026 npm run release:evidence:verify"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",
