@@ -575,7 +575,9 @@
                     "release:attest":  "node scripts/attest-release-provenance.js",
                     "release:prove":  "npm run release:reproduce \u0026\u0026 npm run release:attest",
                     "release:policy":  "node scripts/evaluate-release-policy.js",
-                    "release:gate":  "npm run release:prove \u0026\u0026 npm run release:policy"
+                    "release:gate":  "npm run release:prove \u0026\u0026 npm run release:policy",
+                    "release:authorize":  "node scripts/authorize-release-promotion.js",
+                    "release:promote":  "npm run release:gate \u0026\u0026 npm run release:authorize"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",

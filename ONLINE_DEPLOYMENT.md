@@ -233,3 +233,35 @@ Generated evidence:
 Local execution defaults to `RELEASE_REQUIRE_CI=false`. The GitHub Actions
 workflow requires CI provenance.
 
+
+## Sprint 753 — Release Promotion Manifest and Deployment Authorization
+
+Sprint 753 converts a passed release policy gate into an explicit promotion
+manifest and deployment authorization record.
+
+Run the complete promotion pipeline:
+
+```powershell
+npm run release:promote
+```
+
+The command runs the full release gate and then creates:
+
+- `reports/release/release-promotion-manifest.json`
+- `reports/release/deployment-authorization.json`
+- `reports/release/deployment-authorization.md`
+
+Authorization validates:
+
+- passed policy-gate result;
+- promotion eligibility;
+- exact commit consistency;
+- provenance digest integrity;
+- attestation integrity;
+- application identity;
+- CI provenance when required;
+- authorization actor presence when required.
+
+The GitHub Actions workflow uses a protected GitHub Environment so deployment
+approval rules can be applied before authorization is generated.
+
