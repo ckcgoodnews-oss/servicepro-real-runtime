@@ -175,3 +175,28 @@ Generated verification evidence:
 - `reports/release/release-evidence-verification.json`
 - `reports/release/release-reproducibility-report.md`
 
+
+## Sprint 751 — Release Provenance and Attestation
+
+Sprint 751 adds provenance and attestation records to the release evidence
+pipeline.
+
+Run the full release proof pipeline:
+
+```powershell
+npm run release:prove
+```
+
+The command executes the complete reproducibility pipeline and then creates:
+
+- `reports/release/release-provenance.json`
+- `reports/release/release-attestation.json`
+- `reports/release/release-attestation.md`
+
+The provenance record captures repository identity, branch, commit SHA, builder
+environment, CI run metadata, application identity, Next.js build identity,
+source materials, and SHA-256 digests.
+
+The attestation uses an in-toto-style statement structure and records the
+provenance digest as its subject.
+

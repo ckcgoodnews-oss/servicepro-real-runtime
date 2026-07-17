@@ -1,0 +1,52 @@
+name: Release Provenance Attestation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - 'release/**'
+      - 'codex/sprint-751-release-provenance-attestation'
+
+permissions:
+  contents: read
+
+jobs:
+  attest:
+    name: Reproduce, verify, and attest release
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    env:
+      CI: 'true'
+      NODE_ENV: production
+      ALLOW_LOCAL_PRODUCTION_BUILD: 'true'
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:3000
+
+    steps:
+      - name: Check out exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Reproduce and attest release
+        run: npm run release:prove
+
+      - name: Upload provenance and attestation
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-provenance-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 365
+          path: |
+            reports/release/
+            reports/build/release-manifest.json
