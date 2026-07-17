@@ -1,0 +1,55 @@
+name: Cryptographic Release Signing
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: Deployment target environment
+        required: true
+        default: production
+        type: choice
+        options: [staging, production]
+permissions:
+  contents: read
+jobs:
+  sign-and-verify:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.target_environment }}
+    timeout-minutes: 65
+    env:
+      CI: 'true'
+      NODE_ENV: production
+      ALLOW_LOCAL_PRODUCTION_BUILD: 'true'
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:3000
+      RELEASE_REQUIRE_CI: 'true'
+      RELEASE_AUTH_REQUIRE_CI: 'true'
+      RELEASE_REQUIRE_AUTHORIZATION_ACTOR: 'true'
+      RELEASE_ALLOWED_BRANCHES: main,release/*,codex/sprint-*
+      RELEASE_TARGET_ENVIRONMENT: ${{ inputs.target_environment }}
+      RELEASE_AUTHORIZATION_ACTOR: ${{ github.actor }}
+      RELEASE_AUTHORIZATION_REASON: GitHub protected environment authorization.
+      RELEASE_SIGNER_IDENTITY: ${{ github.actor }}
+      RELEASE_SIGNING_PRIVATE_KEY: ${{ secrets.RELEASE_SIGNING_PRIVATE_KEY }}
+      RELEASE_SIGNING_PUBLIC_KEY: ${{ vars.RELEASE_SIGNING_PUBLIC_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run release:trusted
+      - uses: actions/upload-artifact@v4
+        with:
+          name: signed-release-${{ inputs.target_environment }}-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 365
+          path: |
+            reports/release/immutable-bundle/
+            reports/release/immutable-release-bundle-manifest.json
+            reports/release/immutable-release-bundle-manifest.sig
+            reports/release/release-signing-record.json
+            reports/release/release-signing-record.md
+            reports/release/release-signature-verification.json
+            reports/release/release-signature-verification.md

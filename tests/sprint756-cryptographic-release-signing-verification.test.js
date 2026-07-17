@@ -1,0 +1,11 @@
+'use strict';
+const assert=require('node:assert'),fs=require('node:fs'),path=require('node:path');
+const root=path.resolve(__dirname,'..');
+for(const f of ['scripts/sign-immutable-release-bundle.js','scripts/verify-release-signature.js','.github/workflows/cryptographic-release-signing.yml'])assert.ok(fs.existsSync(path.join(root,f)),`Missing ${f}`);
+const p=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8').replace(/^\uFEFF/,''));
+assert.strictEqual(p.scripts['release:sign'],'node scripts/sign-immutable-release-bundle.js');
+assert.strictEqual(p.scripts['release:verify-signature'],'node scripts/verify-release-signature.js');
+assert.strictEqual(p.scripts['release:trusted'],'npm run release:seal && npm run release:sign && npm run release:verify-signature');
+const s=fs.readFileSync(path.join(root,'scripts/sign-immutable-release-bundle.js'),'utf8');
+for(const x of ['RELEASE_SIGNING_PRIVATE_KEY','RELEASE_SIGNING_PUBLIC_KEY','RSA-SHA256','release-signing-record.json'])assert.ok(s.includes(x),`Missing ${x}`);
+console.log('Sprint 756 cryptographic release signing and verification test passed.');

@@ -316,3 +316,18 @@ Generated outputs:
 Non-secret values are written exactly as used. Secret values are never exposed;
 they are represented as `[REDACTED]` with a short SHA-256 fingerprint.
 
+
+## Sprint 756 — Cryptographic Release Signing and Verification
+
+Sprint 756 adds an RSA-SHA256 detached signature for the immutable release
+bundle manifest, signer identity and public-key fingerprint evidence, and
+independent signature verification.
+
+Commands:
+
+```powershell
+npm run release:sign
+npm run release:verify-signature
+npm run release:trusted
+```
+
