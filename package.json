@@ -579,7 +579,9 @@
                     "release:authorize":  "node scripts/authorize-release-promotion.js",
                     "release:promote":  "npm run release:gate \u0026\u0026 npm run release:authorize",
                     "release:verify-deployment":  "node scripts/verify-deployment-execution.js",
-                    "release:deploy-verify":  "npm run release:promote \u0026\u0026 npm run release:verify-deployment"
+                    "release:deploy-verify":  "npm run release:promote \u0026\u0026 npm run release:verify-deployment",
+                    "release:bundle":  "node scripts/build-immutable-release-bundle.js",
+                    "release:seal":  "npm run release:promote \u0026\u0026 npm run release:bundle"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",

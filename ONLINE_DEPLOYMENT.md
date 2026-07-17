@@ -294,3 +294,25 @@ The verification step validates deployment authorization, release promotion
 integrity, exact commit matching, endpoint reachability, expected HTTP status,
 response hashing, and rollback instructions.
 
+
+## Sprint 754 — Deployment Environment Inventory and Immutable Release Bundle
+
+Sprint 754 captures the actual runtime environment values used for release
+authorization and seals all release evidence into a checksum-protected bundle.
+
+Run:
+
+```powershell
+npm run release:seal
+```
+
+Generated outputs:
+
+- `reports/release/deployment-environment-inventory.json`
+- `reports/release/immutable-release-bundle-manifest.json`
+- `reports/release/immutable-release-bundle.md`
+- `reports/release/immutable-bundle/`
+
+Non-secret values are written exactly as used. Secret values are never exposed;
+they are represented as `[REDACTED]` with a short SHA-256 fingerprint.
+
