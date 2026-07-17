@@ -107,3 +107,18 @@ The next delivery step is to create the Render Blueprint from the connected GitH
 - Added a PowerShell installer that locates an exact sprint ZIP in `I:\REPO`.
 - Added guarded extraction, APPLY execution, verification, ambiguity detection, and retained staging output.
 - Added Sprint 743 regression coverage.
+
+### Sprint 744 — Multi-company provisioning automation
+
+Added a guarded company-provisioning plan and execution command for the dedicated Supabase-project-per-company architecture. Plans are machine-readable and secret-safe, validate owner credentials and safety switches, document Render configuration, and require explicit shell authorization before database changes.
+
+### Sprint 745 — Local Web Application Test Harness
+
+- Added a Windows PowerShell harness that starts the API and Next.js web app on separate ports.
+- Added automatic health and login-page checks, browser launch, and local log capture.
+- Added root npm commands for web development, build, type checking, and local smoke testing.
+
+### Sprint 746 — Authenticated local web application E2E
+- Corrected local health checks to `/healthz` and `/readyz`.
+- Replaced unreliable npm port forwarding with direct Next.js invocation.
+- Added credential-safe login, tenant, dashboard, and logout verification.

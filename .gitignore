@@ -11,3 +11,8 @@ test-results.log
 
 # Local sprint application backups
 .sprint*-backup-*/
+
+# Local runtime logs
+logs/
+
+reports/build/release-manifest.json

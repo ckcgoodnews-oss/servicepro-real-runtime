@@ -1,0 +1,14 @@
+'use strict';
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
+assert.strictEqual(pkg.scripts.build, 'node scripts/build-release.js');
+assert.strictEqual(pkg.scripts['build:render:verify'], 'node scripts/verify-render-deployment.js');
+const build = fs.readFileSync(path.join(root, 'scripts', 'build-release.js'), 'utf8');
+for (const required of ['nodeMajor < 20', "'--check'", "'typecheck'", "'build'", 'release-manifest.json', 'routes-manifest.json', 'render.yaml']) assert(build.includes(required), required);
+const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'ci.yml'), 'utf8');
+assert(workflow.includes('run: npm run build'));
+assert(workflow.includes('NEXT_PUBLIC_API_BASE_URL'));
+console.log('Sprint 747 root build orchestration test passed.');

@@ -70,3 +70,23 @@ Set-Location I:\REPO\servicepro-cumulative
 ```
 
 The installer extracts the archive under `I:\REPO\servicepro-toolkit-staging`, invokes the sprint APPLY script, and then runs its VERIFY script. It refuses ambiguous ZIP matches and preserves the extracted toolkit for audit and rollback.
+
+## Sprint 744 company onboarding gate
+
+Run `npm run company:provision:plan` before provisioning a new company. Review `reports/company-provisioning/<tenant>.json`, configure the listed Render variables securely, and only then run `npm run company:provision` with `CONFIRM_COMPANY_PROVISIONING=YES`.
+
+## Sprint 745 local web application testing
+
+Run the API and Next.js web application on separate ports and verify both endpoints with:
+
+```powershell
+npm run web:test:local
+```
+
+Defaults are API port `3000` and web port `3001`. The command checks `/health`, checks the web `/login` page, opens the browser, writes logs under `logs/`, and stops the temporary processes after the test. Use `-KeepRunning` directly with `scripts/test-local-webapp.ps1` to leave both servers running for manual testing.
+
+## Sprint 746 authenticated local web application test
+
+Run the API and Next.js application together with `npm run web:test:local`. The harness uses `/healthz` and `/readyz` and starts Next.js directly so npm does not misinterpret the port as a project directory.
+
+For the complete login and protected-dashboard test, set `LOCAL_TEST_EMAIL`, `LOCAL_TEST_PASSWORD`, and optionally `LOCAL_TEST_TENANT_ID`, then run `npm run web:test:local:auth`. Credentials are read only from the process environment and are not written to reports or source control.

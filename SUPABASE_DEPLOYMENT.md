@@ -87,3 +87,25 @@ npm run company:manifest
 ```
 
 The default output is `reports/company-deployments/<tenant-id>.json`. It records the dedicated Supabase project reference, tenant identity, expected PostgreSQL store, deployment URLs, required Render variables, and smoke-test contract. It does not contain the database URL or owner password and is safe to retain as a deployment audit artifact.
+
+## Sprint 744: prepare and execute company provisioning
+
+Create `.env.company.local` from `.env.company.example`, replace every placeholder, and keep the file out of Git.
+
+Generate a secret-safe plan without modifying the database:
+
+```powershell
+$env:COMPANY_ENV_FILE = '.env.company.local'
+npm run company:provision:plan
+```
+
+After reviewing the generated JSON, explicitly authorize and execute provisioning:
+
+```powershell
+$env:COMPANY_ENV_FILE = '.env.company.local'
+$env:CONFIRM_COMPANY_PROVISIONING = 'YES'
+npm run company:provision
+Remove-Item Env:CONFIRM_COMPANY_PROVISIONING
+```
+
+The plan records the dedicated Supabase project, ordered commands, Render-variable checklist, and security exclusions. It never stores database URLs or owner passwords.
