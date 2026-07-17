@@ -118,3 +118,27 @@ runs the same command for manual dispatches and configured release branches. It
 uploads the release manifest and certification evidence as a retained workflow
 artifact.
 
+
+## Sprint 749 — Release Evidence Hardening
+
+Sprint 749 normalizes production certification summaries to portable ASCII,
+eliminating Windows console mojibake such as `â€”`.
+
+Run the hardening step after production certification:
+
+```powershell
+npm run release:certify
+npm run release:evidence:harden
+```
+
+Generated evidence:
+
+- `reports/release/production-certification.json`
+- `reports/release/production-certification.md`
+- `reports/release/production-certification.sha256`
+- `reports/release/release-evidence-manifest.json`
+
+The hardening step validates certification status, source cleanliness, commit
+format, artifact records, summary portability, and SHA-256 evidence integrity.
+The GitHub Actions workflow retains hardened evidence for 180 days.
+
