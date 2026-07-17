@@ -90,3 +90,31 @@ Defaults are API port `3000` and web port `3001`. The command checks `/health`, 
 Run the API and Next.js application together with `npm run web:test:local`. The harness uses `/healthz` and `/readyz` and starts Next.js directly so npm does not misinterpret the port as a project directory.
 
 For the complete login and protected-dashboard test, set `LOCAL_TEST_EMAIL`, `LOCAL_TEST_PASSWORD`, and optionally `LOCAL_TEST_TENANT_ID`, then run `npm run web:test:local:auth`. Credentials are read only from the process environment and are not written to reports or source control.
+
+## Sprint 748 — Production Release Certification
+
+Production certification is available through:
+
+```powershell
+$env:NODE_ENV = 'production'
+$env:ALLOW_LOCAL_PRODUCTION_BUILD = 'true'
+$env:NEXT_PUBLIC_API_BASE_URL = 'http://localhost:3000'
+npm run release:certify
+```
+
+Certification is intentionally blocked when `git status --porcelain
+--untracked-files=all` returns source changes. Commit or discard all changes
+before certification.
+
+A successful run executes the Sprint 744–748 tests, verifies the Render
+deployment configuration, executes the root production build, validates the
+required `.next` artifacts and `reports/build/release-manifest.json`, and writes:
+
+- `reports/release/production-certification.json`
+- `reports/release/production-certification.md`
+
+The GitHub Actions workflow `.github/workflows/production-release-certification.yml`
+runs the same command for manual dispatches and configured release branches. It
+uploads the release manifest and certification evidence as a retained workflow
+artifact.
+

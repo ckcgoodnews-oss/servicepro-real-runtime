@@ -16,3 +16,4 @@ test-results.log
 logs/
 
 reports/build/release-manifest.json
+reports/release/

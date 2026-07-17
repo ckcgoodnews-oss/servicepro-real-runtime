@@ -567,7 +567,8 @@
                     "test:sprint746":  "node tests/sprint746-authenticated-local-webapp-e2e.test.js",
                     "build":  "node scripts/build-release.js",
                     "build:render:verify":  "node scripts/verify-render-deployment.js",
-                    "test:sprint747":  "node tests/sprint747-root-build-orchestration.test.js"
+                    "test:sprint747":  "node tests/sprint747-root-build-orchestration.test.js",
+                    "release:certify":  "node scripts/certify-production-release.js"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",
