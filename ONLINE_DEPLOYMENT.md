@@ -265,3 +265,32 @@ Authorization validates:
 The GitHub Actions workflow uses a protected GitHub Environment so deployment
 approval rules can be applied before authorization is generated.
 
+
+## Sprint 754 — Deployment Execution Receipt, Post-Deployment Verification, and Rollback Readiness
+
+Sprint 754 records deployment execution, validates the deployed endpoint, and
+produces rollback-readiness evidence.
+
+Run:
+
+```powershell
+npm run release:deploy-verify
+```
+
+Required environment variable:
+
+```powershell
+$env:DEPLOYMENT_URL = 'https://your-production-url.example'
+```
+
+Generated evidence:
+
+- `reports/release/deployment-execution-receipt.json`
+- `reports/release/post-deployment-verification.json`
+- `reports/release/rollback-readiness.json`
+- `reports/release/deployment-execution-summary.md`
+
+The verification step validates deployment authorization, release promotion
+integrity, exact commit matching, endpoint reachability, expected HTTP status,
+response hashing, and rollback instructions.
+

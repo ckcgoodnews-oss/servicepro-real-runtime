@@ -1,0 +1,84 @@
+name: Post-Deployment Verification
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: Deployment target environment
+        required: true
+        default: production
+        type: choice
+        options:
+          - staging
+          - production
+      deployment_url:
+        description: Deployed application base URL
+        required: true
+        type: string
+      deployment_id:
+        description: Deployment provider identifier
+        required: false
+        type: string
+      rollback_reference:
+        description: Last known-good rollback reference
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify deployed release
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment: ${{ inputs.target_environment }}
+
+    env:
+      CI: 'true'
+      NODE_ENV: production
+      ALLOW_LOCAL_PRODUCTION_BUILD: 'true'
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:3000
+      RELEASE_REQUIRE_CI: 'true'
+      RELEASE_AUTH_REQUIRE_CI: 'true'
+      RELEASE_REQUIRE_AUTHORIZATION_ACTOR: 'true'
+      RELEASE_ALLOWED_BRANCHES: main,release/*,codex/sprint-*
+      RELEASE_TARGET_ENVIRONMENT: ${{ inputs.target_environment }}
+      RELEASE_AUTHORIZATION_ACTOR: ${{ github.actor }}
+      RELEASE_AUTHORIZATION_REASON: Post-deployment verification authorization.
+      DEPLOYMENT_URL: ${{ inputs.deployment_url }}
+      DEPLOYMENT_ID: ${{ inputs.deployment_id }}
+      DEPLOYMENT_EXECUTOR: ${{ github.actor }}
+      DEPLOYMENT_PROVIDER: github-actions
+      DEPLOYMENT_HEALTH_PATH: /
+      DEPLOYMENT_EXPECTED_STATUS: '200'
+      ROLLBACK_REFERENCE: ${{ inputs.rollback_reference }}
+      AUTOMATIC_ROLLBACK_ENABLED: 'false'
+
+    steps:
+      - name: Check out exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify deployment and rollback readiness
+        run: npm run release:deploy-verify
+
+      - name: Upload deployment verification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: post-deployment-verification-${{ inputs.target_environment }}-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 365
+          path: |
+            reports/release/
+            reports/build/release-manifest.json
