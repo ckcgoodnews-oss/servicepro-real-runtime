@@ -587,7 +587,8 @@
                     "release:trusted":  "npm run release:seal \u0026\u0026 npm run release:sign \u0026\u0026 npm run release:verify-signature",
                     "release:register":  "node scripts/register-trusted-release.js",
                     "release:admit":  "node scripts/evaluate-deployment-admission.js",
-                    "release:deployable":  "npm run release:trusted \u0026\u0026 npm run release:register \u0026\u0026 npm run release:admit"
+                    "release:deployable":  "npm run release:trusted \u0026\u0026 npm run release:register \u0026\u0026 npm run release:admit",
+                    "test:sprint757":  "node tests/sprint757-trusted-release-registry-deployment-admission-control.test.js"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",
