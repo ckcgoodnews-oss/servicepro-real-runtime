@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "sprint": 759,
+  "control": "continuous-release-integrity-monitoring",
+  "evaluatedAt": "2026-07-18T19:44:13.215Z",
+  "health": "degraded",
+  "releaseIntegrityStatus": "evidence_missing",
+  "aligned": false,
+  "failClosed": true,
+  "incident": {
+    "key": "41ee8ca4d0a386cb94c0a21325b3f2d0929b940ad27c50da21dd9eb149d584ba",
+    "shouldOpen": false,
+    "suppressedAsDuplicate": true,
+    "recoveryDetected": false
+  },
+  "evidence": {
+    "driftReportPath": "I:\\REPO\\servicepro-cumulative\\release-evidence\\production-release-drift-report.json",
+    "mismatchCount": 0,
+    "missingExpectedCount": 5,
+    "missingActualCount": 4,
+    "expectedReleaseFingerprint": "4c63d31bdd6323c9302670dd7902ca585e8b9f8f45c41acefac3458fb85b5a88",
+    "actualReleaseFingerprint": "709201c54d8504429579563d7e9d79c3ca69dc6933df6c8ef3cfecb0a80c1bbf"
+  }
+}

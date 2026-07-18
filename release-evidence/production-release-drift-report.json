@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-18T19:44:13.212Z",
+  "status": "evidence_missing",
+  "aligned": false,
+  "failClosed": true,
+  "checks": {
+    "releaseId": {
+      "matched": false,
+      "expectedPresent": false,
+      "actualPresent": false,
+      "expectedDigest": null,
+      "actualDigest": null
+    },
+    "version": {
+      "matched": false,
+      "expectedPresent": false,
+      "actualPresent": true,
+      "expectedDigest": null,
+      "actualDigest": "66e6a506872a720eb759ab2606c6ec94f7b3059d4ff64443fefcac7fd8e305e0"
+    },
+    "sourceCommit": {
+      "matched": false,
+      "expectedPresent": false,
+      "actualPresent": false,
+      "expectedDigest": null,
+      "actualDigest": null
+    },
+    "artifactDigest": {
+      "matched": false,
+      "expectedPresent": false,
+      "actualPresent": false,
+      "expectedDigest": null,
+      "actualDigest": null
+    },
+    "environment": {
+      "matched": false,
+      "expectedPresent": false,
+      "actualPresent": false,
+      "expectedDigest": null,
+      "actualDigest": null
+    }
+  },
+  "missingExpected": [
+    "releaseId",
+    "version",
+    "sourceCommit",
+    "artifactDigest",
+    "environment"
+  ],
+  "missingActual": [
+    "releaseId",
+    "sourceCommit",
+    "artifactDigest",
+    "environment"
+  ],
+  "mismatches": [],
+  "sprint": 758,
+  "control": "production-release-drift-detection",
+  "expectedEvidenceSource": null,
+  "actualEvidenceSource": "environment/package.json",
+  "evidenceLoadErrors": [
+    "trusted release entry not found; trusted release registry not found"
+  ],
+  "expectedReleaseFingerprint": "4c63d31bdd6323c9302670dd7902ca585e8b9f8f45c41acefac3458fb85b5a88",
+  "actualReleaseFingerprint": "709201c54d8504429579563d7e9d79c3ca69dc6933df6c8ef3cfecb0a80c1bbf"
+}
