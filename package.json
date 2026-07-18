@@ -594,7 +594,9 @@
                     "release:integrity-monitor":  "node scripts/monitor-release-integrity.js",
                     "test:sprint759":  "node tests/sprint759-continuous-release-integrity-monitoring.test.js",
                     "release:quarantine-check":  "node scripts/enforce-release-quarantine.js",
-                    "test:sprint760":  "node tests/sprint760-release-integrity-quarantine-response.test.js"
+                    "test:sprint760":  "node tests/sprint760-release-integrity-quarantine-response.test.js",
+                    "release:override-check":  "node scripts/check-release-quarantine-override.js",
+                    "test:sprint761":  "node tests/sprint761-governed-quarantine-override.test.js"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",

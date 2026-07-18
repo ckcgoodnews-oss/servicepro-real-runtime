@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "sprint": 761,
+  "control": "governed-quarantine-override",
+  "evaluatedAt": "2026-07-18T20:00:43.758Z",
+  "authorizationId": "15c72ce3fe9543c40f9c297103ee72a02f0d49a235888c2d04f05ed75d891826",
+  "state": "denied",
+  "authorized": false,
+  "reasons": [
+    "override_request_missing"
+  ],
+  "quarantineId": "7b3857336f4d9bf096db73841a0c24bb6ecc4b31f2e3ec53237abc64477cfd9a",
+  "changeTicket": null,
+  "justification": null,
+  "expiresAt": null,
+  "approvals": [],
+  "enforcement": {
+    "allowDeployment": false,
+    "allowPromotion": false,
+    "allowTrafficShift": false,
+    "requireAuditRetention": true
+  }
+}
