@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "sprint": 760,
+  "control": "release-integrity-quarantine-response",
+  "evaluatedAt": "2026-07-18T19:52:08.146Z",
+  "quarantineState": "quarantined",
+  "quarantined": true,
+  "recovered": false,
+  "quarantineId": "7b3857336f4d9bf096db73841a0c24bb6ecc4b31f2e3ec53237abc64477cfd9a",
+  "reason": {
+    "health": "degraded",
+    "releaseIntegrityStatus": "evidence_missing",
+    "failClosed": true,
+    "incidentKey": "41ee8ca4d0a386cb94c0a21325b3f2d0929b940ad27c50da21dd9eb149d584ba"
+  },
+  "response": {
+    "blockPromotion": true,
+    "blockDeployment": true,
+    "requireOperatorReview": true,
+    "allowTrafficShift": false
+  }
+}
