@@ -588,7 +588,9 @@
                     "release:register":  "node scripts/register-trusted-release.js",
                     "release:admit":  "node scripts/evaluate-deployment-admission.js",
                     "release:deployable":  "npm run release:trusted \u0026\u0026 npm run release:register \u0026\u0026 npm run release:admit",
-                    "test:sprint757":  "node tests/sprint757-trusted-release-registry-deployment-admission-control.test.js"
+                    "test:sprint757":  "node tests/sprint757-trusted-release-registry-deployment-admission-control.test.js",
+                    "release:drift-check":  "node scripts/check-production-release-drift.js",
+                    "test:sprint758":  "node tests/sprint758-production-release-drift-detection.test.js"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",
