@@ -584,7 +584,10 @@
                     "release:seal":  "npm run release:promote \u0026\u0026 npm run release:bundle",
                     "release:sign":  "node scripts/sign-immutable-release-bundle.js",
                     "release:verify-signature":  "node scripts/verify-release-signature.js",
-                    "release:trusted":  "npm run release:seal \u0026\u0026 npm run release:sign \u0026\u0026 npm run release:verify-signature"
+                    "release:trusted":  "npm run release:seal \u0026\u0026 npm run release:sign \u0026\u0026 npm run release:verify-signature",
+                    "release:register":  "node scripts/register-trusted-release.js",
+                    "release:admit":  "node scripts/evaluate-deployment-admission.js",
+                    "release:deployable":  "npm run release:trusted \u0026\u0026 npm run release:register \u0026\u0026 npm run release:admit"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",

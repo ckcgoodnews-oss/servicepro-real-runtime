@@ -331,3 +331,25 @@ npm run release:verify-signature
 npm run release:trusted
 ```
 
+
+## Sprint 757 - Trusted Release Registry and Deployment Admission Control
+
+Sprint 757 registers a signed and verified release in a trusted registry and
+creates a deploy-or-deny admission decision for the requested environment.
+
+Commands:
+
+```powershell
+npm run release:register
+npm run release:admit
+npm run release:deployable
+```
+
+Generated evidence:
+
+- `reports/release/trusted-release-registry/index.json`
+- `reports/release/trusted-release-registry/trusted-release-entry.json`
+- `reports/release/trusted-release-registry/trusted-release-entry.md`
+- `reports/release/deployment-admission-decision.json`
+- `reports/release/deployment-admission-decision.md`
+
