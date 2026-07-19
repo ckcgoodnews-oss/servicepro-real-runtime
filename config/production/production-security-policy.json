@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "phase": 70,
+  "requiredSecrets": [
+    "DATABASE_URL",
+    "SESSION_SECRET",
+    "SUPABASE_URL",
+    "SUPABASE_SERVICE_ROLE_KEY"
+  ],
+  "requiredHeaders": [
+    "content-security-policy",
+    "strict-transport-security",
+    "x-content-type-options",
+    "x-frame-options",
+    "referrer-policy",
+    "permissions-policy"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "headers": {
+    "content-security-policy": "default-src 'self'",
+    "strict-transport-security": "max-age=31536000; includeSubDomains",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "referrer-policy": "strict-origin-when-cross-origin",
+    "permissions-policy": "camera=(), microphone=(), geolocation=()"
+  },
+  "configuration": {
+    "nodeEnv": "production",
+    "trustProxy": true,
+    "rateLimiting": true,
+    "secureCookies": true
+  },
+  "secrets": {
+    "DATABASE_URL": "configured",
+    "SESSION_SECRET": "configured",
+    "SUPABASE_URL": "configured",
+    "SUPABASE_SERVICE_ROLE_KEY": "configured"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "releaseId": "8.0.0",
+  "checks": [
+    {
+      "id": "app-build",
+      "category": "application",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "id": "db-migrations",
+      "category": "database",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "id": "security-scan",
+      "category": "security",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "id": "load-test",
+      "category": "performance",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "id": "runbook",
+      "category": "operations",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "id": "backup-restore",
+      "category": "backup",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "id": "rollback-test",
+      "category": "rollback",
+      "required": true,
+      "status": "passed"
+    },
+    {
+      "id": "monitoring-alerts",
+      "category": "monitoring",
+      "required": true,
+      "status": "passed"
+    }
+  ],
+  "approvals": [
+    {
+      "role": "release-manager",
+      "approved": true
+    },
+    {
+      "role": "security",
+      "approved": true
+    },
+    {
+      "role": "sre",
+      "approved": true
+    },
+    {
+      "role": "product-owner",
+      "approved": true
+    }
+  ]
+}

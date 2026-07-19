@@ -621,7 +621,12 @@
                     "release:controls-optimize":  "node scripts/optimize-cd-controls.js",
                     "release:policy-simulate":  "node scripts/simulate-release-policy.js",
                     "test:sprint769":  "node tests/sprint769-release-policy-simulation.test.js",
-                    "test:sprint770":  "node tests/sprint770-continuous-delivery-control-optimization.test.js"
+                    "test:sprint770":  "node tests/sprint770-continuous-delivery-control-optimization.test.js",
+                    "test:phase70":  "node tests/phase70-production-readiness-hardening.integration.test.js",
+                    "production:security-evaluate":  "node scripts/evaluate-production-security.js",
+                    "test:sprint771":  "node tests/sprint771-production-readiness-certification.test.js",
+                    "production:readiness-evaluate":  "node scripts/evaluate-production-readiness.js",
+                    "test:sprint772":  "node tests/sprint772-production-security-hardening.test.js"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",
