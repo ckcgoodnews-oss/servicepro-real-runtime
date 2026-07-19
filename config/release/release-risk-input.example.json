@@ -1,0 +1,12 @@
+{
+  "changeSize": 1800,
+  "filesChanged": 42,
+  "migrationCount": 3,
+  "testCoveragePercent": 88,
+  "failedChecks": 0,
+  "openIncidents": 0,
+  "recentRollbackCount": 0,
+  "deploymentFrequencyPerWeek": 6,
+  "productionTarget": true,
+  "emergencyChange": false
+}

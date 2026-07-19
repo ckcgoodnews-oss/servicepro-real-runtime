@@ -611,7 +611,12 @@
                     "release:rollout-advance":  "node scripts/advance-progressive-rollout.js",
                     "test:sprint766":  "node tests/sprint766-enterprise-release-command-center.test.js",
                     "release:command-center-report":  "node scripts/generate-release-command-center-report.js",
-                    "test:phase67":  "node tests/phase67-enterprise-release-command-center.integration.test.js"
+                    "test:phase67":  "node tests/phase67-enterprise-release-command-center.integration.test.js",
+                    "release:risk-evaluate":  "node scripts/evaluate-release-risk.js",
+                    "test:sprint767":  "node tests/sprint767-predictive-release-risk-intelligence.test.js",
+                    "test:phase68":  "node tests/phase68-release-intelligence-optimization.integration.test.js",
+                    "test:sprint768":  "node tests/sprint768-deployment-performance-optimization.test.js",
+                    "release:performance-analyze":  "node scripts/analyze-deployment-performance.js"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",

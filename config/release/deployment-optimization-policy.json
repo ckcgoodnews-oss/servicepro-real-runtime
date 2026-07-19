@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "phase": 68,
+  "minimumSamplesPerStrategy": 2,
+  "targets": {
+    "minimumSuccessRatePercent": 95,
+    "maximumP95DurationMs": 1800000,
+    "maximumAverageLeadTimeMs": 86400000
+  }
+}

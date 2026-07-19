@@ -1,0 +1,16 @@
+[
+  {
+    "releaseId": "8.0.0-alpha.1",
+    "strategy": "canary",
+    "success": true,
+    "durationMs": 900000,
+    "leadTimeMs": 43200000
+  },
+  {
+    "releaseId": "8.0.0-alpha.2",
+    "strategy": "canary",
+    "success": true,
+    "durationMs": 840000,
+    "leadTimeMs": 39600000
+  }
+]
