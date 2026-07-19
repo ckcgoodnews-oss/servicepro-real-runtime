@@ -1,0 +1,6 @@
+{
+  "releaseId": "8.0.0-alpha.1",
+  "previousReleaseId": "7.9.9",
+  "changeTicket": "CHG-3001",
+  "operator": "release.manager@example.com"
+}

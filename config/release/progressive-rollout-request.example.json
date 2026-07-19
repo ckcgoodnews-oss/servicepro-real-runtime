@@ -1,0 +1,23 @@
+{
+  "releaseId": "8.0.0-alpha.1",
+  "strategy": "canary",
+  "targetEnvironment": "production",
+  "steps": [
+    {
+      "trafficPercent": 5,
+      "minimumObservationMinutes": 10
+    },
+    {
+      "trafficPercent": 20,
+      "minimumObservationMinutes": 15
+    },
+    {
+      "trafficPercent": 50,
+      "minimumObservationMinutes": 20
+    },
+    {
+      "trafficPercent": 100,
+      "minimumObservationMinutes": 30
+    }
+  ]
+}

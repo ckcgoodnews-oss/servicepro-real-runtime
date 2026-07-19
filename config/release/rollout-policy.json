@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "phase": 66,
+  "healthThresholds": {
+    "maxErrorRatePercent": 2.0,
+    "maxP95LatencyMs": 1500,
+    "minAvailabilityPercent": 99.0,
+    "maxSaturationPercent": 85.0
+  },
+  "strategies": {
+    "canary": {
+      "defaultSteps": [
+        {
+          "trafficPercent": 5,
+          "minimumObservationMinutes": 10
+        },
+        {
+          "trafficPercent": 20,
+          "minimumObservationMinutes": 15
+        },
+        {
+          "trafficPercent": 50,
+          "minimumObservationMinutes": 20
+        },
+        {
+          "trafficPercent": 100,
+          "minimumObservationMinutes": 30
+        }
+      ]
+    },
+    "blue_green": {
+      "defaultSteps": [
+        {
+          "trafficPercent": 10,
+          "minimumObservationMinutes": 10
+        },
+        {
+          "trafficPercent": 50,
+          "minimumObservationMinutes": 15
+        },
+        {
+          "trafficPercent": 100,
+          "minimumObservationMinutes": 20
+        }
+      ]
+    },
+    "ring": {
+      "defaultSteps": [
+        {
+          "trafficPercent": 10,
+          "minimumObservationMinutes": 15
+        },
+        {
+          "trafficPercent": 30,
+          "minimumObservationMinutes": 20
+        },
+        {
+          "trafficPercent": 60,
+          "minimumObservationMinutes": 25
+        },
+        {
+          "trafficPercent": 100,
+          "minimumObservationMinutes": 30
+        }
+      ]
+    }
+  }
+}

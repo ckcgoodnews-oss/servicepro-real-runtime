@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "phase": 66,
+  "errorRateTriggerPercent": 5.0,
+  "p95LatencyTriggerMs": 2500,
+  "availabilityTriggerPercent": 98.0,
+  "failedHealthCheckTrigger": 3,
+  "rollbackOnPausedRollout": true,
+  "requireChangeTicket": true,
+  "requireOperator": true,
+  "captureRootCauseEvidence": true
+}

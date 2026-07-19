@@ -602,7 +602,13 @@
                     "test:sprint762":  "node tests/sprint762-immutable-release-authorization-ledger.test.js",
                     "release:ledger-append":  "node scripts/append-release-authorization-ledger.js",
                     "test:sprint763":  "node tests/sprint763-multi-environment-promotion-gates.test.js",
-                    "release:promotion-evaluate":  "node scripts/evaluate-release-promotion.js"
+                    "release:promotion-evaluate":  "node scripts/evaluate-release-promotion.js",
+                    "test:sprint765":  "node tests/sprint765-automated-rollback-governance.test.js",
+                    "release:rollout-create":  "node scripts/create-progressive-rollout.js",
+                    "release:rollback-evaluate":  "node scripts/evaluate-automated-rollback.js",
+                    "test:phase66":  "node tests/phase66-enterprise-deployment-automation.integration.test.js",
+                    "test:sprint764":  "node tests/sprint764-progressive-rollout-orchestration.test.js",
+                    "release:rollout-advance":  "node scripts/advance-progressive-rollout.js"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",
