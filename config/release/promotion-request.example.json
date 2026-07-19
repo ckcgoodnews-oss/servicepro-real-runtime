@@ -1,0 +1,23 @@
+{
+  "releaseId": "8.0.0-alpha.1",
+  "sourceEnvironment": "staging",
+  "targetEnvironment": "production",
+  "changeTicket": "CHG-2001",
+  "riskScore": 10,
+  "evidence": {
+    "securityScanPassed": true,
+    "performanceTestsPassed": true,
+    "rollbackPlanValidated": true
+  },
+  "approvals": [
+    {
+      "role": "release-manager"
+    },
+    {
+      "role": "security"
+    },
+    {
+      "role": "sre"
+    }
+  ]
+}

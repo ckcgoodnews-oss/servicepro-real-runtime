@@ -596,7 +596,13 @@
                     "release:quarantine-check":  "node scripts/enforce-release-quarantine.js",
                     "test:sprint760":  "node tests/sprint760-release-integrity-quarantine-response.test.js",
                     "release:override-check":  "node scripts/check-release-quarantine-override.js",
-                    "test:sprint761":  "node tests/sprint761-governed-quarantine-override.test.js"
+                    "test:sprint761":  "node tests/sprint761-governed-quarantine-override.test.js",
+                    "release:ledger-verify":  "node scripts/verify-release-authorization-ledger.js",
+                    "test:phase65":  "node tests/phase65-release-governance-promotion.integration.test.js",
+                    "test:sprint762":  "node tests/sprint762-immutable-release-authorization-ledger.test.js",
+                    "release:ledger-append":  "node scripts/append-release-authorization-ledger.js",
+                    "test:sprint763":  "node tests/sprint763-multi-environment-promotion-gates.test.js",
+                    "release:promotion-evaluate":  "node scripts/evaluate-release-promotion.js"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",

@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "phase": 65,
+  "environments": {
+    "development": {
+      "allowedSources": [
+        "development"
+      ],
+      "requiredChecks": [],
+      "requiredApprovalRoles": [],
+      "changeTicketRequired": false,
+      "maximumRiskScore": 100
+    },
+    "integration": {
+      "allowedSources": [
+        "development"
+      ],
+      "requiredChecks": [
+        "buildPassed",
+        "unitTestsPassed"
+      ],
+      "requiredApprovalRoles": [],
+      "changeTicketRequired": false,
+      "maximumRiskScore": 80
+    },
+    "qa": {
+      "allowedSources": [
+        "integration",
+        "development"
+      ],
+      "requiredChecks": [
+        "buildPassed",
+        "unitTestsPassed",
+        "integrationTestsPassed"
+      ],
+      "requiredApprovalRoles": [
+        "qa"
+      ],
+      "changeTicketRequired": false,
+      "maximumRiskScore": 60
+    },
+    "uat": {
+      "allowedSources": [
+        "qa"
+      ],
+      "requiredChecks": [
+        "integrationTestsPassed",
+        "securityScanPassed"
+      ],
+      "requiredApprovalRoles": [
+        "qa",
+        "product-owner"
+      ],
+      "changeTicketRequired": true,
+      "maximumRiskScore": 45
+    },
+    "staging": {
+      "allowedSources": [
+        "uat"
+      ],
+      "requiredChecks": [
+        "securityScanPassed",
+        "performanceTestsPassed"
+      ],
+      "requiredApprovalRoles": [
+        "release-manager",
+        "sre"
+      ],
+      "changeTicketRequired": true,
+      "maximumRiskScore": 30
+    },
+    "production": {
+      "allowedSources": [
+        "staging"
+      ],
+      "requiredChecks": [
+        "securityScanPassed",
+        "performanceTestsPassed",
+        "rollbackPlanValidated"
+      ],
+      "requiredApprovalRoles": [
+        "release-manager",
+        "security",
+        "sre"
+      ],
+      "changeTicketRequired": true,
+      "maximumRiskScore": 20
+    },
+    "disaster-recovery": {
+      "allowedSources": [
+        "production"
+      ],
+      "requiredChecks": [
+        "backupValidated",
+        "restoreTestPassed"
+      ],
+      "requiredApprovalRoles": [
+        "release-manager",
+        "sre"
+      ],
+      "changeTicketRequired": true,
+      "maximumRiskScore": 25
+    }
+  }
+}

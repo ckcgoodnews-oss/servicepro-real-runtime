@@ -1,0 +1,3 @@
+#!/usr/bin/env node
+'use strict';
+const path=require('node:path');const {appendLedgerEntry}=require('./lib/release-authorization-ledger');const {readJson}=require('./lib/release-governance-store');const root=path.resolve(__dirname,'..'),authorizationPath=path.resolve(root,process.env.RELEASE_OVERRIDE_REPORT_PATH||path.join('release-evidence','release-quarantine-override-authorization.json')),ledgerPath=path.resolve(root,process.env.RELEASE_AUTHORIZATION_LEDGER_PATH||path.join('release-evidence','release-authorization-ledger.jsonl')),authorization=readJson(authorizationPath);if(!authorization)throw new Error(`Authorization evidence missing: ${authorizationPath}`);console.log(JSON.stringify({ledgerPath,entry:appendLedgerEntry({ledgerPath,authorization})},null,2));

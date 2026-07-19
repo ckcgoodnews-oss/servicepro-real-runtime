@@ -17,3 +17,5 @@ logs/
 
 reports/build/release-manifest.json
 reports/release/
+
+release-evidence/

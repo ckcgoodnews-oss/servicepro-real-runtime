@@ -1,0 +1,4 @@
+create table if not exists release_authorization_ledger(id bigserial primary key,sequence_number bigint not null unique,recorded_at timestamptz not null,previous_hash text,entry_hash text not null unique,authorization jsonb not null,created_at timestamptz not null default now());
+create index if not exists idx_release_authorization_ledger_recorded_at on release_authorization_ledger(recorded_at desc);
+create table if not exists release_promotion_evaluations(id bigserial primary key,release_id text,source_environment text not null,target_environment text not null,authorized boolean not null,failures jsonb not null default '[]'::jsonb,certificate jsonb,evaluated_at timestamptz not null,created_at timestamptz not null default now());
+create index if not exists idx_release_promotion_evaluations_release on release_promotion_evaluations(release_id,evaluated_at desc);
