@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "phase": 69,
+  "releaseRisk": {
+    "blockingThreshold": 80
+  },
+  "promotion": {
+    "requireAuthorization": true,
+    "requiredChecks": 5
+  },
+  "rollout": {
+    "blockPausedRollout": true,
+    "observationWindowMinutes": 15
+  },
+  "release": {
+    "maximumOpenIncidents": 0,
+    "requireChangeTicket": true,
+    "requireRollbackPlan": true
+  },
+  "targets": {
+    "maximumFailureRate": 0.05,
+    "maximumRollbackRate": 0.03,
+    "maximumAverageRiskScore": 55,
+    "minimumFailureRateForRelaxation": 0.01,
+    "minimumRollbackRateForRelaxation": 0.005
+  }
+}

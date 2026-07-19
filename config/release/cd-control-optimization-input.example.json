@@ -1,0 +1,28 @@
+{
+  "deploymentRecords": [
+    {
+      "success": true,
+      "rollbackExecuted": false
+    },
+    {
+      "success": true,
+      "rollbackExecuted": false
+    },
+    {
+      "success": false,
+      "rollbackExecuted": true
+    }
+  ],
+  "riskEvaluations": [
+    {
+      "score": 45
+    },
+    {
+      "score": 58
+    },
+    {
+      "score": 62
+    }
+  ],
+  "policySimulations": []
+}

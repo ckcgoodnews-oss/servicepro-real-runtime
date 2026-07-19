@@ -616,7 +616,12 @@
                     "test:sprint767":  "node tests/sprint767-predictive-release-risk-intelligence.test.js",
                     "test:phase68":  "node tests/phase68-release-intelligence-optimization.integration.test.js",
                     "test:sprint768":  "node tests/sprint768-deployment-performance-optimization.test.js",
-                    "release:performance-analyze":  "node scripts/analyze-deployment-performance.js"
+                    "release:performance-analyze":  "node scripts/analyze-deployment-performance.js",
+                    "test:phase69":  "node tests/phase69-release-policy-simulation-control-optimization.integration.test.js",
+                    "release:controls-optimize":  "node scripts/optimize-cd-controls.js",
+                    "release:policy-simulate":  "node scripts/simulate-release-policy.js",
+                    "test:sprint769":  "node tests/sprint769-release-policy-simulation.test.js",
+                    "test:sprint770":  "node tests/sprint770-continuous-delivery-control-optimization.test.js"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",

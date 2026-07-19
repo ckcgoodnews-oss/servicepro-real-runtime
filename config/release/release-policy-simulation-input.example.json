@@ -1,0 +1,33 @@
+{
+  "release": {
+    "releaseId": "8.0.0-beta.1",
+    "openIncidentCount": 0,
+    "changeTicket": "CHG-6901",
+    "rollbackPlanValidated": true
+  },
+  "risk": {
+    "score": 58
+  },
+  "promotion": {
+    "authorized": true
+  },
+  "rollout": {
+    "state": "running"
+  },
+  "scenarios": [
+    {
+      "scenarioId": "relax-risk-threshold",
+      "name": "Raise blocking threshold to 85",
+      "changes": {
+        "releaseRisk.blockingThreshold": 85
+      }
+    },
+    {
+      "scenarioId": "allow-one-incident",
+      "name": "Allow one open incident",
+      "changes": {
+        "release.maximumOpenIncidents": 1
+      }
+    }
+  ]
+}
