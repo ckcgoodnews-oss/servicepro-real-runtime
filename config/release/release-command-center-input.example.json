@@ -1,0 +1,28 @@
+{
+  "environments": [
+    {
+      "name": "development"
+    },
+    {
+      "name": "qa"
+    },
+    {
+      "name": "staging"
+    },
+    {
+      "name": "production"
+    }
+  ],
+  "releases": [
+    {
+      "releaseId": "8.0.0-alpha.1",
+      "environment": "production",
+      "deployedAt": "2026-07-19T10:00:00.000Z"
+    }
+  ],
+  "authorizations": [],
+  "promotions": [],
+  "rollouts": [],
+  "rollbacks": [],
+  "incidents": []
+}

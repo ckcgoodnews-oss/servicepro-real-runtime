@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "phase": 67,
+  "sprint": 766,
+  "refreshIntervalSeconds": 30,
+  "defaultTimelineLimit": 100,
+  "defaultAuditLimit": 100,
+  "environments": [
+    {
+      "name": "development",
+      "displayName": "Development"
+    },
+    {
+      "name": "integration",
+      "displayName": "Integration"
+    },
+    {
+      "name": "qa",
+      "displayName": "QA"
+    },
+    {
+      "name": "uat",
+      "displayName": "UAT"
+    },
+    {
+      "name": "staging",
+      "displayName": "Staging"
+    },
+    {
+      "name": "production",
+      "displayName": "Production"
+    },
+    {
+      "name": "disaster-recovery",
+      "displayName": "Disaster Recovery"
+    }
+  ],
+  "kpis": [
+    "promotionApprovalRatePercent",
+    "rolloutCompletionRatePercent",
+    "rollbackSuccessRatePercent",
+    "averageDeploymentDurationMs",
+    "openIncidentCount"
+  ]
+}

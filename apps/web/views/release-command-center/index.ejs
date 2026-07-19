@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+  <title>Enterprise Release Command Center</title>
+  <link
+    rel="stylesheet"
+    href="/release-command-center/styles.css"
+  >
+</head>
+<body>
+  <main class="command-center">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Phase 67 · Sprint 766</p>
+        <h1>Enterprise Release Command Center</h1>
+        <p>
+          Unified release, promotion, rollout, rollback,
+          incident, and audit operations.
+        </p>
+      </div>
+      <button id="refresh-button" type="button">
+        Refresh
+      </button>
+    </header>
+
+    <section
+      id="kpi-grid"
+      class="kpi-grid"
+      aria-label="Release KPIs"
+    ></section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <h2>Environment status</h2>
+      </div>
+      <div
+        id="environment-grid"
+        class="environment-grid"
+      ></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <h2>Release timeline</h2>
+      </div>
+      <div
+        id="timeline"
+        class="timeline"
+      ></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading">
+        <h2>Audit explorer</h2>
+      </div>
+      <div class="audit-controls">
+        <input id="audit-actor" placeholder="Actor">
+        <input id="audit-action" placeholder="Action">
+        <button id="audit-search" type="button">
+          Search
+        </button>
+      </div>
+      <div id="audit-results"></div>
+    </section>
+  </main>
+
+  <script src="/release-command-center/app.js"></script>
+</body>
+</html>
