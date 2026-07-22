@@ -1,0 +1,3 @@
+'use strict';
+class GeneralAvailabilityService {constructor({repository,cutoverEngine,validationEngine,cutoverPolicy,validationPolicy}){Object.assign(this,{repository,cutoverEngine,validationEngine,cutoverPolicy,validationPolicy});} async evaluateCutover(input){const r=this.cutoverEngine.evaluateGeneralAvailabilityCutover({...input,policy:this.cutoverPolicy});if(this.repository)await this.repository.saveCutoverReport(r);return r;} async validatePostCutover(input){const r=this.validationEngine.evaluatePostCutoverValidation({...input,policy:this.validationPolicy});if(this.repository)await this.repository.saveValidationReport(r);return r;}}
+module.exports={GeneralAvailabilityService};

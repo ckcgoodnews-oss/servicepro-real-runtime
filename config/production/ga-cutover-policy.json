@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "requiredApprovalRoles": [
+    "release-manager",
+    "security",
+    "sre",
+    "product-owner"
+  ],
+  "requireActiveWindow": false
+}

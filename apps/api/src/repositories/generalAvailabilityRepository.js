@@ -1,0 +1,3 @@
+'use strict';
+class GeneralAvailabilityRepository { constructor(store){this.store=store;} async saveCutoverReport(r){return this.store.query(`insert into ga_cutover_reports (cutover_id,release_id,environment,authorized,report,evaluated_at) values ($1,$2,$3,$4,$5::jsonb,$6) returning *`,[r.cutoverId,r.releaseId,r.environment,r.authorized,JSON.stringify(r),r.evaluatedAt]);} async saveValidationReport(r){return this.store.query(`insert into ga_post_cutover_reports (release_id,validated,decision,report,evaluated_at) values ($1,$2,$3,$4::jsonb,$5) returning *`,[r.releaseId,r.validated,r.decision,JSON.stringify(r),r.evaluatedAt]);}}
+module.exports={GeneralAvailabilityRepository};

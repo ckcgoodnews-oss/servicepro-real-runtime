@@ -626,7 +626,12 @@
                     "production:security-evaluate":  "node scripts/evaluate-production-security.js",
                     "test:sprint771":  "node tests/sprint771-production-readiness-certification.test.js",
                     "production:readiness-evaluate":  "node scripts/evaluate-production-readiness.js",
-                    "test:sprint772":  "node tests/sprint772-production-security-hardening.test.js"
+                    "test:sprint772":  "node tests/sprint772-production-security-hardening.test.js",
+                    "ga:post-cutover-validate":  "node scripts/validate-post-cutover.js",
+                    "test:sprint773":  "node tests/sprint773-general-availability-cutover.test.js",
+                    "test:sprint774":  "node tests/sprint774-post-cutover-validation.test.js",
+                    "ga:cutover-evaluate":  "node scripts/evaluate-ga-cutover.js",
+                    "test:phase71":  "node tests/phase71-general-availability-cutover.integration.test.js"
                 },
     "dependencies":  {
                          "bcryptjs":  "^2.4.3",

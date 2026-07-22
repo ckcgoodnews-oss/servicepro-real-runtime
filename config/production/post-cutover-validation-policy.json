@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "automaticRollback": true,
+  "metricThresholds": {
+    "errorRatePercent": {
+      "max": 1
+    },
+    "p95LatencyMs": {
+      "max": 1500
+    },
+    "availabilityPercent": {
+      "min": 99.9
+    }
+  }
+}

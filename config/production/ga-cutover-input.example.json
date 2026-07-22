@@ -1,0 +1,44 @@
+{
+  "releaseId": "8.0.0",
+  "environment": "production",
+  "window": {
+    "start": "2026-07-19T00:00:00Z",
+    "end": "2026-07-20T00:00:00Z"
+  },
+  "readinessCertificate": {
+    "releaseId": "8.0.0",
+    "certifiedAt": "2026-07-19T00:00:00Z"
+  },
+  "steps": [
+    {
+      "id": "backup",
+      "required": true,
+      "status": "passed",
+      "evidence": "backup-123"
+    },
+    {
+      "id": "deploy",
+      "required": true,
+      "status": "passed",
+      "evidence": "deploy-456"
+    }
+  ],
+  "approvals": [
+    {
+      "role": "release-manager",
+      "approved": true
+    },
+    {
+      "role": "security",
+      "approved": true
+    },
+    {
+      "role": "sre",
+      "approved": true
+    },
+    {
+      "role": "product-owner",
+      "approved": true
+    }
+  ]
+}

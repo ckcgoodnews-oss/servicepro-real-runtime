@@ -1,0 +1,34 @@
+{
+  "releaseId": "8.0.0",
+  "healthChecks": [
+    {
+      "id": "healthz",
+      "status": "passed"
+    },
+    {
+      "id": "readyz",
+      "status": "passed"
+    }
+  ],
+  "metrics": [
+    {
+      "name": "errorRatePercent",
+      "value": 0.2,
+      "unit": "percent"
+    },
+    {
+      "name": "p95LatencyMs",
+      "value": 400,
+      "unit": "ms"
+    },
+    {
+      "name": "availabilityPercent",
+      "value": 99.99,
+      "unit": "percent"
+    }
+  ],
+  "rollback": {
+    "targetReleaseId": "7.0.0",
+    "command": "deploy previous immutable release"
+  }
+}
