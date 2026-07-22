@@ -1,7 +1,8 @@
 const { sendJson } = require('../utils/http');
+const { operationalTenant } = require('../services/tenantResolver');
 
 const repo = req => req.context.repositories.organizationUnits;
-const tenant = req => req.context.tenantId;
+const tenant = req => operationalTenant(req);
 const fail = (res, err) => sendJson(res, err.status || 500, { error: { code: err.code || 'error', message: err.message } });
 
 function list(req, res) { Promise.resolve(repo(req).list(tenant(req))).then(data => sendJson(res, 200, { data })).catch(err => fail(res, err)); }

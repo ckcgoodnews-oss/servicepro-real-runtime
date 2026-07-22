@@ -1,11 +1,12 @@
 const { sendJson } = require('../utils/http');
+const { operationalTenant } = require('../services/tenantResolver');
 
 function repo(req) {
   return req.context.repositories.customers;
 }
 
 function tenant(req) {
-  return req.context.tenantId;
+  return operationalTenant(req);
 }
 
 function list(req, res) {

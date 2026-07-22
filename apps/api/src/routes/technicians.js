@@ -1,7 +1,8 @@
 const { sendJson } = require('../utils/http');
+const { operationalTenant } = require('../services/tenantResolver');
 
 function repo(req) { return req.context.repositories.technicians; }
-function tenant(req) { return req.context.tenantId; }
+function tenant(req) { return operationalTenant(req); }
 
 function list(req, res) {
   Promise.resolve(repo(req).list(tenant(req))).then(data => sendJson(res, 200, { data }));

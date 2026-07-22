@@ -14,6 +14,7 @@ const { applyRouteValidation } = require('./middleware/routeValidation');
 const { buildHealth, buildReadiness, readinessHttpStatus } = require('./services/healthService');
 const { PERMISSIONS } = require('./auth/permissions');
 const { attachRequestContext } = require('./context/requestContext');
+const { attachOperationalTenant } = require('./services/tenantResolver');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -257,6 +258,7 @@ async function router(req, res) {
   if (req.url.startsWith('/api/')) {
     const authorized = await authGuard(req, res);
     if (!authorized) return;
+    await attachOperationalTenant(req);
   }
 
   if (req.url === '/api/v1/me' && req.method === 'GET') {

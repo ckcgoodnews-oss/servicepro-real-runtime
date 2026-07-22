@@ -1,7 +1,8 @@
 const { sendJson } = require('../utils/http');
 const { buildNotificationFromTemplate } = require('../services/templateService');
+const { operationalTenant } = require('../services/tenantResolver');
 
-function tenant(req) { return req.context.tenantId; }
+function tenant(req) { return operationalTenant(req); }
 
 function listTemplates(req, res) {
   Promise.resolve(req.context.repositories.messageTemplates.list(tenant(req)))

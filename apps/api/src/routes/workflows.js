@@ -1,8 +1,9 @@
 const { sendJson } = require('../utils/http');
+const { operationalTenant } = require('../services/tenantResolver');
 const { validateTransition } = require('../services/workflowService');
 
 function tenant(req) {
-  return req.context.tenantId;
+  return operationalTenant(req);
 }
 
 function listRules(req, res) {

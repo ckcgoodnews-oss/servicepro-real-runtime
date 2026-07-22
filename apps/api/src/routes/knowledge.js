@@ -1,5 +1,6 @@
 const { sendJson } = require('../utils/http');
-const tenant = req => req.context.tenantId;
+const { operationalTenant } = require('../services/tenantResolver');
+const tenant = req => operationalTenant(req);
 const articles = req => req.context.repositories.knowledgeArticles;
 const attachments = req => req.context.repositories.mediaAttachments;
 const fail = (res, error) => sendJson(res, error.status || 500, { error: { code: error.code || 'error', message: error.message, details: error.details || {} } });

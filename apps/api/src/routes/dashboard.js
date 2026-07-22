@@ -21,7 +21,7 @@ async function summary(req, res) {
    */
   const tenantId = await resolveOperationalTenantId(
     repositories.store,
-    req.context.tenantId
+    req.context.operationalTenantId || req.context.tenantId
   );
 
   const [

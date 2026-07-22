@@ -42,7 +42,26 @@ async function resolveOperationalTenantId(store, tenantIdentifier) {
   return result.rows[0].id;
 }
 
+async function attachOperationalTenant(req) {
+  const context = req.context || (req.context = {});
+  const tenantKey = context.tenantKey || context.tenantId;
+
+  context.tenantKey = tenantKey;
+  context.operationalTenantId = await resolveOperationalTenantId(
+    context.repositories && context.repositories.store,
+    tenantKey
+  );
+
+  return context.operationalTenantId;
+}
+
+function operationalTenant(req) {
+  return req.context.operationalTenantId || req.context.tenantId;
+}
+
 module.exports = {
   isUuid,
-  resolveOperationalTenantId
+  resolveOperationalTenantId,
+  attachOperationalTenant,
+  operationalTenant
 };

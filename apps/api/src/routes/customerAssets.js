@@ -1,7 +1,8 @@
 const { sendJson } = require('../utils/http');
 const { isWarrantyActive, assetAgeYears } = require('../services/customerAssetService');
+const { operationalTenant } = require('../services/tenantResolver');
 
-function tenant(req) { return req.context.tenantId; }
+function tenant(req) { return operationalTenant(req); }
 function assets(req) { return req.context.repositories.customerAssets; }
 function history(req) { return req.context.repositories.assetServiceHistory; }
 function attachments(req) { return req.context.repositories.mediaAttachments; }
