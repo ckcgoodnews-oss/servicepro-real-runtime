@@ -1,0 +1,10 @@
+const assert = require('assert');
+const fs = require('fs');
+const path = require('path');
+const repo = path.resolve(__dirname, '..');
+const sql = fs.readFileSync(path.join(repo,'packages','database','postgres','105_subscription_entitlement_runtime.sql'),'utf8');
+assert.match(sql, /ALTER TABLE billing_invoices[\s\S]*ADD COLUMN IF NOT EXISTS tenant_id text/i);
+assert.match(sql, /ALTER TABLE tenant_subscriptions[\s\S]*ADD COLUMN IF NOT EXISTS tenant_id text/i);
+assert.match(sql, /ALTER TABLE usage_records[\s\S]*ADD COLUMN IF NOT EXISTS tenant_id text/i);
+assert.match(sql, /CREATE INDEX IF NOT EXISTS idx_billing_invoices_tenant_status[\s\S]*billing_invoices \(tenant_id, status, issued_at DESC\)/i);
+console.log('PASS: migration105-subscription-entitlement-repair.test.js');
