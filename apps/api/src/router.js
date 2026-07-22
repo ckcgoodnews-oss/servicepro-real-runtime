@@ -17,6 +17,8 @@ const { attachRequestContext } = require('./context/requestContext');
 const { attachOperationalTenant } = require('./services/tenantResolver');
 const { ownerAccessGuard } = require('./middleware/ownerAccessGuard');
 const platformAccess = require('./routes/platformAccess');
+const moduleAccess = require('./routes/moduleAccess');
+const { moduleAccessGuard } = require('./middleware/moduleAccessGuard');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -262,6 +264,11 @@ async function router(req, res) {
     if (!authorized) return;
     if (req.url === '/api/v1/access/redeem' && req.method === 'POST') return platformAccess.redeem(req, res);
     if (!(await ownerAccessGuard(req, res))) return;
+    if (req.url === '/api/v1/access/modules' && req.method === 'GET') return moduleAccess.mine(req,res);
+    if (req.url === '/api/v1/team' && req.method === 'GET') return moduleAccess.teamList(req,res);
+    const teamUserMatch=req.url.match(/^\/api\/v1\/team\/([^/]+)$/);if(teamUserMatch&&req.method==='PATCH')return moduleAccess.teamUpdate(req,res,teamUserMatch[1]);
+    const tenantModulesMatch=req.url.match(/^\/api\/v1\/platform\/tenants\/([^/]+)\/modules$/);if(tenantModulesMatch&&req.method==='GET')return moduleAccess.platformGet(req,res,tenantModulesMatch[1]);if(tenantModulesMatch&&req.method==='PUT')return moduleAccess.platformSet(req,res,tenantModulesMatch[1]);
+    if (!(await moduleAccessGuard(req,res))) return;
     await attachOperationalTenant(req);
   }
 
