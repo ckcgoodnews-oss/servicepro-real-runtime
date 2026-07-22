@@ -13,6 +13,7 @@ export function AuthGuard({ children }: { children: ReactNode }) {
       return;
     }
     authFetch('/api/v1/me').then(response => {
+      if (response.status === 402) { router.replace('/activate-access'); return; }
       if (!response.ok) throw new Error('Session expired');
       setReady(true);
     }).catch(() => {

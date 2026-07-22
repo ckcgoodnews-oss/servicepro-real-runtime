@@ -15,6 +15,8 @@ const { buildHealth, buildReadiness, readinessHttpStatus } = require('./services
 const { PERMISSIONS } = require('./auth/permissions');
 const { attachRequestContext } = require('./context/requestContext');
 const { attachOperationalTenant } = require('./services/tenantResolver');
+const { ownerAccessGuard } = require('./middleware/ownerAccessGuard');
+const platformAccess = require('./routes/platformAccess');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -258,8 +260,16 @@ async function router(req, res) {
   if (req.url.startsWith('/api/')) {
     const authorized = await authGuard(req, res);
     if (!authorized) return;
+    if (req.url === '/api/v1/access/redeem' && req.method === 'POST') return platformAccess.redeem(req, res);
+    if (!(await ownerAccessGuard(req, res))) return;
     await attachOperationalTenant(req);
   }
+
+  if (req.url === '/api/v1/platform/owners' && req.method === 'GET') return platformAccess.list(req, res);
+  const platformOwnerTokenMatch=req.url.match(/^\/api\/v1\/platform\/owners\/([^/]+)\/token$/);
+  if(platformOwnerTokenMatch&&req.method==='POST')return platformAccess.issue(req,res,platformOwnerTokenMatch[1]);
+  const platformEntitlementMatch=req.url.match(/^\/api\/v1\/platform\/entitlements\/([^/]+)$/);
+  if(platformEntitlementMatch&&req.method==='PATCH')return platformAccess.update(req,res,platformEntitlementMatch[1]);
 
   if (req.url === '/api/v1/me' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.USERS_SELF_READ)(req, res)) return;
