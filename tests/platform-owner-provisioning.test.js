@@ -19,6 +19,12 @@ function request() {
         moduleAccess: {
           async setTenantModules(tenantId, modules) { return {tenantId, modules}; }
         },
+        serviceMarketplace: {
+          async listCatalog() { return [{id:'pack-plumbing',name:'Plumbing',itemType:'service_pack'}]; },
+          async listInstallations() { return []; },
+          async install(tenantId,input) { return {id:'installation-id',tenantId,...input,status:'active'}; },
+          async uninstall() { return true; }
+        },
         accessEntitlements: {
           async listOwners() {
             return [
@@ -47,10 +53,18 @@ test('cannot issue an owner token to a platform administrator', async () => {
 
 test('platform administrator can create a tenant owner', async () => {
   const req = request();
-  req.body = {tenantId: 'tenant_demo', email: 'new.owner@example.com', name: 'New Owner', password: 'StrongPass123!', modules: ['operations', 'billing', 'invalid']};
+  req.body = {tenantId: 'tenant_demo', email: 'new.owner@example.com', name: 'New Owner', password: 'StrongPass123!', modules: ['operations', 'billing', 'invalid'], siteTypeItemId:'pack-plumbing'};
   const res = response();
   await platformAccess.createOwner(req, res);
   assert.equal(res.statusCode, 201);
   assert.deepEqual(res.body.data.roles, ['owner']);
   assert.deepEqual(res.body.data.enabledModules, ['operations', 'billing']);
+  assert.equal(res.body.data.siteTypeItemId, 'pack-plumbing');
+});
+
+test('platform administrator can change a tenant service-company site type', async () => {
+  const req=request();req.body={itemId:'pack-plumbing'};const res=response();
+  await platformAccess.setSiteType(req,res,'tenant_demo');
+  assert.equal(res.statusCode,200);
+  assert.equal(res.body.data.siteType.id,'pack-plumbing');
 });

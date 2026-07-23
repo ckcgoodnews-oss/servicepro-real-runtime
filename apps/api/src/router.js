@@ -274,6 +274,8 @@ async function router(req, res) {
 
   if (req.url === '/api/v1/platform/owners' && req.method === 'GET') return platformAccess.list(req, res);
   if (req.url === '/api/v1/platform/owners' && req.method === 'POST') return platformAccess.createOwner(req, res);
+  const platformSiteTypeMatch=req.url.match(/^\/api\/v1\/platform\/tenants\/([^/]+)\/site-type$/);
+  if(platformSiteTypeMatch&&req.method==='PUT')return platformAccess.setSiteType(req,res,platformSiteTypeMatch[1]);
   const platformOwnerTokenMatch=req.url.match(/^\/api\/v1\/platform\/owners\/([^/]+)\/token$/);
   if(platformOwnerTokenMatch&&req.method==='POST')return platformAccess.issue(req,res,platformOwnerTokenMatch[1]);
   const platformEntitlementMatch=req.url.match(/^\/api\/v1\/platform\/entitlements\/([^/]+)$/);

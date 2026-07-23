@@ -14,13 +14,16 @@ type Owner = {
   entitlementId?: string;
   status?: string;
   expiresAt?: string;
+  siteTypeItemId?: string;
 };
+type SiteType = {id:string;name:string;itemType:string;description:string};
 
 export function PlatformAdminWorkspace() {
   const [owners, setOwners] = useState<Owner[]>([]);
   const [error, setError] = useState('');
   const [token, setToken] = useState('');
   const [creating, setCreating] = useState(false);
+  const [siteTypes, setSiteTypes] = useState<SiteType[]>([]);
 
   const load = useCallback(async () => {
     try {
@@ -36,6 +39,7 @@ export function PlatformAdminWorkspace() {
 
   useEffect(() => {
     void load();
+    authFetch('/api/v1/app-marketplace').then(response=>response.json()).then(body=>setSiteTypes((body.data||[]).filter((item:SiteType)=>item.itemType==='service_pack'))).catch(()=>setSiteTypes([]));
   }, [load]);
 
   async function issue(event: FormEvent<HTMLFormElement>, owner: Owner) {
@@ -77,12 +81,18 @@ export function PlatformAdminWorkspace() {
     const form = new FormData(event.currentTarget);
     const response = await authFetch('/api/v1/platform/owners', {
       method: 'POST',
-      body: JSON.stringify({tenantId: form.get('tenantId'), name: form.get('name'), email: form.get('email'), password: form.get('password'), modules: form.getAll('modules')})
+      body: JSON.stringify({tenantId: form.get('tenantId'), name: form.get('name'), email: form.get('email'), password: form.get('password'), modules: form.getAll('modules'), siteTypeItemId: form.get('siteTypeItemId')})
     });
     const body = await response.json();
     setCreating(false);
     if (!response.ok) { setError(body.error?.message || 'Unable to create owner'); return; }
     event.currentTarget.reset();
+    await load();
+  }
+
+  async function saveSiteType(owner:Owner,itemId:string){
+    const response=await authFetch(`/api/v1/platform/tenants/${owner.tenantId}/site-type`,{method:'PUT',body:JSON.stringify({itemId})});
+    if(!response.ok){const body=await response.json();setError(body.error?.message||'Unable to update site type');return;}
     await load();
   }
 
@@ -94,6 +104,7 @@ export function PlatformAdminWorkspace() {
         <div className="form-columns"><label>Business name<input name="name" required /></label><label>Tenant ID<input name="tenantId" defaultValue="tenant_demo" required /></label></div>
         <label>Owner email<input name="email" type="email" required /></label>
         <label>Temporary password<input name="password" type="password" minLength={12} required /><small>Use uppercase, lowercase, number, and symbol.</small></label>
+        <label>Service-company site type<select name="siteTypeItemId" required defaultValue=""><option value="" disabled>Select a marketplace service pack</option>{siteTypes.map(item=><option value={item.id} key={item.id}>{item.name}</option>)}</select></label>
         <fieldset className="platform-module-picker"><legend>Enabled business modules</legend><p>Only platform administrators can change this tenant-wide entitlement.</p><div>{availableModules.map(moduleName=><label key={moduleName}><input type="checkbox" name="modules" value={moduleName} defaultChecked={['operations','crm','assets','billing'].includes(moduleName)} />{moduleName}</label>)}</div></fieldset>
         <button className="button button-small" disabled={creating}>{creating ? 'Creating owner…' : 'Create owner'}</button>
       </form>
@@ -138,6 +149,7 @@ export function PlatformAdminWorkspace() {
               <summary>Enabled modules</summary>
               <ModuleChecklist tenantId={owner.tenantId} />
             </details>
+            <label className="owner-site-type">Service-company site type<select value={owner.siteTypeItemId||''} onChange={event=>void saveSiteType(owner,event.target.value)}><option value="" disabled>Select site type</option>{siteTypes.map(item=><option value={item.id} key={item.id}>{item.name}</option>)}</select></label>
           </article>
         ))}
       </div>
