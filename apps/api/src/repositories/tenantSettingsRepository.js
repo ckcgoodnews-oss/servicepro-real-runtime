@@ -14,6 +14,10 @@ function ensureSettings(data) {
 
 function createJsonTenantSettingsRepository(store) {
   return {
+    findPublicBySlug(slug) {
+      const settings=ensureSettings(store.read()).tenantSettings.find(row=>String(row.branding?.publicSlug||'').toLowerCase()===String(slug).toLowerCase()&&row.branding?.publicPublished===true);
+      return settings||null;
+    },
     get(tenantId) {
       const data = ensureSettings(store.read());
       let settings = data.tenantSettings.find(x => x.tenantId === tenantId);
@@ -48,6 +52,10 @@ function createJsonTenantSettingsRepository(store) {
 
 function createPostgresTenantSettingsRepository(store) {
   return {
+    async findPublicBySlug(slug) {
+      const result=await store.query(`SELECT tenant_id as "tenantId",company_name as "companyName",support_email as "supportEmail",support_phone as "supportPhone",branding,features FROM tenant_settings WHERE lower(branding->>'publicSlug')=lower($1) AND COALESCE((branding->>'publicPublished')::boolean,false)=true LIMIT 1`,[slug]);
+      return result.rows[0]||null;
+    },
     async get(tenantId) {
       const result = await store.query(
         `SELECT tenant_id as "tenantId", company_name as "companyName", legal_name as "legalName",

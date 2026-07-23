@@ -18,6 +18,7 @@ const { attachOperationalTenant } = require('./services/tenantResolver');
 const { ownerAccessGuard } = require('./middleware/ownerAccessGuard');
 const platformAccess = require('./routes/platformAccess');
 const moduleAccess = require('./routes/moduleAccess');
+const publicStorefront = require('./routes/publicStorefront');
 const { moduleAccessGuard } = require('./middleware/moduleAccessGuard');
 
 const auth = require('./routes/auth');
@@ -145,6 +146,9 @@ async function router(req, res) {
   }
   if (req.url === '/portal/login' && req.method === 'POST') return portal.login(req, res);
   if (req.url === '/tenant-profile' && req.method === 'GET') return tenantAdmin.getPublicProfile(req, res);
+  const publicStorefrontMatch=req.url.match(/^\/api\/public\/storefront\/([^/?]+)$/);
+  if(publicStorefrontMatch&&req.method==='GET')return publicStorefront.profile(req,res,decodeURIComponent(publicStorefrontMatch[1]));
+  if(publicStorefrontMatch&&req.method==='POST')return publicStorefront.requestService(req,res,decodeURIComponent(publicStorefrontMatch[1]));
 
   if (req.url.startsWith('/portal/api/')) {
     if (!portalAuthGuard(req, res)) return;
@@ -286,6 +290,7 @@ async function router(req, res) {
     if (!requirePermission(PERMISSIONS.USERS_SELF_READ)(req, res)) return;
     return auth.me(req, res);
   }
+  if(req.url==='/api/v1/storefront/themes'&&req.method==='GET')return publicStorefront.listThemes(req,res);
   if (req.url === '/api/v1/authz' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.ADMIN_AUTHZ_READ)(req, res)) return;
     return auth.authz(req, res);
