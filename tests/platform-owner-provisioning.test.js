@@ -1,0 +1,40 @@
+const assert = require('node:assert/strict');
+const test = require('node:test');
+const platformAccess = require('../apps/api/src/routes/platformAccess');
+
+function response() {
+  return {setHeader() {}, end(value) { this.body = JSON.parse(value); }};
+}
+
+function request() {
+  return {
+    body: {tenantId: 'tenant_demo', days: 30},
+    context: {
+      email: '5189213@gmail.com',
+      userId: 'platform-admin-id',
+      repositories: {
+        accessEntitlements: {
+          async listOwners() {
+            return [
+              {id: 'platform-admin-id', tenantId: 'tenant_demo', email: '5189213@gmail.com'},
+              {id: 'business-owner-id', tenantId: 'tenant_demo', email: 'owner@example.com'}
+            ];
+          },
+          async issue(input) { return {id: 'entitlement-id', ...input, status: 'pending'}; }
+        }
+      }
+    }
+  };
+}
+
+test('platform administrators are excluded from owner provisioning', async () => {
+  const owners = await platformAccess.eligibleOwners(request());
+  assert.deepEqual(owners.map(owner => owner.email), ['owner@example.com']);
+});
+
+test('cannot issue an owner token to a platform administrator', async () => {
+  const res = response();
+  await platformAccess.issue(request(), res, 'platform-admin-id');
+  assert.equal(res.statusCode, 400);
+  assert.equal(res.body.error.code, 'invalid_owner');
+});
