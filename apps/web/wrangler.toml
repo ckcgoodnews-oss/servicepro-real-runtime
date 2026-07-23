@@ -1,5 +1,7 @@
 name = "servicepro-web"
+compatibility_date = "2026-07-23"
 
-compatibility_date = "2026-07-21"
-
-pages_build_output_dir = "./out"
+[assets]
+directory = "./out"
+html_handling = "auto-trailing-slash"
+not_found_handling = "404-page"
