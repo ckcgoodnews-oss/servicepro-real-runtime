@@ -27,7 +27,10 @@ async function profile(req, res, slug) {
   const { settings, operationalTenant } = value;
   const branding = settings.branding || {};
   const presentation = branding.publicServicePresentation || {};
-  const services = await req.context.repositories.services.list(operationalTenant);
+  let services = await req.context.repositories.services.list(operationalTenant);
+  if (!services.length && String(settings.tenantId) !== String(operationalTenant)) {
+    services = await req.context.repositories.services.list(settings.tenantId);
+  }
   return sendJson(res, 200, {
     data: {
       slug: branding.publicSlug || slug,
