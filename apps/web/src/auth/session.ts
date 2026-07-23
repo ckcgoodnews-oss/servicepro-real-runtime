@@ -17,14 +17,18 @@ export type AuthSession = {
 const sessionKey = 'servicepro.auth.session';
 const tenantKey = 'servicepro.auth.tenant';
 
+export function configuredTenantId() {
+  return process.env.NEXT_PUBLIC_DEFAULT_TENANT_ID || 'tenant_demo';
+}
+
 export function apiUrl(path: string) {
   const base = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:10001').replace(/\/$/, '');
   return `${base}${path}`;
 }
 
 export function tenantId() {
-  if (typeof window === 'undefined') return process.env.NEXT_PUBLIC_DEFAULT_TENANT_ID || 'tenant_demo';
-  return window.localStorage.getItem(tenantKey) || process.env.NEXT_PUBLIC_DEFAULT_TENANT_ID || 'tenant_demo';
+  if (typeof window === 'undefined') return configuredTenantId();
+  return window.localStorage.getItem(tenantKey) || configuredTenantId();
 }
 
 export function readSession(): AuthSession | null {
@@ -67,6 +71,7 @@ export function clearSession() {
   if (typeof window === 'undefined') return;
   window.localStorage.removeItem(sessionKey);
   window.sessionStorage.removeItem(sessionKey);
+  window.localStorage.removeItem(tenantKey);
 }
 
 export async function authFetch(path: string, init: RequestInit = {}) {

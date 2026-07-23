@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { FormEvent } from 'react';
-import { apiUrl, saveSession, tenantId, type AuthSession } from '@/auth/session';
+import { apiUrl, configuredTenantId, saveSession, type AuthSession } from '@/auth/session';
 
 export function LoginForm() {
   const router = useRouter();
@@ -16,7 +16,7 @@ export function LoginForm() {
     try {
       const response = await fetch(apiUrl('/auth/login'), {
         method: 'POST',
-        headers: { 'content-type': 'application/json', 'x-tenant-id': tenantId() },
+        headers: { 'content-type': 'application/json', 'x-tenant-id': configuredTenantId() },
         body: JSON.stringify({ email: form.get('email'), password: form.get('password') })
       });
       const body = await response.json();
