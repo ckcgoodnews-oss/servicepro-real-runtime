@@ -1,0 +1,114 @@
+.storefront-service-add {
+  margin: 20px 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--mist);
+}
+
+.storefront-service-add h3 {
+  margin: 0;
+  font: 700 15px Manrope;
+}
+
+.storefront-service-add p,
+.storefront-message {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.storefront-service-add label,
+.storefront-builder form > label {
+  display: grid;
+  gap: 7px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.storefront-service-add input,
+.storefront-builder input,
+.storefront-builder select,
+.storefront-builder textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 11px;
+}
+
+.storefront-builder .publish-toggle {
+  display: flex;
+  align-items: center;
+}
+
+.storefront-builder .publish-toggle input,
+.storefront-service-checks input {
+  width: auto;
+}
+
+.storefront-service-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.storefront-service-toolbar legend {
+  margin-right: auto;
+  font-weight: 700;
+}
+
+.storefront-service-toolbar span {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.storefront-service-toolbar button {
+  border: 0;
+  background: transparent;
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.storefront-service-checks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.storefront-service-checks label {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+}
+
+.storefront-service-checks span {
+  display: grid;
+  gap: 2px;
+}
+
+.storefront-service-checks strong {
+  font-size: 10px;
+}
+
+.storefront-service-checks small {
+  color: var(--muted);
+  font-size: 8px;
+}
+
+@media (max-width: 650px) {
+  .storefront-service-checks {
+    grid-template-columns: 1fr;
+  }
+
+  .storefront-service-toolbar {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
