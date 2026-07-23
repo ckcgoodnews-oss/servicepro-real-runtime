@@ -65,11 +65,20 @@ export function PublicStorefront() {
     <main className={`public-storefront theme-${data.theme.slug}`} style={style}>
       <header>
         <strong>{data.logoUrl ? <img src={data.logoUrl} alt="" /> : data.companyName}</strong>
-        <nav>
-          <a href="#services">Services</a>
+        <nav aria-label="Business website navigation">
+          <a href={`/p/?business=${encodeURIComponent(slug)}`}>Home</a>
+          {data.services.map((service: any) => (
+            <a
+              className={service.id === serviceId ? 'active' : ''}
+              href={`/p/?business=${encodeURIComponent(slug)}&service=${encodeURIComponent(service.id)}`}
+              key={service.id}
+            >
+              {service.name}
+            </a>
+          ))}
           <a href="#request">Request service</a>
-          {data.contactPhone && <a href={`tel:${data.contactPhone}`}>{data.contactPhone}</a>}
         </nav>
+        {data.contactPhone && <a className="storefront-call" href={`tel:${data.contactPhone}`}>{data.contactPhone}</a>}
       </header>
       <section
         className="storefront-hero"

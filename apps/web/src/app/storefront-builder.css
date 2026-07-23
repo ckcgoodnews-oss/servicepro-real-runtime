@@ -417,6 +417,49 @@
   font-weight: 700;
 }
 
+.public-storefront > header {
+  position: relative;
+  height: auto;
+  min-height: 76px;
+  gap: 24px;
+  padding-block: 12px;
+}
+
+.public-storefront > header nav {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.public-storefront > header nav a {
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+.public-storefront > header nav a:hover,
+.public-storefront > header nav a.active {
+  background: color-mix(in srgb, var(--store-primary) 10%, white);
+  color: var(--store-primary);
+}
+
+.public-storefront > header nav a:last-child,
+.public-storefront .storefront-call {
+  background: var(--store-primary);
+  color: white;
+}
+
+.public-storefront .storefront-call {
+  flex: none;
+  border-radius: 7px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .storefront-service-page {
   padding: 60px 8vw 90px;
 }
@@ -468,6 +511,25 @@
 }
 
 @media (max-width: 800px) {
+  .public-storefront > header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .public-storefront > header nav {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .public-storefront > header nav a {
+    display: inline-block;
+  }
+
+  .public-storefront .storefront-call {
+    position: absolute;
+    right: 6vw;
+    top: 18px;
+  }
   .storefront-service-page > div {
     grid-template-columns: 1fr;
   }

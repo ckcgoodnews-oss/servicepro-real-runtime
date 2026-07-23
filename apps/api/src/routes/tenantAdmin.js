@@ -30,6 +30,11 @@ function updateBranding(req, res) {
         input.publicSlug = input.publicSlug.trim().toLowerCase()
           .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
       }
+      if (input.publicPublished === true) {
+        input.publicPublishedAt = new Date().toISOString();
+      } else if (input.publicPublished === false && current.branding?.publicPublished !== false) {
+        input.publicUnpublishedAt = new Date().toISOString();
+      }
       return req.context.repositories.tenantSettings.upsert(tenant(req), {
         branding: {
           ...(current.branding || {}),

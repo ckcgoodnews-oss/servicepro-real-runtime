@@ -43,6 +43,8 @@ export function StorefrontBuilder() {
   const [published, setPublished] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState('');
+  const [publishedAt, setPublishedAt] = useState('');
+  const [unpublishedAt, setUnpublishedAt] = useState('');
 
   useEffect(() => {
     Promise.all([
@@ -65,6 +67,8 @@ export function StorefrontBuilder() {
       setServicePresentation(suggestions);
       setStarterPack(starterResponse.data || null);
       setPublished(settingsResponse.data?.branding?.publicPublished === true);
+      setPublishedAt(settingsResponse.data?.branding?.publicPublishedAt || '');
+      setUnpublishedAt(settingsResponse.data?.branding?.publicUnpublishedAt || '');
     });
   }, []);
 
@@ -181,9 +185,13 @@ export function StorefrontBuilder() {
       method: 'PATCH',
       body: JSON.stringify(branding),
     });
+    const responseBody = await response.json().catch(() => ({}));
     setMessage(response.ok ? (published ? 'Changes are live on the public storefront.' : 'Draft saved. The storefront is not publicly available.') : 'Unable to save storefront.');
     if (response.ok) {
-      setSettings((current: any) => ({ ...current, branding }));
+      const savedBranding = responseBody.data || branding;
+      setSettings((current: any) => ({ ...current, branding: savedBranding }));
+      setPublishedAt(savedBranding.publicPublishedAt || '');
+      setUnpublishedAt(savedBranding.publicUnpublishedAt || '');
       setDirty(false);
       setLastSavedAt(new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }));
     }
@@ -224,7 +232,15 @@ export function StorefrontBuilder() {
         <div>
           <span>{published ? 'Live storefront' : 'Unpublished draft'}</span>
           <strong>{dirty ? 'You have unsaved changes' : 'All changes are saved'}</strong>
-          <small>{lastSavedAt ? `Last saved at ${lastSavedAt}` : 'Changes appear publicly only after you save.'}</small>
+          <small>
+            {published && publishedAt
+              ? `Published ${new Date(publishedAt).toLocaleString()}`
+              : !published && unpublishedAt
+                ? `Unpublished ${new Date(unpublishedAt).toLocaleString()}`
+                : lastSavedAt
+                  ? `Last saved at ${lastSavedAt}`
+                  : 'Changes appear publicly only after you save.'}
+          </small>
         </div>
         {branding.publicSlug && published && <a target="_blank" href={`/p/?business=${encodeURIComponent(branding.publicSlug)}`}>View live storefront</a>}
       </section>
