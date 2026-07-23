@@ -48,6 +48,10 @@ async function profile(req, res, slug) {
           name: presentation[item.id]?.title || item.name,
           description: presentation[item.id]?.description || item.description,
           imageUrl: presentation[item.id]?.imageUrl || '',
+          pageHeadline: presentation[item.id]?.pageHeadline || `${presentation[item.id]?.title || item.name} you can depend on`,
+          pageBody: presentation[item.id]?.pageBody || `Get dependable ${(presentation[item.id]?.title || item.name).toLowerCase()} from experienced local professionals.`,
+          benefits: String(presentation[item.id]?.benefits || '')
+            .split('\n').map(value => value.trim()).filter(Boolean),
           startingPrice: item.basePrice
         }))
     }

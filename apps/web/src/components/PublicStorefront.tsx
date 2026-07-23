@@ -8,9 +8,11 @@ export function PublicStorefront() {
   const [slug, setSlug] = useState('');
   const [error, setError] = useState('');
   const [sent, setSent] = useState(false);
+  const [serviceId, setServiceId] = useState('');
 
   useEffect(() => {
     const value = (new URLSearchParams(location.search).get('business') || '').trim().toLowerCase();
+    setServiceId(new URLSearchParams(location.search).get('service') || '');
     setSlug(value);
     if (!value) {
       setError('Business page not specified.');
@@ -57,6 +59,7 @@ export function PublicStorefront() {
     '--store-primary': data.theme.config.primary,
     '--store-secondary': data.theme.config.secondary,
   } as React.CSSProperties;
+  const selectedService = data.services.find((service: any) => service.id === serviceId);
 
   return (
     <main className={`public-storefront theme-${data.theme.slug}`} style={style}>
@@ -79,7 +82,25 @@ export function PublicStorefront() {
           <a href="#request">Request service</a>
         </div>
       </section>
-      <section className="storefront-services" id="services">
+      {selectedService && (
+        <section className="storefront-service-page">
+          <a href={`/p/?business=${encodeURIComponent(slug)}#services`}>← All services</a>
+          <div>
+            <div>
+              <span>Professional service</span>
+              <h1>{selectedService.pageHeadline}</h1>
+              <p>{selectedService.pageBody}</p>
+              {!!selectedService.benefits.length && (
+                <ul>{selectedService.benefits.map((benefit: string) => <li key={benefit}>{benefit}</li>)}</ul>
+              )}
+              {selectedService.startingPrice && <strong>Starting at ${Number(selectedService.startingPrice).toFixed(0)}</strong>}
+              <a href="#request">Request {selectedService.name}</a>
+            </div>
+            {selectedService.imageUrl && <img src={selectedService.imageUrl} alt={selectedService.name} />}
+          </div>
+        </section>
+      )}
+      {!selectedService && <section className="storefront-services" id="services">
         <span>What we do</span>
         <h2>Professional services for your property</h2>
         <div>
@@ -90,11 +111,12 @@ export function PublicStorefront() {
                 <h3>{service.name}</h3>
                 <p>{service.description}</p>
                 {service.startingPrice && <strong>Starting at ${Number(service.startingPrice).toFixed(0)}</strong>}
+                <a className="storefront-service-link" href={`/p/?business=${encodeURIComponent(slug)}&service=${encodeURIComponent(service.id)}`}>View service details →</a>
               </div>
             </article>
           ))}
         </div>
-      </section>
+      </section>}
       <section className="storefront-request" id="request">
         <div>
           <span>Let&apos;s get started</span>
@@ -110,7 +132,7 @@ export function PublicStorefront() {
           <form onSubmit={submit}>
             <input name="name" placeholder="Your name" required />
             <div><input name="email" type="email" placeholder="Email" /><input name="phone" placeholder="Phone" /></div>
-            <select name="serviceId">
+            <select name="serviceId" defaultValue={selectedService?.id || ''}>
               <option value="">Select a service</option>
               {data.services.map((service: any) => <option value={service.id} key={service.id}>{service.name}</option>)}
             </select>

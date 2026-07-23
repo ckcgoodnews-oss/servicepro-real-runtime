@@ -10,16 +10,32 @@ type Service = {
   description?: string;
 };
 
+type ServicePresentation = {
+  title?: string;
+  description?: string;
+  imageUrl?: string;
+  pageHeadline?: string;
+  pageBody?: string;
+  benefits?: string;
+};
+
+function suggestedPresentation(service: Service): ServicePresentation {
+  const name = service.name.trim();
+  return {
+    title: name,
+    description: service.description || `Professional ${name.toLowerCase()} delivered by experienced local specialists.`,
+    pageHeadline: `${name} you can depend on`,
+    pageBody: `Get dependable ${name.toLowerCase()} from a team focused on quality workmanship, clear communication, and a smooth customer experience from request through completion.`,
+    benefits: `Experienced service professionals\nClear scheduling and communication\nQuality work tailored to your needs`,
+  };
+}
+
 export function StorefrontBuilder() {
   const [settings, setSettings] = useState<any>(null);
   const [services, setServices] = useState<Service[]>([]);
   const [themes, setThemes] = useState<any[]>([]);
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
-  const [servicePresentation, setServicePresentation] = useState<Record<string, {
-    title?: string;
-    description?: string;
-    imageUrl?: string;
-  }>>({});
+  const [servicePresentation, setServicePresentation] = useState<Record<string, ServicePresentation>>({});
   const [message, setMessage] = useState('');
   const [addingService, setAddingService] = useState(false);
 
@@ -33,7 +49,14 @@ export function StorefrontBuilder() {
       setServices(servicesResponse.data || []);
       setThemes(themesResponse.data || []);
       setSelectedServiceIds(settingsResponse.data?.branding?.publicServiceIds || []);
-      setServicePresentation(settingsResponse.data?.branding?.publicServicePresentation || {});
+      const stored = settingsResponse.data?.branding?.publicServicePresentation || {};
+      const suggestions = Object.fromEntries(
+        (servicesResponse.data || []).map((service: Service) => [
+          service.id,
+          { ...suggestedPresentation(service), ...(stored[service.id] || {}) },
+        ]),
+      );
+      setServicePresentation(suggestions);
     });
   }, []);
 
@@ -45,7 +68,7 @@ export function StorefrontBuilder() {
     );
   }
 
-  function updatePresentation(serviceId: string, field: 'title' | 'description' | 'imageUrl', value: string) {
+  function updatePresentation(serviceId: string, field: keyof ServicePresentation, value: string) {
     setServicePresentation((current) => ({
       ...current,
       [serviceId]: { ...(current[serviceId] || {}), [field]: value },
@@ -81,6 +104,10 @@ export function StorefrontBuilder() {
 
     setServices((current) => [...current, body.data]);
     setSelectedServiceIds((current) => [...new Set([...current, body.data.id])]);
+    setServicePresentation((current) => ({
+      ...current,
+      [body.data.id]: suggestedPresentation(body.data),
+    }));
     setMessage(`${body.data.name} was added and selected. Save the storefront to publish it.`);
     form.reset();
   }
@@ -237,6 +264,29 @@ export function StorefrontBuilder() {
                         value={servicePresentation[service.id]?.description || ''}
                         placeholder={service.description || 'Describe this service for prospective customers.'}
                         onChange={(event) => updatePresentation(service.id, 'description', event.target.value)}
+                      />
+                    </label>
+                    <label>
+                      Service page headline
+                      <input
+                        value={servicePresentation[service.id]?.pageHeadline || ''}
+                        onChange={(event) => updatePresentation(service.id, 'pageHeadline', event.target.value)}
+                      />
+                    </label>
+                    <label>
+                      Service page details
+                      <textarea
+                        rows={4}
+                        value={servicePresentation[service.id]?.pageBody || ''}
+                        onChange={(event) => updatePresentation(service.id, 'pageBody', event.target.value)}
+                      />
+                    </label>
+                    <label>
+                      Suggested benefits (one per line)
+                      <textarea
+                        rows={4}
+                        value={servicePresentation[service.id]?.benefits || ''}
+                        onChange={(event) => updatePresentation(service.id, 'benefits', event.target.value)}
                       />
                     </label>
                   </div>
