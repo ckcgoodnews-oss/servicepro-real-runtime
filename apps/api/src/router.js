@@ -266,6 +266,7 @@ async function router(req, res) {
     if (!(await ownerAccessGuard(req, res))) return;
     if (req.url === '/api/v1/access/modules' && req.method === 'GET') return moduleAccess.mine(req,res);
     if (req.url === '/api/v1/team' && req.method === 'GET') return moduleAccess.teamList(req,res);
+    if (req.url === '/api/v1/team' && req.method === 'POST') return moduleAccess.teamCreate(req,res);
     const teamUserMatch=req.url.match(/^\/api\/v1\/team\/([^/]+)$/);if(teamUserMatch&&req.method==='PATCH')return moduleAccess.teamUpdate(req,res,teamUserMatch[1]);
     const tenantModulesMatch=req.url.match(/^\/api\/v1\/platform\/tenants\/([^/]+)\/modules$/);if(tenantModulesMatch&&req.method==='GET')return moduleAccess.platformGet(req,res,tenantModulesMatch[1]);if(tenantModulesMatch&&req.method==='PUT')return moduleAccess.platformSet(req,res,tenantModulesMatch[1]);
     if (!(await moduleAccessGuard(req,res))) return;
