@@ -1,6 +1,7 @@
 const {sendJson}=require('../utils/http');
 const {issueOpaqueToken,hashToken}=require('../services/tokenService');
 const {isPlatformAdmin,platformAdminEmails}=require('../services/platformAdminService');
+const {passwordErrors}=require('./auth');
 function deny(res){return sendJson(res,403,{error:{code:'forbidden',message:'Platform administrator access required'}});}
 async function eligibleOwners(req){
   const admins=new Set(platformAdminEmails());
@@ -8,6 +9,16 @@ async function eligibleOwners(req){
     .filter(owner=>!admins.has(String(owner.email||'').trim().toLowerCase()));
 }
 async function list(req,res){if(!isPlatformAdmin(req))return deny(res);return sendJson(res,200,{data:await eligibleOwners(req)});}
+async function createOwner(req,res){
+  if(!isPlatformAdmin(req))return deny(res);
+  const {tenantId,email,name,password}=req.body||{};
+  const errors=passwordErrors(password);
+  if(!tenantId||!email||!name||errors.length)return sendJson(res,400,{error:{code:'validation_failed',message:errors.length?`Password must include ${errors.join(', ')}`:'Tenant, name, email, and password are required'}});
+  if(platformAdminEmails().includes(String(email).trim().toLowerCase()))return sendJson(res,400,{error:{code:'invalid_owner',message:'Platform administrators cannot be created as tenant owners'}});
+  const user=await req.context.repositories.users.create({tenantId,email:String(email).trim().toLowerCase(),name,password,roles:['owner']});
+  if(!user)return sendJson(res,409,{error:{code:'account_exists',message:'An account already exists for this tenant and email'}});
+  return sendJson(res,201,{data:user});
+}
 async function issue(req,res,userId){
   if(!isPlatformAdmin(req))return deny(res);
   const owner=(await eligibleOwners(req)).find(candidate=>candidate.id===userId&&candidate.tenantId===req.body.tenantId);
@@ -19,4 +30,4 @@ async function issue(req,res,userId){
 }
 async function redeem(req,res){const row=await req.context.repositories.accessEntitlements.redeem(req.context.tenantId,req.context.userId,hashToken(req.body.token||''));return row?sendJson(res,200,{data:row}):sendJson(res,400,{error:{code:'invalid_access_token',message:'Access token is invalid or expired'}});}
 async function update(req,res,id){if(!isPlatformAdmin(req))return deny(res);const patch={};if(req.body.status)patch.status=req.body.status;if(req.body.expiresAt)patch.expiresAt=new Date(req.body.expiresAt).toISOString();const row=await req.context.repositories.accessEntitlements.update(id,patch);return row?sendJson(res,200,{data:row}):sendJson(res,404,{error:{code:'not_found',message:'Access entitlement not found'}});}
-module.exports={list,issue,redeem,update,eligibleOwners};
+module.exports={list,createOwner,issue,redeem,update,eligibleOwners};

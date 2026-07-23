@@ -36,13 +36,14 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<AuthSession | null>(null);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
   const userName = session?.user.name || session?.user.email || 'ServicePro user';
-  const isPlatformAdmin = ['cphillips@aardvark-enterprises.net', 'admin1914@aardvark-enterprises.net', '5189213@gmail.com'].includes((session?.user.email || '').toLowerCase());
+  const [isPlatformAdmin, setIsPlatformAdmin] = useState(false);
   const initials = userName.split(/\s|@/).filter(Boolean).slice(0, 2).map(part => part[0]?.toUpperCase()).join('') || 'SP';
   const crumbs = pathname.split('/').filter(Boolean).map((part, index, all) => ({
     label: titleCase(part),
     href: `/${all.slice(0, index + 1).join('/')}`,
   }));
-  const results = useMemo(() => navigation.filter(item => item.label.toLowerCase().includes(query.toLowerCase())), [query]);
+  const visibleNavigation = useMemo(() => navigation.filter(item => item.href !== '/marketplace' || isPlatformAdmin), [isPlatformAdmin]);
+  const results = useMemo(() => visibleNavigation.filter(item => item.label.toLowerCase().includes(query.toLowerCase())), [query, visibleNavigation]);
 
   useEffect(() => {
     const sync=()=>setSession(readSession()); sync(); window.addEventListener('servicepro:session',sync); return ()=>window.removeEventListener('servicepro:session',sync);
@@ -50,6 +51,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!session) return;
+    authFetch('/api/v1/access/modules').then(response=>response.ok?response.json():null).then(body=>setIsPlatformAdmin(Boolean(body?.data?.platformAdmin))).catch(()=>setIsPlatformAdmin(false));
     const sync=()=>authFetch('/api/v1/notifications').then(response=>response.ok?response.json():null).then(body=>setUnreadNotifications(body?.data?.filter((row:{readAt?:string})=>!row.readAt).length||0)).catch(()=>{});
     sync(); window.addEventListener('servicepro:notifications',sync); return ()=>window.removeEventListener('servicepro:notifications',sync);
   }, [session]);
@@ -87,7 +89,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     <aside className="sidebar" aria-label="Primary navigation">
       <div className="sidebar-brand-row"><BrandMark /><button className="sidebar-close" type="button" aria-label="Close navigation" onClick={() => setMobileOpen(false)}>×</button></div>
       <label className="tenant-picker"><span>Workspace</span><select aria-label="Select workspace" defaultValue={session?.user.tenantId || 'current'}><option value={session?.user.tenantId || 'current'}>{session?.user.tenantId || 'Current workspace'}</option></select></label>
-      <nav>{navigation.map(item => <Link className={pathname === item.href ? 'active' : ''} href={item.href} key={item.href} aria-current={pathname===item.href?'page':undefined} onClick={() => setMobileOpen(false)}><span aria-hidden="true">{item.icon}</span>{item.label}</Link>)}</nav>
+      <nav>{visibleNavigation.map(item => <Link className={pathname === item.href ? 'active' : ''} href={item.href} key={item.href} aria-current={pathname===item.href?'page':undefined} onClick={() => setMobileOpen(false)}><span aria-hidden="true">{item.icon}</span>{item.label}</Link>)}</nav>
       <div className="sidebar-bottom">{isPlatformAdmin && <Link href="/platform-admin"><span aria-hidden="true">A</span>Platform admin</Link>}<Link href="/system-status"><span aria-hidden="true">●</span>System status</Link><Link href="/settings"><span aria-hidden="true">⚙</span>Settings</Link><LogoutButton /><div className="user-chip"><b>{initials}</b><span><strong>{userName}</strong><small>{session?.user.roles?.[0] || 'Workspace member'}</small></span></div></div>
     </aside>
     <main className="workspace" id="main-content" tabIndex={-1}>

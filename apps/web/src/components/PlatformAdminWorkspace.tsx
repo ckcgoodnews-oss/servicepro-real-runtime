@@ -18,6 +18,7 @@ export function PlatformAdminWorkspace() {
   const [owners, setOwners] = useState<Owner[]>([]);
   const [error, setError] = useState('');
   const [token, setToken] = useState('');
+  const [creating, setCreating] = useState(false);
 
   const load = useCallback(async () => {
     try {
@@ -67,7 +68,33 @@ export function PlatformAdminWorkspace() {
     await load();
   }
 
+  async function createOwner(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setCreating(true);
+    setError('');
+    const form = new FormData(event.currentTarget);
+    const response = await authFetch('/api/v1/platform/owners', {
+      method: 'POST',
+      body: JSON.stringify({tenantId: form.get('tenantId'), name: form.get('name'), email: form.get('email'), password: form.get('password')})
+    });
+    const body = await response.json();
+    setCreating(false);
+    if (!response.ok) { setError(body.error?.message || 'Unable to create owner'); return; }
+    event.currentTarget.reset();
+    await load();
+  }
+
   return (
+    <div className="platform-admin-grid">
+    <section className="panel platform-owner-create">
+      <div className="panel-heading"><div><h2>Create business owner</h2><p>Create the tenant login, then assign modules and timed access.</p></div></div>
+      <form onSubmit={createOwner}>
+        <div className="form-columns"><label>Business name<input name="name" required /></label><label>Tenant ID<input name="tenantId" defaultValue="tenant_demo" required /></label></div>
+        <label>Owner email<input name="email" type="email" required /></label>
+        <label>Temporary password<input name="password" type="password" minLength={12} required /><small>Use uppercase, lowercase, number, and symbol.</small></label>
+        <button className="button button-small" disabled={creating}>{creating ? 'Creating owner…' : 'Create owner'}</button>
+      </form>
+    </section>
     <section className="panel">
       <div className="panel-heading">
         <div>
@@ -112,5 +139,6 @@ export function PlatformAdminWorkspace() {
         ))}
       </div>
     </section>
+    </div>
   );
 }

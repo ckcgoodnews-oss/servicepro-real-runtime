@@ -9,7 +9,7 @@ function moduleForPath(path){
   if(/^\/api\/v1\/(reports|exports)/.test(path))return 'analytics';
   if(/^\/api\/v1\/knowledge/.test(path))return 'knowledge';
   if(/^\/api\/v1\/(notifications|communications)/.test(path))return 'communications';
-  if(/^\/api\/v1\/marketplace/.test(path))return 'marketplace';
+  if(/^\/api\/v1\/(marketplace|app-marketplace)/.test(path))return 'marketplace';
   if(/^\/api\/v1\/(tenant|audit|security|integrity|team)/.test(path))return 'administration';
   return null;
 }

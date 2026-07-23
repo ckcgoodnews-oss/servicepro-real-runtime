@@ -13,6 +13,9 @@ function request() {
       email: '5189213@gmail.com',
       userId: 'platform-admin-id',
       repositories: {
+        users: {
+          async create(input) { return {id: 'new-owner-id', ...input}; }
+        },
         accessEntitlements: {
           async listOwners() {
             return [
@@ -37,4 +40,13 @@ test('cannot issue an owner token to a platform administrator', async () => {
   await platformAccess.issue(request(), res, 'platform-admin-id');
   assert.equal(res.statusCode, 400);
   assert.equal(res.body.error.code, 'invalid_owner');
+});
+
+test('platform administrator can create a tenant owner', async () => {
+  const req = request();
+  req.body = {tenantId: 'tenant_demo', email: 'new.owner@example.com', name: 'New Owner', password: 'StrongPass123!'};
+  const res = response();
+  await platformAccess.createOwner(req, res);
+  assert.equal(res.statusCode, 201);
+  assert.deepEqual(res.body.data.roles, ['owner']);
 });

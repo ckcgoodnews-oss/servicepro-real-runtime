@@ -1,0 +1,9 @@
+.platform-admin-grid{display:grid;gap:16px}
+.platform-owner-create form{display:grid;gap:12px}
+.platform-owner-create label{display:grid;gap:6px;font-size:11px;font-weight:700}
+.platform-owner-create input{width:100%;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--ink);padding:11px}
+.platform-owner-create small{color:var(--muted);font-size:9px}
+.platform-owner-create .button{justify-self:start}
+.platform-admin-grid .organization-list>article{gap:12px;padding:14px 0;flex-wrap:wrap}
+.platform-admin-grid details{width:100%}
+.platform-admin-grid summary{cursor:pointer;color:var(--green);font-weight:700;font-size:11px}
