@@ -7,6 +7,102 @@
   scroll-margin-top: 95px;
 }
 
+.storefront-builder-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 14px 0 10px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.storefront-builder-breadcrumbs a {
+  color: var(--green);
+}
+
+.storefront-builder-tabs {
+  position: sticky;
+  top: 76px;
+  z-index: 6;
+  display: flex;
+  gap: 5px;
+  margin-bottom: 18px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.storefront-builder-tabs a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 7px;
+  padding: 10px 14px;
+  color: var(--ink);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.storefront-builder-tabs a:hover,
+.storefront-builder-tabs a:focus {
+  background: var(--mist);
+  color: var(--green);
+}
+
+.storefront-builder-tabs a > span {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--green);
+  color: white;
+  font-size: 8px;
+}
+
+.storefront-builder-tabs small {
+  border-radius: 99px;
+  background: var(--mist);
+  padding: 3px 6px;
+  color: var(--green);
+  font-size: 8px;
+}
+
+.storefront-builder-section,
+.storefront-builder fieldset,
+.storefront-publish-status {
+  scroll-margin-top: 145px;
+}
+
+.storefront-builder-section {
+  display: grid;
+  gap: 13px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.storefront-builder-section > header h3 {
+  margin: 4px 0;
+  font: 700 15px Manrope;
+}
+
+.storefront-builder-section > header span {
+  color: var(--green);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.storefront-builder-section > header p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
 .storefront-add-kicker {
   color: var(--green);
   font-size: 8px;
@@ -239,6 +335,14 @@
 }
 
 @media (max-width: 650px) {
+  .storefront-builder-tabs {
+    top: 68px;
+    overflow-x: auto;
+  }
+
+  .storefront-builder-tabs a {
+    min-width: max-content;
+  }
   .storefront-starter-pack {
     grid-template-columns: 1fr;
   }

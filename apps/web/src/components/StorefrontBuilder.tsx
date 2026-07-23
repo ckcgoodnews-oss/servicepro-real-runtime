@@ -210,8 +210,17 @@ export function StorefrontBuilder() {
         )}
       </div>
 
+      <nav className="storefront-builder-breadcrumbs" aria-label="Storefront builder breadcrumb">
+        <a href="/dashboard/">Workspace</a><span>/</span><strong>Storefront Builder</strong><span>/</span><span>Edit public site</span>
+      </nav>
+      <nav className="storefront-builder-tabs" aria-label="Storefront builder sections">
+        <a href="#storefront-branding"><span>1</span>Branding</a>
+        <a href="#storefront-services"><span>2</span>Services &amp; Pages <small>{selectedServiceIds.length}</small></a>
+        <a href="#storefront-publish"><span>3</span>Publish &amp; Preview</a>
+      </nav>
+
       {message && <p className="storefront-message">{message}</p>}
-      <section className={`storefront-publish-status ${published ? 'live' : 'draft'}`}>
+      <section id="storefront-publish" className={`storefront-publish-status ${published ? 'live' : 'draft'}`}>
         <div>
           <span>{published ? 'Live storefront' : 'Unpublished draft'}</span>
           <strong>{dirty ? 'You have unsaved changes' : 'All changes are saved'}</strong>
@@ -265,7 +274,9 @@ export function StorefrontBuilder() {
       )}
 
       <form onSubmit={save} onChange={() => setDirty(true)}>
-        <div className="form-columns">
+        <section className="storefront-builder-section" id="storefront-branding">
+          <header><span>Branding</span><h3>Business identity and public appearance</h3><p>Choose the public address, theme, company message, and images.</p></header>
+          <div className="form-columns">
           <label>
             Public URL slug
             <input name="slug" defaultValue={branding.publicSlug || ''} placeholder="your-business" pattern="[A-Za-z0-9 -]+" required />
@@ -278,21 +289,22 @@ export function StorefrontBuilder() {
             </select>
           </label>
         </div>
-        <label className="publish-toggle">
+          <label className="publish-toggle">
           <input type="checkbox" name="published" checked={published} onChange={(event) => { setPublished(event.target.checked); setDirty(true); }} />
           {published ? 'Published — saving changes updates the live website' : 'Publish this storefront'}
-        </label>
-        <label>Headline<input name="tagline" defaultValue={branding.publicTagline || ''} /></label>
-        <label>Business description<textarea name="description" defaultValue={branding.publicDescription || ''} rows={4} /></label>
-        <div className="form-columns">
+          </label>
+          <label>Headline<input name="tagline" defaultValue={branding.publicTagline || ''} /></label>
+          <label>Business description<textarea name="description" defaultValue={branding.publicDescription || ''} rows={4} /></label>
+          <div className="form-columns">
           <label>Service area<input name="serviceArea" defaultValue={branding.publicServiceArea || ''} /></label>
           <label>Operating hours<input name="hours" defaultValue={branding.publicHours || ''} /></label>
-        </div>
-        <div className="form-columns">
+          </div>
+          <div className="form-columns">
           <label>Logo URL<input name="logoUrl" type="url" defaultValue={branding.logoUrl || ''} /></label>
           <label>Hero image URL<input name="heroImageUrl" defaultValue={branding.heroImageUrl || '/storefront/field-service-hero.png'} /></label>
-        </div>
-        <fieldset>
+          </div>
+        </section>
+        <fieldset id="storefront-services">
           <div className="storefront-service-toolbar">
             <legend>Visible public services</legend>
             <span>{selectedServiceIds.length} of {services.length} selected</span>
