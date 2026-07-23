@@ -22,7 +22,17 @@ function createPostgres(store) {
     async listOwners(){const r=await store.query(`SELECT u.id::text,u.tenant_id AS "tenantId",u.email,u.name,u.roles,e.id::text AS "entitlementId",e.status,e.expires_at AS "expiresAt",e.activated_at AS "activatedAt",e.token_last_four AS "tokenLastFour" FROM runtime_users u LEFT JOIN LATERAL (SELECT * FROM runtime_owner_access_entitlements x WHERE x.tenant_id=u.tenant_id AND x.user_id=u.id ORDER BY x.created_at DESC LIMIT 1) e ON true WHERE u.roles ? 'owner' ORDER BY lower(u.email)`);return r.rows;},
     async issue(input){await store.query(`UPDATE runtime_owner_access_entitlements SET status='revoked',updated_at=now() WHERE tenant_id=$1 AND user_id=$2::uuid AND status IN ('pending','active')`,[input.tenantId,input.userId]);const r=await store.query(`INSERT INTO runtime_owner_access_entitlements(tenant_id,user_id,token_hash,token_last_four,expires_at,created_by) VALUES($1,$2::uuid,$3,$4,$5,$6::uuid) RETURNING id::text,tenant_id AS "tenantId",user_id::text AS "userId",token_last_four AS "tokenLastFour",status,expires_at AS "expiresAt"`,[input.tenantId,input.userId,input.tokenHash,input.tokenLastFour,input.expiresAt,input.createdBy]);return r.rows[0];},
     async redeem(tenantId,userId,tokenHash){const r=await store.query(`UPDATE runtime_owner_access_entitlements SET status='active',activated_at=now(),updated_at=now() WHERE tenant_id=$1 AND user_id=$2::uuid AND token_hash=$3 AND status='pending' AND expires_at>now() RETURNING id::text,status,expires_at AS "expiresAt"`,[tenantId,userId,tokenHash]);return r.rows[0]||null;},
-    async current(tenantId,userId){const r=await store.query(`${select} WHERE e.tenant_id=$1 AND e.user_id=$2::uuid ORDER BY e.created_at DESC LIMIT 1`,[tenantId,userId]);return r.rows[0]||null;},
+    async current(tenantId,userId){
+      try {
+        const r=await store.query(`${select} WHERE e.tenant_id=$1 AND e.user_id=$2::uuid ORDER BY e.created_at DESC LIMIT 1`,[tenantId,userId]);
+        return r.rows[0]||null;
+      } catch (error) {
+        // Preserve the pre-entitlement behavior during rolling deployments. Once
+        // migration 775 exists, all other database failures must still surface.
+        if (error?.code === '42P01') return null;
+        throw error;
+      }
+    },
     async update(id,patch){const r=await store.query(`UPDATE runtime_owner_access_entitlements SET status=COALESCE($2,status),expires_at=COALESCE($3,expires_at),updated_at=now() WHERE id=$1::uuid RETURNING id::text,tenant_id AS "tenantId",user_id::text AS "userId",status,expires_at AS "expiresAt"`,[id,patch.status||null,patch.expiresAt||null]);return r.rows[0]||null;}
   };
 }
