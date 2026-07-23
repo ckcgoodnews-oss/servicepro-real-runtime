@@ -38,13 +38,16 @@ export function StorefrontBuilder() {
   const [servicePresentation, setServicePresentation] = useState<Record<string, ServicePresentation>>({});
   const [message, setMessage] = useState('');
   const [addingService, setAddingService] = useState(false);
+  const [starterPack, setStarterPack] = useState<any>(null);
+  const [addingStarters, setAddingStarters] = useState(false);
 
   useEffect(() => {
     Promise.all([
       authFetch('/api/v1/tenant/settings').then((response) => response.json()),
       authFetch('/api/v1/services').then((response) => response.json()),
       authFetch('/api/v1/storefront/themes').then((response) => response.json()),
-    ]).then(([settingsResponse, servicesResponse, themesResponse]) => {
+      authFetch('/api/v1/storefront/starter-services').then((response) => response.json()),
+    ]).then(([settingsResponse, servicesResponse, themesResponse, starterResponse]) => {
       setSettings(settingsResponse.data);
       setServices(servicesResponse.data || []);
       setThemes(themesResponse.data || []);
@@ -57,6 +60,7 @@ export function StorefrontBuilder() {
         ]),
       );
       setServicePresentation(suggestions);
+      setStarterPack(starterResponse.data || null);
     });
   }, []);
 
@@ -65,6 +69,44 @@ export function StorefrontBuilder() {
       current.includes(serviceId)
         ? current.filter((id) => id !== serviceId)
         : [...current, serviceId],
+    );
+  }
+
+  async function addStarterServices() {
+    if (!starterPack?.services?.length) return;
+    setAddingStarters(true);
+    setMessage('');
+    const created: Service[] = [];
+    const failures: string[] = [];
+    for (const suggestion of starterPack.services) {
+      const response = await authFetch('/api/v1/services', {
+        method: 'POST',
+        body: JSON.stringify({
+          ...suggestion,
+          category: 'public',
+          basePrice: 0,
+          unitCost: 0,
+          taxable: true,
+          active: true,
+        }),
+      });
+      const body = await response.json().catch(() => ({}));
+      if (response.ok && body.data?.id) created.push(body.data);
+      else failures.push(suggestion.name);
+    }
+    setAddingStarters(false);
+    if (created.length) {
+      setServices((current) => [...current, ...created]);
+      setSelectedServiceIds((current) => [...new Set([...current, ...created.map((service) => service.id)])]);
+      setServicePresentation((current) => ({
+        ...current,
+        ...Object.fromEntries(created.map((service) => [service.id, suggestedPresentation(service)])),
+      }));
+    }
+    setMessage(
+      created.length
+        ? `${created.length} suggested service pages were created and selected. Save the storefront to publish them.`
+        : `No pages were created. ${failures.length ? 'The suggested services may already exist in the catalog.' : ''}`,
     );
   }
 
@@ -188,6 +230,19 @@ export function StorefrontBuilder() {
           {addingService ? 'Adding...' : 'Add and select service'}
         </button>
       </form>
+
+      {starterPack?.services?.length > 0 && (
+        <section className="storefront-starter-pack">
+          <div>
+            <h3>{starterPack.siteType?.name || 'Service business'} suggested pages</h3>
+            <p>Create a relevant starter catalog and editable public page for each suggested service.</p>
+          </div>
+          <ul>{starterPack.services.map((service: any) => <li key={service.code}>{service.name}</li>)}</ul>
+          <button className="button button-small" type="button" disabled={addingStarters} onClick={() => void addStarterServices()}>
+            {addingStarters ? 'Creating pages...' : 'Create suggested service pages'}
+          </button>
+        </section>
+      )}
 
       <form onSubmit={save}>
         <div className="form-columns">

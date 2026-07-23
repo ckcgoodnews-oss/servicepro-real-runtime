@@ -86,4 +86,22 @@ function listThemes(req, res) {
   return sendJson(res, 200, { data: themes });
 }
 
-module.exports = { profile, requestService, listThemes, themes };
+async function starterServices(req, res) {
+  const catalog = await req.context.repositories.serviceMarketplace.listCatalog();
+  const installations = await req.context.repositories.serviceMarketplace.listInstallations(req.context.tenantId);
+  const activeIds = new Set(installations.filter(row => row.status === 'active').map(row => row.itemId));
+  const pack = catalog.find(item => item.itemType === 'service_pack' && activeIds.has(item.id));
+  const names = pack?.features?.length ? pack.features : ['Consultation', 'Repair service', 'Preventive maintenance'];
+  return sendJson(res, 200, {
+    data: {
+      siteType: pack ? { id: pack.id, name: pack.name, description: pack.description } : null,
+      services: names.map((name, index) => ({
+        code: `${String(pack?.code || 'service').replace(/^pack-/, '').toUpperCase()}-${index + 1}`,
+        name,
+        description: `Professional ${name.toLowerCase()} from experienced local service specialists.`
+      }))
+    }
+  });
+}
+
+module.exports = { profile, requestService, listThemes, starterServices, themes };

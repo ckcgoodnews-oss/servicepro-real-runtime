@@ -291,6 +291,7 @@ async function router(req, res) {
     return auth.me(req, res);
   }
   if(req.url==='/api/v1/storefront/themes'&&req.method==='GET')return publicStorefront.listThemes(req,res);
+  if(req.url==='/api/v1/storefront/starter-services'&&req.method==='GET')return publicStorefront.starterServices(req,res);
   if (req.url === '/api/v1/authz' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.ADMIN_AUTHZ_READ)(req, res)) return;
     return auth.authz(req, res);
