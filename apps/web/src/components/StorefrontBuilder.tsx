@@ -40,6 +40,9 @@ export function StorefrontBuilder() {
   const [addingService, setAddingService] = useState(false);
   const [starterPack, setStarterPack] = useState<any>(null);
   const [addingStarters, setAddingStarters] = useState(false);
+  const [published, setPublished] = useState(false);
+  const [dirty, setDirty] = useState(false);
+  const [lastSavedAt, setLastSavedAt] = useState('');
 
   useEffect(() => {
     Promise.all([
@@ -61,10 +64,12 @@ export function StorefrontBuilder() {
       );
       setServicePresentation(suggestions);
       setStarterPack(starterResponse.data || null);
+      setPublished(settingsResponse.data?.branding?.publicPublished === true);
     });
   }, []);
 
   function toggleService(serviceId: string) {
+    setDirty(true);
     setSelectedServiceIds((current) =>
       current.includes(serviceId)
         ? current.filter((id) => id !== serviceId)
@@ -96,6 +101,7 @@ export function StorefrontBuilder() {
     }
     setAddingStarters(false);
     if (created.length) {
+      setDirty(true);
       setServices((current) => [...current, ...created]);
       setSelectedServiceIds((current) => [...new Set([...current, ...created.map((service) => service.id)])]);
       setServicePresentation((current) => ({
@@ -111,6 +117,7 @@ export function StorefrontBuilder() {
   }
 
   function updatePresentation(serviceId: string, field: keyof ServicePresentation, value: string) {
+    setDirty(true);
     setServicePresentation((current) => ({
       ...current,
       [serviceId]: { ...(current[serviceId] || {}), [field]: value },
@@ -159,7 +166,7 @@ export function StorefrontBuilder() {
     const form = new FormData(event.currentTarget);
     const branding = {
       publicSlug: form.get('slug'),
-      publicPublished: form.get('published') === 'on',
+      publicPublished: published,
       publicTheme: form.get('theme'),
       publicTagline: form.get('tagline'),
       publicDescription: form.get('description'),
@@ -174,8 +181,12 @@ export function StorefrontBuilder() {
       method: 'PATCH',
       body: JSON.stringify(branding),
     });
-    setMessage(response.ok ? 'Storefront saved.' : 'Unable to save storefront.');
-    if (response.ok) setSettings((current: any) => ({ ...current, branding }));
+    setMessage(response.ok ? (published ? 'Changes are live on the public storefront.' : 'Draft saved. The storefront is not publicly available.') : 'Unable to save storefront.');
+    if (response.ok) {
+      setSettings((current: any) => ({ ...current, branding }));
+      setDirty(false);
+      setLastSavedAt(new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }));
+    }
   }
 
   if (!settings) return <section className="panel">Loading storefront builder...</section>;
@@ -200,6 +211,14 @@ export function StorefrontBuilder() {
       </div>
 
       {message && <p className="storefront-message">{message}</p>}
+      <section className={`storefront-publish-status ${published ? 'live' : 'draft'}`}>
+        <div>
+          <span>{published ? 'Live storefront' : 'Unpublished draft'}</span>
+          <strong>{dirty ? 'You have unsaved changes' : 'All changes are saved'}</strong>
+          <small>{lastSavedAt ? `Last saved at ${lastSavedAt}` : 'Changes appear publicly only after you save.'}</small>
+        </div>
+        {branding.publicSlug && published && <a target="_blank" href={`/p/?business=${encodeURIComponent(branding.publicSlug)}`}>View live storefront</a>}
+      </section>
 
       <form className="storefront-service-add" onSubmit={addService}>
         <div>
@@ -244,7 +263,7 @@ export function StorefrontBuilder() {
         </section>
       )}
 
-      <form onSubmit={save}>
+      <form onSubmit={save} onChange={() => setDirty(true)}>
         <div className="form-columns">
           <label>
             Public URL slug
@@ -259,8 +278,8 @@ export function StorefrontBuilder() {
           </label>
         </div>
         <label className="publish-toggle">
-          <input type="checkbox" name="published" defaultChecked={branding.publicPublished === true} />
-          Publish this storefront
+          <input type="checkbox" name="published" checked={published} onChange={(event) => { setPublished(event.target.checked); setDirty(true); }} />
+          {published ? 'Published — saving changes updates the live website' : 'Publish this storefront'}
         </label>
         <label>Headline<input name="tagline" defaultValue={branding.publicTagline || ''} /></label>
         <label>Business description<textarea name="description" defaultValue={branding.publicDescription || ''} rows={4} /></label>
@@ -276,8 +295,8 @@ export function StorefrontBuilder() {
           <div className="storefront-service-toolbar">
             <legend>Visible public services</legend>
             <span>{selectedServiceIds.length} of {services.length} selected</span>
-            <button type="button" onClick={() => setSelectedServiceIds(services.map((service) => service.id))}>Select all</button>
-            <button type="button" onClick={() => setSelectedServiceIds([])}>Clear all</button>
+            <button type="button" onClick={() => { setSelectedServiceIds(services.map((service) => service.id)); setDirty(true); }}>Select all</button>
+            <button type="button" onClick={() => { setSelectedServiceIds([]); setDirty(true); }}>Clear all</button>
           </div>
           <div className="storefront-service-checks">
             {services.map((service) => (
@@ -292,6 +311,7 @@ export function StorefrontBuilder() {
                 </label>
                 {selectedServiceIds.includes(service.id) && (
                   <div className="storefront-service-design">
+                    {branding.publicSlug && published && <a className="storefront-service-preview" target="_blank" href={`/p/?business=${encodeURIComponent(branding.publicSlug)}&service=${encodeURIComponent(service.id)}`}>Preview this service page</a>}
                     {servicePresentation[service.id]?.imageUrl && (
                       <img src={servicePresentation[service.id].imageUrl} alt="" />
                     )}
@@ -351,7 +371,10 @@ export function StorefrontBuilder() {
             {!services.length && <p>No catalog services yet. Add the first one above.</p>}
           </div>
         </fieldset>
-        <button className="button">Save storefront</button>
+        <div className="storefront-save-bar">
+          <span>{published ? 'Saving will update the public website immediately.' : 'Saving will keep this storefront private.'}</span>
+          <button className="button">{published ? 'Save & publish changes' : 'Save draft'}</button>
+        </div>
       </form>
     </section>
   );
