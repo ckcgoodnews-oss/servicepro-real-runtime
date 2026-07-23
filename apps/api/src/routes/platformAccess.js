@@ -2,6 +2,7 @@ const {sendJson}=require('../utils/http');
 const {issueOpaqueToken,hashToken}=require('../services/tokenService');
 const {isPlatformAdmin,platformAdminEmails}=require('../services/platformAdminService');
 const {passwordErrors}=require('./auth');
+const {normalizeModules}=require('../services/moduleAccessService');
 function deny(res){return sendJson(res,403,{error:{code:'forbidden',message:'Platform administrator access required'}});}
 async function eligibleOwners(req){
   const admins=new Set(platformAdminEmails());
@@ -17,7 +18,9 @@ async function createOwner(req,res){
   if(platformAdminEmails().includes(String(email).trim().toLowerCase()))return sendJson(res,400,{error:{code:'invalid_owner',message:'Platform administrators cannot be created as tenant owners'}});
   const user=await req.context.repositories.users.create({tenantId,email:String(email).trim().toLowerCase(),name,password,roles:['owner']});
   if(!user)return sendJson(res,409,{error:{code:'account_exists',message:'An account already exists for this tenant and email'}});
-  return sendJson(res,201,{data:user});
+  const modules=normalizeModules(req.body.modules);
+  await req.context.repositories.moduleAccess.setTenantModules(tenantId,modules,req.context.userId);
+  return sendJson(res,201,{data:{...user,enabledModules:modules}});
 }
 async function issue(req,res,userId){
   if(!isPlatformAdmin(req))return deny(res);

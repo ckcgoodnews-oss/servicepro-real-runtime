@@ -16,6 +16,9 @@ function request() {
         users: {
           async create(input) { return {id: 'new-owner-id', ...input}; }
         },
+        moduleAccess: {
+          async setTenantModules(tenantId, modules) { return {tenantId, modules}; }
+        },
         accessEntitlements: {
           async listOwners() {
             return [
@@ -44,9 +47,10 @@ test('cannot issue an owner token to a platform administrator', async () => {
 
 test('platform administrator can create a tenant owner', async () => {
   const req = request();
-  req.body = {tenantId: 'tenant_demo', email: 'new.owner@example.com', name: 'New Owner', password: 'StrongPass123!'};
+  req.body = {tenantId: 'tenant_demo', email: 'new.owner@example.com', name: 'New Owner', password: 'StrongPass123!', modules: ['operations', 'billing', 'invalid']};
   const res = response();
   await platformAccess.createOwner(req, res);
   assert.equal(res.statusCode, 201);
   assert.deepEqual(res.body.data.roles, ['owner']);
+  assert.deepEqual(res.body.data.enabledModules, ['operations', 'billing']);
 });

@@ -4,6 +4,8 @@ import {FormEvent, useCallback, useEffect, useState} from 'react';
 import {authFetch} from '@/auth/session';
 import {ModuleChecklist} from '@/components/ModuleChecklist';
 
+const availableModules = ['operations', 'crm', 'assets', 'inventory', 'billing', 'analytics', 'knowledge', 'communications', 'marketplace', 'administration'];
+
 type Owner = {
   id: string;
   tenantId: string;
@@ -75,7 +77,7 @@ export function PlatformAdminWorkspace() {
     const form = new FormData(event.currentTarget);
     const response = await authFetch('/api/v1/platform/owners', {
       method: 'POST',
-      body: JSON.stringify({tenantId: form.get('tenantId'), name: form.get('name'), email: form.get('email'), password: form.get('password')})
+      body: JSON.stringify({tenantId: form.get('tenantId'), name: form.get('name'), email: form.get('email'), password: form.get('password'), modules: form.getAll('modules')})
     });
     const body = await response.json();
     setCreating(false);
@@ -92,6 +94,7 @@ export function PlatformAdminWorkspace() {
         <div className="form-columns"><label>Business name<input name="name" required /></label><label>Tenant ID<input name="tenantId" defaultValue="tenant_demo" required /></label></div>
         <label>Owner email<input name="email" type="email" required /></label>
         <label>Temporary password<input name="password" type="password" minLength={12} required /><small>Use uppercase, lowercase, number, and symbol.</small></label>
+        <fieldset className="platform-module-picker"><legend>Enabled business modules</legend><p>Only platform administrators can change this tenant-wide entitlement.</p><div>{availableModules.map(moduleName=><label key={moduleName}><input type="checkbox" name="modules" value={moduleName} defaultChecked={['operations','crm','assets','billing'].includes(moduleName)} />{moduleName}</label>)}</div></fieldset>
         <button className="button button-small" disabled={creating}>{creating ? 'Creating owner…' : 'Create owner'}</button>
       </form>
     </section>
