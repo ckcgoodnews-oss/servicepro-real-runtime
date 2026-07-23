@@ -13,6 +13,10 @@ function request() {
       email: '5189213@gmail.com',
       userId: 'platform-admin-id',
       repositories: {
+        workspaces: {
+          async find(tenantId) { return tenantId === 'tenant_demo' ? {id:'workspace-1',tenantId,name:'Demo Plumbing'} : null; },
+          async create(input) { return {id:'workspace-new',tenantId:'tenant_new_business',name:input.name}; }
+        },
         users: {
           async create(input) { return {id: 'new-owner-id', ...input}; }
         },
@@ -60,6 +64,16 @@ test('platform administrator can create a tenant owner', async () => {
   assert.deepEqual(res.body.data.roles, ['owner']);
   assert.deepEqual(res.body.data.enabledModules, ['operations', 'billing']);
   assert.equal(res.body.data.siteTypeItemId, 'pack-plumbing');
+});
+
+test('platform administrator can provision a new workspace with its owner', async () => {
+  const req = request();
+  req.body = {workspaceName:'New Plumbing Co',email:'owner@new.example',name:'New Owner',password:'StrongPass123!',modules:['operations'],siteTypeItemId:'pack-plumbing'};
+  const res = response();
+  await platformAccess.createOwner(req,res);
+  assert.equal(res.statusCode,201);
+  assert.equal(res.body.data.tenantId,'tenant_new_business');
+  assert.equal(res.body.data.workspace.name,'New Plumbing Co');
 });
 
 test('platform administrator can change a tenant service-company site type', async () => {

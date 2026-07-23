@@ -17,19 +17,24 @@ async function eligibleOwners(req){
 async function list(req,res){if(!isPlatformAdmin(req))return deny(res);return sendJson(res,200,{data:await eligibleOwners(req)});}
 async function createOwner(req,res){
   if(!isPlatformAdmin(req))return deny(res);
-  const {tenantId,email,name,password}=req.body||{};
+  let {tenantId}=req.body||{};
+  const {email,name,password}=req.body||{};
   const errors=passwordErrors(password);
-  if(!tenantId||!email||!name||errors.length)return sendJson(res,400,{error:{code:'validation_failed',message:errors.length?`Password must include ${errors.join(', ')}`:'Tenant, name, email, and password are required'}});
+  if(!email||!name||errors.length)return sendJson(res,400,{error:{code:'validation_failed',message:errors.length?`Password must include ${errors.join(', ')}`:'Owner name, email, and password are required'}});
   if(platformAdminEmails().includes(String(email).trim().toLowerCase()))return sendJson(res,400,{error:{code:'invalid_owner',message:'Platform administrators cannot be created as tenant owners'}});
   const catalog=await req.context.repositories.serviceMarketplace.listCatalog();
   const siteType=catalog.find(item=>item.id===req.body.siteTypeItemId&&item.itemType==='service_pack');
   if(req.body.siteTypeItemId&&!siteType)return sendJson(res,400,{error:{code:'invalid_site_type',message:'Select a valid service-company site type from the marketplace'}});
+  let workspace=tenantId?await req.context.repositories.workspaces.find(tenantId):null;
+  if(tenantId&&!workspace)return sendJson(res,400,{error:{code:'invalid_workspace',message:'Select an existing workspace or leave it blank to create one'}});
+  if(!workspace)workspace=await req.context.repositories.workspaces.create({name:req.body.workspaceName||`${name} Business`});
+  tenantId=workspace.tenantId;
   const user=await req.context.repositories.users.create({tenantId,email:String(email).trim().toLowerCase(),name,password,roles:['owner']});
   if(!user)return sendJson(res,409,{error:{code:'account_exists',message:'An account already exists for this tenant and email'}});
   const modules=normalizeModules(req.body.modules);
   await req.context.repositories.moduleAccess.setTenantModules(tenantId,modules,req.context.userId);
   if(siteType)await req.context.repositories.serviceMarketplace.install(tenantId,{itemId:siteType.id,installedBy:req.context.userId});
-  return sendJson(res,201,{data:{...user,enabledModules:modules,siteTypeItemId:siteType?.id||''}});
+  return sendJson(res,201,{data:{...user,workspace,enabledModules:modules,siteTypeItemId:siteType?.id||''}});
 }
 async function setSiteType(req,res,tenantId){
   if(!isPlatformAdmin(req))return deny(res);

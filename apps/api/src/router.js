@@ -20,6 +20,7 @@ const platformAccess = require('./routes/platformAccess');
 const moduleAccess = require('./routes/moduleAccess');
 const publicStorefront = require('./routes/publicStorefront');
 const { moduleAccessGuard } = require('./middleware/moduleAccessGuard');
+const workspaces = require('./routes/workspaces');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -278,6 +279,9 @@ async function router(req, res) {
   }
 
   if (req.url === '/api/v1/platform/owners' && req.method === 'GET') return platformAccess.list(req, res);
+  if (req.url === '/api/v1/admin/workspaces' && req.method === 'GET') return workspaces.list(req, res);
+  if (req.url === '/api/v1/workspace/current' && req.method === 'GET') return workspaces.current(req, res);
+  if (req.url === '/api/admin/switch-tenant' && req.method === 'POST') return workspaces.switchTenant(req, res);
   if (req.url === '/api/v1/platform/owners' && req.method === 'POST') return platformAccess.createOwner(req, res);
   const platformSiteTypeMatch=req.url.match(/^\/api\/v1\/platform\/tenants\/([^/]+)\/site-type$/);
   if(platformSiteTypeMatch&&req.method==='PUT')return platformAccess.setSiteType(req,res,platformSiteTypeMatch[1]);

@@ -1,0 +1,1 @@
+import {TeamManagementWorkspace} from '@/components/TeamManagementWorkspace';export default function Page(){return <div className="dashboard-content"><h1>Team access</h1><TeamManagementWorkspace/></div>}
