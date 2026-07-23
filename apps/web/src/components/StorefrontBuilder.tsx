@@ -15,6 +15,11 @@ export function StorefrontBuilder() {
   const [services, setServices] = useState<Service[]>([]);
   const [themes, setThemes] = useState<any[]>([]);
   const [selectedServiceIds, setSelectedServiceIds] = useState<string[]>([]);
+  const [servicePresentation, setServicePresentation] = useState<Record<string, {
+    title?: string;
+    description?: string;
+    imageUrl?: string;
+  }>>({});
   const [message, setMessage] = useState('');
   const [addingService, setAddingService] = useState(false);
 
@@ -28,6 +33,7 @@ export function StorefrontBuilder() {
       setServices(servicesResponse.data || []);
       setThemes(themesResponse.data || []);
       setSelectedServiceIds(settingsResponse.data?.branding?.publicServiceIds || []);
+      setServicePresentation(settingsResponse.data?.branding?.publicServicePresentation || {});
     });
   }, []);
 
@@ -37,6 +43,13 @@ export function StorefrontBuilder() {
         ? current.filter((id) => id !== serviceId)
         : [...current, serviceId],
     );
+  }
+
+  function updatePresentation(serviceId: string, field: 'title' | 'description' | 'imageUrl', value: string) {
+    setServicePresentation((current) => ({
+      ...current,
+      [serviceId]: { ...(current[serviceId] || {}), [field]: value },
+    }));
   }
 
   async function addService(event: FormEvent<HTMLFormElement>) {
@@ -86,6 +99,7 @@ export function StorefrontBuilder() {
       logoUrl: form.get('logoUrl'),
       heroImageUrl: form.get('heroImageUrl') || '/storefront/field-service-hero.png',
       publicServiceIds: selectedServiceIds,
+      publicServicePresentation: servicePresentation,
     };
     const response = await authFetch('/api/v1/tenant/branding', {
       method: 'PATCH',
@@ -152,7 +166,8 @@ export function StorefrontBuilder() {
         <div className="form-columns">
           <label>
             Public URL slug
-            <input name="slug" defaultValue={branding.publicSlug || ''} placeholder="your-business" required />
+            <input name="slug" defaultValue={branding.publicSlug || ''} placeholder="your-business" pattern="[A-Za-z0-9 -]+" required />
+            <small>Saved as a lowercase URL, for example: plumber</small>
           </label>
           <label>
             Theme
@@ -184,14 +199,49 @@ export function StorefrontBuilder() {
           </div>
           <div className="storefront-service-checks">
             {services.map((service) => (
-              <label key={service.id}>
-                <input
-                  type="checkbox"
-                  checked={selectedServiceIds.includes(service.id)}
-                  onChange={() => toggleService(service.id)}
-                />
-                <span><strong>{service.name}</strong><small>{service.code}</small></span>
-              </label>
+              <article className={selectedServiceIds.includes(service.id) ? 'selected' : ''} key={service.id}>
+                <label className="storefront-service-select">
+                  <input
+                    type="checkbox"
+                    checked={selectedServiceIds.includes(service.id)}
+                    onChange={() => toggleService(service.id)}
+                  />
+                  <span><strong>{service.name}</strong><small>{service.code}</small></span>
+                </label>
+                {selectedServiceIds.includes(service.id) && (
+                  <div className="storefront-service-design">
+                    {servicePresentation[service.id]?.imageUrl && (
+                      <img src={servicePresentation[service.id].imageUrl} alt="" />
+                    )}
+                    <label>
+                      Public title
+                      <input
+                        value={servicePresentation[service.id]?.title || ''}
+                        placeholder={service.name}
+                        onChange={(event) => updatePresentation(service.id, 'title', event.target.value)}
+                      />
+                    </label>
+                    <label>
+                      Service image URL
+                      <input
+                        type="url"
+                        value={servicePresentation[service.id]?.imageUrl || ''}
+                        placeholder="https://example.com/service.jpg"
+                        onChange={(event) => updatePresentation(service.id, 'imageUrl', event.target.value)}
+                      />
+                    </label>
+                    <label>
+                      Public marketing text
+                      <textarea
+                        rows={3}
+                        value={servicePresentation[service.id]?.description || ''}
+                        placeholder={service.description || 'Describe this service for prospective customers.'}
+                        onChange={(event) => updatePresentation(service.id, 'description', event.target.value)}
+                      />
+                    </label>
+                  </div>
+                )}
+              </article>
             ))}
             {!services.length && <p>No catalog services yet. Add the first one above.</p>}
           </div>

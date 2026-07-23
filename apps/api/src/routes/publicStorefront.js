@@ -1,7 +1,85 @@
-const {sendJson}=require('../utils/http');
-const {resolveOperationalTenantId}=require('../services/tenantResolver');
-const themes=[{slug:'evergreen',name:'Modern Field Service',config:{primary:'#176b5b',secondary:'#b9e55b'}},{slug:'clean-trades',name:'Clean Trades',config:{primary:'#155e9a',secondary:'#eef6fb'}},{slug:'corporate-fleet',name:'Corporate Fleet',config:{primary:'#24364b',secondary:'#e9a23b'}}];
-async function context(req,slug){const settings=await req.context.repositories.tenantSettings.findPublicBySlug(slug);if(!settings)return null;const operationalTenant=await resolveOperationalTenantId(req.context.repositories.store,settings.tenantId);return{settings,operationalTenant};}
-async function profile(req,res,slug){const value=await context(req,slug);if(!value)return sendJson(res,404,{error:{code:'storefront_not_found',message:'Storefront not found'}});const {settings,operationalTenant}=value,branding=settings.branding||{},services=await req.context.repositories.services.list(operationalTenant);return sendJson(res,200,{data:{slug,companyName:settings.companyName,contactEmail:settings.supportEmail,contactPhone:settings.supportPhone,description:branding.publicDescription||'',tagline:branding.publicTagline||'',serviceArea:branding.publicServiceArea||'',hours:branding.publicHours||'',logoUrl:branding.logoUrl||'',heroImageUrl:branding.heroImageUrl||'/storefront/field-service-hero.png',theme:themes.find(item=>item.slug===branding.publicTheme)||themes[0],services:services.filter(item=>item.active!==false&&(branding.publicServiceIds||[]).includes(item.id)).map(item=>({id:item.id,name:item.name,description:item.description,startingPrice:item.basePrice}))}})}
-async function requestService(req,res,slug){const value=await context(req,slug);if(!value)return sendJson(res,404,{error:{code:'storefront_not_found',message:'Storefront not found'}});const{name,email,phone,serviceId,message}=req.body||{};if(!name||(!email&&!phone)||!message)return sendJson(res,400,{error:{code:'validation_failed',message:'Name, email or phone, and request details are required'}});const parts=String(name).trim().split(/\s+/),customer=await req.context.repositories.customers.create(value.operationalTenant,{firstName:parts.shift()||'Prospective',lastName:parts.join(' ')||'Customer',email:email||'',phone:phone||''});const job=await req.context.repositories.jobs.create(value.operationalTenant,{customerId:customer.id,title:`Website request: ${message}`.slice(0,180),serviceId:serviceId||'',status:'open',priority:'normal'});return sendJson(res,201,{data:{requestId:job.id,message:'Your request has been received.'}})}
-function listThemes(req,res){return sendJson(res,200,{data:themes})}module.exports={profile,requestService,listThemes,themes};
+const { sendJson } = require('../utils/http');
+const { resolveOperationalTenantId } = require('../services/tenantResolver');
+
+const themes = [
+  { slug: 'evergreen', name: 'Modern Field Service', config: { primary: '#176b5b', secondary: '#b9e55b' } },
+  { slug: 'clean-trades', name: 'Clean Trades', config: { primary: '#155e9a', secondary: '#eef6fb' } },
+  { slug: 'corporate-fleet', name: 'Corporate Fleet', config: { primary: '#24364b', secondary: '#e9a23b' } }
+];
+
+async function context(req, slug) {
+  const settings = await req.context.repositories.tenantSettings.findPublicBySlug(String(slug || '').trim());
+  if (!settings) return null;
+  const operationalTenant = await resolveOperationalTenantId(req.context.repositories.store, settings.tenantId);
+  return { settings, operationalTenant };
+}
+
+async function profile(req, res, slug) {
+  const value = await context(req, slug);
+  if (!value) {
+    return sendJson(res, 404, {
+      error: {
+        code: 'storefront_not_found',
+        message: 'This business page is not published. Confirm the storefront URL and publish it in Storefront Builder.'
+      }
+    });
+  }
+  const { settings, operationalTenant } = value;
+  const branding = settings.branding || {};
+  const presentation = branding.publicServicePresentation || {};
+  const services = await req.context.repositories.services.list(operationalTenant);
+  return sendJson(res, 200, {
+    data: {
+      slug: branding.publicSlug || slug,
+      companyName: settings.companyName,
+      contactEmail: settings.supportEmail,
+      contactPhone: settings.supportPhone,
+      description: branding.publicDescription || '',
+      tagline: branding.publicTagline || '',
+      serviceArea: branding.publicServiceArea || '',
+      hours: branding.publicHours || '',
+      logoUrl: branding.logoUrl || '',
+      heroImageUrl: branding.heroImageUrl || '/storefront/field-service-hero.png',
+      theme: themes.find(item => item.slug === branding.publicTheme) || themes[0],
+      services: services
+        .filter(item => item.active !== false && (branding.publicServiceIds || []).includes(item.id))
+        .map(item => ({
+          id: item.id,
+          name: presentation[item.id]?.title || item.name,
+          description: presentation[item.id]?.description || item.description,
+          imageUrl: presentation[item.id]?.imageUrl || '',
+          startingPrice: item.basePrice
+        }))
+    }
+  });
+}
+
+async function requestService(req, res, slug) {
+  const value = await context(req, slug);
+  if (!value) return sendJson(res, 404, { error: { code: 'storefront_not_found', message: 'Storefront not found' } });
+  const { name, email, phone, serviceId, message } = req.body || {};
+  if (!name || (!email && !phone) || !message) {
+    return sendJson(res, 400, { error: { code: 'validation_failed', message: 'Name, email or phone, and request details are required' } });
+  }
+  const parts = String(name).trim().split(/\s+/);
+  const customer = await req.context.repositories.customers.create(value.operationalTenant, {
+    firstName: parts.shift() || 'Prospective',
+    lastName: parts.join(' ') || 'Customer',
+    email: email || '',
+    phone: phone || ''
+  });
+  const job = await req.context.repositories.jobs.create(value.operationalTenant, {
+    customerId: customer.id,
+    title: `Website request: ${message}`.slice(0, 180),
+    serviceId: serviceId || '',
+    status: 'open',
+    priority: 'normal'
+  });
+  return sendJson(res, 201, { data: { requestId: job.id, message: 'Your request has been received.' } });
+}
+
+function listThemes(req, res) {
+  return sendJson(res, 200, { data: themes });
+}
+
+module.exports = { profile, requestService, listThemes, themes };

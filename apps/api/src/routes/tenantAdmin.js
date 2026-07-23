@@ -25,10 +25,15 @@ function updateBranding(req, res) {
   Promise.resolve()
     .then(async () => {
       const current = await req.context.repositories.tenantSettings.get(tenant(req));
+      const input = { ...(req.body || {}) };
+      if (typeof input.publicSlug === 'string') {
+        input.publicSlug = input.publicSlug.trim().toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+      }
       return req.context.repositories.tenantSettings.upsert(tenant(req), {
         branding: {
           ...(current.branding || {}),
-          ...(req.body || {})
+          ...input
         }
       });
     })
