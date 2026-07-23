@@ -220,10 +220,11 @@ export function StorefrontBuilder() {
         {branding.publicSlug && published && <a target="_blank" href={`/p/?business=${encodeURIComponent(branding.publicSlug)}`}>View live storefront</a>}
       </section>
 
-      <form className="storefront-service-add" onSubmit={addService}>
+      <form className="storefront-service-add" id="add-service-page" onSubmit={addService}>
         <div>
-          <h3>Add a public service</h3>
-          <p>Create an additional catalog service and select it for storefront visibility.</p>
+          <span className="storefront-add-kicker">Additional public page</span>
+          <h3>Add another service page</h3>
+          <p>Create a service, generate its editable public page, and select it for storefront visibility. Save the storefront afterward to publish it.</p>
         </div>
         <div className="form-columns">
           <label>
@@ -246,7 +247,7 @@ export function StorefrontBuilder() {
           </label>
         </div>
         <button className="button button-small" disabled={addingService}>
-          {addingService ? 'Adding...' : 'Add and select service'}
+          {addingService ? 'Creating page...' : 'Create and select service page'}
         </button>
       </form>
 
@@ -295,6 +296,7 @@ export function StorefrontBuilder() {
           <div className="storefront-service-toolbar">
             <legend>Visible public services</legend>
             <span>{selectedServiceIds.length} of {services.length} selected</span>
+            <a href="#add-service-page">+ Add service page</a>
             <button type="button" onClick={() => { setSelectedServiceIds(services.map((service) => service.id)); setDirty(true); }}>Select all</button>
             <button type="button" onClick={() => { setSelectedServiceIds([]); setDirty(true); }}>Clear all</button>
           </div>
