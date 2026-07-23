@@ -37,11 +37,11 @@ export function WorkspaceHeader({ platformAdmin }: { platformAdmin: boolean }) {
   }
 
   if (!platformAdmin) {
-    return <div className="workspace-static-label"><span>Workspace</span><strong>{current?.name || 'Current business'}</strong></div>;
+    return <div className="workspace-static-label"><span>WORKSPACE</span><strong>{current?.name || 'Current business'}</strong></div>;
   }
 
   return <div className="workspace-selector">
-    <span>Active workspace</span>
+    <span>WORKSPACE</span>
     <input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search businesses" aria-label="Search business workspaces" />
     <select value={current?.tenantId || tenantId()} disabled={switching} onChange={event => void switchWorkspace(event.target.value)} aria-label="Switch active workspace">
       {filtered.map(workspace => <option value={workspace.tenantId} key={workspace.id}>{workspace.name} · {workspace.tenantId}</option>)}

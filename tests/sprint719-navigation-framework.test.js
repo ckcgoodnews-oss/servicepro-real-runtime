@@ -13,7 +13,26 @@ const testingGuide = read('WEBSITE_TESTING.md');
 
 assert.match(shell, /aria-label="Primary navigation"/);
 assert.match(shell, /aria-label="Breadcrumb"/);
-assert.match(shell, /Select workspace/);
+assert.match(
+  shell,
+  /import\s+\{\s*WorkspaceHeader\s*\}\s+from\s+['"]@\/components\/WorkspaceHeader['"]/
+);
+
+assert.match(
+  shell,
+  /<WorkspaceHeader\s+platformAdmin=\{isPlatformAdmin\}\s*\/>/
+);
+
+const workspaceHeader = fs.readFileSync(
+  path.join(root, 'apps/web/src/components/WorkspaceHeader.tsx'),
+  'utf8'
+);
+
+assert.match(workspaceHeader, /WORKSPACE/);
+assert.match(workspaceHeader, /platformAdmin/);
+assert.match(workspaceHeader, /Search businesses/);
+assert.match(workspaceHeader, /workspace-static-label/);
+assert.match(workspaceHeader, /workspace-selector/);
 assert.match(shell, /Search ServicePro/);
 assert.match(shell, /event\.ctrlKey \|\| event\.metaKey/);
 assert.match(shell, /Open profile menu/);

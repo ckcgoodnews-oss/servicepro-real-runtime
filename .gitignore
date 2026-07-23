@@ -1,21 +1,74 @@
+# Dependencies
 node_modules/
-apps/web/.next/
-apps/web/out/
-apps/web/tsconfig.tsbuildinfo
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js
+.next/
+out/
+
+# Build output
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Runtime and cache files
+.cache/
+.tmp/
+temp/
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Environment files
 .env
-.env.render
-.env*.local
-data/*.json
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Keep documented examples
+!.env.example
+!**/.env.example
+!*.env.production.example
+!**/*.env.production.example
+
+# Database/runtime artifacts
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# OS files
 .DS_Store
-test-results.log
+Thumbs.db
+Desktop.ini
 
-# Local sprint application backups
-.sprint*-backup-*/
+# IDE files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-# Local runtime logs
-logs/
+# Test and repair artifacts
+repair-backups/
+test-results.txt
 
-reports/build/release-manifest.json
-reports/release/
+# Local deployment output
+.wrangler/
+.vercel/
+.cloudflare/
 
-release-evidence/
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/

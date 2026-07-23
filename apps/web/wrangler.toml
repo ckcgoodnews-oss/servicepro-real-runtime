@@ -1,5 +1,5 @@
-﻿name = "servicepro-web"
+name = "servicepro-web"
+
 compatibility_date = "2026-07-21"
 
-[assets]
-directory = "./out"
+pages_build_output_dir = "./out"

@@ -4,9 +4,12 @@ const { buildBootstrapSql, migrationFiles } = require('../scripts/build-supabase
 const { readCompanyConfig, removeDemoSeed } = require('../scripts/provision-company-database');
 
 const files = migrationFiles();
-assert.strictEqual(files.length, 679);
+assert.strictEqual(files.length, 681);
 assert.strictEqual(files[0], '040_auth_rbac_sessions.sql');
-assert.strictEqual(files.at(-1), '728_expanded_service_catalog.sql');
+assert.strictEqual(
+  files.at(-1),
+  '776_module_entitlements_rbac.sql'
+);
 
 const sql = buildBootstrapSql();
 assert.match(sql, /CREATE TABLE IF NOT EXISTS postgres_runtime_migrations/);
