@@ -19,3 +19,10 @@ reports/build/release-manifest.json
 reports/release/
 
 release-evidence/
+.pnpm-store/
+**/.next/
+**/out/
+**/*.tsbuildinfo
+*.backup-*
+test-results*.txt
+wrangler-deploy-error.txt

@@ -17,10 +17,12 @@ const { attachRequestContext } = require('./context/requestContext');
 const { attachOperationalTenant } = require('./services/tenantResolver');
 const { ownerAccessGuard } = require('./middleware/ownerAccessGuard');
 const platformAccess = require('./routes/platformAccess');
+const platformTenantDashboard = require('./routes/platformTenantDashboard');
 const moduleAccess = require('./routes/moduleAccess');
 const publicStorefront = require('./routes/publicStorefront');
 const { moduleAccessGuard } = require('./middleware/moduleAccessGuard');
 const workspaces = require('./routes/workspaces');
+const tenantManagement = require('./routes/tenantManagement');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -278,11 +280,28 @@ async function router(req, res) {
     await attachOperationalTenant(req);
   }
 
+  if (req.url === '/api/v1/platform/tenant-dashboard' && req.method === 'GET') return platformTenantDashboard.dashboard(req, res);
   if (req.url === '/api/v1/platform/owners' && req.method === 'GET') return platformAccess.list(req, res);
+  if (req.url === '/api/v1/platform/tenant-management' && req.method === 'GET') return tenantManagement.list(req, res);
   if (req.url === '/api/v1/admin/workspaces' && req.method === 'GET') return workspaces.list(req, res);
   if (req.url === '/api/v1/workspace/current' && req.method === 'GET') return workspaces.current(req, res);
   if (req.url === '/api/admin/switch-tenant' && req.method === 'POST') return workspaces.switchTenant(req, res);
   if (req.url === '/api/v1/platform/owners' && req.method === 'POST') return platformAccess.createOwner(req, res);
+  const tenantManagementDetailMatch=req.url.match(/^\/api\/v1\/platform\/tenant-management\/([^/]+)$/);
+  if(tenantManagementDetailMatch&&req.method==='GET')return tenantManagement.detail(req,res,tenantManagementDetailMatch[1]);
+  if(tenantManagementDetailMatch&&req.method==='PATCH')return tenantManagement.update(req,res,tenantManagementDetailMatch[1]);
+  const tenantManagementActionMatch=req.url.match(/^\/api\/v1\/platform\/tenant-management\/([^/]+)\/(archive|restore|soft-delete)$/);
+  if(tenantManagementActionMatch&&req.method==='POST')return tenantManagement.action(req,res,tenantManagementActionMatch[1],tenantManagementActionMatch[2]);
+  const tenantManagementOwnerActionMatch=req.url.match(/^\/api\/v1\/platform\/tenant-management\/([^/]+)\/owners\/([^/]+)\/(restore|soft-delete)$/);
+  if(tenantManagementOwnerActionMatch&&req.method==='POST')return tenantManagement.ownerAction(req,res,tenantManagementOwnerActionMatch[1],tenantManagementOwnerActionMatch[2],tenantManagementOwnerActionMatch[3]);
+  const tenantManagementDomainMatch=req.url.match(/^\/api\/v1\/platform\/tenant-management\/([^/]+)\/domains$/);
+  if(tenantManagementDomainMatch&&req.method==='POST')return tenantManagement.saveDomain(req,res,tenantManagementDomainMatch[1]);
+  const tenantManagementApiKeyMatch=req.url.match(/^\/api\/v1\/platform\/tenant-management\/([^/]+)\/api-keys$/);
+  if(tenantManagementApiKeyMatch&&req.method==='POST')return tenantManagement.createApiKey(req,res,tenantManagementApiKeyMatch[1]);
+  const tenantManagementApiKeyRevokeMatch=req.url.match(/^\/api\/v1\/platform\/tenant-management\/([^/]+)\/api-keys\/([^/]+)\/revoke$/);
+  if(tenantManagementApiKeyRevokeMatch&&req.method==='POST')return tenantManagement.revokeApiKey(req,res,tenantManagementApiKeyRevokeMatch[1],tenantManagementApiKeyRevokeMatch[2]);
+  const tenantManagementAuditMatch=req.url.match(/^\/api\/v1\/platform\/tenant-management\/([^/]+)\/audit$/);
+  if(tenantManagementAuditMatch&&req.method==='GET')return tenantManagement.audit(req,res,tenantManagementAuditMatch[1]);
   const platformSiteTypeMatch=req.url.match(/^\/api\/v1\/platform\/tenants\/([^/]+)\/site-type$/);
   if(platformSiteTypeMatch&&req.method==='PUT')return platformAccess.setSiteType(req,res,platformSiteTypeMatch[1]);
   const platformOwnerTokenMatch=req.url.match(/^\/api\/v1\/platform\/owners\/([^/]+)\/token$/);
@@ -804,3 +823,4 @@ async function router(req, res) {
 }
 
 module.exports = { router };
+
