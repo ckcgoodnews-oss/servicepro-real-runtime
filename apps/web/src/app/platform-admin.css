@@ -9,3 +9,28 @@
 .platform-admin-grid summary{cursor:pointer;color:var(--green);font-weight:700;font-size:11px}
 .platform-module-picker{border:1px solid var(--line);border-radius:9px;padding:14px}.platform-module-picker legend{font-weight:700}.platform-module-picker p{margin:0 0 10px;color:var(--muted);font-size:9px}.platform-module-picker>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.platform-module-picker>div label{display:flex;align-items:center;gap:7px;text-transform:capitalize}.platform-module-picker input{width:auto}@media(max-width:600px){.platform-module-picker>div{grid-template-columns:1fr}}
 .owner-site-type{display:grid;gap:6px;min-width:260px;font-size:10px;font-weight:700}
+
+/* Sprint 1 - Tenant Management Center Foundation */
+.tenant-command-center{grid-column:1/-1;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.tenant-command-center .panel-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.tenant-summary-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:16px 0}
+.tenant-summary-cards article{display:flex;flex-direction:column;gap:6px;border:1px solid var(--line);border-radius:11px;padding:15px;background:color-mix(in srgb,var(--panel) 92%,var(--green) 8%)}
+.tenant-summary-cards small,.tenant-dashboard-table small{display:block;color:var(--muted)}
+.tenant-summary-cards strong{font-size:25px;line-height:1}
+.tenant-summary-cards span{font-size:10px;color:var(--muted)}
+.tenant-dashboard-toolbar{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:14px 0}
+.tenant-dashboard-toolbar label{max-width:440px;flex:1}
+.tenant-dashboard-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:11px}
+.tenant-dashboard-table{width:100%;border-collapse:collapse;min-width:820px}
+.tenant-dashboard-table th,.tenant-dashboard-table td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+.tenant-dashboard-table th{font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.tenant-dashboard-table tbody tr:last-child td{border-bottom:0}
+.status-pill{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px 8px;font-size:9px;font-weight:700}
+.status-active,.status-trial,.status-trialing,.status-enabled{border-color:var(--green);color:var(--green)}
+.status-suspended,.status-revoked,.status-inactive{opacity:.75}
+.not-metered{color:var(--muted);font-size:10px}
+.tenant-empty{text-align:center!important;color:var(--muted);padding:28px!important}
+@media(max-width:1100px){.tenant-summary-cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.tenant-summary-cards{grid-template-columns:1fr 1fr}.tenant-dashboard-toolbar{align-items:stretch;flex-direction:column}}
+@media(max-width:460px){.tenant-summary-cards{grid-template-columns:1fr}}
+
