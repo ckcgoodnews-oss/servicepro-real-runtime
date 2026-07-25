@@ -23,6 +23,8 @@ const publicStorefront = require('./routes/publicStorefront');
 const { moduleAccessGuard } = require('./middleware/moduleAccessGuard');
 const workspaces = require('./routes/workspaces');
 const tenantManagement = require('./routes/tenantManagement');
+const tenantManagementCenter = require('./routes/tenantManagementCenter');
+const platformOperationsCenter = require('./routes/platformOperationsCenter');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -302,6 +304,13 @@ async function router(req, res) {
   if(tenantManagementApiKeyRevokeMatch&&req.method==='POST')return tenantManagement.revokeApiKey(req,res,tenantManagementApiKeyRevokeMatch[1],tenantManagementApiKeyRevokeMatch[2]);
   const tenantManagementAuditMatch=req.url.match(/^\/api\/v1\/platform\/tenant-management\/([^/]+)\/audit$/);
   if(tenantManagementAuditMatch&&req.method==='GET')return tenantManagement.audit(req,res,tenantManagementAuditMatch[1]);
+
+  // Tenant Management Center (full platform admin subsystem)
+  if (req.url.startsWith('/api/v1/platform/tmc')) {
+    if (tenantManagementCenter.dispatch(req, res)) return;
+    if (platformOperationsCenter.dispatch(req, res)) return;
+  }
+
   const platformSiteTypeMatch=req.url.match(/^\/api\/v1\/platform\/tenants\/([^/]+)\/site-type$/);
   if(platformSiteTypeMatch&&req.method==='PUT')return platformAccess.setSiteType(req,res,platformSiteTypeMatch[1]);
   const platformOwnerTokenMatch=req.url.match(/^\/api\/v1\/platform\/owners\/([^/]+)\/token$/);
