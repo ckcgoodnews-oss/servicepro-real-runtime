@@ -1,0 +1,36 @@
+:root {
+  --primary: #1a73e8;
+  --primary-dark: #1557b0;
+  --success: #34a853;
+  --warning: #f9ab00;
+  --danger: #ea4335;
+  --bg: #f5f5f5;
+  --surface: #ffffff;
+  --text: #202124;
+  --text-muted: #5f6368;
+  --border: #e0e0e0;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.4; -webkit-font-smoothing: antialiased; }
+
+.mobile-shell { display: flex; flex-direction: column; min-height: 100dvh; max-width: 480px; margin: 0 auto; }
+.mobile-header { background: var(--primary); color: #fff; padding: 1rem 1.25rem; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+.mobile-header h1 { font-size: 1.1rem; font-weight: 600; }
+.mobile-content { flex: 1; padding: 1rem; overflow-y: auto; }
+.mobile-nav { display: flex; justify-content: space-around; background: var(--surface); border-top: 1px solid var(--border); padding: 0.5rem 0; position: sticky; bottom: 0; }
+.mobile-nav a { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--text-muted); font-size: 0.65rem; padding: 0.3rem 0.5rem; }
+.mobile-nav a.active { color: var(--primary); }
+.mobile-nav a span { font-size: 1.2rem; }
+
+.m-card { background: var(--surface); border-radius: var(--radius); padding: 1rem; margin-bottom: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.m-btn { display: flex; align-items: center; justify-content: center; gap: 0.5rem; width: 100%; padding: 0.75rem; border: none; border-radius: var(--radius); font-size: 0.9rem; font-weight: 600; cursor: pointer; }
+.m-btn-primary { background: var(--primary); color: #fff; }
+.m-btn-success { background: var(--success); color: #fff; }
+.m-btn-danger { background: var(--danger); color: #fff; }
+.m-btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text); }
+
+.job-card { border-left: 4px solid var(--primary); }
+.job-card.priority-high { border-left-color: var(--warning); }
+.job-card.priority-emergency { border-left-color: var(--danger); }
