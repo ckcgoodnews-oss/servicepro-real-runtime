@@ -27,6 +27,8 @@ const tenantManagementCenter = require('./routes/tenantManagementCenter');
 const platformOperationsCenter = require('./routes/platformOperationsCenter');
 const crmLeads = require('./routes/crmLeads');
 const marketingCampaigns = require('./routes/marketingCampaigns');
+const aiAssistant = require('./routes/aiAssistant');
+const automation = require('./routes/automation');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -672,6 +674,87 @@ async function router(req, res) {
   if (campaignSendMatch && req.method === 'POST') {
     if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
     return marketingCampaigns.send(req, res, campaignSendMatch[1]);
+  }
+
+  // AI Assistant & Knowledge Base
+  if (req.url === '/api/v1/ai/knowledge' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AI_READ)(req, res)) return;
+    return aiAssistant.listArticles(req, res);
+  }
+  if (req.url === '/api/v1/ai/knowledge' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.AI_WRITE)(req, res)) return;
+    return aiAssistant.createArticle(req, res);
+  }
+  if (req.url === '/api/v1/ai/search' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AI_READ)(req, res)) return;
+    return aiAssistant.search(req, res);
+  }
+  if (req.url === '/api/v1/ai/chat' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.AI_READ)(req, res)) return;
+    return aiAssistant.chat(req, res);
+  }
+  const aiArticleMatch = req.url.match(/^\/api\/v1\/ai\/knowledge\/([^/]+)$/);
+  if (aiArticleMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AI_READ)(req, res)) return;
+    return aiAssistant.getArticle(req, res, aiArticleMatch[1]);
+  }
+  if (aiArticleMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.AI_WRITE)(req, res)) return;
+    return aiAssistant.updateArticle(req, res, aiArticleMatch[1]);
+  }
+  if (aiArticleMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.AI_WRITE)(req, res)) return;
+    return aiAssistant.deleteArticle(req, res, aiArticleMatch[1]);
+  }
+  const aiHelpfulMatch = req.url.match(/^\/api\/v1\/ai\/knowledge\/([^/]+)\/helpful$/);
+  if (aiHelpfulMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.AI_READ)(req, res)) return;
+    return aiAssistant.markHelpful(req, res, aiHelpfulMatch[1]);
+  }
+
+  // Workflow Automation
+  if (req.url === '/api/v1/automation/workflows' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_READ)(req, res)) return;
+    return automation.listWorkflows(req, res);
+  }
+  if (req.url === '/api/v1/automation/workflows' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_WRITE)(req, res)) return;
+    return automation.createWorkflow(req, res);
+  }
+  if (req.url === '/api/v1/automation/triggers' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_READ)(req, res)) return;
+    return automation.getTriggers(req, res);
+  }
+  if (req.url === '/api/v1/automation/actions' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_READ)(req, res)) return;
+    return automation.getActions(req, res);
+  }
+  if (req.url === '/api/v1/automation/executions' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_READ)(req, res)) return;
+    return automation.listExecutions(req, res, '');
+  }
+  const automationWfMatch = req.url.match(/^\/api\/v1\/automation\/workflows\/([^/]+)$/);
+  if (automationWfMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_READ)(req, res)) return;
+    return automation.getWorkflow(req, res, automationWfMatch[1]);
+  }
+  if (automationWfMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_WRITE)(req, res)) return;
+    return automation.updateWorkflow(req, res, automationWfMatch[1]);
+  }
+  if (automationWfMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_WRITE)(req, res)) return;
+    return automation.deleteWorkflow(req, res, automationWfMatch[1]);
+  }
+  const automationExecMatch = req.url.match(/^\/api\/v1\/automation\/workflows\/([^/]+)\/execute$/);
+  if (automationExecMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_WRITE)(req, res)) return;
+    return automation.executeWorkflow(req, res, automationExecMatch[1]);
+  }
+  const automationHistMatch = req.url.match(/^\/api\/v1\/automation\/workflows\/([^/]+)\/executions$/);
+  if (automationHistMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_READ)(req, res)) return;
+    return automation.listExecutions(req, res, automationHistMatch[1]);
   }
 
   if (req.url === '/api/v1/privacy/cases' && req.method === 'POST') {
