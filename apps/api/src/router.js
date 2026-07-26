@@ -29,6 +29,7 @@ const crmLeads = require('./routes/crmLeads');
 const marketingCampaigns = require('./routes/marketingCampaigns');
 const aiAssistant = require('./routes/aiAssistant');
 const automation = require('./routes/automation');
+const websiteBuilder = require('./routes/websiteBuilder');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -755,6 +756,59 @@ async function router(req, res) {
   if (automationHistMatch && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.AUTOMATION_READ)(req, res)) return;
     return automation.listExecutions(req, res, automationHistMatch[1]);
+  }
+
+  // Website Builder
+  if (req.url === '/api/v1/website/pages' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_READ)(req, res)) return;
+    return websiteBuilder.listPages(req, res);
+  }
+  if (req.url === '/api/v1/website/pages' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_WRITE)(req, res)) return;
+    return websiteBuilder.createPage(req, res);
+  }
+  if (req.url === '/api/v1/website/theme' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_READ)(req, res)) return;
+    return websiteBuilder.getTheme(req, res);
+  }
+  if (req.url === '/api/v1/website/theme' && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_WRITE)(req, res)) return;
+    return websiteBuilder.updateTheme(req, res);
+  }
+  if (req.url === '/api/v1/website/media' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_READ)(req, res)) return;
+    return websiteBuilder.listMedia(req, res);
+  }
+  if (req.url === '/api/v1/website/media' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_WRITE)(req, res)) return;
+    return websiteBuilder.addMedia(req, res);
+  }
+  if (req.url === '/api/v1/website/templates' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_READ)(req, res)) return;
+    return websiteBuilder.getSectionTemplates(req, res);
+  }
+  const websitePageMatch = req.url.match(/^\/api\/v1\/website\/pages\/([^/]+)$/);
+  if (websitePageMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_READ)(req, res)) return;
+    return websiteBuilder.getPage(req, res, websitePageMatch[1]);
+  }
+  if (websitePageMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_WRITE)(req, res)) return;
+    return websiteBuilder.updatePage(req, res, websitePageMatch[1]);
+  }
+  if (websitePageMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_WRITE)(req, res)) return;
+    return websiteBuilder.deletePage(req, res, websitePageMatch[1]);
+  }
+  const websitePublishMatch = req.url.match(/^\/api\/v1\/website\/pages\/([^/]+)\/publish$/);
+  if (websitePublishMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_WRITE)(req, res)) return;
+    return websiteBuilder.publishPage(req, res, websitePublishMatch[1]);
+  }
+  const websiteMediaDelMatch = req.url.match(/^\/api\/v1\/website\/media\/([^/]+)$/);
+  if (websiteMediaDelMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.WEBSITE_WRITE)(req, res)) return;
+    return websiteBuilder.deleteMedia(req, res, websiteMediaDelMatch[1]);
   }
 
   if (req.url === '/api/v1/privacy/cases' && req.method === 'POST') {
