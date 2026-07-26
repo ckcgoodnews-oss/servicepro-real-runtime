@@ -1,0 +1,83 @@
+:root {
+  --color-primary: #1a73e8;
+  --color-primary-dark: #1557b0;
+  --color-success: #34a853;
+  --color-warning: #f9ab00;
+  --color-danger: #ea4335;
+  --color-bg: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-text: #202124;
+  --color-text-secondary: #5f6368;
+  --color-border: #e0e0e0;
+  --radius: 8px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.portal-shell { display: flex; min-height: 100vh; }
+.portal-sidebar {
+  width: 260px; background: var(--color-surface); border-right: 1px solid var(--color-border);
+  padding: 1.5rem 0; display: flex; flex-direction: column;
+}
+.portal-main { flex: 1; padding: 2rem; max-width: 1200px; }
+
+.portal-nav { list-style: none; padding: 0; }
+.portal-nav li a {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.75rem 1.5rem; color: var(--color-text-secondary);
+  text-decoration: none; font-size: 0.9rem; transition: all 0.15s;
+}
+.portal-nav li a:hover { background: var(--color-bg); color: var(--color-text); }
+.portal-nav li a.active { color: var(--color-primary); background: #e8f0fe; border-right: 3px solid var(--color-primary); }
+
+.card {
+  background: var(--color-surface); border-radius: var(--radius);
+  border: 1px solid var(--color-border); padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.6rem 1.2rem; border-radius: var(--radius);
+  font-size: 0.875rem; font-weight: 500; cursor: pointer;
+  border: none; transition: all 0.15s;
+}
+.btn-primary { background: var(--color-primary); color: #fff; }
+.btn-primary:hover { background: var(--color-primary-dark); }
+.btn-outline { background: transparent; border: 1px solid var(--color-border); color: var(--color-text); }
+
+.page-header { margin-bottom: 1.5rem; }
+.page-header h1 { font-size: 1.5rem; font-weight: 600; }
+.page-header p { color: var(--color-text-secondary); margin-top: 0.25rem; }
+
+.grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.stat-value { font-size: 2rem; font-weight: 700; color: var(--color-primary); }
+.stat-label { font-size: 0.8rem; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+
+.status-badge {
+  display: inline-block; padding: 0.2rem 0.6rem; border-radius: 12px;
+  font-size: 0.75rem; font-weight: 500;
+}
+.status-open { background: #e8f0fe; color: var(--color-primary); }
+.status-scheduled { background: #fef7e0; color: #b06000; }
+.status-completed { background: #e6f4ea; color: #137333; }
+.status-paid { background: #e6f4ea; color: #137333; }
+.status-pending { background: #fef7e0; color: #b06000; }
+.status-overdue { background: #fce8e6; color: #c5221f; }
+
+@media (max-width: 768px) {
+  .portal-shell { flex-direction: column; }
+  .portal-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--color-border); padding: 1rem 0; }
+  .portal-nav { display: flex; overflow-x: auto; }
+  .portal-nav li a { white-space: nowrap; border-right: none !important; }
+  .portal-main { padding: 1rem; }
+}
