@@ -57,6 +57,15 @@ server.listen(0, async () => {
       });
       if (r.status !== 204) throw new Error('got ' + r.status);
     }],
+    // New module auth tests
+    ['CRM requires auth', async () => { const r = await get(port, '/api/v1/crm/leads'); if (r.status !== 401) throw new Error('got ' + r.status); }],
+    ['CRM pipeline requires auth', async () => { const r = await get(port, '/api/v1/crm/pipeline'); if (r.status !== 401) throw new Error('got ' + r.status); }],
+    ['Marketing requires auth', async () => { const r = await get(port, '/api/v1/marketing/campaigns'); if (r.status !== 401) throw new Error('got ' + r.status); }],
+    ['AI knowledge requires auth', async () => { const r = await get(port, '/api/v1/ai/knowledge'); if (r.status !== 401) throw new Error('got ' + r.status); }],
+    ['AI chat requires auth', async () => { const r = await post(port, '/api/v1/ai/chat', { message: 'test' }); if (r.status !== 401) throw new Error('got ' + r.status); }],
+    ['Automation requires auth', async () => { const r = await get(port, '/api/v1/automation/workflows'); if (r.status !== 401) throw new Error('got ' + r.status); }],
+    ['Website builder requires auth', async () => { const r = await get(port, '/api/v1/website/pages'); if (r.status !== 401) throw new Error('got ' + r.status); }],
+    ['Payments requires auth', async () => { const r = await get(port, '/api/v1/payments'); if (r.status !== 401) throw new Error('got ' + r.status); }],
   ];
 
   for (const [name, fn] of tests) {
