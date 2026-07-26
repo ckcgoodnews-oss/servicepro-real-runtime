@@ -30,6 +30,7 @@ const marketingCampaigns = require('./routes/marketingCampaigns');
 const aiAssistant = require('./routes/aiAssistant');
 const automation = require('./routes/automation');
 const websiteBuilder = require('./routes/websiteBuilder');
+const fileUpload = require('./routes/fileUpload');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -809,6 +810,21 @@ async function router(req, res) {
   if (websiteMediaDelMatch && req.method === 'DELETE') {
     if (!requirePermission(PERMISSIONS.WEBSITE_WRITE)(req, res)) return;
     return websiteBuilder.deleteMedia(req, res, websiteMediaDelMatch[1]);
+  }
+
+  // File Upload
+  if (req.url === '/api/v1/files' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.FILES_READ)(req, res)) return;
+    return fileUpload.list(req, res);
+  }
+  if (req.url === '/api/v1/files/upload' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.FILES_WRITE)(req, res)) return;
+    return fileUpload.upload(req, res);
+  }
+  const fileDelMatch = req.url.match(/^\/api\/v1\/files\/([^/]+)$/);
+  if (fileDelMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.FILES_WRITE)(req, res)) return;
+    return fileUpload.remove(req, res, fileDelMatch[1]);
   }
 
   if (req.url === '/api/v1/privacy/cases' && req.method === 'POST') {
