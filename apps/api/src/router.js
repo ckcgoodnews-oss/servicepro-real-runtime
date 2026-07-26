@@ -26,6 +26,7 @@ const tenantManagement = require('./routes/tenantManagement');
 const tenantManagementCenter = require('./routes/tenantManagementCenter');
 const platformOperationsCenter = require('./routes/platformOperationsCenter');
 const crmLeads = require('./routes/crmLeads');
+const marketingCampaigns = require('./routes/marketingCampaigns');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -639,6 +640,38 @@ async function router(req, res) {
   if (crmLeadMatch && req.method === 'DELETE') {
     if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
     return crmLeads.remove(req, res, crmLeadMatch[1]);
+  }
+
+  // Marketing Campaigns
+  if (req.url === '/api/v1/marketing/campaigns' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MARKETING_READ)(req, res)) return;
+    return marketingCampaigns.list(req, res);
+  }
+  if (req.url === '/api/v1/marketing/campaigns' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
+    return marketingCampaigns.create(req, res);
+  }
+  if (req.url === '/api/v1/marketing/stats' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MARKETING_READ)(req, res)) return;
+    return marketingCampaigns.stats(req, res);
+  }
+  const campaignMatch = req.url.match(/^\/api\/v1\/marketing\/campaigns\/([^/]+)$/);
+  if (campaignMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MARKETING_READ)(req, res)) return;
+    return marketingCampaigns.getById(req, res, campaignMatch[1]);
+  }
+  if (campaignMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
+    return marketingCampaigns.update(req, res, campaignMatch[1]);
+  }
+  if (campaignMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
+    return marketingCampaigns.remove(req, res, campaignMatch[1]);
+  }
+  const campaignSendMatch = req.url.match(/^\/api\/v1\/marketing\/campaigns\/([^/]+)\/send$/);
+  if (campaignSendMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
+    return marketingCampaigns.send(req, res, campaignSendMatch[1]);
   }
 
   if (req.url === '/api/v1/privacy/cases' && req.method === 'POST') {
