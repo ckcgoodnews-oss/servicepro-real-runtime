@@ -25,6 +25,7 @@ const workspaces = require('./routes/workspaces');
 const tenantManagement = require('./routes/tenantManagement');
 const tenantManagementCenter = require('./routes/tenantManagementCenter');
 const platformOperationsCenter = require('./routes/platformOperationsCenter');
+const crmLeads = require('./routes/crmLeads');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -611,6 +612,33 @@ async function router(req, res) {
   if (dispatchMatch && req.method === 'PATCH') {
     if (!requirePermission(PERMISSIONS.DISPATCH_WRITE)(req, res)) return;
     return dispatch.updateStatus(req, res, dispatchMatch[1]);
+  }
+
+  // CRM Leads
+  if (req.url === '/api/v1/crm/leads' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return crmLeads.list(req, res);
+  }
+  if (req.url === '/api/v1/crm/leads' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return crmLeads.create(req, res);
+  }
+  if (req.url === '/api/v1/crm/pipeline' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return crmLeads.pipeline(req, res);
+  }
+  const crmLeadMatch = req.url.match(/^\/api\/v1\/crm\/leads\/([^/]+)$/);
+  if (crmLeadMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return crmLeads.getById(req, res, crmLeadMatch[1]);
+  }
+  if (crmLeadMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return crmLeads.update(req, res, crmLeadMatch[1]);
+  }
+  if (crmLeadMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return crmLeads.remove(req, res, crmLeadMatch[1]);
   }
 
   if (req.url === '/api/v1/privacy/cases' && req.method === 'POST') {
