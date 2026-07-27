@@ -120,6 +120,20 @@ export function PlatformAdminWorkspace() {
     await load();
   }
 
+  async function resetOwnerPassword(owner: Owner) {
+    const newPassword = prompt(`Enter new password for ${owner.email} (min 12 chars, uppercase, lowercase, number, symbol):`);
+    if (!newPassword) return;
+    setError('');
+    const response = await authFetch(`/api/v1/platform/owners/${owner.id}/reset-password`, {
+      method: 'POST',
+      body: JSON.stringify({ tenantId: owner.tenantId, password: newPassword })
+    });
+    const body = await response.json();
+    if (!response.ok) { setError(body.error?.message || 'Password reset failed'); return; }
+    setError('');
+    alert(`Password reset successful for ${owner.email}`);
+  }
+
   async function createOwner(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setCreating(true); setError('');
@@ -200,6 +214,7 @@ export function PlatformAdminWorkspace() {
             <span><strong>{owner.name||owner.email}</strong><small>{owner.email} · {owner.tenantId} · {owner.status||'Unmanaged'}{owner.expiresAt?` · expires ${new Date(owner.expiresAt).toLocaleDateString()}`:''}</small></span>
             <form onSubmit={event=>issue(event,owner)}><input name="days" type="number" min="1" max="3650" defaultValue="30" /><button className="button button-small">Issue token</button></form>
             {owner.entitlementId&&<span><button onClick={()=>change(owner,'suspended')}>Suspend</button><button onClick={()=>change(owner,'revoked')}>Revoke</button><button onClick={()=>change(owner,'active',30)}>Extend 30 days</button></span>}
+            <button className="button button-small" onClick={()=>resetOwnerPassword(owner)}>Reset password</button>
             <details><summary>Enabled modules</summary><ModuleChecklist tenantId={owner.tenantId} /></details>
             <label className="owner-site-type">Service-company site type<select value={owner.siteTypeItemId||''} onChange={event=>void saveSiteType(owner,event.target.value)}><option value="" disabled>Select site type</option>{siteTypes.map(item=><option value={item.id} key={item.id}>{item.name}</option>)}</select></label>
           </article>)}

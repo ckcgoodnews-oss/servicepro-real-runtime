@@ -59,4 +59,14 @@ async function issue(req,res,userId){
 }
 async function redeem(req,res){const row=await req.context.repositories.accessEntitlements.redeem(req.context.tenantId,req.context.userId,hashToken(req.body.token||''));return row?sendJson(res,200,{data:row}):sendJson(res,400,{error:{code:'invalid_access_token',message:'Access token is invalid or expired'}});}
 async function update(req,res,id){if(!isPlatformAdmin(req))return deny(res);const patch={};if(req.body.status)patch.status=req.body.status;if(req.body.expiresAt)patch.expiresAt=new Date(req.body.expiresAt).toISOString();const row=await req.context.repositories.accessEntitlements.update(id,patch);return row?sendJson(res,200,{data:row}):sendJson(res,404,{error:{code:'not_found',message:'Access entitlement not found'}});}
-module.exports={list,createOwner,setSiteType,issue,redeem,update,eligibleOwners};
+async function resetPassword(req,res,userId){
+  if(!isPlatformAdmin(req))return deny(res);
+  const {tenantId,password}=req.body||{};
+  if(!tenantId||!password)return sendJson(res,400,{error:{code:'validation_failed',message:'tenantId and password are required'}});
+  const errors=passwordErrors(password);
+  if(errors.length)return sendJson(res,400,{error:{code:'validation_failed',message:`Password must include ${errors.join(', ')}`}});
+  const user=await req.context.repositories.users.updatePassword(tenantId,userId,password);
+  if(!user)return sendJson(res,404,{error:{code:'not_found',message:'Owner not found'}});
+  return sendJson(res,200,{data:{id:user.id,email:user.email,tenantId:user.tenantId,passwordReset:true}});
+}
+module.exports={list,createOwner,setSiteType,issue,redeem,update,resetPassword,eligibleOwners};
