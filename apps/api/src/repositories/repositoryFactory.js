@@ -45,7 +45,8 @@ const KEY_ALIASES = {
   user: 'users',
   vendor: 'vendors',
   warehouse: 'warehouses',
-  workflow: 'workflows'
+  workflow: 'workflows',
+  workspace: 'workspaces'
 };
 
 function keyFromCreator(name) {

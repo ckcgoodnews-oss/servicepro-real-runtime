@@ -266,18 +266,7 @@ function createPostgresTenantManagementRepository(store) {
       await ensureTables();
       const workspaces = repositories.workspaces?.list
         ? await repositories.workspaces.list()
-        : [...new Set([
-            ...(data.users || []).map(row => row.tenantId),
-            ...(data.customers || []).map(row => row.tenantId),
-            ...(data.jobs || []).map(row => row.tenantId),
-            ...(data.tenantAdminRecords || []).map(row => row.tenantId),
-            ...(data.tenantSettings || []).map(row => row.tenantId)
-          ].filter(Boolean))]
-          .sort()
-          .map(tenantId => ({
-            tenantId,
-            name: tenantId
-          }));
+        : [];
       const rows = (await query(`SELECT * FROM platform_tenant_admin_records`)).rows;
       const domains = (await query(`SELECT id::text, tenant_id AS "tenantId", domain, status, ssl_status AS "sslStatus", created_at AS "createdAt", updated_at AS "updatedAt" FROM platform_tenant_domains WHERE deleted_at IS NULL`)).rows;
       const apiKeys = (await query(`SELECT id::text, tenant_id AS "tenantId", name, last_four AS "lastFour", expires_at AS "expiresAt", created_at AS "createdAt" FROM platform_tenant_api_keys WHERE revoked_at IS NULL`)).rows;
