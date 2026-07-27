@@ -13,7 +13,9 @@ const testingGuide = read('WEBSITE_TESTING.md');
 
 assert.match(shell, /aria-label="Primary navigation"/);
 assert.match(shell, /aria-label="Breadcrumb"/);
-assert.match(shell, /Select workspace/);
+assert.match(shell, /<WorkspaceHeader platformAdmin=\{isPlatformAdmin\}/);
+assert.match(shell, /visibleNavigation/);
+assert.match(shell, /aria-current=\{pathname===item\.href\?'page':undefined\}/);
 assert.match(shell, /Search ServicePro/);
 assert.match(shell, /event\.ctrlKey \|\| event\.metaKey/);
 assert.match(shell, /Open profile menu/);

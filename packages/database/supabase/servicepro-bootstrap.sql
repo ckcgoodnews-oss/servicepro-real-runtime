@@ -1256,18 +1256,63 @@ COMMIT;
 -- BEGIN SERVICEPRO MIGRATION 065_reporting_runtime.sql
 BEGIN;
 -- Sprint 65 PostgreSQL migration: reporting runtime views.
+--
+-- Compatibility note:
+-- Historical tenant_id columns are not uniform across every runtime table.
+-- Some deployments use uuid while others use text. Reporting views therefore
+-- normalize tenant_id to text at every cross-table boundary. This prevents
+-- PostgreSQL UNION and JOIN type-resolution failures while preserving the
+-- tenant identifier value used by the application layer.
 
 CREATE OR REPLACE VIEW reporting_revenue_summary AS
 SELECT
-  tenant_id,
+  tenant_id::text AS tenant_id,
   COUNT(*)::int AS invoice_count,
   COALESCE(SUM(total), 0)::float AS invoice_total,
   COALESCE(SUM(paid_amount), 0)::float AS paid_total,
   COALESCE(SUM(balance_due), 0)::float AS balance_due
 FROM invoices
-GROUP BY tenant_id;
+GROUP BY tenant_id::text;
 
 CREATE OR REPLACE VIEW reporting_dashboard_summary AS
+WITH tenant_scope AS (
+  SELECT tenant_id::text AS tenant_id FROM customers
+  UNION
+  SELECT tenant_id::text AS tenant_id FROM jobs
+  UNION
+  SELECT tenant_id::text AS tenant_id FROM invoices
+  UNION
+  SELECT tenant_id::text AS tenant_id FROM payments
+),
+customer_totals AS (
+  SELECT
+    tenant_id::text AS tenant_id,
+    COUNT(*) AS customer_count
+  FROM customers
+  GROUP BY tenant_id::text
+),
+job_totals AS (
+  SELECT
+    tenant_id::text AS tenant_id,
+    COUNT(*) AS job_count
+  FROM jobs
+  GROUP BY tenant_id::text
+),
+invoice_totals AS (
+  SELECT
+    tenant_id::text AS tenant_id,
+    COALESCE(SUM(total), 0) AS invoice_total,
+    COALESCE(SUM(balance_due), 0) AS balance_due
+  FROM invoices
+  GROUP BY tenant_id::text
+),
+payment_totals AS (
+  SELECT
+    tenant_id::text AS tenant_id,
+    COALESCE(SUM(amount), 0) AS payment_total
+  FROM payments
+  GROUP BY tenant_id::text
+)
 SELECT
   t.tenant_id,
   COALESCE(c.customer_count, 0)::int AS customer_count,
@@ -1275,19 +1320,11 @@ SELECT
   COALESCE(i.invoice_total, 0)::float AS invoice_total,
   COALESCE(i.balance_due, 0)::float AS balance_due,
   COALESCE(p.payment_total, 0)::float AS payment_total
-FROM (
-  SELECT tenant_id FROM customers
-  UNION SELECT tenant_id FROM jobs
-  UNION SELECT tenant_id FROM invoices
-  UNION SELECT tenant_id FROM payments
-) t
-LEFT JOIN (SELECT tenant_id, COUNT(*) AS customer_count FROM customers GROUP BY tenant_id) c ON c.tenant_id = t.tenant_id
-LEFT JOIN (SELECT tenant_id, COUNT(*) AS job_count FROM jobs GROUP BY tenant_id) j ON j.tenant_id = t.tenant_id
-LEFT JOIN (
-  SELECT tenant_id, COALESCE(SUM(total), 0) AS invoice_total, COALESCE(SUM(balance_due), 0) AS balance_due
-  FROM invoices GROUP BY tenant_id
-) i ON i.tenant_id = t.tenant_id
-LEFT JOIN (SELECT tenant_id, COALESCE(SUM(amount), 0) AS payment_total FROM payments GROUP BY tenant_id) p ON p.tenant_id = t.tenant_id;
+FROM tenant_scope t
+LEFT JOIN customer_totals c ON c.tenant_id = t.tenant_id
+LEFT JOIN job_totals j ON j.tenant_id = t.tenant_id
+LEFT JOIN invoice_totals i ON i.tenant_id = t.tenant_id
+LEFT JOIN payment_totals p ON p.tenant_id = t.tenant_id;
 
 CREATE TABLE IF NOT EXISTS report_run_events (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -3488,6 +3525,9 @@ COMMIT;
 -- BEGIN SERVICEPRO MIGRATION 105_subscription_entitlement_runtime.sql
 BEGIN;
 -- Sprint 105 PostgreSQL migration: subscription, billing, and entitlement runtime.
+-- Repair: make the migration safe when one or more target tables already exist
+-- with a partial/legacy schema. CREATE TABLE IF NOT EXISTS does not add missing
+-- columns, so every required column is reconciled before index creation.
 
 CREATE TABLE IF NOT EXISTS subscription_plans (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -3504,6 +3544,19 @@ CREATE TABLE IF NOT EXISTS subscription_plans (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+ALTER TABLE subscription_plans
+  ADD COLUMN IF NOT EXISTS code text,
+  ADD COLUMN IF NOT EXISTS name text,
+  ADD COLUMN IF NOT EXISTS description text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'active',
+  ADD COLUMN IF NOT EXISTS billing_interval text NOT NULL DEFAULT 'monthly',
+  ADD COLUMN IF NOT EXISTS base_price_cents integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS currency text NOT NULL DEFAULT 'USD',
+  ADD COLUMN IF NOT EXISTS trial_days integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS plan_entitlements (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   plan_id uuid NOT NULL,
@@ -3516,6 +3569,16 @@ CREATE TABLE IF NOT EXISTS plan_entitlements (
   updated_at timestamptz NOT NULL DEFAULT now(),
   UNIQUE (plan_id, entitlement_key)
 );
+
+ALTER TABLE plan_entitlements
+  ADD COLUMN IF NOT EXISTS plan_id uuid,
+  ADD COLUMN IF NOT EXISTS entitlement_key text,
+  ADD COLUMN IF NOT EXISTS value_type text NOT NULL DEFAULT 'boolean',
+  ADD COLUMN IF NOT EXISTS value jsonb NOT NULL DEFAULT 'true'::jsonb,
+  ADD COLUMN IF NOT EXISTS description text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE TABLE IF NOT EXISTS tenant_subscriptions (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -3533,6 +3596,20 @@ CREATE TABLE IF NOT EXISTS tenant_subscriptions (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+ALTER TABLE tenant_subscriptions
+  ADD COLUMN IF NOT EXISTS tenant_id text,
+  ADD COLUMN IF NOT EXISTS plan_id uuid,
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'active',
+  ADD COLUMN IF NOT EXISTS started_at timestamptz,
+  ADD COLUMN IF NOT EXISTS current_period_start timestamptz,
+  ADD COLUMN IF NOT EXISTS current_period_end timestamptz,
+  ADD COLUMN IF NOT EXISTS cancelled_at timestamptz,
+  ADD COLUMN IF NOT EXISTS external_customer_id text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS external_subscription_id text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
+
 CREATE TABLE IF NOT EXISTS usage_meters (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   meter_key text NOT NULL UNIQUE,
@@ -3545,6 +3622,17 @@ CREATE TABLE IF NOT EXISTS usage_meters (
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
+
+ALTER TABLE usage_meters
+  ADD COLUMN IF NOT EXISTS meter_key text,
+  ADD COLUMN IF NOT EXISTS name text,
+  ADD COLUMN IF NOT EXISTS description text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS unit text NOT NULL DEFAULT 'count',
+  ADD COLUMN IF NOT EXISTS aggregation text NOT NULL DEFAULT 'sum',
+  ADD COLUMN IF NOT EXISTS billable boolean NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE TABLE IF NOT EXISTS usage_records (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -3559,6 +3647,18 @@ CREATE TABLE IF NOT EXISTS usage_records (
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
+
+ALTER TABLE usage_records
+  ADD COLUMN IF NOT EXISTS tenant_id text,
+  ADD COLUMN IF NOT EXISTS subscription_id uuid,
+  ADD COLUMN IF NOT EXISTS meter_key text,
+  ADD COLUMN IF NOT EXISTS quantity numeric(18,4) NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS source_id text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS source_type text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS recorded_at timestamptz,
+  ADD COLUMN IF NOT EXISTS metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
 
 CREATE TABLE IF NOT EXISTS billing_invoices (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -3578,6 +3678,31 @@ CREATE TABLE IF NOT EXISTS billing_invoices (
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
+
+ALTER TABLE billing_invoices
+  ADD COLUMN IF NOT EXISTS tenant_id text,
+  ADD COLUMN IF NOT EXISTS subscription_id uuid,
+  ADD COLUMN IF NOT EXISTS invoice_number text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS status text NOT NULL DEFAULT 'open',
+  ADD COLUMN IF NOT EXISTS subtotal_cents integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS tax_cents integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_cents integer NOT NULL DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS currency text NOT NULL DEFAULT 'USD',
+  ADD COLUMN IF NOT EXISTS issued_at timestamptz,
+  ADD COLUMN IF NOT EXISTS due_at timestamptz,
+  ADD COLUMN IF NOT EXISTS paid_at timestamptz,
+  ADD COLUMN IF NOT EXISTS line_items jsonb NOT NULL DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS created_at timestamptz NOT NULL DEFAULT now(),
+  ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now();
+
+CREATE UNIQUE INDEX IF NOT EXISTS uq_subscription_plans_code
+ON subscription_plans (code)
+WHERE code IS NOT NULL;
+
+CREATE UNIQUE INDEX IF NOT EXISTS uq_plan_entitlements_plan_key
+ON plan_entitlements (plan_id, entitlement_key)
+WHERE plan_id IS NOT NULL AND entitlement_key IS NOT NULL;
 
 CREATE INDEX IF NOT EXISTS idx_tenant_subscriptions_tenant_status
 ON tenant_subscriptions (tenant_id, status, created_at DESC);
@@ -19025,3 +19150,426 @@ ON CONFLICT(code) DO NOTHING;
 INSERT INTO postgres_runtime_migrations (version) VALUES ('728_expanded_service_catalog.sql') ON CONFLICT (version) DO NOTHING;
 COMMIT;
 -- END SERVICEPRO MIGRATION 728_expanded_service_catalog.sql
+
+-- BEGIN SERVICEPRO MIGRATION 775_owner_access_entitlements.sql
+BEGIN;
+CREATE TABLE IF NOT EXISTS runtime_owner_access_entitlements (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id text NOT NULL,
+  user_id uuid NOT NULL REFERENCES runtime_users(id) ON DELETE CASCADE,
+  token_hash text NOT NULL UNIQUE,
+  token_last_four text NOT NULL,
+  status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending','active','suspended','revoked')),
+  expires_at timestamptz NOT NULL,
+  activated_at timestamptz,
+  created_by uuid,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_owner_access_user
+ON runtime_owner_access_entitlements (tenant_id, user_id, created_at DESC);
+INSERT INTO postgres_runtime_migrations (version) VALUES ('775_owner_access_entitlements.sql') ON CONFLICT (version) DO NOTHING;
+COMMIT;
+-- END SERVICEPRO MIGRATION 775_owner_access_entitlements.sql
+
+-- BEGIN SERVICEPRO MIGRATION 776_module_entitlements_rbac.sql
+BEGIN;
+CREATE TABLE IF NOT EXISTS tenant_module_entitlements (
+  tenant_id text PRIMARY KEY,
+  enabled_modules jsonb NOT NULL DEFAULT '[]'::jsonb,
+  updated_by uuid,
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+ALTER TABLE runtime_users ADD COLUMN IF NOT EXISTS module_permissions jsonb NOT NULL DEFAULT '[]'::jsonb;
+INSERT INTO postgres_runtime_migrations (version) VALUES ('776_module_entitlements_rbac.sql') ON CONFLICT (version) DO NOTHING;
+COMMIT;
+-- END SERVICEPRO MIGRATION 776_module_entitlements_rbac.sql
+
+-- BEGIN SERVICEPRO MIGRATION 777_tenant_management_center.sql
+BEGIN;
+BEGIN;
+
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE IF NOT EXISTS platform_tenant_admin_records (
+  tenant_id text PRIMARY KEY,
+  status text NOT NULL DEFAULT 'active',
+  plan text NOT NULL DEFAULT 'manual',
+  tags jsonb NOT NULL DEFAULT '[]'::jsonb,
+  notes text NOT NULL DEFAULT '',
+  feature_flags jsonb NOT NULL DEFAULT '{}'::jsonb,
+  branding jsonb NOT NULL DEFAULT '{}'::jsonb,
+  storage_bytes bigint NOT NULL DEFAULT 0,
+  archived_at timestamptz,
+  deleted_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS platform_tenant_domains (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id text NOT NULL,
+  domain text NOT NULL,
+  status text NOT NULL DEFAULT 'pending_dns',
+  ssl_status text NOT NULL DEFAULT 'pending',
+  deleted_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS platform_tenant_domains_live_domain_idx
+  ON platform_tenant_domains (lower(domain))
+  WHERE deleted_at IS NULL;
+
+CREATE TABLE IF NOT EXISTS platform_tenant_api_keys (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id text NOT NULL,
+  name text NOT NULL,
+  key_hash text NOT NULL,
+  last_four text NOT NULL,
+  expires_at timestamptz,
+  revoked_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS platform_tenant_admin_audit (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id text NOT NULL,
+  actor_id text NOT NULL DEFAULT '',
+  action text NOT NULL,
+  metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS platform_tenant_admin_audit_tenant_created_idx
+  ON platform_tenant_admin_audit (tenant_id, created_at DESC);
+COMMIT;
+INSERT INTO postgres_runtime_migrations (version) VALUES ('777_tenant_management_center.sql') ON CONFLICT (version) DO NOTHING;
+COMMIT;
+-- END SERVICEPRO MIGRATION 777_tenant_management_center.sql
+
+-- BEGIN SERVICEPRO MIGRATION 778_tenant_management_center_full.sql
+BEGIN;
+BEGIN;
+
+-- ============================================================
+-- TENANT MANAGEMENT CENTER - Complete Schema
+-- Sprint 1-10: Foundation through Recovery
+-- ============================================================
+
+-- Sprint 1: Foundation (extends existing platform_tenant_admin_records)
+ALTER TABLE platform_tenant_admin_records
+  ADD COLUMN IF NOT EXISTS subscription_plan text NOT NULL DEFAULT 'free',
+  ADD COLUMN IF NOT EXISTS subscription_status text NOT NULL DEFAULT 'active',
+  ADD COLUMN IF NOT EXISTS subscription_seats int NOT NULL DEFAULT 5,
+  ADD COLUMN IF NOT EXISTS subscription_started_at timestamptz,
+  ADD COLUMN IF NOT EXISTS subscription_expires_at timestamptz,
+  ADD COLUMN IF NOT EXISTS billing_provider text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS billing_external_id text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS billing_email text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS usage_limits jsonb NOT NULL DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS white_label jsonb NOT NULL DEFAULT '{}'::jsonb,
+  ADD COLUMN IF NOT EXISTS health_score int NOT NULL DEFAULT 100,
+  ADD COLUMN IF NOT EXISTS health_issues jsonb NOT NULL DEFAULT '[]'::jsonb,
+  ADD COLUMN IF NOT EXISTS last_health_check_at timestamptz,
+  ADD COLUMN IF NOT EXISTS permanently_purged_at timestamptz;
+
+-- Sprint 3: Impersonation sessions
+CREATE TABLE IF NOT EXISTS platform_impersonation_sessions (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  admin_user_id text NOT NULL,
+  admin_email text NOT NULL,
+  target_tenant_id text NOT NULL,
+  target_owner_id text NOT NULL,
+  target_owner_email text NOT NULL,
+  mode text NOT NULL DEFAULT 'full',
+  token_hash text NOT NULL,
+  started_at timestamptz NOT NULL DEFAULT now(),
+  ended_at timestamptz,
+  ended_reason text NOT NULL DEFAULT '',
+  ip_address text NOT NULL DEFAULT '',
+  user_agent text NOT NULL DEFAULT ''
+);
+
+CREATE INDEX IF NOT EXISTS platform_impersonation_sessions_active_idx
+  ON platform_impersonation_sessions (admin_user_id, ended_at)
+  WHERE ended_at IS NULL;
+
+CREATE INDEX IF NOT EXISTS platform_impersonation_sessions_tenant_idx
+  ON platform_impersonation_sessions (target_tenant_id, started_at DESC);
+
+-- Sprint 4: Subscription & billing history
+CREATE TABLE IF NOT EXISTS platform_billing_events (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id text NOT NULL,
+  event_type text NOT NULL,
+  amount_cents bigint NOT NULL DEFAULT 0,
+  currency text NOT NULL DEFAULT 'USD',
+  description text NOT NULL DEFAULT '',
+  external_id text NOT NULL DEFAULT '',
+  metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS platform_billing_events_tenant_idx
+  ON platform_billing_events (tenant_id, created_at DESC);
+
+-- Sprint 5: Feature management (per-tenant module configuration)
+CREATE TABLE IF NOT EXISTS platform_tenant_modules (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id text NOT NULL,
+  module_key text NOT NULL,
+  enabled boolean NOT NULL DEFAULT true,
+  is_beta boolean NOT NULL DEFAULT false,
+  config jsonb NOT NULL DEFAULT '{}'::jsonb,
+  enabled_at timestamptz NOT NULL DEFAULT now(),
+  disabled_at timestamptz
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS platform_tenant_modules_tenant_module_idx
+  ON platform_tenant_modules (tenant_id, module_key);
+
+-- Sprint 7: OAuth clients
+CREATE TABLE IF NOT EXISTS platform_tenant_oauth_clients (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id text NOT NULL,
+  client_name text NOT NULL,
+  client_id text NOT NULL UNIQUE,
+  client_secret_hash text NOT NULL,
+  redirect_uris jsonb NOT NULL DEFAULT '[]'::jsonb,
+  scopes jsonb NOT NULL DEFAULT '[]'::jsonb,
+  rate_limit_rpm int NOT NULL DEFAULT 60,
+  revoked_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- Sprint 7: Webhooks
+CREATE TABLE IF NOT EXISTS platform_tenant_webhooks (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id text NOT NULL,
+  url text NOT NULL,
+  events jsonb NOT NULL DEFAULT '[]'::jsonb,
+  secret_hash text NOT NULL DEFAULT '',
+  active boolean NOT NULL DEFAULT true,
+  last_triggered_at timestamptz,
+  failure_count int NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- Sprint 8: Usage snapshots for monitoring
+CREATE TABLE IF NOT EXISTS platform_tenant_usage_snapshots (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id text NOT NULL,
+  snapshot_date date NOT NULL DEFAULT CURRENT_DATE,
+  users_count int NOT NULL DEFAULT 0,
+  customers_count int NOT NULL DEFAULT 0,
+  jobs_count int NOT NULL DEFAULT 0,
+  assets_count int NOT NULL DEFAULT 0,
+  storage_bytes bigint NOT NULL DEFAULT 0,
+  api_calls_count bigint NOT NULL DEFAULT 0,
+  login_count int NOT NULL DEFAULT 0,
+  error_count int NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS platform_tenant_usage_snapshots_tenant_date_idx
+  ON platform_tenant_usage_snapshots (tenant_id, snapshot_date);
+
+COMMIT;
+INSERT INTO postgres_runtime_migrations (version) VALUES ('778_tenant_management_center_full.sql') ON CONFLICT (version) DO NOTHING;
+COMMIT;
+-- END SERVICEPRO MIGRATION 778_tenant_management_center_full.sql
+
+-- BEGIN SERVICEPRO MIGRATION 779_crm_and_marketing.sql
+BEGIN;
+BEGIN;
+
+-- CRM Leads
+CREATE TABLE IF NOT EXISTS crm_leads (
+  id text PRIMARY KEY,
+  tenant_id text NOT NULL,
+  name text NOT NULL,
+  email text NOT NULL DEFAULT '',
+  phone text NOT NULL DEFAULT '',
+  company text NOT NULL DEFAULT '',
+  source text NOT NULL DEFAULT 'manual',
+  stage text NOT NULL DEFAULT 'new',
+  value bigint NOT NULL DEFAULT 0,
+  service text NOT NULL DEFAULT '',
+  notes text NOT NULL DEFAULT '',
+  assigned_to text NOT NULL DEFAULT '',
+  tags jsonb NOT NULL DEFAULT '[]'::jsonb,
+  last_contact_at timestamptz,
+  converted_at timestamptz,
+  lost_reason text NOT NULL DEFAULT '',
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS crm_leads_tenant_stage_idx ON crm_leads (tenant_id, stage);
+CREATE INDEX IF NOT EXISTS crm_leads_tenant_source_idx ON crm_leads (tenant_id, source);
+
+-- Marketing Campaigns
+CREATE TABLE IF NOT EXISTS marketing_campaigns (
+  id text PRIMARY KEY,
+  tenant_id text NOT NULL,
+  name text NOT NULL,
+  type text NOT NULL DEFAULT 'email',
+  status text NOT NULL DEFAULT 'draft',
+  subject text NOT NULL DEFAULT '',
+  body text NOT NULL DEFAULT '',
+  audience text NOT NULL DEFAULT 'all_customers',
+  audience_filter jsonb NOT NULL DEFAULT '{}'::jsonb,
+  scheduled_at timestamptz,
+  sent_count int NOT NULL DEFAULT 0,
+  opened_count int NOT NULL DEFAULT 0,
+  clicked_count int NOT NULL DEFAULT 0,
+  converted_count int NOT NULL DEFAULT 0,
+  created_by text NOT NULL DEFAULT '',
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS marketing_campaigns_tenant_status_idx ON marketing_campaigns (tenant_id, status);
+
+-- Payment records
+CREATE TABLE IF NOT EXISTS payment_records (
+  id text PRIMARY KEY,
+  tenant_id text NOT NULL,
+  invoice_id text NOT NULL DEFAULT '',
+  amount_cents bigint NOT NULL DEFAULT 0,
+  method text NOT NULL DEFAULT 'card',
+  status text NOT NULL DEFAULT 'pending',
+  stripe_payment_intent_id text NOT NULL DEFAULT '',
+  stripe_refund_id text NOT NULL DEFAULT '',
+  refunded_amount_cents bigint NOT NULL DEFAULT 0,
+  refund_reason text NOT NULL DEFAULT '',
+  processed_by text NOT NULL DEFAULT '',
+  completed_at timestamptz,
+  refunded_at timestamptz,
+  metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS payment_records_tenant_invoice_idx ON payment_records (tenant_id, invoice_id);
+CREATE INDEX IF NOT EXISTS payment_records_tenant_status_idx ON payment_records (tenant_id, status);
+
+COMMIT;
+INSERT INTO postgres_runtime_migrations (version) VALUES ('779_crm_and_marketing.sql') ON CONFLICT (version) DO NOTHING;
+COMMIT;
+-- END SERVICEPRO MIGRATION 779_crm_and_marketing.sql
+
+-- BEGIN SERVICEPRO MIGRATION 780_website_builder_and_automation.sql
+BEGIN;
+BEGIN;
+
+-- Website Builder Pages
+CREATE TABLE IF NOT EXISTS website_pages (
+  id text PRIMARY KEY,
+  tenant_id text NOT NULL,
+  title text NOT NULL,
+  slug text NOT NULL,
+  sections jsonb NOT NULL DEFAULT '[]'::jsonb,
+  seo jsonb NOT NULL DEFAULT '{}'::jsonb,
+  status text NOT NULL DEFAULT 'draft',
+  template text NOT NULL DEFAULT 'blank',
+  page_order int NOT NULL DEFAULT 0,
+  version int NOT NULL DEFAULT 1,
+  published_at timestamptz,
+  created_by text NOT NULL DEFAULT '',
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS website_pages_tenant_slug_idx ON website_pages (tenant_id, slug);
+CREATE INDEX IF NOT EXISTS website_pages_tenant_status_idx ON website_pages (tenant_id, status);
+
+-- Website Themes
+CREATE TABLE IF NOT EXISTS website_themes (
+  tenant_id text PRIMARY KEY,
+  primary_color text NOT NULL DEFAULT '#1a73e8',
+  secondary_color text NOT NULL DEFAULT '#34a853',
+  font_family text NOT NULL DEFAULT 'Inter, sans-serif',
+  header_style text NOT NULL DEFAULT 'fixed',
+  footer_style text NOT NULL DEFAULT 'standard',
+  custom_css text NOT NULL DEFAULT '',
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- Website Media Library
+CREATE TABLE IF NOT EXISTS website_media (
+  id text PRIMARY KEY,
+  tenant_id text NOT NULL,
+  filename text NOT NULL,
+  url text NOT NULL,
+  mime_type text NOT NULL DEFAULT '',
+  size_bytes bigint NOT NULL DEFAULT 0,
+  alt text NOT NULL DEFAULT '',
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS website_media_tenant_idx ON website_media (tenant_id, created_at DESC);
+
+-- Automation Workflows
+CREATE TABLE IF NOT EXISTS automation_workflows (
+  id text PRIMARY KEY,
+  tenant_id text NOT NULL,
+  name text NOT NULL,
+  description text NOT NULL DEFAULT '',
+  trigger_type text NOT NULL DEFAULT 'manual',
+  trigger_config jsonb NOT NULL DEFAULT '{}'::jsonb,
+  steps jsonb NOT NULL DEFAULT '[]'::jsonb,
+  status text NOT NULL DEFAULT 'draft',
+  execution_count int NOT NULL DEFAULT 0,
+  last_executed_at timestamptz,
+  created_by text NOT NULL DEFAULT '',
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS automation_workflows_tenant_status_idx ON automation_workflows (tenant_id, status);
+
+-- Automation Execution History
+CREATE TABLE IF NOT EXISTS automation_executions (
+  id text PRIMARY KEY,
+  tenant_id text NOT NULL,
+  workflow_id text NOT NULL,
+  workflow_name text NOT NULL DEFAULT '',
+  trigger_type text NOT NULL DEFAULT '',
+  status text NOT NULL DEFAULT 'pending',
+  steps_executed int NOT NULL DEFAULT 0,
+  step_results jsonb NOT NULL DEFAULT '[]'::jsonb,
+  context jsonb NOT NULL DEFAULT '{}'::jsonb,
+  started_at timestamptz NOT NULL DEFAULT now(),
+  completed_at timestamptz
+);
+
+CREATE INDEX IF NOT EXISTS automation_executions_workflow_idx ON automation_executions (tenant_id, workflow_id, started_at DESC);
+
+-- AI Knowledge Base
+CREATE TABLE IF NOT EXISTS ai_knowledge (
+  id text PRIMARY KEY,
+  tenant_id text NOT NULL,
+  title text NOT NULL,
+  content text NOT NULL,
+  category text NOT NULL DEFAULT 'general',
+  tags jsonb NOT NULL DEFAULT '[]'::jsonb,
+  status text NOT NULL DEFAULT 'published',
+  embedding vector(1536),
+  view_count int NOT NULL DEFAULT 0,
+  helpful_count int NOT NULL DEFAULT 0,
+  created_by text NOT NULL DEFAULT '',
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS ai_knowledge_tenant_category_idx ON ai_knowledge (tenant_id, category);
+CREATE INDEX IF NOT EXISTS ai_knowledge_tenant_status_idx ON ai_knowledge (tenant_id, status);
+
+COMMIT;
+INSERT INTO postgres_runtime_migrations (version) VALUES ('780_website_builder_and_automation.sql') ON CONFLICT (version) DO NOTHING;
+COMMIT;
+-- END SERVICEPRO MIGRATION 780_website_builder_and_automation.sql

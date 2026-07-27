@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const workflow = fs.readFileSync('.github/workflows/postgres-smoke.yml', 'utf8');
 for (const contract of [
-  'codex/sprint-716-frontend-foundation',
+  'main',
   'postgres:16-alpine',
   'npm ci',
   'npm run migrations:check',
@@ -79,7 +79,7 @@ const duplicateTables = [...tableDeclarations.entries()]
   .filter(([, files]) => files.length > 1)
   .map(([table]) => table)
   .sort();
-assert.deepStrictEqual(duplicateTables, ['customers', 'jobs', 'route_plans', 'sla_policies', 'webhook_subscriptions']);
+assert.deepStrictEqual(duplicateTables, ['crm_leads', 'customers', 'jobs', 'marketing_campaigns', 'route_plans', 'sla_policies', 'webhook_subscriptions']);
 for (const file of fs.readdirSync('packages/database/postgres').filter((name) => name.endsWith('.sql'))) {
   const source = fs.readFileSync(`packages/database/postgres/${file}`, 'utf8');
   for (const match of source.matchAll(/CREATE\s+(?:UNIQUE\s+)?(?:TABLE|INDEX)(?:\s+IF\s+NOT\s+EXISTS)?\s+([^\s(]+)/gi)) {

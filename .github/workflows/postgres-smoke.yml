@@ -3,7 +3,7 @@ name: PostgreSQL Smoke
 on:
   push:
     branches:
-      - codex/sprint-716-frontend-foundation
+      - main
   pull_request:
     branches:
       - main
