@@ -40,11 +40,17 @@ async function issueSession(req, user, existingSessionId, currentRefreshHash) {
 async function login(req, res) {
   const { email, password } = req.body || {};
   if (!email || !password) return sendJson(res, 400, { error: { code: 'validation_failed', message: 'email and password are required' } });
-  const user = await req.context.repositories.users.findByEmail(req.context.tenantId, email);
+  let user = await req.context.repositories.users.findByEmail(req.context.tenantId, email);
+  // If not found in the request tenant, try cross-tenant lookup (owners created by platform admin may be in a different tenant)
+  if (!user && req.context.repositories.users.findByEmailAnyTenant) {
+    user = await req.context.repositories.users.findByEmailAnyTenant(email);
+  }
   if (!user || !(await verifyPassword(password, user.passwordHash))) {
     await req.context.repositories.authEvents.log({ tenantId: req.context.tenantId, userId: null, eventType: 'auth.login_failed', email, status: 'failed' });
     return sendJson(res, 401, { error: { code: 'unauthorized', message: 'Invalid email or password' } });
   }
+  // Switch request context to the user's actual tenant
+  req.context.tenantId = user.tenantId;
   if (user.mfaEnabled) {
     const code = String(crypto.randomInt(100000, 1000000));
     const challenge = await req.context.repositories.authSessions.createMfaChallenge({ tenantId: user.tenantId, userId: user.id, tokenHash: hashToken(code), expiresAt: new Date(Date.now() + 5 * 60 * 1000).toISOString() });

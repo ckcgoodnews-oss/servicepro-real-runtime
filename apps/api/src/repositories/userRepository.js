@@ -106,6 +106,18 @@ function createPostgresUserRepository(store) {
       );
       return result.rows[0] || null;
     },
+    async findByEmailAnyTenant(email) {
+      const result = await store.query(
+        `SELECT id::text, tenant_id as "tenantId", email, name, password_hash as "passwordHash",
+                roles, permissions, mfa_enabled as "mfaEnabled", avatar_url as "avatarUrl", timezone, locale,
+                notification_preferences as "notificationPreferences", created_at as "createdAt", updated_at as "updatedAt"
+         FROM runtime_users
+         WHERE lower(email) = lower($1)
+         LIMIT 1`,
+        [email]
+      );
+      return result.rows[0] || null;
+    },
     async createSeedOwner(tenantId, email, password) {
       const existing = await this.findByEmail(tenantId, email);
       if (existing) return existing;
