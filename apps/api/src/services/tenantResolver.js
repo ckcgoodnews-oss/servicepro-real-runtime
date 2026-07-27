@@ -47,10 +47,17 @@ async function attachOperationalTenant(req) {
   const tenantKey = context.tenantKey || context.tenantId;
 
   context.tenantKey = tenantKey;
-  context.operationalTenantId = await resolveOperationalTenantId(
-    context.repositories && context.repositories.store,
-    tenantKey
-  );
+
+  try {
+    context.operationalTenantId = await resolveOperationalTenantId(
+      context.repositories && context.repositories.store,
+      tenantKey
+    );
+  } catch {
+    // Platform admin routes may not have a valid tenant context.
+    // Allow the request to proceed with a null operational tenant ID.
+    context.operationalTenantId = null;
+  }
 
   return context.operationalTenantId;
 }
