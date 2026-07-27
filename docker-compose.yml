@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_DB: servicepro
       POSTGRES_USER: servicepro
-      POSTGRES_PASSWORD: servicepro
+      POSTGRES_PASSWORD: development-only
     ports:
       - "5432:5432"
     volumes:
@@ -25,16 +25,16 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      NODE_ENV: production
+      NODE_ENV: development
       PORT: 3000
       APP_NAME: ServicePro
-      APP_VERSION: 0.71.0
+      APP_VERSION: 8.0.0-alpha.1
       DEFAULT_TENANT_ID: tenant_demo
       DATA_STORE: postgres
-      DATABASE_URL: postgresql://servicepro:servicepro@postgres:5432/servicepro
+      DATABASE_URL: postgresql://servicepro:development-only@postgres:5432/servicepro
       DATABASE_SSL: "false"
-      JWT_SECRET: replace-this-with-a-long-random-secret
-      PORTAL_TOKEN_SECRET: replace-this-with-a-long-random-portal-secret
+      JWT_SECRET: development-only-jwt-secret-never-use-in-production
+      PORTAL_TOKEN_SECRET: development-only-portal-secret-never-use-in-production
       CORS_ALLOWED_ORIGINS: http://localhost:3000,http://localhost:5173
       MAX_JSON_BODY_BYTES: 1048576
       RATE_LIMIT_WINDOW_MS: 60000

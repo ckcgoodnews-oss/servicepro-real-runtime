@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { version } = require('../package.json');
 
-const PLACEHOLDER = /^(?:change[_-]?me|replace[-_ ]?this|password|secret|token|example)(?:\b|[_-])/i;
+const PLACEHOLDER = /^(?:change[_-]?me|replace[-_ ]?this|set[_-]?externally|password|secret|token|example)(?:\b|[_-])/i;
 
 function parseArgs(argv) {
   const args = {};

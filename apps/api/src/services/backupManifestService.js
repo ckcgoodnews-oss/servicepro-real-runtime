@@ -12,7 +12,7 @@ function buildBackupManifest(filePath, options = {}) {
   const stat = fs.statSync(filePath);
   return {
     app: process.env.APP_NAME || 'ServicePro',
-    version: process.env.APP_VERSION || '0.73.0',
+    version: process.env.APP_VERSION || require('../../../../package.json').version,
     backupType: options.backupType || 'json',
     sourcePath: path.resolve(filePath),
     filename: path.basename(filePath),

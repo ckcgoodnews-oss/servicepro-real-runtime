@@ -14,14 +14,16 @@ function validateOnlineAlpha() {
   for (const service of ['servicepro-api-alpha-ckcgoodnews', 'servicepro-web-alpha-ckcgoodnews']) {
     assert.match(blueprint, new RegExp(`name: ${service}`));
   }
-  assert.strictEqual((blueprint.match(/branch: codex\/sprint-716-frontend-foundation/g) || []).length, 2);
+  assert.strictEqual((blueprint.match(/branch: main/g) || []).length, 2);
+  assert.match(blueprint, /DATA_STORE[\s\S]*value: postgres/);
+  assert.match(blueprint, /fromDatabase:[\s\S]*name: servicepro-postgres[\s\S]*property: connectionString/);
   assert.strictEqual((blueprint.match(/autoDeployTrigger: checksPass/g) || []).length, 2);
   for (const contract of ['healthCheckPath: /readyz', 'JWT_SECRET', 'PORTAL_TOKEN_SECRET', 'CORS_ALLOWED_ORIGINS', 'NEXT_PUBLIC_API_BASE_URL']) {
     assert.match(blueprint, new RegExp(contract));
   }
-  assert.match(guide, /temporary filesystem/);
-  assert.match(guide, /Do not enter real customer/);
-  assert.match(guide, /PostgreSQL adapter certification/);
+  assert.match(blueprint, /preDeployCommand: npm run migrate/);
+  assert.match(guide, /authoritative PostgreSQL datastore/);
+  assert.match(guide, /never enables the local demonstration credentials automatically/);
   assert.match(releaseNotes, /Sprint 731/);
   assert.match(releaseNotes, /Render online alpha foundation/);
 

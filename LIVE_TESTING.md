@@ -15,7 +15,7 @@ Use the local environment for fast interaction while building. Local changes app
 
 ## Live Render environment
 
-Each push to `codex/sprint-716-frontend-foundation` starts the full GitHub CI workflow. Render watches the same branch and deploys the API and website only after the GitHub checks pass.
+Each push to `main` starts the full GitHub CI workflow. Render watches `main` and deploys the API and website only after the GitHub checks pass.
 
 Expected live URLs:
 
@@ -25,8 +25,8 @@ Expected live URLs:
 
 After Render finishes, run the **Online alpha smoke** workflow in GitHub Actions or run `scripts/smoke-deployed-app.js` with `SMOKE_WEB_URL`, `SMOKE_API_URL`, `SMOKE_TIMEOUT_MS=90000`, and `SMOKE_EXPECTED_VERSION=8.0.0-alpha.1`.
 
-The live smoke test deliberately fails when Render is still serving an old commit. Free services can require up to 90 seconds to wake after being idle.
+The live smoke test deliberately fails when Render is still serving an old commit.
 
 ## Safe promotion rule
 
-A sprint is ready for live testing when local tests and the production build pass. A live alpha is accepted only when GitHub CI is green, Render reports both services as live, `/system-status` passes, and the deployed smoke test succeeds. Do not enter real customer or payment data while the alpha uses temporary JSON storage.
+A sprint is ready for live testing when local tests and the production build pass. A live release environment is accepted only when GitHub CI is green, Render reports both services and PostgreSQL as healthy, `/system-status` passes, and the authenticated PostgreSQL smoke test succeeds.

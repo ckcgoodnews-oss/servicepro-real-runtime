@@ -5,7 +5,7 @@ Use two PowerShell windows from the repository root.
 ## 1. Start the API
 
 ```powershell
-Set-Location "I:\REPO\servicepro-cumulative"
+Set-Location "I:\REPO\ServicePRO"
 $env:DATA_STORE = "json"
 $env:DATA_FILE = "./data/servicepro-runtime.json"
 $env:PORT = "10001"
@@ -21,7 +21,7 @@ Port `10001` is intentionally used for local JSON testing so it does not collide
 ## 2. Start the website
 
 ```powershell
-Set-Location "I:\REPO\servicepro-cumulative\apps\web"
+Set-Location "I:\REPO\ServicePRO\apps\web"
 if (-not (Test-Path .env.local)) { Copy-Item .env.example .env.local }
 npm run dev
 ```

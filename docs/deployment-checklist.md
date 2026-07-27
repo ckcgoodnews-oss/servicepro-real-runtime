@@ -11,7 +11,7 @@
 ## Build
 
 ```powershell
-docker build -t servicepro-api:0.71.0 .
+docker build -t servicepro-api:8.0.0-alpha.1 .
 ```
 
 ## Run database migrations

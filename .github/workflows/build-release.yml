@@ -3,7 +3,7 @@ on:
   pull_request:
     branches: [main]
   push:
-    branches: [main, codex/sprint-716-frontend-foundation]
+    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
