@@ -93,7 +93,9 @@ CREATE TABLE IF NOT EXISTS ai_knowledge (
   category text NOT NULL DEFAULT 'general',
   tags jsonb NOT NULL DEFAULT '[]'::jsonb,
   status text NOT NULL DEFAULT 'published',
-  embedding vector(1536),
+  -- Embeddings are not queried by the current runtime. Store provider-neutral JSON
+  -- until vector search is introduced through an explicit optional extension migration.
+  embedding jsonb,
   view_count int NOT NULL DEFAULT 0,
   helpful_count int NOT NULL DEFAULT 0,
   created_by text NOT NULL DEFAULT '',

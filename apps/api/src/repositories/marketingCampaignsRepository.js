@@ -96,7 +96,73 @@ function createJsonImpl(store) {
 }
 
 function createPostgresImpl(store) {
-  return createJsonImpl(store);
+  const select = `SELECT id::text, tenant_id as "tenantId", name, type, status, subject, body, audience,
+    audience_filter as "audienceFilter", scheduled_at as "scheduledAt", sent_count as "sentCount",
+    opened_count as "openedCount", clicked_count as "clickedCount", converted_count as "convertedCount",
+    created_by as "createdBy", created_at as "createdAt", updated_at as "updatedAt" FROM marketing_campaigns`;
+  return {
+    async listCampaigns(tenantId, filters = {}) {
+      const values = [tenantId];
+      const where = ['tenant_id=$1'];
+      for (const [column, value] of [['status', filters.status], ['type', filters.type]]) {
+        if (value) { values.push(value); where.push(`${column}=$${values.length}`); }
+      }
+      return (await store.query(`${select} WHERE ${where.join(' AND ')} ORDER BY created_at DESC`, values)).rows;
+    },
+    async findCampaignById(tenantId, id) {
+      return (await store.query(`${select} WHERE tenant_id=$1 AND id=$2::uuid LIMIT 1`, [tenantId, id])).rows[0] || null;
+    },
+    async createCampaign(tenantId, input) {
+      if (!input.name) { const error = new Error('Campaign name is required'); error.status = 400; error.code = 'validation_failed'; throw error; }
+      return (await store.query(
+        `INSERT INTO marketing_campaigns
+          (tenant_id,name,channel,type,status,subject,body,audience,audience_filter,scheduled_at,created_by)
+         VALUES ($1,$2,$3,$3,'draft',$4,$5,$6,$7::jsonb,NULLIF($8,'')::timestamptz,$9)
+         RETURNING id::text, tenant_id as "tenantId", name, type, status, subject, body, audience,
+           audience_filter as "audienceFilter", scheduled_at as "scheduledAt", sent_count as "sentCount",
+           opened_count as "openedCount", clicked_count as "clickedCount", converted_count as "convertedCount",
+           created_by as "createdBy", created_at as "createdAt", updated_at as "updatedAt"`,
+        [tenantId, input.name, input.type || 'email', input.subject || '', input.body || '', input.audience || 'all_customers',
+          JSON.stringify(input.audienceFilter || {}), input.scheduledAt || '', input.createdBy || '']
+      )).rows[0];
+    },
+    async updateCampaign(tenantId, id, input) {
+      const existing = await this.findCampaignById(tenantId, id);
+      if (!existing) return null;
+      const next = { ...existing, ...input };
+      return (await store.query(
+        `UPDATE marketing_campaigns SET name=$3,type=$4,status=$5,subject=$6,body=$7,audience=$8,
+           audience_filter=$9::jsonb,scheduled_at=NULLIF($10,'')::timestamptz,sent_count=$11,
+           opened_count=$12,clicked_count=$13,converted_count=$14,updated_at=now()
+         WHERE tenant_id=$1 AND id=$2::uuid
+         RETURNING id::text, tenant_id as "tenantId", name, type, status, subject, body, audience,
+           audience_filter as "audienceFilter", scheduled_at as "scheduledAt", sent_count as "sentCount",
+           opened_count as "openedCount", clicked_count as "clickedCount", converted_count as "convertedCount",
+           created_by as "createdBy", created_at as "createdAt", updated_at as "updatedAt"`,
+        [tenantId, id, next.name, next.type, next.status, next.subject, next.body, next.audience,
+          JSON.stringify(next.audienceFilter || {}), next.scheduledAt || '', Number(next.sentCount || 0),
+          Number(next.openedCount || 0), Number(next.clickedCount || 0), Number(next.convertedCount || 0)]
+      )).rows[0] || null;
+    },
+    async deleteCampaign(tenantId, id) {
+      return (await store.query('DELETE FROM marketing_campaigns WHERE tenant_id=$1 AND id=$2::uuid RETURNING id::text', [tenantId, id])).rows[0] || null;
+    },
+    async getStats(tenantId) {
+      const rows = await this.listCampaigns(tenantId);
+      const sent = rows.reduce((sum, row) => sum + row.sentCount, 0);
+      const opened = rows.reduce((sum, row) => sum + row.openedCount, 0);
+      return {
+        total: rows.length,
+        active: rows.filter(row => row.status === 'active').length,
+        draft: rows.filter(row => row.status === 'draft').length,
+        completed: rows.filter(row => row.status === 'completed').length,
+        totalSent: sent,
+        totalOpened: opened,
+        totalConverted: rows.reduce((sum, row) => sum + row.convertedCount, 0),
+        avgOpenRate: sent ? Math.round(opened / sent * 100) : 0
+      };
+    }
+  };
 }
 
 module.exports = { createMarketingCampaignsRepository };
