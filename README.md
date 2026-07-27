@@ -8,6 +8,22 @@ The current release branch can be connected to a two-service Render test environ
 
 Local and production-build testing instructions are in [WEBSITE_TESTING.md](WEBSITE_TESTING.md).
 
+## Deterministic installation and build
+
+ServicePro uses two independent npm packages and two committed npm lockfiles:
+
+```powershell
+Set-Location "I:\REPO\ServicePRO"
+npm ci
+npm ci --prefix apps/web
+npm test
+npm run build
+```
+
+The first clean frontend installation extracts the Next.js compiler and image-processing
+binaries and can take several minutes on Windows. Allow the command to finish; do not run a
+second installer against the same `apps\web\node_modules` directory.
+
 ## Historical patch notes
 
 ### Sprint 151

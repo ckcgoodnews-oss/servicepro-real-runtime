@@ -18,7 +18,7 @@
 .tenant-summary-cards small,.tenant-dashboard-table small{display:block;color:var(--muted)}
 .tenant-summary-cards strong{font-size:25px;line-height:1}
 .tenant-summary-cards span{font-size:10px;color:var(--muted)}
-.tenant-dashboard-toolbar{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:14px 0}
+.tenant-dashboard-toolbar{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:14px 0}
 .tenant-dashboard-toolbar label{max-width:440px;flex:1}
 .tenant-dashboard-table-wrap{overflow:auto;border:1px solid var(--line);border-radius:11px}
 .tenant-dashboard-table{width:100%;border-collapse:collapse;min-width:820px}
