@@ -14,6 +14,7 @@ function createInvoiceRepository(store) {
 function ensureCollection(data) {
   if (!data.invoices) data.invoices = [];
   if (!data.services) data.services = [];
+  if (!data.paymentApplicationEvents) data.paymentApplicationEvents = [];
   return data;
 }
 
@@ -86,7 +87,17 @@ function createJsonInvoiceRepository(store) {
       const data = ensureCollection(store.read());
       const idx = data.invoices.findIndex(i => i.tenantId === tenantId && i.id === id);
       if (idx === -1) return null;
+      const previousBalance = data.invoices[idx].balanceDue;
       data.invoices[idx] = applyPaymentToInvoice(data.invoices[idx], amount);
+      data.paymentApplicationEvents.push({
+        id: makeId('payevt'),
+        tenantId,
+        invoiceId: id,
+        amount: roundMoney(amount),
+        previousBalance,
+        newBalance: data.invoices[idx].balanceDue,
+        createdAt: now()
+      });
       store.write(data);
       return data.invoices[idx];
     },
@@ -191,22 +202,30 @@ function createPostgresInvoiceRepository(store) {
       return result.rows[0] || null;
     },
     async recordPayment(tenantId, id, amount) {
-      const existing = await this.findById(tenantId, id);
-      if (!existing) return null;
-      const next = applyPaymentToInvoice(existing, amount);
+      return store.transaction(async tx => {
+        const locked = await tx.query(`${selectSql} WHERE tenant_id = $1 AND id = $2 FOR UPDATE`, [tenantId, id]);
+        const existing = locked.rows[0];
+        if (!existing) return null;
+        const next = applyPaymentToInvoice(existing, amount);
 
-      const result = await store.query(
-        `UPDATE invoices
-         SET paid_amount = $3, balance_due = $4, status = $5, updated_at = now()
-         WHERE tenant_id = $1 AND id = $2
-         RETURNING id::text, tenant_id as "tenantId", customer_id::text as "customerId",
-                   job_id::text as "jobId", status, tax_rate::float as "taxRate", lines,
-                   subtotal::float, tax::float, total::float, paid_amount::float as "paidAmount",
-                   balance_due::float as "balanceDue", created_at as "createdAt", updated_at as "updatedAt"`,
-        [tenantId, id, next.paidAmount, next.balanceDue, next.status]
-      );
-
-      return result.rows[0] || null;
+        const result = await tx.query(
+          `UPDATE invoices
+           SET paid_amount = $3, balance_due = $4, status = $5, updated_at = now()
+           WHERE tenant_id = $1 AND id = $2
+           RETURNING id::text, tenant_id as "tenantId", customer_id::text as "customerId",
+                     job_id::text as "jobId", status, tax_rate::float as "taxRate", lines,
+                     subtotal::float, tax::float, total::float, paid_amount::float as "paidAmount",
+                     balance_due::float as "balanceDue", created_at as "createdAt", updated_at as "updatedAt"`,
+          [tenantId, id, next.paidAmount, next.balanceDue, next.status]
+        );
+        await tx.query(
+          `INSERT INTO payment_application_events
+             (tenant_id, invoice_id, amount, previous_balance, new_balance)
+           VALUES ($1, $2, $3, $4, $5)`,
+          [tenantId, id, roundMoney(amount), existing.balanceDue, next.balanceDue]
+        );
+        return result.rows[0] || null;
+      });
     },
     async delete(tenantId, id) {
       const result = await store.query('DELETE FROM invoices WHERE tenant_id = $1 AND id = $2', [tenantId, id]);

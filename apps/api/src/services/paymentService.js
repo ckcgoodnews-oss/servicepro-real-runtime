@@ -3,6 +3,51 @@
 
 const STRIPE_KEY = process.env.STRIPE_SECRET_KEY || '';
 
+function money(value) {
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) {
+    const error = new TypeError('Payment amount must be a finite number.');
+    error.code = 'invalid_payment_amount';
+    throw error;
+  }
+  return Math.round((amount + Number.EPSILON) * 100) / 100;
+}
+
+function applyPaymentToInvoice(invoice, amount, at = new Date().toISOString()) {
+  if (!invoice || typeof invoice !== 'object') {
+    const error = new TypeError('Invoice is required.');
+    error.code = 'invoice_required';
+    throw error;
+  }
+
+  const paymentAmount = money(amount);
+  if (paymentAmount <= 0) {
+    const error = new RangeError('Payment amount must be greater than zero.');
+    error.code = 'invalid_payment_amount';
+    throw error;
+  }
+
+  const total = money(invoice.total || 0);
+  const paidAmount = money(invoice.paidAmount || 0);
+  const balanceDue = money(invoice.balanceDue ?? Math.max(0, total - paidAmount));
+  if (paymentAmount > balanceDue) {
+    const error = new RangeError('Payment amount cannot exceed the invoice balance.');
+    error.code = 'payment_exceeds_balance';
+    throw error;
+  }
+
+  const nextPaidAmount = money(paidAmount + paymentAmount);
+  const nextBalanceDue = money(Math.max(0, balanceDue - paymentAmount));
+  return {
+    ...invoice,
+    paidAmount: nextPaidAmount,
+    balanceDue: nextBalanceDue,
+    status: nextBalanceDue === 0 ? 'paid' : 'partially_paid',
+    paidAt: nextBalanceDue === 0 ? (invoice.paidAt || at) : (invoice.paidAt || null),
+    updatedAt: at
+  };
+}
+
 function isConfigured() {
   return Boolean(STRIPE_KEY);
 }
@@ -76,4 +121,12 @@ function verifyWebhookSignature(payload, signature) {
   return crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected)) ? JSON.parse(payload) : null;
 }
 
-module.exports = { isConfigured, createPaymentIntent, createCustomer, listPaymentMethods, createRefund, verifyWebhookSignature };
+module.exports = {
+  applyPaymentToInvoice,
+  isConfigured,
+  createPaymentIntent,
+  createCustomer,
+  listPaymentMethods,
+  createRefund,
+  verifyWebhookSignature
+};
