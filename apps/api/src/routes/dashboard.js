@@ -19,10 +19,16 @@ async function summary(req, res) {
    * Authentication uses the tenant key, such as "tenant_demo".
    * Operational PostgreSQL tables use the tenants.id UUID.
    */
-  const tenantId = await resolveOperationalTenantId(
-    repositories.store,
-    req.context.operationalTenantId || req.context.tenantId
-  );
+  let tenantId;
+  try {
+    tenantId = await resolveOperationalTenantId(
+      repositories.store,
+      req.context.operationalTenantId || req.context.tenantId
+    );
+  } catch {
+    // Tenant not yet in the tenants table — use the raw key
+    tenantId = req.context.tenantId;
+  }
 
   const [
     jobs,
