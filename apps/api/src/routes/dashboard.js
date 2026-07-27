@@ -30,21 +30,20 @@ async function summary(req, res) {
     tenantId = req.context.tenantId;
   }
 
-  const [
-    jobs,
-    appointments,
-    customers,
-    invoices,
-    notifications,
-    activity
-  ] = await Promise.all([
-    repositories.jobs.list(tenantId),
-    repositories.appointments.list(tenantId),
-    repositories.customers.list(tenantId),
-    repositories.invoices.list(tenantId),
-    repositories.notifications.list(tenantId),
-    repositories.audit.list(tenantId, 8)
-  ]);
+  let jobs = [], appointments = [], customers = [], invoices = [], notifications = [], activity = [];
+  try {
+    [jobs, appointments, customers, invoices, notifications, activity] = await Promise.all([
+      repositories.jobs.list(tenantId),
+      repositories.appointments.list(tenantId),
+      repositories.customers.list(tenantId),
+      repositories.invoices.list(tenantId),
+      repositories.notifications.list(tenantId),
+      repositories.audit.list(tenantId, 8)
+    ]);
+  } catch (err) {
+    console.error('[dashboard.summary] Data fetch error:', err?.message || err);
+    // Return empty dashboard for tenants without data tables
+  }
 
   const customerNames = new Map(
     customers.map(row => [
