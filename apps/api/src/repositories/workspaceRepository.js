@@ -35,15 +35,47 @@ function createWorkspaceRepository(store) {
     };
   }
   if (store.type === 'postgres') {
-    const select = `SELECT t.id::text AS id, t.tenant_key AS "tenantId",
+    const selectWithSettings = `SELECT t.id::text AS id, t.tenant_key AS "tenantId",
       COALESCE(NULLIF(ts.company_name,''), t.name) AS name, t.created_at AS "createdAt"
       FROM tenants t LEFT JOIN tenant_settings ts ON ts.tenant_id = t.tenant_key`;
+    const selectBasic = `SELECT t.id::text AS id, t.tenant_key AS "tenantId",
+      t.name AS name, t.created_at AS "createdAt"
+      FROM tenants t`;
+
+    async function safeQuery(sql, params = []) {
+      try {
+        return await store.query(sql, params);
+      } catch (err) {
+        // If tenant_settings table doesn't exist, fall back to basic query
+        if (err?.code === '42P01') {
+          const fallbackSql = sql.replace(selectWithSettings, selectBasic);
+          if (fallbackSql !== sql) return store.query(fallbackSql, params);
+        }
+        throw err;
+      }
+    }
+
     return {
       async list() {
-        return (await store.query(`${select} ORDER BY name`)).rows;
+        try {
+          return (await store.query(`${selectWithSettings} ORDER BY name`)).rows;
+        } catch (err) {
+          if (err?.code === '42P01') {
+            // tenant_settings table missing — use basic select
+            return (await store.query(`${selectBasic} ORDER BY name`)).rows;
+          }
+          throw err;
+        }
       },
       async find(tenantId) {
-        return (await store.query(`${select} WHERE t.tenant_key=$1 OR t.id::text=$1 LIMIT 1`, [tenantId])).rows[0] || null;
+        try {
+          return (await store.query(`${selectWithSettings} WHERE t.tenant_key=$1 OR t.id::text=$1 LIMIT 1`, [tenantId])).rows[0] || null;
+        } catch (err) {
+          if (err?.code === '42P01') {
+            return (await store.query(`${selectBasic} WHERE t.tenant_key=$1 OR t.id::text=$1 LIMIT 1`, [tenantId])).rows[0] || null;
+          }
+          throw err;
+        }
       },
       async create(input) {
         const base = normalizeKey(input.tenantId || input.name) || `business_${Date.now()}`;
