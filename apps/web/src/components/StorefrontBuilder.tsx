@@ -177,7 +177,7 @@ export function StorefrontBuilder() {
       publicServiceArea: form.get('serviceArea'),
       publicHours: form.get('hours'),
       logoUrl: form.get('logoUrl'),
-      heroImageUrl: form.get('heroImageUrl') || '/storefront/field-service-hero.png',
+      heroImageUrl: (form.get('heroImageUrl') === 'custom' ? form.get('heroImageUrlCustom') : form.get('heroImageUrl')) || '/storefront/field-service-hero.png',
       publicServiceIds: selectedServiceIds,
       publicServicePresentation: servicePresentation,
     };
@@ -317,7 +317,46 @@ export function StorefrontBuilder() {
           </div>
           <div className="form-columns">
           <label>Logo URL<input name="logoUrl" type="url" defaultValue={branding.logoUrl || ''} /></label>
-          <label>Hero image URL<input name="heroImageUrl" defaultValue={branding.heroImageUrl || '/storefront/field-service-hero.png'} /></label>
+          <label>Hero image URL<select name="heroImageUrl" defaultValue={(branding.heroImageUrl && !branding.heroImageUrl.startsWith('/storefront/')) ? 'custom' : (branding.heroImageUrl || '/storefront/field-service-hero.png')} onChange={(e) => { const custom = e.currentTarget.parentElement?.querySelector('input[name="heroImageUrlCustom"]') as HTMLInputElement; if (custom) custom.style.display = e.target.value === 'custom' ? 'block' : 'none'; }}>
+            <optgroup label="Industry Images">
+              <option value="/storefront/industries/plumbing.svg">Plumbing</option>
+              <option value="/storefront/industries/hvac.svg">HVAC</option>
+              <option value="/storefront/industries/carpet-cleaning.svg">Carpet &amp; Upholstery Cleaning</option>
+              <option value="/storefront/industries/landscaping.svg">Landscaping</option>
+              <option value="/storefront/industries/electrical.svg">Electrical</option>
+              <option value="/storefront/industries/residential-cleaning.svg">Residential Cleaning</option>
+              <option value="/storefront/industries/commercial-cleaning.svg">Commercial Janitorial</option>
+              <option value="/storefront/industries/pest-control.svg">Pest Control</option>
+              <option value="/storefront/industries/roofing.svg">Roofing</option>
+              <option value="/storefront/industries/garage-door.svg">Garage Door</option>
+              <option value="/storefront/industries/appliance-repair.svg">Appliance Repair</option>
+              <option value="/storefront/industries/handyman.svg">Handyman</option>
+              <option value="/storefront/industries/painting.svg">Painting</option>
+              <option value="/storefront/industries/pressure-washing.svg">Pressure Washing</option>
+              <option value="/storefront/industries/pool-spa.svg">Pool &amp; Spa</option>
+              <option value="/storefront/industries/locksmith-security.svg">Locksmith &amp; Security</option>
+              <option value="/storefront/industries/tree-care.svg">Tree Care</option>
+              <option value="/storefront/industries/snow-removal.svg">Snow &amp; Ice</option>
+              <option value="/storefront/industries/irrigation.svg">Irrigation</option>
+              <option value="/storefront/industries/septic.svg">Septic &amp; Wastewater</option>
+              <option value="/storefront/industries/chimney-fireplace.svg">Chimney &amp; Fireplace</option>
+              <option value="/storefront/industries/solar.svg">Solar</option>
+              <option value="/storefront/industries/home-inspection.svg">Home Inspection</option>
+              <option value="/storefront/industries/restoration.svg">Restoration</option>
+              <option value="/storefront/industries/moving.svg">Moving Services</option>
+              <option value="/storefront/industries/junk-removal.svg">Junk Removal</option>
+              <option value="/storefront/industries/window-gutter.svg">Window &amp; Gutter</option>
+              <option value="/storefront/industries/flooring.svg">Flooring</option>
+              <option value="/storefront/industries/property-maintenance.svg">Property Maintenance</option>
+              <option value="/storefront/industries/fencing.svg">Fencing</option>
+            </optgroup>
+            <optgroup label="General">
+              <option value="/storefront/field-service-hero.png">Default Field Service</option>
+            </optgroup>
+            <optgroup label="Custom">
+              <option value="custom">Enter custom URL...</option>
+            </optgroup>
+          </select><input name="heroImageUrlCustom" type="url" placeholder="https://example.com/hero.jpg" style={{display: (branding.heroImageUrl && !branding.heroImageUrl.startsWith('/storefront/')) ? 'block' : 'none'}} defaultValue={(branding.heroImageUrl && !branding.heroImageUrl.startsWith('/storefront/')) ? branding.heroImageUrl : ''} /></label>
           </div>
         </section>
         <fieldset id="storefront-services">
