@@ -12,4 +12,5 @@ test('Render Blueprint is explicitly free and remains PostgreSQL-backed', () => 
   assert.match(blueprint, /key:\s+DATABASE_URL\s+fromDatabase:/);
   assert.doesNotMatch(blueprint, /preDeployCommand:/);
   assert.match(blueprint, /startCommand:\s+npm run migrate && npm start/);
+  assert.match(blueprint, /databases:[\s\S]*region:\s+oregon/);
 });

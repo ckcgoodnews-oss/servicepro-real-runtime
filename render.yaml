@@ -56,7 +56,8 @@ databases:
   - name: servicepro-postgres
     # Non-production only: 1 GB, no backups, and expires after 30 days.
     plan: free
-    region: ohio
+    # Must match the existing free web services for private DATABASE_URL access.
+    region: oregon
     postgresMajorVersion: "16"
     databaseName: servicepro
     user: servicepro
