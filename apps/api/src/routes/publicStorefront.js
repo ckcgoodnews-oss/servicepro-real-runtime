@@ -10,7 +10,22 @@ const themes = [
 async function context(req, slug) {
   const settings = await req.context.repositories.tenantSettings.findPublicBySlug(String(slug || '').trim());
   if (!settings) return null;
-  const operationalTenant = await resolveOperationalTenantId(req.context.repositories.store, settings.tenantId);
+
+  let operationalTenant;
+  try {
+    operationalTenant = await resolveOperationalTenantId(req.context.repositories.store, settings.tenantId);
+  } catch (err) {
+    if (
+      err.message === 'Tenant identifier is required.' ||
+      err.message.startsWith('No operational tenant UUID exists')
+    ) {
+      return null;
+    }
+    throw err;
+  }
+
+  if (!operationalTenant) return null;
+
   return { settings, operationalTenant };
 }
 
