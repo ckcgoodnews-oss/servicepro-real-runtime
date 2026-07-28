@@ -20,7 +20,12 @@ assert.match(sql, /CREATE TABLE IF NOT EXISTS postgres_runtime_migrations/);
 assert.strictEqual((sql.match(/-- BEGIN SERVICEPRO MIGRATION/g) || []).length, files.length);
 assert.ok(sql.includes('-- BEGIN SERVICEPRO MIGRATION 040_auth_rbac_sessions.sql'));
 assert.ok(sql.includes('-- END SERVICEPRO MIGRATION 780_website_builder_and_automation.sql'));
-assert.strictEqual(fs.readFileSync('packages/database/supabase/servicepro-bootstrap.sql', 'utf8'), sql, 'Committed Supabase bundle must match the source migrations');
+const normalizeLineEndings = value => value.replace(/\r\n/g, '\n');
+assert.strictEqual(
+  normalizeLineEndings(fs.readFileSync('packages/database/supabase/servicepro-bootstrap.sql', 'utf8')),
+  normalizeLineEndings(sql),
+  'Committed Supabase bundle must match the source migrations'
+);
 
 const config = readCompanyConfig({
   DATA_STORE: 'postgres',

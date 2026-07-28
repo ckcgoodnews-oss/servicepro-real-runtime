@@ -87,7 +87,10 @@ export async function authFetch(path: string, init: RequestInit = {}) {
   const session = readSession();
   const headers = new Headers(init.headers);
   headers.set('content-type', 'application/json');
-  headers.set('x-tenant-id', session?.user.tenantId || tenantId());
+  // The active workspace may differ from the tenant encoded in a platform
+  // administrator's login token. The API validates that cross-tenant headers
+  // are only honored for allowlisted platform administrators.
+  headers.set('x-tenant-id', tenantId());
   if (session?.accessToken) headers.set('authorization', `Bearer ${session.accessToken}`);
   let response = await fetch(apiUrl(path), { ...init, headers });
   if (response.status === 401 && session?.refreshToken && path !== '/auth/refresh') {

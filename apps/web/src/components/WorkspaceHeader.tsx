@@ -10,6 +10,7 @@ export function WorkspaceHeader({ platformAdmin }: { platformAdmin: boolean }) {
   const [options, setOptions] = useState<Workspace[]>([]);
   const [query, setQuery] = useState('');
   const [switching, setSwitching] = useState(false);
+  const [switchError, setSwitchError] = useState('');
 
   useEffect(() => {
     authFetch('/api/v1/workspace/current').then(response => response.ok ? response.json() : null)
@@ -29,11 +30,24 @@ export function WorkspaceHeader({ platformAdmin }: { platformAdmin: boolean }) {
   async function switchWorkspace(nextTenantId: string) {
     if (!nextTenantId || nextTenantId === tenantId()) return;
     setSwitching(true);
-    const response = await authFetch('/api/admin/switch-tenant', { method: 'POST', body: JSON.stringify({ tenantId: nextTenantId }) });
-    setSwitching(false);
-    if (!response.ok) return;
-    setActiveTenantId(nextTenantId);
-    window.location.reload();
+    setSwitchError('');
+    try {
+      const response = await authFetch('/api/admin/switch-tenant', {
+        method: 'POST',
+        body: JSON.stringify({ tenantId: nextTenantId })
+      });
+      if (!response.ok) {
+        const body = await response.json().catch(() => null);
+        setSwitchError(body?.error?.message || 'Unable to switch company.');
+        return;
+      }
+      setActiveTenantId(nextTenantId);
+      window.location.reload();
+    } catch {
+      setSwitchError('Unable to reach ServicePro. Please try again.');
+    } finally {
+      setSwitching(false);
+    }
   }
 
   if (!platformAdmin) {
@@ -46,5 +60,6 @@ export function WorkspaceHeader({ platformAdmin }: { platformAdmin: boolean }) {
     <select value={current?.tenantId || tenantId()} disabled={switching} onChange={event => void switchWorkspace(event.target.value)} aria-label="Switch active workspace">
       {filtered.map(workspace => <option value={workspace.tenantId} key={workspace.id}>{workspace.name} · {workspace.tenantId}</option>)}
     </select>
+    {switchError && <small className="workspace-switch-error" role="alert">{switchError}</small>}
   </div>;
 }
