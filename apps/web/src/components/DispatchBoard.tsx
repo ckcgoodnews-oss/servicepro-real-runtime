@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { authFetch } from '@/auth/session';
 
 type JobStatus = 'unassigned' | 'assigned' | 'en_route' | 'in_progress' | 'completed';
 type Priority = 'low' | 'normal' | 'high' | 'emergency';
@@ -55,10 +56,38 @@ const techStatusColors: Record<string, string> = {
 };
 
 export function DispatchBoard() {
-  const [jobs, setJobs] = useState(DEMO_JOBS);
-  const [techs] = useState(DEMO_TECHS);
+  const [jobs, setJobs] = useState<DispatchJob[]>(DEMO_JOBS);
+  const [technicians, setTechnicians] = useState<Technician[]>(DEMO_TECHS);
+  const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'board' | 'list' | 'map'>('board');
   const [draggedJob, setDraggedJob] = useState<string | null>(null);
+
+  useEffect(() => {
+    Promise.all([
+      authFetch('/api/v1/dispatch').then(r => r.ok ? r.json() : null),
+      authFetch('/api/v1/technicians').then(r => r.ok ? r.json() : null)
+    ]).then(([dispatchData, techData]) => {
+      if (dispatchData?.data?.length) setJobs(dispatchData.data.map((j: any) => ({
+        id: j.id,
+        title: j.title || j.jobTitle || 'Untitled job',
+        customer: j.customerName || j.customer || 'Unassigned',
+        address: j.address || '',
+        status: j.status || 'unassigned',
+        priority: j.priority || 'normal',
+        scheduledTime: j.scheduledTime || j.startTime || '',
+        assignedTo: j.technicianId || j.assignedTo || '',
+        estimatedDuration: j.estimatedDuration || '1h'
+      })));
+      if (techData?.data?.length) setTechnicians(techData.data.map((t: any) => ({
+        id: t.id,
+        name: t.name || t.email || 'Unknown',
+        status: t.status || 'available',
+        currentJob: t.currentJob || '',
+        jobsToday: t.jobsToday || 0,
+        completedToday: t.completedToday || 0
+      })));
+    }).catch(() => {}).finally(() => setLoading(false));
+  }, []);
 
   const unassigned = jobs.filter(j => j.status === 'unassigned');
   const assigned = jobs.filter(j => j.status === 'assigned');
@@ -78,7 +107,7 @@ export function DispatchBoard() {
         <StatCard label="Assigned" value={assigned.length} color="#f9ab00" />
         <StatCard label="En Route" value={enRoute.length} color="#4285f4" />
         <StatCard label="In Progress" value={inProgress.length} color="#34a853" />
-        <StatCard label="Techs Available" value={techs.filter(t => t.status === 'available').length} color="#1a73e8" />
+        <StatCard label="Techs Available" value={technicians.filter(t => t.status === 'available').length} color="#1a73e8" />
       </div>
 
       {/* View Switcher */}
@@ -93,21 +122,21 @@ export function DispatchBoard() {
 
       {view === 'board' && (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', minHeight: '400px' }}>
-          <Column title="Unassigned" color="#ea4335" jobs={unassigned} onDrop={(id) => handleDrop(id, 'unassigned')} draggedJob={draggedJob} setDraggedJob={setDraggedJob} techs={techs} />
-          <Column title="Assigned" color="#f9ab00" jobs={assigned} onDrop={(id) => handleDrop(id, 'assigned')} draggedJob={draggedJob} setDraggedJob={setDraggedJob} techs={techs} />
-          <Column title="En Route" color="#4285f4" jobs={enRoute} onDrop={(id) => handleDrop(id, 'en_route')} draggedJob={draggedJob} setDraggedJob={setDraggedJob} techs={techs} />
-          <Column title="In Progress" color="#34a853" jobs={inProgress} onDrop={(id) => handleDrop(id, 'in_progress')} draggedJob={draggedJob} setDraggedJob={setDraggedJob} techs={techs} />
+          <Column title="Unassigned" color="#ea4335" jobs={unassigned} onDrop={(id) => handleDrop(id, 'unassigned')} draggedJob={draggedJob} setDraggedJob={setDraggedJob} techs={technicians} />
+          <Column title="Assigned" color="#f9ab00" jobs={assigned} onDrop={(id) => handleDrop(id, 'assigned')} draggedJob={draggedJob} setDraggedJob={setDraggedJob} techs={technicians} />
+          <Column title="En Route" color="#4285f4" jobs={enRoute} onDrop={(id) => handleDrop(id, 'en_route')} draggedJob={draggedJob} setDraggedJob={setDraggedJob} techs={technicians} />
+          <Column title="In Progress" color="#34a853" jobs={inProgress} onDrop={(id) => handleDrop(id, 'in_progress')} draggedJob={draggedJob} setDraggedJob={setDraggedJob} techs={technicians} />
         </div>
       )}
 
-      {view === 'list' && <ListView jobs={jobs} techs={techs} />}
-      {view === 'map' && <MapView techs={techs} />}
+      {view === 'list' && <ListView jobs={jobs} techs={technicians} />}
+      {view === 'map' && <MapView techs={technicians} />}
 
       {/* Technician Panel */}
       <div style={{ marginTop: '1rem' }}>
         <h3 style={{ fontSize: '0.95rem', marginBottom: '0.75rem' }}>Technician Status</h3>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem' }}>
-          {techs.map(tech => (
+          {technicians.map(tech => (
             <div key={tech.id} style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '0.75rem', borderLeft: `4px solid ${techStatusColors[tech.status]}` }}
               onDragOver={e => e.preventDefault()} onDrop={() => draggedJob && handleDrop(draggedJob, 'assigned', tech.id)}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

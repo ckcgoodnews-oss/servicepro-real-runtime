@@ -10,7 +10,12 @@ const themes = [
 async function context(req, slug) {
   const settings = await req.context.repositories.tenantSettings.findPublicBySlug(String(slug || '').trim());
   if (!settings) return null;
-  const operationalTenant = await resolveOperationalTenantId(req.context.repositories.store, settings.tenantId);
+  let operationalTenant;
+  try {
+    operationalTenant = await resolveOperationalTenantId(req.context.repositories.store, settings.tenantId);
+  } catch {
+    operationalTenant = settings.tenantId;
+  }
   return { settings, operationalTenant };
 }
 

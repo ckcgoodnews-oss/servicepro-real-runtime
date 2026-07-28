@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { authFetch } from '@/auth/session';
 
 type LeadStage = 'new' | 'contacted' | 'qualified' | 'proposal' | 'won' | 'lost';
 type LeadSource = 'website' | 'referral' | 'phone' | 'storefront' | 'marketing' | 'walk_in';
@@ -43,9 +44,29 @@ const sourceIcons: Record<LeadSource, string> = {
 };
 
 export function CrmPipeline() {
-  const [leads, setLeads] = useState(DEMO_LEADS);
+  const [leads, setLeads] = useState<Lead[]>(DEMO_LEADS);
+  const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'pipeline' | 'list'>('pipeline');
   const [draggedLead, setDraggedLead] = useState<string | null>(null);
+
+  useEffect(() => {
+    authFetch('/api/v1/crm/leads').then(r => r.ok ? r.json() : null)
+      .then(body => {
+        if (body?.data?.length) setLeads(body.data.map((l: any) => ({
+          id: l.id,
+          name: l.name || `${l.firstName || ''} ${l.lastName || ''}`.trim() || 'Unknown',
+          company: l.company || l.companyName || '',
+          email: l.email || '',
+          phone: l.phone || '',
+          stage: l.stage || 'new',
+          source: l.source || 'website',
+          value: l.value || l.estimatedValue || 0,
+          notes: l.notes || '',
+          createdAt: l.createdAt || new Date().toISOString(),
+          lastContact: l.lastContact || l.updatedAt || ''
+        })));
+      }).catch(() => {}).finally(() => setLoading(false));
+  }, []);
 
   const activeStages = stages.filter(s => s.key !== 'won' && s.key !== 'lost');
   const totalValue = leads.filter(l => l.stage !== 'lost').reduce((s, l) => s + l.value, 0);
