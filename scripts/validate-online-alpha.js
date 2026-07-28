@@ -21,7 +21,8 @@ function validateOnlineAlpha() {
   for (const contract of ['healthCheckPath: /readyz', 'JWT_SECRET', 'PORTAL_TOKEN_SECRET', 'CORS_ALLOWED_ORIGINS', 'NEXT_PUBLIC_API_BASE_URL']) {
     assert.match(blueprint, new RegExp(contract));
   }
-  assert.match(blueprint, /preDeployCommand: npm run migrate/);
+  assert.doesNotMatch(blueprint, /preDeployCommand:/);
+  assert.match(blueprint, /startCommand: npm run migrate && npm start/);
   assert.match(guide, /authoritative PostgreSQL datastore/);
   assert.match(guide, /never enables the local demonstration credentials automatically/);
   assert.match(releaseNotes, /Sprint 731/);
