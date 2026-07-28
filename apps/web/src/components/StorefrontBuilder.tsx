@@ -177,7 +177,7 @@ export function StorefrontBuilder() {
       publicServiceArea: form.get('serviceArea'),
       publicHours: form.get('hours'),
       logoUrl: form.get('logoUrl'),
-      heroImageUrl: form.get('heroImageUrl') || '/storefront/field-service-hero.png',
+      heroImageUrl: String(form.get('heroImageUrl') || '').trim(),
       publicServiceIds: selectedServiceIds,
       publicServicePresentation: servicePresentation,
     };
@@ -317,7 +317,7 @@ export function StorefrontBuilder() {
           </div>
           <div className="form-columns">
           <label>Logo URL<input name="logoUrl" type="url" defaultValue={branding.logoUrl || ''} /></label>
-          <label>Hero image URL<input name="heroImageUrl" defaultValue={branding.heroImageUrl || '/storefront/field-service-hero.png'} /></label>
+          <label>Hero image URL<input name="heroImageUrl" defaultValue={branding.heroImageUrl || ''} /></label>
           </div>
         </section>
         <fieldset id="storefront-services">

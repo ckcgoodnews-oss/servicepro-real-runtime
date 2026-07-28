@@ -1,6 +1,74 @@
 const { sendJson } = require('../utils/http');
 const { resolveOperationalTenantId } = require('../services/tenantResolver');
 
+const industryHeroMap = {
+  plumbing: '/storefront/industries/plumbing.jpg',
+  hvac: '/storefront/industries/hvac.jpg',
+  carpet_cleaning: '/storefront/industries/carpet_cleaning.jpg',
+  landscaping: '/storefront/industries/landscaping.jpg',
+  electrical: '/storefront/industries/electrical.jpg',
+  residential_cleaning: '/storefront/industries/residential_cleaning.jpg',
+  commercial_cleaning: '/storefront/industries/commercial_cleaning.jpg',
+  pest_control: '/storefront/industries/pest_control.jpg',
+  roofing: '/storefront/industries/roofing.jpg',
+  garage_door: '/storefront/industries/garage_door.jpg',
+  appliance_repair: '/storefront/industries/appliance_repair.jpg',
+  handyman: '/storefront/industries/handyman.jpg',
+  painting: '/storefront/industries/painting.jpg',
+  pressure_washing: '/storefront/industries/pressure_washing.jpg',
+  pool_spa: '/storefront/industries/pool_spa.jpg',
+  locksmith_security: '/storefront/industries/locksmith_security.jpg',
+  tree_care: '/storefront/industries/tree_care.jpg',
+  snow_removal: '/storefront/industries/snow_removal.jpg',
+  irrigation: '/storefront/industries/irrigation.jpg',
+  septic: '/storefront/industries/septic.jpg',
+  chimney_fireplace: '/storefront/industries/chimney_fireplace.jpg',
+  solar: '/storefront/industries/solar.jpg',
+  home_inspection: '/storefront/industries/home_inspection.jpg',
+  restoration: '/storefront/industries/restoration.jpg',
+  moving: '/storefront/industries/moving.jpg',
+  junk_removal: '/storefront/industries/junk_removal.jpg',
+  window_gutter: '/storefront/industries/window_gutter.jpg',
+  flooring: '/storefront/industries/flooring.jpg',
+  property_maintenance: '/storefront/industries/property_maintenance.jpg',
+  fencing: '/storefront/industries/fencing.jpg'
+};
+
+function normalizeIndustryKey(value) {
+  return String(value || '').trim().toLowerCase().replace(/-/g, '_');
+}
+
+function resolveHeroImageUrl(branding, industry) {
+  const heroImageUrl = String(branding?.heroImageUrl || '').trim();
+  if (heroImageUrl) return heroImageUrl;
+  const key = normalizeIndustryKey(industry || 'plumbing');
+  return industryHeroMap[key] || '/storefront/field-service-hero.png';
+}
+
+async function resolveTenantIndustry(req, tenantId) {
+  if (!tenantId) return 'plumbing';
+
+  try {
+    const workspaceRepo = req.context.repositories.workspaces;
+    if (workspaceRepo?.find) {
+      const workspace = await workspaceRepo.find(tenantId);
+      if (workspace?.industry) return normalizeIndustryKey(workspace.industry);
+    }
+
+    if (req.context.repositories.store?.type === 'postgres') {
+      const result = await req.context.repositories.store.query(
+        `SELECT industry FROM tenants WHERE tenant_key = $1 OR id::text = $1 LIMIT 1`,
+        [tenantId]
+      );
+      if (result.rows?.[0]?.industry) return normalizeIndustryKey(result.rows[0].industry);
+    }
+  } catch (_) {
+    // Fall back to plumbing when industry resolution is unavailable.
+  }
+
+  return 'plumbing';
+}
+
 const themes = [
   { slug: 'evergreen', name: 'Modern Field Service', config: { primary: '#176b5b', secondary: '#b9e55b' } },
   { slug: 'clean-trades', name: 'Clean Trades', config: { primary: '#155e9a', secondary: '#eef6fb' } },
@@ -41,6 +109,7 @@ async function profile(req, res, slug) {
   }
   const { settings, operationalTenant } = value;
   const branding = settings.branding || {};
+  const tenantIndustry = await resolveTenantIndustry(req, settings.tenantId);
   const presentation = branding.publicServicePresentation || {};
   let services = await req.context.repositories.services.list(operationalTenant);
   if (!services.length && String(settings.tenantId) !== String(operationalTenant)) {
@@ -57,7 +126,7 @@ async function profile(req, res, slug) {
       serviceArea: branding.publicServiceArea || '',
       hours: branding.publicHours || '',
       logoUrl: branding.logoUrl || '',
-      heroImageUrl: branding.heroImageUrl || '/storefront/field-service-hero.png',
+      heroImageUrl: resolveHeroImageUrl(branding, tenantIndustry),
       theme: themes.find(item => item.slug === branding.publicTheme) || themes[0],
       services: services
         .filter(item => item.active !== false && (branding.publicServiceIds || []).includes(item.id))

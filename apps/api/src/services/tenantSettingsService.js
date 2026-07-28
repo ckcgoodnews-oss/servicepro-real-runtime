@@ -13,6 +13,7 @@ function defaultTenantSettings(tenantId = 'tenant_demo') {
       appName: 'ServicePro',
       primaryColor: '#1f4f82',
       logoUrl: '',
+      heroImageUrl: '',
       portalWelcomeTitle: 'Welcome to your service portal',
       portalWelcomeMessage: 'Request service, review estimates, and view invoices.'
     },
