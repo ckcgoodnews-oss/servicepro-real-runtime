@@ -2,7 +2,7 @@
 
 ## Verified configuration
 
-- `render.yaml` targets `main`, provisions a non-production free Render PostgreSQL instance, and executes `npm run migrate` before deployment.
+- `render.yaml` targets `main`, provisions a non-production free Render PostgreSQL instance, and executes the idempotent `npm run migrate` command before each API process starts because Render free services do not support pre-deploy commands.
 - Both web services explicitly use Render's free instance type and may spin down after inactivity.
 - The free PostgreSQL instance is limited to 1 GB, has no backups, and expires after 30 days. It must not hold production or irreplaceable data.
 - Production secrets and allowed origins are environment inputs rather than repository defaults.

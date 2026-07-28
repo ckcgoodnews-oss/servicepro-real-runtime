@@ -7,8 +7,9 @@ services:
     branch: main
     autoDeployTrigger: checksPass
     buildCommand: npm ci --omit=dev
-    preDeployCommand: npm run migrate
-    startCommand: npm start
+    # Free services do not support preDeployCommand. Migrations are idempotent
+    # and run before each API process starts.
+    startCommand: npm run migrate && npm start
     healthCheckPath: /readyz
     envVars:
       - key: NODE_VERSION
