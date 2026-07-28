@@ -2,7 +2,9 @@
 
 ## Verified configuration
 
-- `render.yaml` targets `main`, provisions persistent managed PostgreSQL, and executes `npm run migrate` before deployment.
+- `render.yaml` targets `main`, provisions a non-production free Render PostgreSQL instance, and executes `npm run migrate` before deployment.
+- Both web services explicitly use Render's free instance type and may spin down after inactivity.
+- The free PostgreSQL instance is limited to 1 GB, has no backups, and expires after 30 days. It must not hold production or irreplaceable data.
 - Production secrets and allowed origins are environment inputs rather than repository defaults.
 - Production Docker Compose fails closed when database, Redis, signing secrets, or CORS values are absent.
 - Development Compose values are explicitly development-only.
@@ -11,7 +13,7 @@
 
 ## Non-production deployment checklist
 
-1. Provision managed PostgreSQL and Redis with backup/retention policies.
+1. For evaluation, provision the Blueprint's free PostgreSQL instance and record its 30-day expiration date. For production, replace it with managed PostgreSQL and Redis plans that include backup/retention policies.
 2. Inject unique signing secrets, database credentials, Redis URL, canonical public API URL, and exact allowed origins.
 3. Run the pre-deploy migration and retain its immutable log.
 4. Verify `/healthz`, `/readyz`, login, dashboard, customer, work-order, invoice, and payment workflows.

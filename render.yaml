@@ -2,7 +2,8 @@ services:
   - type: web
     name: servicepro-api-alpha-ckcgoodnews
     runtime: node
-    plan: starter
+    # Non-production evaluation deployment. Free services spin down when idle.
+    plan: free
     branch: main
     autoDeployTrigger: checksPass
     buildCommand: npm ci --omit=dev
@@ -36,7 +37,8 @@ services:
   - type: web
     name: servicepro-web-alpha-ckcgoodnews
     runtime: node
-    plan: starter
+    # Non-production evaluation deployment. Free services spin down when idle.
+    plan: free
     rootDir: apps/web
     branch: main
     autoDeployTrigger: checksPass
@@ -51,7 +53,8 @@ services:
 
 databases:
   - name: servicepro-postgres
-    plan: basic-256mb
+    # Non-production only: 1 GB, no backups, and expires after 30 days.
+    plan: free
     region: ohio
     postgresMajorVersion: "16"
     databaseName: servicepro
