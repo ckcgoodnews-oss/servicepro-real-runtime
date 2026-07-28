@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <rect width="1200" height="600" fill="#9b513d"/>
+  <rect width="1200" height="600" fill="rgba(0,0,0,0.15)"/>
+  <!-- Flame/chimney icon -->
+  <g transform="translate(600,250)" fill="white" opacity="0.9">
+    <!-- Chimney structure -->
+    <rect x="-30" y="-80" width="60" height="120" rx="4"/>
+    <rect x="-35" y="-85" width="70" height="15" rx="3"/>
+    <rect x="-35" y="35" width="70" height="15" rx="3"/>
+    <!-- Flame -->
+    <path d="M0,50 Q-25,70 -20,90 Q-15,100 0,95 Q-5,85 0,75 Q5,85 0,95 Q15,100 20,90 Q25,70 0,50 Z" opacity="0.8"/>
+    <!-- Brick lines -->
+    <line x1="-30" y1="-55" x2="30" y2="-55" stroke="rgba(0,0,0,0.15)" stroke-width="2"/>
+    <line x1="-30" y1="-30" x2="30" y2="-30" stroke="rgba(0,0,0,0.15)" stroke-width="2"/>
+    <line x1="-30" y1="-5" x2="30" y2="-5" stroke="rgba(0,0,0,0.15)" stroke-width="2"/>
+    <line x1="-30" y1="20" x2="30" y2="20" stroke="rgba(0,0,0,0.15)" stroke-width="2"/>
+  </g>
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="36" font-weight="700">Chimney &amp; Fireplace</text>
+  <text x="600" y="490" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="18">Professional Service Solutions</text>
+</svg>

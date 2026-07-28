@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <rect width="1200" height="600" fill="#9b6f4f"/>
+  <rect width="1200" height="600" fill="rgba(0,0,0,0.15)"/>
+  <!-- Carpet/brush icon -->
+  <g transform="translate(600,250)" fill="white" opacity="0.9">
+    <rect x="-70" y="20" width="140" height="60" rx="8"/>
+    <rect x="-55" y="80" width="12" height="20" rx="3"/>
+    <rect x="-30" y="80" width="12" height="20" rx="3"/>
+    <rect x="-6" y="80" width="12" height="20" rx="3"/>
+    <rect x="18" y="80" width="12" height="20" rx="3"/>
+    <rect x="43" y="80" width="12" height="20" rx="3"/>
+    <rect x="-10" y="-80" width="20" height="100" rx="5"/>
+    <path d="M-80,-30 L80,-30 L90,-10 L-90,-10 Z" opacity="0.7"/>
+  </g>
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="36" font-weight="700">Carpet Cleaning</text>
+  <text x="600" y="490" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="18">Professional Service Solutions</text>
+</svg>

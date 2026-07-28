@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <rect width="1200" height="600" fill="#287fa1"/>
+  <rect width="1200" height="600" fill="rgba(0,0,0,0.15)"/>
+  <!-- Water spray icon -->
+  <g transform="translate(600,250)" fill="white" opacity="0.9">
+    <rect x="-60" y="-10" width="80" height="20" rx="5"/>
+    <polygon points="20,-15 60,-40 60,40 20,15"/>
+    <!-- Spray lines -->
+    <line x1="65" y1="-35" x2="90" y2="-55" stroke="white" stroke-width="4" stroke-linecap="round"/>
+    <line x1="65" y1="-20" x2="95" y2="-30" stroke="white" stroke-width="4" stroke-linecap="round"/>
+    <line x1="65" y1="0" x2="100" y2="0" stroke="white" stroke-width="4" stroke-linecap="round"/>
+    <line x1="65" y1="20" x2="95" y2="30" stroke="white" stroke-width="4" stroke-linecap="round"/>
+    <line x1="65" y1="35" x2="90" y2="55" stroke="white" stroke-width="4" stroke-linecap="round"/>
+    <!-- Handle -->
+    <rect x="-60" y="10" width="15" height="50" rx="4"/>
+  </g>
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="36" font-weight="700">Pressure Washing</text>
+  <text x="600" y="490" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="18">Professional Service Solutions</text>
+</svg>

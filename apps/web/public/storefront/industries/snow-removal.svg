@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <rect width="1200" height="600" fill="#6688a6"/>
+  <rect width="1200" height="600" fill="rgba(0,0,0,0.15)"/>
+  <!-- Snowflake/plow icon -->
+  <g transform="translate(600,250)" fill="white" opacity="0.9">
+    <!-- Snowflake -->
+    <rect x="-3" y="-80" width="6" height="100" rx="3"/>
+    <rect x="-3" y="-80" width="6" height="100" rx="3" transform="rotate(60 0 -30)"/>
+    <rect x="-3" y="-80" width="6" height="100" rx="3" transform="rotate(120 0 -30)"/>
+    <circle cx="0" cy="-30" r="8"/>
+    <!-- Plow blade -->
+    <path d="M-70,40 L70,40 L80,80 L-80,80 Z" opacity="0.8"/>
+    <rect x="-10" y="20" width="20" height="25" rx="3"/>
+  </g>
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="36" font-weight="700">Snow Removal</text>
+  <text x="600" y="490" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="18">Professional Service Solutions</text>
+</svg>

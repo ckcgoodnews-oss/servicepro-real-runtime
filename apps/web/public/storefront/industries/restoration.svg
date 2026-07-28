@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <rect width="1200" height="600" fill="#7d5b8f"/>
+  <rect width="1200" height="600" fill="rgba(0,0,0,0.15)"/>
+  <!-- Repair/house icon -->
+  <g transform="translate(600,250)" fill="white" opacity="0.9">
+    <!-- House -->
+    <polygon points="0,-70 -60,0 -45,0 -45,60 45,60 45,0 60,0"/>
+    <!-- Circular arrow (restoration symbol) -->
+    <path d="M30,-50 A40,40 0 1,1 -10,-70" fill="none" stroke="white" stroke-width="7" stroke-linecap="round"/>
+    <polygon points="-10,-80 -10,-60 -25,-70" fill="white"/>
+    <!-- Wrench inside house -->
+    <rect x="-5" y="5" width="10" height="40" rx="3" fill="rgba(0,0,0,0.2)"/>
+    <circle cx="0" cy="5" r="10" fill="rgba(0,0,0,0.2)"/>
+  </g>
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="36" font-weight="700">Restoration</text>
+  <text x="600" y="490" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="18">Professional Service Solutions</text>
+</svg>

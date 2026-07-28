@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <rect width="1200" height="600" fill="#397b89"/>
+  <rect width="1200" height="600" fill="rgba(0,0,0,0.15)"/>
+  <!-- Building/mop icon -->
+  <g transform="translate(600,250)" fill="white" opacity="0.9">
+    <rect x="-50" y="-70" width="70" height="140" rx="4"/>
+    <rect x="-40" y="-55" width="15" height="15" fill="rgba(0,0,0,0.2)"/>
+    <rect x="-15" y="-55" width="15" height="15" fill="rgba(0,0,0,0.2)"/>
+    <rect x="-40" y="-30" width="15" height="15" fill="rgba(0,0,0,0.2)"/>
+    <rect x="-15" y="-30" width="15" height="15" fill="rgba(0,0,0,0.2)"/>
+    <rect x="-40" y="-5" width="15" height="15" fill="rgba(0,0,0,0.2)"/>
+    <rect x="-15" y="-5" width="15" height="15" fill="rgba(0,0,0,0.2)"/>
+    <!-- Mop -->
+    <rect x="40" y="-60" width="8" height="100" rx="3"/>
+    <rect x="30" y="40" width="28" height="30" rx="5"/>
+    <line x1="34" y1="70" x2="34" y2="90" stroke="white" stroke-width="3"/>
+    <line x1="44" y1="70" x2="44" y2="90" stroke="white" stroke-width="3"/>
+    <line x1="54" y1="70" x2="54" y2="90" stroke="white" stroke-width="3"/>
+  </g>
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="36" font-weight="700">Commercial Cleaning</text>
+  <text x="600" y="490" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="18">Professional Service Solutions</text>
+</svg>

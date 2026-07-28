@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <rect width="1200" height="600" fill="#5c91a8"/>
+  <rect width="1200" height="600" fill="rgba(0,0,0,0.15)"/>
+  <!-- House with sparkle icon -->
+  <g transform="translate(600,250)" fill="white" opacity="0.9">
+    <polygon points="0,-70 -70,0 -55,0 -55,60 55,60 55,0 70,0"/>
+    <rect x="-15" y="20" width="30" height="40" fill="rgba(0,0,0,0.2)"/>
+    <!-- Sparkles -->
+    <polygon points="60,-50 63,-40 70,-37 63,-34 60,-24 57,-34 50,-37 57,-40" fill="white"/>
+    <polygon points="-55,-60 -53,-53 -46,-51 -53,-49 -55,-42 -57,-49 -64,-51 -57,-53" fill="white"/>
+  </g>
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="36" font-weight="700">Residential Cleaning</text>
+  <text x="600" y="490" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="18">Professional Service Solutions</text>
+</svg>

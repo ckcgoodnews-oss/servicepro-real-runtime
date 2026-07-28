@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <rect width="1200" height="600" fill="#596879"/>
+  <rect width="1200" height="600" fill="rgba(0,0,0,0.15)"/>
+  <!-- Garage icon -->
+  <g transform="translate(600,250)" fill="white" opacity="0.9">
+    <path d="M-80,80 L-80,-20 L0,-70 L80,-20 L80,80 Z"/>
+    <rect x="-60" y="-10" width="120" height="90" fill="rgba(0,0,0,0.25)" rx="3"/>
+    <line x1="-60" y1="10" x2="60" y2="10" stroke="white" stroke-width="2" opacity="0.5"/>
+    <line x1="-60" y1="30" x2="60" y2="30" stroke="white" stroke-width="2" opacity="0.5"/>
+    <line x1="-60" y1="50" x2="60" y2="50" stroke="white" stroke-width="2" opacity="0.5"/>
+    <line x1="-60" y1="70" x2="60" y2="70" stroke="white" stroke-width="2" opacity="0.5"/>
+  </g>
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="36" font-weight="700">Garage Door</text>
+  <text x="600" y="490" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="18">Professional Service Solutions</text>
+</svg>

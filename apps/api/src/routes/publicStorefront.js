@@ -1,6 +1,43 @@
 const { sendJson } = require('../utils/http');
 const { resolveOperationalTenantId } = require('../services/tenantResolver');
 
+const industryHeroMap = {
+  market_plumbing: '/storefront/industries/plumbing.svg',
+  market_hvac: '/storefront/industries/hvac.svg',
+  market_carpet: '/storefront/industries/carpet-cleaning.svg',
+  market_landscape: '/storefront/industries/landscaping.svg',
+  market_electrical: '/storefront/industries/electrical.svg',
+  market_residential_cleaning: '/storefront/industries/residential-cleaning.svg',
+  market_commercial_cleaning: '/storefront/industries/commercial-cleaning.svg',
+  market_pest_control: '/storefront/industries/pest-control.svg',
+  market_roofing: '/storefront/industries/roofing.svg',
+  market_garage_door: '/storefront/industries/garage-door.svg',
+  market_appliance_repair: '/storefront/industries/appliance-repair.svg',
+  market_handyman: '/storefront/industries/handyman.svg',
+  market_painting: '/storefront/industries/painting.svg',
+  market_pressure_washing: '/storefront/industries/pressure-washing.svg',
+  market_pool_spa: '/storefront/industries/pool-spa.svg',
+  market_locksmith_security: '/storefront/industries/locksmith-security.svg',
+  market_tree_care: '/storefront/industries/tree-care.svg',
+  market_snow_removal: '/storefront/industries/snow-removal.svg',
+  market_irrigation: '/storefront/industries/irrigation.svg',
+  market_septic: '/storefront/industries/septic.svg',
+  market_chimney_fireplace: '/storefront/industries/chimney-fireplace.svg',
+  market_solar: '/storefront/industries/solar.svg',
+  market_home_inspection: '/storefront/industries/home-inspection.svg',
+  market_restoration: '/storefront/industries/restoration.svg',
+  market_moving: '/storefront/industries/moving.svg',
+  market_junk_removal: '/storefront/industries/junk-removal.svg',
+  market_window_gutter: '/storefront/industries/window-gutter.svg',
+  market_flooring: '/storefront/industries/flooring.svg',
+  market_property_maintenance: '/storefront/industries/property-maintenance.svg',
+  market_fencing: '/storefront/industries/fencing.svg'
+};
+
+function defaultHeroForPack(packId) {
+  return industryHeroMap[packId] || '/storefront/field-service-hero.png';
+}
+
 const themes = [
   { slug: 'evergreen', name: 'Modern Field Service', config: { primary: '#176b5b', secondary: '#b9e55b' } },
   { slug: 'clean-trades', name: 'Clean Trades', config: { primary: '#155e9a', secondary: '#eef6fb' } },
@@ -36,6 +73,12 @@ async function profile(req, res, slug) {
   if (!services.length && String(settings.tenantId) !== String(operationalTenant)) {
     services = await req.context.repositories.services.list(settings.tenantId);
   }
+  let defaultHero = '/storefront/field-service-hero.png';
+  try {
+    const installations = await req.context.repositories.serviceMarketplace.listInstallations(operationalTenant);
+    const activePack = installations.find(i => i.status === 'active');
+    if (activePack) defaultHero = defaultHeroForPack(activePack.itemId);
+  } catch {}
   return sendJson(res, 200, {
     data: {
       slug: branding.publicSlug || slug,
@@ -47,7 +90,7 @@ async function profile(req, res, slug) {
       serviceArea: branding.publicServiceArea || '',
       hours: branding.publicHours || '',
       logoUrl: branding.logoUrl || '',
-      heroImageUrl: branding.heroImageUrl || '/storefront/field-service-hero.png',
+      heroImageUrl: branding.heroImageUrl || defaultHero,
       theme: themes.find(item => item.slug === branding.publicTheme) || themes[0],
       services: services
         .filter(item => item.active !== false && (branding.publicServiceIds || []).includes(item.id))

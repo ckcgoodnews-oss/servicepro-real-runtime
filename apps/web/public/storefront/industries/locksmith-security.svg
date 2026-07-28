@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" width="1200" height="600">
+  <rect width="1200" height="600" fill="#47566a"/>
+  <rect width="1200" height="600" fill="rgba(0,0,0,0.15)"/>
+  <!-- Key/lock icon -->
+  <g transform="translate(600,250)" fill="white" opacity="0.9">
+    <!-- Lock body -->
+    <rect x="-40" y="-10" width="80" height="70" rx="8"/>
+    <!-- Lock shackle -->
+    <path d="M-25,-10 L-25,-40 Q-25,-65 0,-65 Q25,-65 25,-40 L25,-10" fill="none" stroke="white" stroke-width="12" stroke-linecap="round"/>
+    <!-- Keyhole -->
+    <circle cx="0" cy="25" r="12" fill="rgba(0,0,0,0.25)"/>
+    <rect x="-5" y="25" width="10" height="25" rx="3" fill="rgba(0,0,0,0.25)"/>
+  </g>
+  <text x="600" y="450" text-anchor="middle" fill="white" font-family="system-ui, sans-serif" font-size="36" font-weight="700">Locksmith &amp; Security</text>
+  <text x="600" y="490" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-family="system-ui, sans-serif" font-size="18">Professional Service Solutions</text>
+</svg>
