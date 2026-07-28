@@ -17,8 +17,9 @@ async function eligibleOwners(req){
 async function list(req,res){if(!isPlatformAdmin(req))return deny(res);return sendJson(res,200,{data:await eligibleOwners(req)});}
 async function createOwner(req,res){
   if(!isPlatformAdmin(req))return deny(res);
-  let {tenantId}=req.body||{};
+  let tenantId=String(req.body?.tenantId||'').trim();
   const {email,name,password}=req.body||{};
+  const workspaceName=String(req.body?.workspaceName||'').trim();
   const errors=passwordErrors(password);
   if(!email||!name||errors.length)return sendJson(res,400,{error:{code:'validation_failed',message:errors.length?`Password must include ${errors.join(', ')}`:'Owner name, email, and password are required'}});
   if(platformAdminEmails().includes(String(email).trim().toLowerCase()))return sendJson(res,400,{error:{code:'invalid_owner',message:'Platform administrators cannot be created as tenant owners'}});
@@ -26,8 +27,7 @@ async function createOwner(req,res){
   const siteType=catalog.find(item=>item.id===req.body.siteTypeItemId&&item.itemType==='service_pack');
   if(req.body.siteTypeItemId&&!siteType)return sendJson(res,400,{error:{code:'invalid_site_type',message:'Select a valid service-company site type from the marketplace'}});
   let workspace=tenantId?await req.context.repositories.workspaces.find(tenantId):null;
-  if(tenantId&&!workspace)return sendJson(res,400,{error:{code:'invalid_workspace',message:'Select an existing workspace or leave it blank to create one'}});
-  if(!workspace)workspace=await req.context.repositories.workspaces.create({name:req.body.workspaceName||`${name} Business`});
+  if(!workspace)workspace=await req.context.repositories.workspaces.create({tenantId,name:workspaceName||`${name} Business`});
   tenantId=workspace.tenantId;
   const user=await req.context.repositories.users.create({tenantId,email:String(email).trim().toLowerCase(),name,password,roles:['owner']});
   if(!user)return sendJson(res,409,{error:{code:'account_exists',message:'An account already exists for this tenant and email'}});

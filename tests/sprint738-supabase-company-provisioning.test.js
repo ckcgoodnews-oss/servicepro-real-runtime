@@ -6,12 +6,12 @@ const { readCompanyConfig, removeDemoSeed } = require('../scripts/provision-comp
 const files = migrationFiles();
 assert.ok(files.length >= 679, 'The migration bundle must not lose previously certified migrations');
 assert.strictEqual(files[0], '040_auth_rbac_sessions.sql');
-assert.strictEqual(files.at(-1), '780_website_builder_and_automation.sql');
+assert.strictEqual(files.at(-1), '781_tenant_registry_reconciliation.sql');
 assert.strictEqual(new Set(files).size, files.length, 'Migration filenames must be unique');
 const migrationNumbers = files.map(file => file.slice(0, 3));
 assert.strictEqual(new Set(migrationNumbers).size, files.length, 'Migration identifiers must be unique');
 assert.ok(files.every(file => /^\d{3}_[a-z0-9_.]+\.sql$/.test(file)), 'Migration filenames must follow the canonical convention');
-for (const required of ['728_expanded_service_catalog.sql', '779_crm_and_marketing.sql', '780_website_builder_and_automation.sql']) {
+for (const required of ['728_expanded_service_catalog.sql', '779_crm_and_marketing.sql', '780_website_builder_and_automation.sql', '781_tenant_registry_reconciliation.sql']) {
   assert.ok(files.includes(required), `Required migration ${required} is missing`);
 }
 
@@ -20,6 +20,7 @@ assert.match(sql, /CREATE TABLE IF NOT EXISTS postgres_runtime_migrations/);
 assert.strictEqual((sql.match(/-- BEGIN SERVICEPRO MIGRATION/g) || []).length, files.length);
 assert.ok(sql.includes('-- BEGIN SERVICEPRO MIGRATION 040_auth_rbac_sessions.sql'));
 assert.ok(sql.includes('-- END SERVICEPRO MIGRATION 780_website_builder_and_automation.sql'));
+assert.ok(sql.includes('-- END SERVICEPRO MIGRATION 781_tenant_registry_reconciliation.sql'));
 const normalizeLineEndings = value => value.replace(/\r\n/g, '\n');
 assert.strictEqual(
   normalizeLineEndings(fs.readFileSync('packages/database/supabase/servicepro-bootstrap.sql', 'utf8')),

@@ -41,6 +41,7 @@ type DashboardData = {
   tenants:DashboardTenant[];
   generatedAt:string;
 };
+type CreatedWorkspace = {tenantId:string;name:string};
 
 function formatBytes(value:number){
   if(!value)return '0 B';
@@ -60,6 +61,7 @@ export function PlatformAdminWorkspace() {
   const [creating, setCreating] = useState(false);
   const [siteTypes, setSiteTypes] = useState<SiteType[]>([]);
   const [search,setSearch]=useState('');
+  const [createdWorkspace,setCreatedWorkspace]=useState<CreatedWorkspace|null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -136,15 +138,16 @@ export function PlatformAdminWorkspace() {
 
   async function createOwner(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setCreating(true); setError('');
+    setCreating(true); setError(''); setCreatedWorkspace(null);
     const form = new FormData(event.currentTarget);
     const response = await authFetch('/api/v1/platform/owners', {
       method: 'POST',
-      body: JSON.stringify({tenantId: form.get('tenantId'), name: form.get('name'), email: form.get('email'), password: form.get('password'), modules: form.getAll('modules'), siteTypeItemId: form.get('siteTypeItemId')})
+      body: JSON.stringify({workspaceName: form.get('workspaceName'), tenantId: form.get('tenantId'), name: form.get('ownerName'), email: form.get('email'), password: form.get('password'), modules: form.getAll('modules'), siteTypeItemId: form.get('siteTypeItemId')})
     });
     const body = await response.json();
     setCreating(false);
     if (!response.ok) { setError(body.error?.message || 'Unable to create owner'); return; }
+    setCreatedWorkspace({tenantId:body.data.tenantId,name:body.data.workspace?.name||String(form.get('workspaceName')||'')});
     event.currentTarget.reset();
     await load();
   }
@@ -178,17 +181,18 @@ export function PlatformAdminWorkspace() {
         </div>
         <div className="tenant-dashboard-table-wrap">
           <table className="tenant-dashboard-table">
-            <thead><tr><th>Tenant</th><th>Users</th><th>Owners</th><th>Subscription</th><th>Storage</th><th>Tenant status</th></tr></thead>
+            <thead><tr><th>Tenant</th><th>Tenant ID</th><th>Users</th><th>Owners</th><th>Subscription</th><th>Storage</th><th>Tenant status</th></tr></thead>
             <tbody>
               {filteredTenants.map(row=><tr key={row.tenantId}>
-                <td><strong>{row.tenantName}</strong><small>{row.tenantId}</small></td>
+                <td><strong>{row.tenantName}</strong></td>
+                <td><code>{row.tenantId}</code></td>
                 <td><strong>{row.activeUsers}</strong><small>{row.totalUsers} total</small></td>
                 <td>{row.ownerCount}</td>
                 <td><span className={`status-pill status-${row.subscriptionStatus}`}>{title(row.subscriptionStatus)}</span><small>{row.subscriptionPlan}</small></td>
                 <td>{row.storageMetered?formatBytes(row.storageBytes):<span className="not-metered">Not metered</span>}</td>
                 <td><span className={`status-pill status-${row.tenantStatus}`}>{title(row.tenantStatus)}</span></td>
               </tr>)}
-              {!filteredTenants.length&&<tr><td colSpan={6} className="tenant-empty">No tenants match this search.</td></tr>}
+              {!filteredTenants.length&&<tr><td colSpan={7} className="tenant-empty">No tenants match this search.</td></tr>}
             </tbody>
           </table>
         </div>
@@ -196,8 +200,10 @@ export function PlatformAdminWorkspace() {
 
       <section className="panel platform-owner-create">
         <div className="panel-heading"><div><h2>Create business owner</h2><p>Create the tenant login, then assign modules and timed access.</p></div></div>
+        {createdWorkspace&&<div className="token-reveal"><strong>Workspace created</strong><code>{createdWorkspace.tenantId}</code><button type="button" onClick={()=>navigator.clipboard.writeText(createdWorkspace.tenantId)}>Copy tenant ID</button><small>{createdWorkspace.name} is registered and available in the workspace selector.</small></div>}
         <form onSubmit={createOwner}>
-          <div className="form-columns"><label>Business name<input name="name" required /></label><label>Tenant ID<input name="tenantId" defaultValue="tenant_demo" required /></label></div>
+          <div className="form-columns"><label>Business name<input name="workspaceName" required /></label><label>Tenant ID (optional)<input name="tenantId" placeholder="Generated from business name" pattern="[A-Za-z0-9_-]+" /><small>Enter a unique ID or leave blank to generate one.</small></label></div>
+          <label>Owner name<input name="ownerName" required /></label>
           <label>Owner email<input name="email" type="email" required /></label>
           <label>Temporary password<input name="password" type="password" minLength={12} required /><small>Use uppercase, lowercase, number, and symbol.</small></label>
           <label>Service-company site type<select name="siteTypeItemId" required defaultValue=""><option value="" disabled>Select a marketplace service pack</option>{siteTypes.map(item=><option value={item.id} key={item.id}>{item.name}</option>)}</select></label>

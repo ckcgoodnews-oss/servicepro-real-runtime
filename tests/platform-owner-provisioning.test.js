@@ -15,7 +15,7 @@ function request() {
       repositories: {
         workspaces: {
           async find(tenantId) { return tenantId === 'tenant_demo' ? {id:'workspace-1',tenantId,name:'Demo Plumbing'} : null; },
-          async create(input) { return {id:'workspace-new',tenantId:'tenant_new_business',name:input.name}; }
+          async create(input) { return {id:'workspace-new',tenantId:input.tenantId||'tenant_new_business',name:input.name}; }
         },
         users: {
           async create(input) { return {id: 'new-owner-id', ...input}; }
@@ -57,7 +57,7 @@ test('cannot issue an owner token to a platform administrator', async () => {
 
 test('platform administrator can create a tenant owner', async () => {
   const req = request();
-  req.body = {tenantId: 'tenant_demo', email: 'new.owner@example.com', name: 'New Owner', password: 'StrongPass123!', modules: ['operations', 'billing', 'invalid'], siteTypeItemId:'pack-plumbing'};
+  req.body = {workspaceName:'Demo Plumbing',tenantId: 'tenant_demo', email: 'new.owner@example.com', name: 'New Owner', password: 'StrongPass123!', modules: ['operations', 'billing', 'invalid'], siteTypeItemId:'pack-plumbing'};
   const res = response();
   await platformAccess.createOwner(req, res);
   assert.equal(res.statusCode, 201);
@@ -74,6 +74,16 @@ test('platform administrator can provision a new workspace with its owner', asyn
   assert.equal(res.statusCode,201);
   assert.equal(res.body.data.tenantId,'tenant_new_business');
   assert.equal(res.body.data.workspace.name,'New Plumbing Co');
+});
+
+test('platform administrator can create a workspace with a supplied tenant ID', async () => {
+  const req = request();
+  req.body = {workspaceName:'C&D Landscaping',tenantId:'cd_tenant_demo',email:'cd@example.com',name:'C&D Owner',password:'StrongPass123!',modules:['operations'],siteTypeItemId:'pack-plumbing'};
+  const res = response();
+  await platformAccess.createOwner(req,res);
+  assert.equal(res.statusCode,201);
+  assert.equal(res.body.data.tenantId,'cd_tenant_demo');
+  assert.equal(res.body.data.workspace.name,'C&D Landscaping');
 });
 
 test('platform administrator can change a tenant service-company site type', async () => {
