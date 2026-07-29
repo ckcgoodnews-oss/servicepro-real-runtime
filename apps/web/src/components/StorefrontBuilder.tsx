@@ -30,6 +30,39 @@ function suggestedPresentation(service: Service): ServicePresentation {
   };
 }
 
+const INDUSTRY_IMAGE_OPTIONS = [
+  { value: '/storefront/industries/appliance-repair.svg', label: 'Appliance Repair' },
+  { value: '/storefront/industries/carpet-cleaning.svg', label: 'Carpet & Upholstery' },
+  { value: '/storefront/industries/chimney-fireplace.svg', label: 'Chimney & Fireplace' },
+  { value: '/storefront/industries/commercial-cleaning.svg', label: 'Commercial Janitorial' },
+  { value: '/storefront/industries/electrical.svg', label: 'Electrical' },
+  { value: '/storefront/industries/fencing.svg', label: 'Fencing' },
+  { value: '/storefront/industries/flooring.svg', label: 'Flooring' },
+  { value: '/storefront/industries/garage-door.svg', label: 'Garage Door' },
+  { value: '/storefront/industries/handyman.svg', label: 'Handyman' },
+  { value: '/storefront/industries/home-inspection.svg', label: 'Home Inspection' },
+  { value: '/storefront/industries/hvac.svg', label: 'HVAC' },
+  { value: '/storefront/industries/irrigation.svg', label: 'Irrigation' },
+  { value: '/storefront/industries/junk-removal.svg', label: 'Junk Removal' },
+  { value: '/storefront/industries/landscaping.svg', label: 'Landscaping' },
+  { value: '/storefront/industries/locksmith-security.svg', label: 'Locksmith & Security' },
+  { value: '/storefront/industries/moving.svg', label: 'Moving Services' },
+  { value: '/storefront/industries/painting.svg', label: 'Painting' },
+  { value: '/storefront/industries/pest-control.svg', label: 'Pest Control' },
+  { value: '/storefront/industries/plumbing.svg', label: 'Plumbing' },
+  { value: '/storefront/industries/pool-spa.svg', label: 'Pool & Spa' },
+  { value: '/storefront/industries/pressure-washing.svg', label: 'Pressure Washing' },
+  { value: '/storefront/industries/property-maintenance.svg', label: 'Property Maintenance' },
+  { value: '/storefront/industries/residential-cleaning.svg', label: 'Residential Cleaning' },
+  { value: '/storefront/industries/restoration.svg', label: 'Restoration' },
+  { value: '/storefront/industries/roofing.svg', label: 'Roofing' },
+  { value: '/storefront/industries/septic.svg', label: 'Septic & Wastewater' },
+  { value: '/storefront/industries/snow-removal.svg', label: 'Snow & Ice' },
+  { value: '/storefront/industries/solar.svg', label: 'Solar' },
+  { value: '/storefront/industries/tree-care.svg', label: 'Tree Care' },
+  { value: '/storefront/industries/window-gutter.svg', label: 'Window & Gutter' },
+];
+
 export function StorefrontBuilder() {
   const [settings, setSettings] = useState<any>(null);
   const [services, setServices] = useState<Service[]>([]);
@@ -187,8 +220,8 @@ export function StorefrontBuilder() {
     });
     const responseBody = await response.json().catch(() => ({}));
     // Also update company name if changed
-    const newCompanyName = form.get('companyName');
-    if (newCompanyName && newCompanyName !== settings.companyName) {
+    const newCompanyName = String(form.get('companyName') || '').trim();
+    if (newCompanyName && newCompanyName !== (settings.companyName || '')) {
       await authFetch('/api/v1/tenant/settings', {
         method: 'PATCH',
         body: JSON.stringify({ companyName: newCompanyName }),
@@ -340,36 +373,7 @@ export function StorefrontBuilder() {
           <label>Logo URL<select name="logoUrl" defaultValue={(branding.logoUrl && !branding.logoUrl.startsWith('/storefront/')) ? 'custom' : (branding.logoUrl || '')} onChange={(e) => { const custom = e.currentTarget.parentElement?.querySelector('input[name="logoUrlCustom"]') as HTMLInputElement; if (custom) custom.style.display = e.target.value === 'custom' ? 'block' : 'none'; }}>
             <option value="">None (text only)</option>
             <optgroup label="Industry Logos">
-              <option value="/storefront/industries/plumbing.svg">Plumbing</option>
-              <option value="/storefront/industries/hvac.svg">HVAC</option>
-              <option value="/storefront/industries/carpet-cleaning.svg">Carpet &amp; Upholstery</option>
-              <option value="/storefront/industries/landscaping.svg">Landscaping</option>
-              <option value="/storefront/industries/electrical.svg">Electrical</option>
-              <option value="/storefront/industries/residential-cleaning.svg">Residential Cleaning</option>
-              <option value="/storefront/industries/commercial-cleaning.svg">Commercial Janitorial</option>
-              <option value="/storefront/industries/pest-control.svg">Pest Control</option>
-              <option value="/storefront/industries/roofing.svg">Roofing</option>
-              <option value="/storefront/industries/garage-door.svg">Garage Door</option>
-              <option value="/storefront/industries/appliance-repair.svg">Appliance Repair</option>
-              <option value="/storefront/industries/handyman.svg">Handyman</option>
-              <option value="/storefront/industries/painting.svg">Painting</option>
-              <option value="/storefront/industries/pressure-washing.svg">Pressure Washing</option>
-              <option value="/storefront/industries/pool-spa.svg">Pool &amp; Spa</option>
-              <option value="/storefront/industries/locksmith-security.svg">Locksmith &amp; Security</option>
-              <option value="/storefront/industries/tree-care.svg">Tree Care</option>
-              <option value="/storefront/industries/snow-removal.svg">Snow &amp; Ice</option>
-              <option value="/storefront/industries/irrigation.svg">Irrigation</option>
-              <option value="/storefront/industries/septic.svg">Septic &amp; Wastewater</option>
-              <option value="/storefront/industries/chimney-fireplace.svg">Chimney &amp; Fireplace</option>
-              <option value="/storefront/industries/solar.svg">Solar</option>
-              <option value="/storefront/industries/home-inspection.svg">Home Inspection</option>
-              <option value="/storefront/industries/restoration.svg">Restoration</option>
-              <option value="/storefront/industries/moving.svg">Moving Services</option>
-              <option value="/storefront/industries/junk-removal.svg">Junk Removal</option>
-              <option value="/storefront/industries/window-gutter.svg">Window &amp; Gutter</option>
-              <option value="/storefront/industries/flooring.svg">Flooring</option>
-              <option value="/storefront/industries/property-maintenance.svg">Property Maintenance</option>
-              <option value="/storefront/industries/fencing.svg">Fencing</option>
+              {INDUSTRY_IMAGE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
             </optgroup>
             <optgroup label="Custom">
               <option value="custom">Enter custom URL...</option>
@@ -377,36 +381,7 @@ export function StorefrontBuilder() {
           </select><input name="logoUrlCustom" type="url" placeholder="https://example.com/logo.png" style={{display: (branding.logoUrl && !branding.logoUrl.startsWith('/storefront/')) ? 'block' : 'none'}} defaultValue={(branding.logoUrl && !branding.logoUrl.startsWith('/storefront/')) ? branding.logoUrl : ''} /></label>
           <label>Hero image URL<select name="heroImageUrl" defaultValue={(branding.heroImageUrl && !branding.heroImageUrl.startsWith('/storefront/')) ? 'custom' : (branding.heroImageUrl || '/storefront/field-service-hero.png')} onChange={(e) => { const custom = e.currentTarget.parentElement?.querySelector('input[name="heroImageUrlCustom"]') as HTMLInputElement; if (custom) custom.style.display = e.target.value === 'custom' ? 'block' : 'none'; }}>
             <optgroup label="Industry Images">
-              <option value="/storefront/industries/plumbing.svg">Plumbing</option>
-              <option value="/storefront/industries/hvac.svg">HVAC</option>
-              <option value="/storefront/industries/carpet-cleaning.svg">Carpet &amp; Upholstery Cleaning</option>
-              <option value="/storefront/industries/landscaping.svg">Landscaping</option>
-              <option value="/storefront/industries/electrical.svg">Electrical</option>
-              <option value="/storefront/industries/residential-cleaning.svg">Residential Cleaning</option>
-              <option value="/storefront/industries/commercial-cleaning.svg">Commercial Janitorial</option>
-              <option value="/storefront/industries/pest-control.svg">Pest Control</option>
-              <option value="/storefront/industries/roofing.svg">Roofing</option>
-              <option value="/storefront/industries/garage-door.svg">Garage Door</option>
-              <option value="/storefront/industries/appliance-repair.svg">Appliance Repair</option>
-              <option value="/storefront/industries/handyman.svg">Handyman</option>
-              <option value="/storefront/industries/painting.svg">Painting</option>
-              <option value="/storefront/industries/pressure-washing.svg">Pressure Washing</option>
-              <option value="/storefront/industries/pool-spa.svg">Pool &amp; Spa</option>
-              <option value="/storefront/industries/locksmith-security.svg">Locksmith &amp; Security</option>
-              <option value="/storefront/industries/tree-care.svg">Tree Care</option>
-              <option value="/storefront/industries/snow-removal.svg">Snow &amp; Ice</option>
-              <option value="/storefront/industries/irrigation.svg">Irrigation</option>
-              <option value="/storefront/industries/septic.svg">Septic &amp; Wastewater</option>
-              <option value="/storefront/industries/chimney-fireplace.svg">Chimney &amp; Fireplace</option>
-              <option value="/storefront/industries/solar.svg">Solar</option>
-              <option value="/storefront/industries/home-inspection.svg">Home Inspection</option>
-              <option value="/storefront/industries/restoration.svg">Restoration</option>
-              <option value="/storefront/industries/moving.svg">Moving Services</option>
-              <option value="/storefront/industries/junk-removal.svg">Junk Removal</option>
-              <option value="/storefront/industries/window-gutter.svg">Window &amp; Gutter</option>
-              <option value="/storefront/industries/flooring.svg">Flooring</option>
-              <option value="/storefront/industries/property-maintenance.svg">Property Maintenance</option>
-              <option value="/storefront/industries/fencing.svg">Fencing</option>
+              {INDUSTRY_IMAGE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
             </optgroup>
             <optgroup label="General">
               <option value="/storefront/field-service-hero.png">Default Field Service</option>
@@ -464,36 +439,7 @@ export function StorefrontBuilder() {
                         }}
                       >
                         <option value="">None</option>
-                        <option value="/storefront/industries/plumbing.svg">Plumbing</option>
-                        <option value="/storefront/industries/hvac.svg">HVAC</option>
-                        <option value="/storefront/industries/carpet-cleaning.svg">Carpet Cleaning</option>
-                        <option value="/storefront/industries/landscaping.svg">Landscaping</option>
-                        <option value="/storefront/industries/electrical.svg">Electrical</option>
-                        <option value="/storefront/industries/residential-cleaning.svg">Residential Cleaning</option>
-                        <option value="/storefront/industries/commercial-cleaning.svg">Commercial Janitorial</option>
-                        <option value="/storefront/industries/pest-control.svg">Pest Control</option>
-                        <option value="/storefront/industries/roofing.svg">Roofing</option>
-                        <option value="/storefront/industries/garage-door.svg">Garage Door</option>
-                        <option value="/storefront/industries/appliance-repair.svg">Appliance Repair</option>
-                        <option value="/storefront/industries/handyman.svg">Handyman</option>
-                        <option value="/storefront/industries/painting.svg">Painting</option>
-                        <option value="/storefront/industries/pressure-washing.svg">Pressure Washing</option>
-                        <option value="/storefront/industries/pool-spa.svg">Pool &amp; Spa</option>
-                        <option value="/storefront/industries/locksmith-security.svg">Locksmith</option>
-                        <option value="/storefront/industries/tree-care.svg">Tree Care</option>
-                        <option value="/storefront/industries/snow-removal.svg">Snow &amp; Ice</option>
-                        <option value="/storefront/industries/irrigation.svg">Irrigation</option>
-                        <option value="/storefront/industries/septic.svg">Septic</option>
-                        <option value="/storefront/industries/chimney-fireplace.svg">Chimney</option>
-                        <option value="/storefront/industries/solar.svg">Solar</option>
-                        <option value="/storefront/industries/home-inspection.svg">Home Inspection</option>
-                        <option value="/storefront/industries/restoration.svg">Restoration</option>
-                        <option value="/storefront/industries/moving.svg">Moving</option>
-                        <option value="/storefront/industries/junk-removal.svg">Junk Removal</option>
-                        <option value="/storefront/industries/window-gutter.svg">Window &amp; Gutter</option>
-                        <option value="/storefront/industries/flooring.svg">Flooring</option>
-                        <option value="/storefront/industries/property-maintenance.svg">Property Maintenance</option>
-                        <option value="/storefront/industries/fencing.svg">Fencing</option>
+                        {INDUSTRY_IMAGE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
                         <option value="custom">Custom URL...</option>
                       </select>
                       {(servicePresentation[service.id]?.imageUrl === 'custom' || (servicePresentation[service.id]?.imageUrl && !(servicePresentation[service.id]?.imageUrl ?? '').startsWith('/storefront/'))) && (
