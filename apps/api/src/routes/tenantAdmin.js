@@ -40,6 +40,7 @@ function updateBranding(req, res) {
         input.publicUnpublishedAt = new Date().toISOString();
       }
       return req.context.repositories.tenantSettings.upsert(tenant(req), {
+        ...current,
         branding: {
           ...(current.branding || {}),
           ...input
