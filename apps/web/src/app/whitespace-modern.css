@@ -1,0 +1,257 @@
+/* ============================================================
+   whitespace-modern.css
+   Modern whitespace overrides for improved readability,
+   reduced cognitive load, and better usability.
+   Import AFTER globals.css to override spacing values.
+   ============================================================ */
+
+/* Macro-whitespace: increase breathing room between major sections */
+.dashboard-content {
+  padding: 48px 40px 64px;
+}
+
+.dashboard-intro {
+  margin-bottom: 12px;
+}
+
+.dashboard-intro h1 {
+  margin: 14px 0 8px;
+  font-size: 32px;
+}
+
+.kpi-grid {
+  gap: 18px;
+  margin-top: 32px;
+}
+
+.dashboard-grid {
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.panel {
+  padding: 28px;
+  border-radius: 14px;
+}
+
+.panel-heading {
+  margin-bottom: 18px;
+}
+
+.panel-heading h2 {
+  font-size: 17px;
+}
+
+/* Micro-whitespace: improve touch targets and field spacing */
+.button {
+  padding: 16px 26px;
+  border-radius: 10px;
+  font-size: 14px;
+  gap: 10px;
+}
+
+.button-small {
+  padding: 12px 20px;
+  font-size: 13px;
+  border-radius: 8px;
+}
+
+/* Form fields — bigger touch targets, more spacing */
+input, select, textarea {
+  padding: 14px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+label {
+  margin: 18px 0;
+  gap: 8px;
+}
+
+.form-columns {
+  gap: 16px;
+}
+
+/* KPI cards — more internal breathing room */
+.kpi-grid article {
+  padding: 24px 26px;
+  border-radius: 14px;
+}
+
+.kpi-grid strong {
+  font-size: 30px;
+  margin: 10px 0 4px;
+}
+
+.kpi-grid article > span {
+  font-size: 11px;
+  letter-spacing: 0.3px;
+}
+
+.kpi-grid small {
+  font-size: 10px;
+  margin-top: 4px;
+}
+
+/* CTAs and interactive elements — distinct focus areas */
+.hero-actions {
+  margin-top: 40px;
+  gap: 18px;
+}
+
+.workspace-header {
+  height: 80px;
+  padding: 0 40px;
+}
+
+.workspace-actions {
+  gap: 12px;
+}
+
+.icon-button, .search-button {
+  height: 42px;
+  border-radius: 9px;
+}
+
+.search-button {
+  width: 240px;
+  padding: 0 14px;
+  gap: 10px;
+}
+
+.sidebar nav {
+  margin-top: 42px;
+  gap: 6px;
+}
+
+.sidebar nav a, .sidebar-bottom > a {
+  padding: 13px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+  gap: 14px;
+}
+
+/* Table rows and list items — less cramped, easier scanning */
+.attention-row {
+  padding: 16px 0;
+  gap: 14px;
+}
+
+.attention-row div strong {
+  font-size: 12px;
+}
+
+.compact-list article {
+  padding: 14px 0;
+  gap: 14px;
+}
+
+.compact-list strong {
+  font-size: 12px;
+}
+
+.organization-list article,
+.asset-list > button {
+  padding: 14px 10px;
+}
+
+/* Storefront builder sections */
+.storefront-builder-section {
+  gap: 18px;
+  padding: 28px;
+}
+
+.storefront-builder-section > header h3 {
+  font-size: 16px;
+  margin: 6px 0;
+}
+
+.storefront-builder-section > header p {
+  margin: 0 0 14px;
+}
+
+/* Prevent multi-column crowding — let content breathe */
+.section-heading {
+  gap: 52px;
+}
+
+.solution-grid {
+  gap: 2px;
+  margin-top: 64px;
+}
+
+.solution-grid article {
+  padding: 44px;
+}
+
+.solution-grid h3 {
+  margin: 48px 0 16px;
+}
+
+/* Profile and settings grids */
+.profile-grid {
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.settings-grid {
+  gap: 18px;
+  margin-top: 32px;
+}
+
+/* Asset workspace */
+.asset-layout {
+  gap: 20px;
+}
+
+.asset-facts {
+  gap: 14px;
+  margin: 20px 0;
+}
+
+.asset-detail-grid {
+  gap: 24px;
+  margin-top: 28px;
+}
+
+/* Mobile: maintain proportional whitespace */
+@media (max-width: 900px) {
+  .dashboard-content {
+    padding: 36px 28px 56px;
+  }
+
+  .kpi-grid {
+    gap: 14px;
+  }
+
+  .panel {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-content {
+    padding: 24px 16px 80px;
+  }
+
+  .kpi-grid {
+    gap: 10px;
+  }
+
+  .kpi-grid article {
+    padding: 16px 18px;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .button {
+    padding: 14px 20px;
+  }
+
+  .workspace-header {
+    height: 72px;
+    padding: 0 16px;
+  }
+}
