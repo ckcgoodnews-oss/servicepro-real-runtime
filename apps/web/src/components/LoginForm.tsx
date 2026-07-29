@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { FormEvent } from 'react';
+import { PasswordInput } from '@/components/PasswordInput';
 import { apiUrl, configuredTenantId, saveSession, type AuthSession } from '@/auth/session';
 
 export function LoginForm() {
@@ -39,5 +40,5 @@ export function LoginForm() {
       window.alert(problem instanceof Error ? problem.message : 'Unable to sign in');
     }
   }
-  return <form onSubmit={submit}><label>Email address<input type="email" name="email" autoComplete="email" placeholder="you@company.com" required /></label><label>Password<span className="label-row"><Link href="/forgot-password">Forgot password?</Link></span><input type="password" name="password" autoComplete="current-password" placeholder="Enter your password" required /></label><label className="check-row"><input type="checkbox" name="remember" /> Keep me signed in on this device</label><button className="button button-wide" type="submit">Sign in <span aria-hidden="true">→</span></button></form>;
+  return <form onSubmit={submit}><label>Email address<input type="email" name="email" autoComplete="email" placeholder="you@company.com" required /></label><label>Password<span className="label-row"><Link href="/forgot-password">Forgot password?</Link></span><PasswordInput name="password" autoComplete="current-password" placeholder="Enter your password" required /></label><label className="check-row"><input type="checkbox" name="remember" /> Keep me signed in on this device</label><button className="button button-wide" type="submit">Sign in <span aria-hidden="true">→</span></button></form>;
 }

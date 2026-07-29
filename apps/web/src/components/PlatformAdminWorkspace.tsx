@@ -3,6 +3,7 @@
 import {FormEvent, useCallback, useEffect, useMemo, useState} from 'react';
 import {authFetch} from '@/auth/session';
 import {ModuleChecklist} from '@/components/ModuleChecklist';
+import {PasswordInput} from '@/components/PasswordInput';
 
 const availableModules = ['operations', 'crm', 'assets', 'inventory', 'billing', 'analytics', 'knowledge', 'communications', 'marketplace', 'administration'];
 
@@ -205,7 +206,7 @@ export function PlatformAdminWorkspace() {
           <div className="form-columns"><label>Business name<input name="workspaceName" required /></label><label>Tenant ID (optional)<input name="tenantId" placeholder="Generated from business name" pattern="[A-Za-z0-9_-]+" /><small>Enter a unique ID or leave blank to generate one.</small></label></div>
           <label>Owner name<input name="ownerName" required /></label>
           <label>Owner email<input name="email" type="email" required /></label>
-          <label>Temporary password<input name="password" type="password" minLength={12} required /><small>Use uppercase, lowercase, number, and symbol.</small></label>
+          <label>Temporary password<PasswordInput name="password" minLength={12} required /><small>Use uppercase, lowercase, number, and symbol.</small></label>
           <label>Service-company site type<select name="siteTypeItemId" required defaultValue=""><option value="" disabled>Select a marketplace service pack</option>{siteTypes.map(item=><option value={item.id} key={item.id}>{item.name}</option>)}</select></label>
           <fieldset className="platform-module-picker"><legend>Enabled business modules</legend><p>Only platform administrators can change this tenant-wide entitlement.</p><div>{availableModules.map(moduleName=><label key={moduleName}><input type="checkbox" name="modules" value={moduleName} defaultChecked={['operations','crm','assets','billing'].includes(moduleName)} />{moduleName}</label>)}</div></fieldset>
           <button className="button button-small" disabled={creating}>{creating ? 'Creating owner…' : 'Create owner'}</button>

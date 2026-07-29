@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, type FormEvent } from 'react';
 import { apiUrl, saveSession, tenantId, type AuthSession } from '@/auth/session';
+import { PasswordInput } from '@/components/PasswordInput';
 
 export function RegisterForm() {
   const router = useRouter(); const [error,setError] = useState(''); const [busy,setBusy] = useState(false);
@@ -14,5 +15,5 @@ export function RegisterForm() {
       saveSession(body.data as AuthSession, false); router.replace('/dashboard');
     } catch (problem) { setError(problem instanceof Error ? problem.message : 'Registration failed'); } finally { setBusy(false); }
   }
-  return <form onSubmit={submit}><label>Full name<input name="name" autoComplete="name" required autoFocus /></label><label>Work email<input name="email" type="email" autoComplete="email" required /></label><label>Password<input name="password" type="password" autoComplete="new-password" minLength={12} required /></label><p className="password-hint">Use 12+ characters with uppercase, lowercase, a number, and a symbol.</p>{error && <p className="form-error" role="alert">{error}</p>}<button className="button button-wide" disabled={busy} type="submit">{busy ? 'Creating account...' : 'Create account'}</button></form>;
+  return <form onSubmit={submit}><label>Full name<input name="name" autoComplete="name" required autoFocus /></label><label>Work email<input name="email" type="email" autoComplete="email" required /></label><label>Password<PasswordInput name="password" autoComplete="new-password" minLength={12} required /></label><p className="password-hint">Use 12+ characters with uppercase, lowercase, a number, and a symbol.</p>{error && <p className="form-error" role="alert">{error}</p>}<button className="button button-wide" disabled={busy} type="submit">{busy ? 'Creating account...' : 'Create account'}</button></form>;
 }

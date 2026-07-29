@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from 'react';
 import { apiUrl, tenantId } from '@/auth/session';
+import { PasswordInput } from '@/components/PasswordInput';
 
 type Mode = 'forgot' | 'reset' | 'invite';
 
@@ -37,5 +38,5 @@ export function IdentityForm({ mode }: { mode: Mode }) {
       setBusy(false);
     }
   }
-  return <form onSubmit={submit}>{mode === 'forgot' ? <label>Email address<input name="email" type="email" autoComplete="email" required autoFocus /></label> : <>{mode === 'invite' && <label>Full name<input name="name" autoComplete="name" required autoFocus /></label>}<label>New password<input name="password" type="password" autoComplete="new-password" minLength={12} required /></label></>}{error && <p className="form-error" role="alert">{error}</p>}{message && <p className="form-success" role="status">{message}</p>}<button className="button button-wide" disabled={busy} type="submit">{busy ? 'Working...' : mode === 'forgot' ? 'Send reset instructions' : 'Set password'}</button></form>;
+  return <form onSubmit={submit}>{mode === 'forgot' ? <label>Email address<input name="email" type="email" autoComplete="email" required autoFocus /></label> : <>{mode === 'invite' && <label>Full name<input name="name" autoComplete="name" required autoFocus /></label>}<label>New password<PasswordInput name="password" autoComplete="new-password" minLength={12} required /></label></>}{error && <p className="form-error" role="alert">{error}</p>}{message && <p className="form-success" role="status">{message}</p>}<button className="button button-wide" disabled={busy} type="submit">{busy ? 'Working...' : mode === 'forgot' ? 'Send reset instructions' : 'Set password'}</button></form>;
 }
