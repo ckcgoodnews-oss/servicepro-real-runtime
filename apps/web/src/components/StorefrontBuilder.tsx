@@ -532,6 +532,36 @@ export function StorefrontBuilder() {
         <div className="storefront-save-bar">
           <span>{published ? 'Saving will update the public website immediately.' : 'Saving will keep this storefront private.'}</span>
           <button className="button">{published ? 'Save & publish changes' : 'Save draft'}</button>
+          <button type="button" className="button-small" style={{background:'var(--red)',color:'white',marginLeft:'auto'}} onClick={async () => {
+            if (!confirm('Delete this public storefront? This will remove your public page and all storefront settings. Your services and business data are not affected.')) return;
+            const response = await authFetch('/api/v1/tenant/branding', {
+              method: 'PATCH',
+              body: JSON.stringify({
+                publicSlug: '',
+                publicPublished: false,
+                publicTagline: '',
+                publicDescription: '',
+                publicServiceArea: '',
+                publicHours: '',
+                logoUrl: '',
+                heroImageUrl: '',
+                publicServiceIds: [],
+                publicServicePresentation: {},
+                publicPublishedAt: '',
+                publicUnpublishedAt: new Date().toISOString(),
+              }),
+            });
+            if (response.ok) {
+              setPublished(false);
+              setSelectedServiceIds([]);
+              setServicePresentation({});
+              setSettings((current: any) => ({ ...current, branding: {} }));
+              setMessage('Storefront deleted. Your public page is no longer accessible.');
+              setDirty(false);
+            } else {
+              setMessage('Unable to delete storefront. Try again.');
+            }
+          }}>Delete storefront</button>
         </div>
       </form>
     </section>
