@@ -2,10 +2,10 @@ function defaultTenantSettings(tenantId = 'tenant_demo') {
   const stamp = new Date().toISOString();
   return {
     tenantId,
-    companyName: 'ServicePro Demo Plumbing',
-    legalName: 'ServicePro Demo Plumbing LLC',
-    supportEmail: 'support@example.com',
-    supportPhone: '555-0100',
+    companyName: '',
+    legalName: '',
+    supportEmail: '',
+    supportPhone: '',
     timezone: 'America/Indiana/Indianapolis',
     locale: 'en-US',
     currency: 'USD',

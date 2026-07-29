@@ -42,4 +42,22 @@ async function switchTenant(req, res) {
   }
 }
 
-module.exports = { list, current, switchTenant };
+async function deleteWorkspace(req, res, tenantId) {
+  if (!isPlatformAdmin(req)) return deny(res);
+  try {
+    const workspace = await req.context.repositories.workspaces.find(tenantId);
+    if (!workspace) return sendJson(res, 404, { error: { code: 'workspace_not_found', message: 'Workspace not found' } });
+    // Delete tenant settings
+    try { await req.context.repositories.store.query('DELETE FROM tenant_settings WHERE tenant_id = $1', [tenantId]); } catch {}
+    // Delete users
+    try { await req.context.repositories.store.query('DELETE FROM runtime_users WHERE tenant_id = $1', [tenantId]); } catch {}
+    // Delete the workspace/tenant record
+    try { await req.context.repositories.store.query('DELETE FROM tenants WHERE tenant_key = $1', [tenantId]); } catch {}
+    return sendJson(res, 200, { data: { tenantId, deleted: true } });
+  } catch (err) {
+    console.error('[workspaces.delete] Error:', err?.message || err);
+    return sendJson(res, 500, { error: { code: 'internal_error', message: err?.message || 'Failed to delete workspace' } });
+  }
+}
+
+module.exports = { list, current, switchTenant, deleteWorkspace };

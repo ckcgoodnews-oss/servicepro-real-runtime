@@ -37,3 +37,21 @@
 .workspace-selector option {
   color: #102c2a;
 }
+
+.workspace-delete-btn {
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 6px;
+  background: rgba(217, 87, 77, 0.15);
+  color: #ff8a80;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.workspace-delete-btn:hover {
+  background: rgba(217, 87, 77, 0.35);
+}
+.workspace-delete-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}

@@ -294,6 +294,8 @@ async function router(req, res) {
   if (req.url === '/api/v1/admin/workspaces' && req.method === 'GET') return workspaces.list(req, res);
   if (req.url === '/api/v1/workspace/current' && req.method === 'GET') return workspaces.current(req, res);
   if (req.url === '/api/admin/switch-tenant' && req.method === 'POST') return workspaces.switchTenant(req, res);
+  const workspaceDeleteMatch = req.url.match(/^\/api\/v1\/admin\/workspaces\/([^/]+)$/);
+  if (workspaceDeleteMatch && req.method === 'DELETE') return workspaces.deleteWorkspace(req, res, decodeURIComponent(workspaceDeleteMatch[1]));
   if (req.url === '/api/v1/platform/owners' && req.method === 'POST') return platformAccess.createOwner(req, res);
   const tenantManagementDetailMatch=req.url.match(/^\/api\/v1\/platform\/tenant-management\/([^/]+)$/);
   if(tenantManagementDetailMatch&&req.method==='GET')return tenantManagement.detail(req,res,tenantManagementDetailMatch[1]);
