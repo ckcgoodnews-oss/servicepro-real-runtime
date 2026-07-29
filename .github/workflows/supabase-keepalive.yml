@@ -1,0 +1,35 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # Ping every 5 days to prevent the 7-day inactivity pause
+    - cron: '0 6 */5 * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase database
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          # Install PostgreSQL client
+          sudo apt-get install -y -qq postgresql-client > /dev/null 2>&1
+
+          # Run a simple query to keep the database active
+          psql "$DATABASE_URL" -c "SELECT 1 AS keepalive, now() AS pinged_at;" || {
+            echo "::warning::Database ping failed — Supabase may be paused or unreachable"
+            exit 1
+          }
+
+          echo "✓ Supabase database is active"
+
+      - name: Ping API health endpoint
+        run: |
+          # Also ping the API to keep Render's free instance warm
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://api.aardvark-enterprises.net/healthz || echo "000")
+          echo "API health check: HTTP $STATUS"
+          if [ "$STATUS" != "200" ]; then
+            echo "::warning::API health check returned $STATUS"
+          fi
