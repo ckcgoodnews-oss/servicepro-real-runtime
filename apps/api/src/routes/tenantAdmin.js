@@ -16,7 +16,11 @@ function getSettings(req, res) {
 }
 
 function updateSettings(req, res) {
-  Promise.resolve(req.context.repositories.tenantSettings.upsert(tenant(req), req.body))
+  Promise.resolve()
+    .then(async () => {
+      const current = await req.context.repositories.tenantSettings.get(tenant(req));
+      return req.context.repositories.tenantSettings.upsert(tenant(req), { ...current, ...req.body });
+    })
     .then(data => sendJson(res, 200, { data }))
     .catch(err => sendJson(res, err.status || 500, { error: { code: err.code || 'error', message: err.message } }));
 }
