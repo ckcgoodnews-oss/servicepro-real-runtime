@@ -252,6 +252,7 @@ export function StorefrontBuilder() {
           </small>
         </div>
         {branding.publicSlug && published && <a target="_blank" href={`/p/?business=${encodeURIComponent(branding.publicSlug)}`}>View live storefront</a>}
+        <button type="submit" form="storefront-form" className="button button-small">{published ? 'Save & publish' : 'Save draft'}</button>
       </section>
 
       <form className="storefront-service-add" id="add-service-page" onSubmit={addService}>
@@ -298,7 +299,7 @@ export function StorefrontBuilder() {
         </section>
       )}
 
-      <form onSubmit={save} onChange={() => setDirty(true)}>
+      <form id="storefront-form" onSubmit={save} onChange={() => setDirty(true)}>
         <section className="storefront-builder-section" id="storefront-branding">
           <header><span>Branding</span><h3>Business identity and public appearance</h3><p>Choose the public address, theme, company message, and images.</p></header>
           <div className="form-columns">
@@ -406,6 +407,10 @@ export function StorefrontBuilder() {
           </select><input name="heroImageUrlCustom" type="url" placeholder="https://example.com/hero.jpg" style={{display: (branding.heroImageUrl && !branding.heroImageUrl.startsWith('/storefront/')) ? 'block' : 'none'}} defaultValue={(branding.heroImageUrl && !branding.heroImageUrl.startsWith('/storefront/')) ? branding.heroImageUrl : ''} /></label>
           </div>
         </section>
+        <div className="storefront-save-bar" style={{marginBottom: '8px'}}>
+          <span>{dirty ? 'You have unsaved changes' : ''}</span>
+          <button type="submit" className="button button-small">{published ? 'Save & publish' : 'Save draft'}</button>
+        </div>
         <fieldset id="storefront-services">
           <div className="storefront-service-toolbar">
             <legend>Visible public services</legend>
