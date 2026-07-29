@@ -432,7 +432,7 @@ export function StorefrontBuilder() {
                     <label>
                       Service image
                       <select
-                        value={(servicePresentation[service.id]?.imageUrl && !servicePresentation[service.id]?.imageUrl.startsWith('/storefront/')) ? 'custom' : (servicePresentation[service.id]?.imageUrl || '')}
+                        value={(servicePresentation[service.id]?.imageUrl && !(servicePresentation[service.id]?.imageUrl ?? '').startsWith('/storefront/')) ? 'custom' : (servicePresentation[service.id]?.imageUrl || '')}
                         onChange={(event) => {
                           if (event.target.value === 'custom') return;
                           updatePresentation(service.id, 'imageUrl', event.target.value);
@@ -471,7 +471,7 @@ export function StorefrontBuilder() {
                         <option value="/storefront/industries/fencing.svg">Fencing</option>
                         <option value="custom">Custom URL...</option>
                       </select>
-                      {(servicePresentation[service.id]?.imageUrl === 'custom' || (servicePresentation[service.id]?.imageUrl && !servicePresentation[service.id]?.imageUrl.startsWith('/storefront/'))) && (
+                      {(servicePresentation[service.id]?.imageUrl === 'custom' || (servicePresentation[service.id]?.imageUrl && !(servicePresentation[service.id]?.imageUrl ?? '').startsWith('/storefront/'))) && (
                         <input
                           type="url"
                           value={servicePresentation[service.id]?.imageUrl === 'custom' ? '' : (servicePresentation[service.id]?.imageUrl || '')}
