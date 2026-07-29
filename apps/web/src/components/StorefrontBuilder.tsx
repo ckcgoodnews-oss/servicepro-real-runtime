@@ -186,6 +186,15 @@ export function StorefrontBuilder() {
       body: JSON.stringify(branding),
     });
     const responseBody = await response.json().catch(() => ({}));
+    // Also update company name if changed
+    const newCompanyName = form.get('companyName');
+    if (newCompanyName && newCompanyName !== settings.companyName) {
+      await authFetch('/api/v1/tenant/settings', {
+        method: 'PATCH',
+        body: JSON.stringify({ companyName: newCompanyName }),
+      });
+      setSettings((current: any) => ({ ...current, companyName: newCompanyName }));
+    }
     setMessage(response.ok ? (published ? 'Changes are live on the public storefront.' : 'Draft saved. The storefront is not publicly available.') : 'Unable to save storefront.');
     if (response.ok) {
       const savedBranding = responseBody.data || branding;
@@ -309,6 +318,7 @@ export function StorefrontBuilder() {
           <input type="checkbox" name="published" checked={published} onChange={(event) => { setPublished(event.target.checked); setDirty(true); }} />
           {published ? 'Published — saving changes updates the live website' : 'Publish this storefront'}
           </label>
+          <label>Business name (displayed as page heading)<input name="companyName" defaultValue={settings.companyName || ''} /></label>
           <label>Headline<input name="tagline" defaultValue={branding.publicTagline || ''} /></label>
           <label>Business description<textarea name="description" defaultValue={branding.publicDescription || ''} rows={4} /></label>
           <div className="form-columns">
