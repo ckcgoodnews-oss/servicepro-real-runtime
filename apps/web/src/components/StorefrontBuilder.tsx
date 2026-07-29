@@ -225,7 +225,6 @@ export function StorefrontBuilder() {
             Preview storefront
           </a>
         )}
-        <button type="submit" form="storefront-form" className="button button-small">{published ? 'Save & publish' : 'Save draft'}</button>
       </div>
 
       <nav className="storefront-builder-breadcrumbs" aria-label="Storefront builder breadcrumb">
@@ -300,7 +299,7 @@ export function StorefrontBuilder() {
         </section>
       )}
 
-      <form id="storefront-form" onSubmit={save} onChange={() => setDirty(true)}>
+      <form id="storefront-form" key={`sf-${settings?.tenantId || ''}-${settings?.branding?.publicSlug || ''}`} onSubmit={save} onChange={() => setDirty(true)}>
         <section className="storefront-builder-section" id="storefront-branding">
           <header><span>Branding</span><h3>Business identity and public appearance</h3><p>Choose the public address, theme, company message, and images.</p></header>
           <div className="form-columns">
