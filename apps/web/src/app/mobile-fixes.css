@@ -1,0 +1,280 @@
+/* ============================================================
+   mobile-fixes.css
+   Fix mobile navigation and scrolling issues
+   ============================================================ */
+
+/* Ensure the body and html can scroll freely */
+html, body {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Fix mobile viewport height issues (iOS address bar) */
+@supports (height: 100dvh) {
+  .app-shell {
+    min-height: 100dvh;
+  }
+  .sidebar {
+    height: 100dvh;
+  }
+}
+
+/* Mobile: ≤900px - Collapsed sidebar */
+@media (max-width: 900px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    overflow-x: hidden;
+  }
+
+  .workspace {
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .dashboard-content {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Mobile: ≤600px - Full mobile layout */
+@media (max-width: 600px) {
+  .app-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  /* Sidebar: slides in from left as overlay */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    height: 100%;
+    height: 100dvh;
+    z-index: 40;
+    padding: 24px 18px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    transform: translateX(-105%);
+    transition: transform 0.25s ease;
+  }
+
+  /* When nav is open, slide sidebar in */
+  .nav-open .sidebar {
+    transform: translateX(0);
+  }
+
+  /* Scrim/overlay behind open nav */
+  .nav-open .nav-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 35;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  /* Show sidebar brand and all nav items when open */
+  .sidebar .brand-name,
+  .sidebar nav a {
+    font-size: 13px;
+  }
+
+  .sidebar nav {
+    display: grid;
+    gap: 4px;
+    margin-top: 20px;
+  }
+
+  .sidebar nav a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+  }
+
+  .sidebar-bottom {
+    display: block;
+    margin-top: auto;
+    padding-top: 16px;
+  }
+
+  .sidebar-bottom > a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  /* Menu toggle button - make visible and accessible */
+  .menu-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 20px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Workspace main area - ensure scrollability */
+  .workspace {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Workspace header - sticky but doesn't block scroll */
+  .workspace-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: auto;
+    min-height: 60px;
+    padding: 12px 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* Dashboard content - ensure it scrolls */
+  .dashboard-content {
+    padding: 20px 16px 40px;
+    overflow: visible;
+  }
+
+  /* KPI grid - 1 column on very small screens */
+  .kpi-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Dashboard lower grid */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Panels - prevent overflow */
+  .panel {
+    overflow: hidden;
+    word-wrap: break-word;
+  }
+
+  /* Tables and wide content - horizontal scroll */
+  .attention-row {
+    grid-template-columns: 48px 1fr auto;
+  }
+
+  .tenant-dashboard-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Profile grid - single column */
+  .profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Organization */
+  .organization-summary {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Asset workspace */
+  .asset-layout {
+    grid-template-columns: 1fr;
+  }
+
+  /* Storefront builder - stack fields */
+  .storefront-builder-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .storefront-builder-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Form columns - stack on mobile */
+  .form-columns {
+    grid-template-columns: 1fr;
+  }
+
+  /* Fix platform admin grid */
+  .platform-admin-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .tenant-summary-cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Fix organization modal */
+  .organization-modal {
+    width: calc(100% - 20px);
+    max-height: 85vh;
+  }
+
+  /* Prevent body scroll when modal/nav is open */
+  .nav-open,
+  .modal-open {
+    overflow: hidden;
+  }
+
+  /* Command palette - full width on mobile */
+  .command-menu {
+    width: calc(100% - 20px);
+  }
+
+  /* Hide sidebar close button when sidebar isn't visible */
+  .sidebar-close {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 16px;
+    border: 0;
+    background: transparent;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 400px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tenant-summary-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .organization-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace-header {
+    padding: 10px 12px;
+  }
+
+  .dashboard-content {
+    padding: 16px 12px 36px;
+  }
+}
