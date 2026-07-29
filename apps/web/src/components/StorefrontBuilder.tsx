@@ -225,6 +225,7 @@ export function StorefrontBuilder() {
             Preview storefront
           </a>
         )}
+        <button type="submit" form="storefront-form" className="button button-small">{published ? 'Save & publish' : 'Save draft'}</button>
       </div>
 
       <nav className="storefront-builder-breadcrumbs" aria-label="Storefront builder breadcrumb">
