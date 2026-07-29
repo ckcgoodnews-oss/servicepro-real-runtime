@@ -325,6 +325,8 @@ async function router(req, res) {
   if(platformOwnerTokenMatch&&req.method==='POST')return platformAccess.issue(req,res,platformOwnerTokenMatch[1]);
   const platformOwnerPasswordMatch=req.url.match(/^\/api\/v1\/platform\/owners\/([^/]+)\/reset-password$/);
   if(platformOwnerPasswordMatch&&req.method==='POST')return platformAccess.resetPassword(req,res,platformOwnerPasswordMatch[1]);
+  const platformOwnerProfileMatch=req.url.match(/^\/api\/v1\/platform\/owners\/([^/]+)\/profile$/);
+  if(platformOwnerProfileMatch&&req.method==='PATCH')return platformAccess.updateOwnerProfile(req,res,platformOwnerProfileMatch[1]);
   const platformEntitlementMatch=req.url.match(/^\/api\/v1\/platform\/entitlements\/([^/]+)$/);
   if(platformEntitlementMatch&&req.method==='PATCH')return platformAccess.update(req,res,platformEntitlementMatch[1]);
 

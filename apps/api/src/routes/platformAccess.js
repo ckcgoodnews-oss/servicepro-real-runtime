@@ -69,4 +69,12 @@ async function resetPassword(req,res,userId){
   if(!user)return sendJson(res,404,{error:{code:'not_found',message:'Owner not found'}});
   return sendJson(res,200,{data:{id:user.id,email:user.email,tenantId:user.tenantId,passwordReset:true}});
 }
-module.exports={list,createOwner,setSiteType,issue,redeem,update,resetPassword,eligibleOwners};
+async function updateOwnerProfile(req,res,userId){
+  if(!isPlatformAdmin(req))return deny(res);
+  const {tenantId,name,email}=req.body||{};
+  if(!tenantId)return sendJson(res,400,{error:{code:'validation_failed',message:'tenantId is required'}});
+  const user=await req.context.repositories.users.updateProfile(tenantId,userId,{name:name||undefined,email:email||undefined});
+  if(!user)return sendJson(res,404,{error:{code:'not_found',message:'Owner not found'}});
+  return sendJson(res,200,{data:user});
+}
+module.exports={list,createOwner,setSiteType,issue,redeem,update,resetPassword,updateOwnerProfile,eligibleOwners};
