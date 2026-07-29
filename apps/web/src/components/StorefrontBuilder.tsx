@@ -230,6 +230,16 @@ export function StorefrontBuilder() {
       <nav className="storefront-builder-breadcrumbs" aria-label="Storefront builder breadcrumb">
         <a href="/dashboard/">Workspace</a><span>/</span><strong>Storefront Builder</strong><span>/</span><span>Edit public site</span>
       </nav>
+
+      {branding.publicSlug && published && (
+        <a
+          className="button button-small storefront-view-page-sticky"
+          target="_blank"
+          href={`/p/?business=${encodeURIComponent(branding.publicSlug)}`}
+        >
+          View page ↗
+        </a>
+      )}
       <nav className="storefront-builder-tabs" aria-label="Storefront builder sections">
         <a href="#storefront-branding"><span>1</span>Branding</a>
         <a href="#storefront-services"><span>2</span>Services &amp; Pages <small>{selectedServiceIds.length}</small></a>
