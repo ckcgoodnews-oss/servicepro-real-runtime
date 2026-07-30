@@ -46,13 +46,13 @@
 .button {
   padding: 16px 26px;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 15px;
   gap: 10px;
 }
 
 .button-small {
   padding: 12px 20px;
-  font-size: 13px;
+  font-size: 14px;
   border-radius: 8px;
 }
 
@@ -60,12 +60,13 @@
 input, select, textarea {
   padding: 14px 16px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 label {
   margin: 18px 0;
   gap: 8px;
+  font-size: 13px;
 }
 
 .form-columns {
@@ -254,4 +255,63 @@ label {
     height: 72px;
     padding: 0 16px;
   }
+}
+
+
+/* Base font size increase for readability */
+body {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.dashboard-intro p,
+.panel p,
+.panel-heading p,
+.storefront-builder-section p,
+.storefront-builder-section label,
+.form-error,
+.form-success,
+.storefront-message {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.sidebar nav a,
+.sidebar-bottom > a {
+  font-size: 14px;
+}
+
+.kpi-grid article > span {
+  font-size: 12px;
+}
+
+.kpi-grid small {
+  font-size: 11px;
+}
+
+.attention-row div strong,
+.compact-list strong {
+  font-size: 13px;
+}
+
+.attention-row div p,
+.attention-row > small,
+.compact-list small {
+  font-size: 11px;
+}
+
+.workspace-header strong {
+  font-size: 17px;
+}
+
+.workspace-header small {
+  font-size: 11px;
+}
+
+.panel-heading h2 {
+  font-size: 18px;
+}
+
+.dashboard-intro h1 {
+  font-size: 34px;
 }
