@@ -102,7 +102,7 @@ export function PublicStorefront() {
               {!!selectedService.benefits.length && (
                 <ul>{selectedService.benefits.map((benefit: string) => <li key={benefit}>{benefit}</li>)}</ul>
               )}
-              {selectedService.startingPrice && <strong>Starting at ${Number(selectedService.startingPrice).toFixed(0)}</strong>}
+              {selectedService.startingPrice && <strong>{selectedService.startingPrice}</strong>}
               <a href="#request">Request {selectedService.name}</a>
             </div>
             {selectedService.imageUrl && <img src={selectedService.imageUrl} alt={selectedService.name} />}
@@ -119,7 +119,7 @@ export function PublicStorefront() {
               <div>
                 <h3>{service.name}</h3>
                 <p>{service.description}</p>
-                {service.startingPrice && <strong>Starting at ${Number(service.startingPrice).toFixed(0)}</strong>}
+                {service.startingPrice && <strong>{service.startingPrice}</strong>}
                 <a className="storefront-service-link" href={`/p/?business=${encodeURIComponent(slug)}&service=${encodeURIComponent(service.id)}`}>View service details →</a>
               </div>
             </article>

@@ -103,7 +103,8 @@ async function profile(req, res, slug) {
           pageBody: presentation[item.id]?.pageBody || `Get dependable ${(presentation[item.id]?.title || item.name).toLowerCase()} from experienced local professionals.`,
           benefits: String(presentation[item.id]?.benefits || '')
             .split('\n').map(value => value.trim()).filter(Boolean),
-          startingPrice: item.basePrice
+          startingPrice: presentation[item.id]?.startingPrice
+            ?? (Number(item.basePrice) > 0 ? `Starting at $${Number(item.basePrice).toFixed(0)}` : '')
         }))
     }
   });

@@ -19,10 +19,16 @@ type ServicePresentation = {
   title?: string;
   description?: string;
   imageUrl?: string;
+  startingPrice?: string;
   pageHeadline?: string;
   pageBody?: string;
   benefits?: string;
 };
+
+function normalizeStartingPrice(value: string) {
+  const trimmed = value.trim();
+  return /^(?:\$?\s*0+(?:\.0+)?|starting (?:at|from)\s+\$?\s*0+(?:\.0+)?)$/i.test(trimmed) ? '' : trimmed;
+}
 
 function suggestedPresentation(service: Service): ServicePresentation {
   const name = service.name.trim();
@@ -31,6 +37,7 @@ function suggestedPresentation(service: Service): ServicePresentation {
     title: name,
     description: service.description || `Professional ${name.toLowerCase()} delivered by experienced local specialists.`,
     imageUrl: image?.value || '',
+    startingPrice: service.basePrice && service.basePrice > 0 ? `Starting at $${service.basePrice}` : '',
     pageHeadline: `${name} you can depend on`,
     pageBody: `Get dependable ${name.toLowerCase()} from a team focused on quality workmanship, clear communication, and a smooth customer experience from request through completion.`,
     benefits: `Experienced service professionals\nClear scheduling and communication\nQuality work tailored to your needs`,
@@ -347,7 +354,7 @@ export function StorefrontBuilder() {
         name: String(fields.get('serviceName') || '').trim(),
         description: String(fields.get('serviceDescription') || '').trim(),
         category: 'public',
-        basePrice: Number(fields.get('servicePrice') || 0),
+        basePrice: 0,
         unitCost: 0,
         taxable: true,
         active: true,
@@ -365,7 +372,10 @@ export function StorefrontBuilder() {
     setSelectedServiceIds((current) => [...new Set([...current, body.data.id])]);
     setServicePresentation((current) => ({
       ...current,
-      [body.data.id]: suggestedPresentation(body.data),
+      [body.data.id]: {
+        ...suggestedPresentation(body.data),
+        startingPrice: normalizeStartingPrice(String(fields.get('servicePrice') || '')),
+      },
     }));
     setMessage(`${body.data.name} was added and selected. Save the storefront to publish it.`);
     form.reset();
@@ -493,8 +503,8 @@ export function StorefrontBuilder() {
             <input name="serviceDescription" placeholder="Fast help when you need it most" />
           </label>
           <label>
-            Starting price
-            <input name="servicePrice" type="number" min="0" step="0.01" defaultValue="0" />
+            Public price text
+            <input name="servicePrice" type="text" placeholder="Free estimate, From $129, or leave blank" />
           </label>
         </div>
         <button className="button button-small" disabled={addingService}>
@@ -603,18 +613,16 @@ export function StorefrontBuilder() {
                       />
                     </label>
                     <label>
-                      Starting price ($)
+                      Public price text
                       <input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        defaultValue={service.basePrice || 0}
-                        onBlur={async (event) => {
-                          const price = Number(event.target.value);
-                          if (price === (service.basePrice || 0)) return;
-                          await authFetch(`/api/v1/services/${service.id}`, { method: 'PATCH', body: JSON.stringify({ basePrice: price }) });
-                          setServices(prev => prev.map(s => s.id === service.id ? { ...s, basePrice: price } as any : s));
-                        }}
+                        type="text"
+                        value={servicePresentation[service.id]?.startingPrice || ''}
+                        placeholder="Free estimate, From $129, or leave blank"
+                        onChange={(event) => updatePresentation(
+                          service.id,
+                          'startingPrice',
+                          normalizeStartingPrice(event.target.value),
+                        )}
                       />
                     </label>
                     <label>
