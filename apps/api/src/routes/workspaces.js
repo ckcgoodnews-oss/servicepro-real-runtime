@@ -60,4 +60,19 @@ async function deleteWorkspace(req, res, tenantId) {
   }
 }
 
-module.exports = { list, current, switchTenant, deleteWorkspace };
+async function renameWorkspace(req, res, tenantId) {
+  if (!isPlatformAdmin(req)) return deny(res);
+  try {
+    const { name } = req.body || {};
+    if (!name || !String(name).trim()) return sendJson(res, 400, { error: { code: 'validation_failed', message: 'Workspace name is required' } });
+    const workspace = await req.context.repositories.workspaces.find(tenantId);
+    if (!workspace) return sendJson(res, 404, { error: { code: 'workspace_not_found', message: 'Workspace not found' } });
+    await req.context.repositories.store.query('UPDATE tenants SET name = $1 WHERE tenant_key = $2', [String(name).trim(), tenantId]);
+    return sendJson(res, 200, { data: { tenantId, name: String(name).trim() } });
+  } catch (err) {
+    console.error('[workspaces.rename] Error:', err?.message || err);
+    return sendJson(res, 500, { error: { code: 'internal_error', message: err?.message || 'Failed to rename workspace' } });
+  }
+}
+
+module.exports = { list, current, switchTenant, deleteWorkspace, renameWorkspace };

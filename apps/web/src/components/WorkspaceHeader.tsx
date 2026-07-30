@@ -75,12 +75,33 @@ export function WorkspaceHeader({ platformAdmin }: { platformAdmin: boolean }) {
     window.location.reload();
   }
 
+  async function renameCurrentWorkspace() {
+    const active = current?.tenantId || tenantId();
+    if (!active) return;
+    const newName = prompt('Enter new workspace name:', current?.name || '');
+    if (!newName || !newName.trim()) return;
+    setSwitching(true);
+    const response = await authFetch(`/api/v1/admin/workspaces/${encodeURIComponent(active)}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ name: newName.trim() })
+    });
+    setSwitching(false);
+    if (!response.ok) {
+      const body = await response.json().catch(() => null);
+      setSwitchError(body?.error?.message || 'Unable to rename workspace.');
+      return;
+    }
+    setCurrent(prev => prev ? { ...prev, name: newName.trim() } : prev);
+    setOptions(prev => prev.map(w => w.tenantId === active ? { ...w, name: newName.trim() } : w));
+  }
+
   return <div className="workspace-selector">
     <span>Active workspace</span>
     <input value={query} onChange={event => setQuery(event.target.value)} placeholder="Search businesses" aria-label="Search business workspaces" />
     <select value={current?.tenantId || tenantId()} disabled={switching} onChange={event => void switchWorkspace(event.target.value)} aria-label="Switch active workspace">
       {filtered.map(workspace => <option value={workspace.tenantId} key={workspace.id}>{workspace.name} · {workspace.tenantId}</option>)}
     </select>
+    <button type="button" className="workspace-rename-btn" disabled={switching} onClick={renameCurrentWorkspace} title="Rename this workspace">✏️</button>
     <button type="button" className="workspace-delete-btn" disabled={switching} onClick={deleteCurrentWorkspace} title="Delete this workspace">🗑</button>
     {switchError && <small className="workspace-switch-error" role="alert">{switchError}</small>}
   </div>;

@@ -55,3 +55,22 @@
   opacity: 0.5;
   cursor: wait;
 }
+
+.workspace-rename-btn {
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 6px;
+  background: rgba(255,255,255,.08);
+  color: #b9cfca;
+  padding: 6px 10px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.workspace-rename-btn:hover {
+  background: rgba(255,255,255,.18);
+  color: white;
+}
+.workspace-rename-btn:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
