@@ -15,6 +15,6 @@ assert.strictEqual(appointments.update('tenant_a', appointment.id, { technicianI
 
 const read = file => fs.readFileSync(path.join(__dirname, '..', file), 'utf8');
 const component = read('apps/web/src/components/WorkOrderWorkspace.tsx');
-for (const label of ['Search work orders', "'kanban'", "'calendar'", 'Save assignment', 'Move to']) assert.match(component, new RegExp(label));
+for (const label of ['Search work orders', "'kanban'", "'calendar'", 'Save assignment', 'Move to', 'Cancel work order', 'Postpone', 'Permanently delete']) assert.match(component, new RegExp(label));
 assert.match(read('packages/database/postgres/723_work_order_experience.sql'), /idx_jobs_tenant_status_priority/);
 console.log('Sprint 723 work order experience test passed.');

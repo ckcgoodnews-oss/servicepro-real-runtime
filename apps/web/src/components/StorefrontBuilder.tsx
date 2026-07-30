@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from 'react';
 import { authFetch } from '@/auth/session';
+import { SERVICE_IMAGE_OPTIONS, suggestedServiceImage } from '@/data/serviceImageLibrary';
 
 type Service = {
   id: string;
@@ -21,9 +22,11 @@ type ServicePresentation = {
 
 function suggestedPresentation(service: Service): ServicePresentation {
   const name = service.name.trim();
+  const image = suggestedServiceImage(name);
   return {
     title: name,
     description: service.description || `Professional ${name.toLowerCase()} delivered by experienced local specialists.`,
+    imageUrl: image?.value || '',
     pageHeadline: `${name} you can depend on`,
     pageBody: `Get dependable ${name.toLowerCase()} from a team focused on quality workmanship, clear communication, and a smooth customer experience from request through completion.`,
     benefits: `Experienced service professionals\nClear scheduling and communication\nQuality work tailored to your needs`,
@@ -241,6 +244,12 @@ export function StorefrontBuilder() {
 
   if (!settings) return <section className="panel">Loading storefront builder...</section>;
   const branding = settings.branding || {};
+  const activePackCode = starterPack?.services
+    ?.map((service: { imageUrl?: string }) => service.imageUrl?.match(/\/services\/(pack-[^/]+)\//)?.[1])
+    .find(Boolean);
+  const serviceImageOptions = activePackCode
+    ? SERVICE_IMAGE_OPTIONS.filter((option) => option.packCode === activePackCode)
+    : SERVICE_IMAGE_OPTIONS;
 
   return (
     <section className="panel storefront-builder">
@@ -439,7 +448,12 @@ export function StorefrontBuilder() {
                         }}
                       >
                         <option value="">None</option>
-                        {INDUSTRY_IMAGE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                        <optgroup label={activePackCode ? 'Recommended service images' : 'Service images'}>
+                          {serviceImageOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                        </optgroup>
+                        <optgroup label="Industry images">
+                          {INDUSTRY_IMAGE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                        </optgroup>
                         <option value="custom">Custom URL...</option>
                       </select>
                       {(servicePresentation[service.id]?.imageUrl === 'custom' || (servicePresentation[service.id]?.imageUrl && !(servicePresentation[service.id]?.imageUrl ?? '').startsWith('/storefront/'))) && (

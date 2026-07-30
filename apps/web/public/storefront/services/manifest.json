@@ -82,6 +82,160 @@
                 "y_end_pct": 90
               }
             }
+          },
+          "ceiling-fan": {
+            "file_name": "pack-electrical/ceiling-fan.jpg",
+            "public_url": "/storefront/services/pack-electrical/ceiling-fan.jpg",
+            "alt_text": "Professional Ceiling fan service in progress.",
+            "seo_title": "Ceiling Fan Services",
+            "seo_description": "Professional Ceiling fan service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#D49328",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#D49328"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "ev-charger": {
+            "file_name": "pack-electrical/ev-charger.jpg",
+            "public_url": "/storefront/services/pack-electrical/ev-charger.jpg",
+            "alt_text": "Professional Ev charger service in progress.",
+            "seo_title": "Ev Charger Services",
+            "seo_description": "Professional Ev charger service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#D49328",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#D49328"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "generator-install": {
+            "file_name": "pack-electrical/generator-install.jpg",
+            "public_url": "/storefront/services/pack-electrical/generator-install.jpg",
+            "alt_text": "Professional Generator install service in progress.",
+            "seo_title": "Generator Install Services",
+            "seo_description": "Professional Generator install service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#D49328",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#D49328"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "lighting-design": {
+            "file_name": "pack-electrical/lighting-design.jpg",
+            "public_url": "/storefront/services/pack-electrical/lighting-design.jpg",
+            "alt_text": "Professional Lighting design service in progress.",
+            "seo_title": "Lighting Design Services",
+            "seo_description": "Professional Lighting design service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#D49328",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#D49328"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "outlet-install": {
+            "file_name": "pack-electrical/outlet-install.jpg",
+            "public_url": "/storefront/services/pack-electrical/outlet-install.jpg",
+            "alt_text": "Professional Outlet install service in progress.",
+            "seo_title": "Outlet Install Services",
+            "seo_description": "Professional Outlet install service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#D49328",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#D49328"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "troubleshooting": {
+            "file_name": "pack-electrical/troubleshooting.jpg",
+            "public_url": "/storefront/services/pack-electrical/troubleshooting.jpg",
+            "alt_text": "Professional Troubleshooting service in progress.",
+            "seo_title": "Troubleshooting Services",
+            "seo_description": "Professional Troubleshooting service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#D49328",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#D49328"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "whole-house-surge": {
+            "file_name": "pack-electrical/whole-house-surge.jpg",
+            "public_url": "/storefront/services/pack-electrical/whole-house-surge.jpg",
+            "alt_text": "Professional Whole house surge service in progress.",
+            "seo_title": "Whole House Surge Services",
+            "seo_description": "Professional Whole house surge service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#D49328",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#D49328"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
           }
         }
       },
@@ -146,6 +300,160 @@
                 "#63853A",
                 "#C87925",
                 "#33452B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "garden-design": {
+            "file_name": "pack-landscape/garden-design.jpg",
+            "public_url": "/storefront/services/pack-landscape/garden-design.jpg",
+            "alt_text": "Professional Garden design service in progress.",
+            "seo_title": "Garden Design Services",
+            "seo_description": "Professional Garden design service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#56843F",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#56843F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "hardscape": {
+            "file_name": "pack-landscape/hardscape.jpg",
+            "public_url": "/storefront/services/pack-landscape/hardscape.jpg",
+            "alt_text": "Professional Hardscape service in progress.",
+            "seo_title": "Hardscape Services",
+            "seo_description": "Professional Hardscape service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#56843F",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#56843F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "irrigation-install": {
+            "file_name": "pack-landscape/irrigation-install.jpg",
+            "public_url": "/storefront/services/pack-landscape/irrigation-install.jpg",
+            "alt_text": "Professional Irrigation install service in progress.",
+            "seo_title": "Irrigation Install Services",
+            "seo_description": "Professional Irrigation install service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#56843F",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#56843F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "lawn-care": {
+            "file_name": "pack-landscape/lawn-care.jpg",
+            "public_url": "/storefront/services/pack-landscape/lawn-care.jpg",
+            "alt_text": "Professional Lawn care service in progress.",
+            "seo_title": "Lawn Care Services",
+            "seo_description": "Professional Lawn care service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#56843F",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#56843F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "mulching-beds": {
+            "file_name": "pack-landscape/mulching-beds.jpg",
+            "public_url": "/storefront/services/pack-landscape/mulching-beds.jpg",
+            "alt_text": "Professional Mulching beds service in progress.",
+            "seo_title": "Mulching Beds Services",
+            "seo_description": "Professional Mulching beds service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#56843F",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#56843F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "spring-cleanup": {
+            "file_name": "pack-landscape/spring-cleanup.jpg",
+            "public_url": "/storefront/services/pack-landscape/spring-cleanup.jpg",
+            "alt_text": "Professional Spring cleanup service in progress.",
+            "seo_title": "Spring Cleanup Services",
+            "seo_description": "Professional Spring cleanup service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#56843F",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#56843F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "tree-planting": {
+            "file_name": "pack-landscape/tree-planting.jpg",
+            "public_url": "/storefront/services/pack-landscape/tree-planting.jpg",
+            "alt_text": "Professional Tree planting service in progress.",
+            "seo_title": "Tree Planting Services",
+            "seo_description": "Professional Tree planting service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#56843F",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#56843F"
               ],
               "recommended_overlay_color": "rgba(0,0,0,0.5)",
               "safe_text_area_coordinates": {
@@ -228,6 +536,94 @@
                 "y_end_pct": 90
               }
             }
+          },
+          "pet-odor-treatment": {
+            "file_name": "pack-carpet/pet-odor-treatment.jpg",
+            "public_url": "/storefront/services/pack-carpet/pet-odor-treatment.jpg",
+            "alt_text": "Professional Pet odor treatment service in progress.",
+            "seo_title": "Pet Odor Treatment Services",
+            "seo_description": "Professional Pet odor treatment service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#9B6F4F",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#9B6F4F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "stain-removal": {
+            "file_name": "pack-carpet/stain-removal.jpg",
+            "public_url": "/storefront/services/pack-carpet/stain-removal.jpg",
+            "alt_text": "Professional Stain removal service in progress.",
+            "seo_title": "Stain Removal Services",
+            "seo_description": "Professional Stain removal service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#9B6F4F",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#9B6F4F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "steam-cleaning": {
+            "file_name": "pack-carpet/steam-cleaning.jpg",
+            "public_url": "/storefront/services/pack-carpet/steam-cleaning.jpg",
+            "alt_text": "Professional Steam cleaning service in progress.",
+            "seo_title": "Steam Cleaning Services",
+            "seo_description": "Professional Steam cleaning service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#9B6F4F",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#9B6F4F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "upholstery-cleaning": {
+            "file_name": "pack-carpet/upholstery-cleaning.jpg",
+            "public_url": "/storefront/services/pack-carpet/upholstery-cleaning.jpg",
+            "alt_text": "Professional Upholstery cleaning service in progress.",
+            "seo_title": "Upholstery Cleaning Services",
+            "seo_description": "Professional Upholstery cleaning service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#9B6F4F",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#9B6F4F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
           }
         }
       },
@@ -296,6 +692,160 @@
               "recommended_overlay_color": "rgba(0,0,0,0.5)",
               "safe_text_area_coordinates": {
                 "x_start_pct": 55,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "ac-repair": {
+            "file_name": "pack-hvac/ac-repair.jpg",
+            "public_url": "/storefront/services/pack-hvac/ac-repair.jpg",
+            "alt_text": "Professional Ac repair service in progress.",
+            "seo_title": "Ac Repair Services",
+            "seo_description": "Professional Ac repair service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#3C7EC4",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#3C7EC4"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "ductwork": {
+            "file_name": "pack-hvac/ductwork.jpg",
+            "public_url": "/storefront/services/pack-hvac/ductwork.jpg",
+            "alt_text": "Professional Ductwork service in progress.",
+            "seo_title": "Ductwork Services",
+            "seo_description": "Professional Ductwork service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#3C7EC4",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#3C7EC4"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "emergency-heating": {
+            "file_name": "pack-hvac/emergency-heating.jpg",
+            "public_url": "/storefront/services/pack-hvac/emergency-heating.jpg",
+            "alt_text": "Professional Emergency heating service in progress.",
+            "seo_title": "Emergency Heating Services",
+            "seo_description": "Professional Emergency heating service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#3C7EC4",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#3C7EC4"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "furnace-tuneup": {
+            "file_name": "pack-hvac/furnace-tuneup.jpg",
+            "public_url": "/storefront/services/pack-hvac/furnace-tuneup.jpg",
+            "alt_text": "Professional Furnace tuneup service in progress.",
+            "seo_title": "Furnace Tuneup Services",
+            "seo_description": "Professional Furnace tuneup service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#3C7EC4",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#3C7EC4"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "indoor-air-quality": {
+            "file_name": "pack-hvac/indoor-air-quality.jpg",
+            "public_url": "/storefront/services/pack-hvac/indoor-air-quality.jpg",
+            "alt_text": "Professional Indoor air quality service in progress.",
+            "seo_title": "Indoor Air Quality Services",
+            "seo_description": "Professional Indoor air quality service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#3C7EC4",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#3C7EC4"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "mini-split-install": {
+            "file_name": "pack-hvac/mini-split-install.jpg",
+            "public_url": "/storefront/services/pack-hvac/mini-split-install.jpg",
+            "alt_text": "Professional Mini split install service in progress.",
+            "seo_title": "Mini Split Install Services",
+            "seo_description": "Professional Mini split install service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#3C7EC4",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#3C7EC4"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "thermostat-install": {
+            "file_name": "pack-hvac/thermostat-install.jpg",
+            "public_url": "/storefront/services/pack-hvac/thermostat-install.jpg",
+            "alt_text": "Professional Thermostat install service in progress.",
+            "seo_title": "Thermostat Install Services",
+            "seo_description": "Professional Thermostat install service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#3C7EC4",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#3C7EC4"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
                 "y_start_pct": 10,
                 "x_end_pct": 95,
                 "y_end_pct": 90
@@ -374,6 +924,226 @@
                 "y_end_pct": 90
               }
             }
+          },
+          "consultation": {
+            "file_name": "pack-plumbing/consultation.jpg",
+            "public_url": "/storefront/services/pack-plumbing/consultation.jpg",
+            "alt_text": "Professional Consultation service in progress.",
+            "seo_title": "Consultation Services",
+            "seo_description": "Professional Consultation service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#247D70"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "drain-cleaning": {
+            "file_name": "pack-plumbing/drain-cleaning.jpg",
+            "public_url": "/storefront/services/pack-plumbing/drain-cleaning.jpg",
+            "alt_text": "Professional Drain cleaning service in progress.",
+            "seo_title": "Drain Cleaning Services",
+            "seo_description": "Professional Drain cleaning service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#247D70"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "emergency-plumbing": {
+            "file_name": "pack-plumbing/emergency-plumbing.jpg",
+            "public_url": "/storefront/services/pack-plumbing/emergency-plumbing.jpg",
+            "alt_text": "Professional Emergency plumbing service in progress.",
+            "seo_title": "Emergency Plumbing Services",
+            "seo_description": "Professional Emergency plumbing service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#247D70"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "gas-line-service": {
+            "file_name": "pack-plumbing/gas-line-service.jpg",
+            "public_url": "/storefront/services/pack-plumbing/gas-line-service.jpg",
+            "alt_text": "Professional Gas line service service in progress.",
+            "seo_title": "Gas Line Service Services",
+            "seo_description": "Professional Gas line service service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#247D70"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "leak-detection": {
+            "file_name": "pack-plumbing/leak-detection.jpg",
+            "public_url": "/storefront/services/pack-plumbing/leak-detection.jpg",
+            "alt_text": "Professional Leak detection service in progress.",
+            "seo_title": "Leak Detection Services",
+            "seo_description": "Professional Leak detection service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#247D70"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "preventive-maintenance": {
+            "file_name": "pack-plumbing/preventive-maintenance.jpg",
+            "public_url": "/storefront/services/pack-plumbing/preventive-maintenance.jpg",
+            "alt_text": "Professional Preventive maintenance service in progress.",
+            "seo_title": "Preventive Maintenance Services",
+            "seo_description": "Professional Preventive maintenance service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#247D70"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "repair-service": {
+            "file_name": "pack-plumbing/repair-service.jpg",
+            "public_url": "/storefront/services/pack-plumbing/repair-service.jpg",
+            "alt_text": "Professional Repair service service in progress.",
+            "seo_title": "Repair Service Services",
+            "seo_description": "Professional Repair service service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#247D70"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "repiping": {
+            "file_name": "pack-plumbing/repiping.jpg",
+            "public_url": "/storefront/services/pack-plumbing/repiping.jpg",
+            "alt_text": "Professional Repiping service in progress.",
+            "seo_title": "Repiping Services",
+            "seo_description": "Professional Repiping service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#247D70"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "sewer-camera": {
+            "file_name": "pack-plumbing/sewer-camera.jpg",
+            "public_url": "/storefront/services/pack-plumbing/sewer-camera.jpg",
+            "alt_text": "Professional Sewer camera service in progress.",
+            "seo_title": "Sewer Camera Services",
+            "seo_description": "Professional Sewer camera service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#247D70"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "water-heater-diagnostic": {
+            "file_name": "pack-plumbing/water-heater-diagnostic.jpg",
+            "public_url": "/storefront/services/pack-plumbing/water-heater-diagnostic.jpg",
+            "alt_text": "Professional Water heater diagnostic service in progress.",
+            "seo_title": "Water Heater Diagnostic Services",
+            "seo_description": "Professional Water heater diagnostic service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#247D70"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
           }
         }
       },
@@ -437,6 +1207,94 @@
               "dominant_colors": [
                 "#EEE9DF",
                 "#3C454B",
+                "#5C91A8"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "bathroom-cleaning": {
+            "file_name": "pack-residential-cleaning/bathroom-cleaning.jpg",
+            "public_url": "/storefront/services/pack-residential-cleaning/bathroom-cleaning.jpg",
+            "alt_text": "Professional Bathroom cleaning service in progress.",
+            "seo_title": "Bathroom Cleaning Services",
+            "seo_description": "Professional Bathroom cleaning service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#5C91A8",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#5C91A8"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "deep-cleaning": {
+            "file_name": "pack-residential-cleaning/deep-cleaning.jpg",
+            "public_url": "/storefront/services/pack-residential-cleaning/deep-cleaning.jpg",
+            "alt_text": "Professional Deep cleaning service in progress.",
+            "seo_title": "Deep Cleaning Services",
+            "seo_description": "Professional Deep cleaning service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#5C91A8",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#5C91A8"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "move-in-move-out": {
+            "file_name": "pack-residential-cleaning/move-in-move-out.jpg",
+            "public_url": "/storefront/services/pack-residential-cleaning/move-in-move-out.jpg",
+            "alt_text": "Professional Move in move out service in progress.",
+            "seo_title": "Move In Move Out Services",
+            "seo_description": "Professional Move in move out service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#5C91A8",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#5C91A8"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "recurring-housekeeping": {
+            "file_name": "pack-residential-cleaning/recurring-housekeeping.jpg",
+            "public_url": "/storefront/services/pack-residential-cleaning/recurring-housekeeping.jpg",
+            "alt_text": "Professional Recurring housekeeping service in progress.",
+            "seo_title": "Recurring Housekeeping Services",
+            "seo_description": "Professional Recurring housekeeping service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#5C91A8",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
                 "#5C91A8"
               ],
               "recommended_overlay_color": "rgba(0,0,0,0.5)",
@@ -520,6 +1378,94 @@
                 "y_end_pct": 90
               }
             }
+          },
+          "floor-care": {
+            "file_name": "pack-commercial-cleaning/floor-care.jpg",
+            "public_url": "/storefront/services/pack-commercial-cleaning/floor-care.jpg",
+            "alt_text": "Professional Floor care service in progress.",
+            "seo_title": "Floor Care Services",
+            "seo_description": "Professional Floor care service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#397B89",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#397B89"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "office-cleaning": {
+            "file_name": "pack-commercial-cleaning/office-cleaning.jpg",
+            "public_url": "/storefront/services/pack-commercial-cleaning/office-cleaning.jpg",
+            "alt_text": "Professional Office cleaning service in progress.",
+            "seo_title": "Office Cleaning Services",
+            "seo_description": "Professional Office cleaning service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#397B89",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#397B89"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "post-construction-cleanup": {
+            "file_name": "pack-commercial-cleaning/post-construction-cleanup.jpg",
+            "public_url": "/storefront/services/pack-commercial-cleaning/post-construction-cleanup.jpg",
+            "alt_text": "Professional Post construction cleanup service in progress.",
+            "seo_title": "Post Construction Cleanup Services",
+            "seo_description": "Professional Post construction cleanup service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#397B89",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#397B89"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "restroom-sanitation": {
+            "file_name": "pack-commercial-cleaning/restroom-sanitation.jpg",
+            "public_url": "/storefront/services/pack-commercial-cleaning/restroom-sanitation.jpg",
+            "alt_text": "Professional Restroom sanitation service in progress.",
+            "seo_title": "Restroom Sanitation Services",
+            "seo_description": "Professional Restroom sanitation service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#397B89",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#397B89"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
           }
         }
       },
@@ -583,6 +1529,94 @@
               "dominant_colors": [
                 "#E8E2D8",
                 "#403C31",
+                "#75613B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "bed-bug-treatment": {
+            "file_name": "pack-pest-control/bed-bug-treatment.jpg",
+            "public_url": "/storefront/services/pack-pest-control/bed-bug-treatment.jpg",
+            "alt_text": "Professional Bed bug treatment service in progress.",
+            "seo_title": "Bed Bug Treatment Services",
+            "seo_description": "Professional Bed bug treatment service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#75613B",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#75613B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "mosquito-control": {
+            "file_name": "pack-pest-control/mosquito-control.jpg",
+            "public_url": "/storefront/services/pack-pest-control/mosquito-control.jpg",
+            "alt_text": "Professional Mosquito control service in progress.",
+            "seo_title": "Mosquito Control Services",
+            "seo_description": "Professional Mosquito control service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#75613B",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#75613B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "rodent-control": {
+            "file_name": "pack-pest-control/rodent-control.jpg",
+            "public_url": "/storefront/services/pack-pest-control/rodent-control.jpg",
+            "alt_text": "Professional Rodent control service in progress.",
+            "seo_title": "Rodent Control Services",
+            "seo_description": "Professional Rodent control service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#75613B",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#75613B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "termite-treatment": {
+            "file_name": "pack-pest-control/termite-treatment.jpg",
+            "public_url": "/storefront/services/pack-pest-control/termite-treatment.jpg",
+            "alt_text": "Professional Termite treatment service in progress.",
+            "seo_title": "Termite Treatment Services",
+            "seo_description": "Professional Termite treatment service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#75613B",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
                 "#75613B"
               ],
               "recommended_overlay_color": "rgba(0,0,0,0.5)",
@@ -666,6 +1700,94 @@
                 "y_end_pct": 90
               }
             }
+          },
+          "gutter-installation": {
+            "file_name": "pack-roofing/gutter-installation.jpg",
+            "public_url": "/storefront/services/pack-roofing/gutter-installation.jpg",
+            "alt_text": "Professional Gutter installation service in progress.",
+            "seo_title": "Gutter Installation Services",
+            "seo_description": "Professional Gutter installation service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#8A4F42",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#8A4F42"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "roof-repair": {
+            "file_name": "pack-roofing/roof-repair.jpg",
+            "public_url": "/storefront/services/pack-roofing/roof-repair.jpg",
+            "alt_text": "Professional Roof repair service in progress.",
+            "seo_title": "Roof Repair Services",
+            "seo_description": "Professional Roof repair service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#8A4F42",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#8A4F42"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "roof-replacement": {
+            "file_name": "pack-roofing/roof-replacement.jpg",
+            "public_url": "/storefront/services/pack-roofing/roof-replacement.jpg",
+            "alt_text": "Professional Roof replacement service in progress.",
+            "seo_title": "Roof Replacement Services",
+            "seo_description": "Professional Roof replacement service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#8A4F42",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#8A4F42"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "storm-damage-inspection": {
+            "file_name": "pack-roofing/storm-damage-inspection.jpg",
+            "public_url": "/storefront/services/pack-roofing/storm-damage-inspection.jpg",
+            "alt_text": "Professional Storm damage inspection service in progress.",
+            "seo_title": "Storm Damage Inspection Services",
+            "seo_description": "Professional Storm damage inspection service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#8A4F42",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#8A4F42"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
           }
         }
       },
@@ -729,6 +1851,94 @@
               "dominant_colors": [
                 "#E6E1D8",
                 "#373B3F",
+                "#596879"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "door-replacement": {
+            "file_name": "pack-garage-door/door-replacement.jpg",
+            "public_url": "/storefront/services/pack-garage-door/door-replacement.jpg",
+            "alt_text": "Professional Door replacement service in progress.",
+            "seo_title": "Door Replacement Services",
+            "seo_description": "Professional Door replacement service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#596879",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#596879"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "opener-installation": {
+            "file_name": "pack-garage-door/opener-installation.jpg",
+            "public_url": "/storefront/services/pack-garage-door/opener-installation.jpg",
+            "alt_text": "Professional Opener installation service in progress.",
+            "seo_title": "Opener Installation Services",
+            "seo_description": "Professional Opener installation service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#596879",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#596879"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "safety-inspection": {
+            "file_name": "pack-garage-door/safety-inspection.jpg",
+            "public_url": "/storefront/services/pack-garage-door/safety-inspection.jpg",
+            "alt_text": "Professional Safety inspection service in progress.",
+            "seo_title": "Safety Inspection Services",
+            "seo_description": "Professional Safety inspection service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#596879",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#596879"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "spring-replacement": {
+            "file_name": "pack-garage-door/spring-replacement.jpg",
+            "public_url": "/storefront/services/pack-garage-door/spring-replacement.jpg",
+            "alt_text": "Professional Spring replacement service in progress.",
+            "seo_title": "Spring Replacement Services",
+            "seo_description": "Professional Spring replacement service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#596879",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
                 "#596879"
               ],
               "recommended_overlay_color": "rgba(0,0,0,0.5)",
@@ -812,6 +2022,94 @@
                 "y_end_pct": 90
               }
             }
+          },
+          "dishwasher-repair": {
+            "file_name": "pack-appliance-repair/dishwasher-repair.jpg",
+            "public_url": "/storefront/services/pack-appliance-repair/dishwasher-repair.jpg",
+            "alt_text": "Professional Dishwasher repair service in progress.",
+            "seo_title": "Dishwasher Repair Services",
+            "seo_description": "Professional Dishwasher repair service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#536FA3",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#536FA3"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "oven-range-repair": {
+            "file_name": "pack-appliance-repair/oven-range-repair.jpg",
+            "public_url": "/storefront/services/pack-appliance-repair/oven-range-repair.jpg",
+            "alt_text": "Professional Oven range repair service in progress.",
+            "seo_title": "Oven Range Repair Services",
+            "seo_description": "Professional Oven range repair service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#536FA3",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#536FA3"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "refrigerator-repair": {
+            "file_name": "pack-appliance-repair/refrigerator-repair.jpg",
+            "public_url": "/storefront/services/pack-appliance-repair/refrigerator-repair.jpg",
+            "alt_text": "Professional Refrigerator repair service in progress.",
+            "seo_title": "Refrigerator Repair Services",
+            "seo_description": "Professional Refrigerator repair service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#536FA3",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#536FA3"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "washer-dryer-repair": {
+            "file_name": "pack-appliance-repair/washer-dryer-repair.jpg",
+            "public_url": "/storefront/services/pack-appliance-repair/washer-dryer-repair.jpg",
+            "alt_text": "Professional Washer dryer repair service in progress.",
+            "seo_title": "Washer Dryer Repair Services",
+            "seo_description": "Professional Washer dryer repair service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#536FA3",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#536FA3"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
           }
         }
       },
@@ -875,6 +2173,94 @@
               "dominant_colors": [
                 "#E6E1D8",
                 "#373B3F",
+                "#9A7041"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "door-repair": {
+            "file_name": "pack-handyman/door-repair.jpg",
+            "public_url": "/storefront/services/pack-handyman/door-repair.jpg",
+            "alt_text": "Professional Door repair service in progress.",
+            "seo_title": "Door Repair Services",
+            "seo_description": "Professional Door repair service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#9A7041",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#9A7041"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "drywall-repair": {
+            "file_name": "pack-handyman/drywall-repair.jpg",
+            "public_url": "/storefront/services/pack-handyman/drywall-repair.jpg",
+            "alt_text": "Professional Drywall repair service in progress.",
+            "seo_title": "Drywall Repair Services",
+            "seo_description": "Professional Drywall repair service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#9A7041",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#9A7041"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "furniture-assembly": {
+            "file_name": "pack-handyman/furniture-assembly.jpg",
+            "public_url": "/storefront/services/pack-handyman/furniture-assembly.jpg",
+            "alt_text": "Professional Furniture assembly service in progress.",
+            "seo_title": "Furniture Assembly Services",
+            "seo_description": "Professional Furniture assembly service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#9A7041",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
+                "#9A7041"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "tv-mounting": {
+            "file_name": "pack-handyman/tv-mounting.jpg",
+            "public_url": "/storefront/services/pack-handyman/tv-mounting.jpg",
+            "alt_text": "Professional Tv mounting service in progress.",
+            "seo_title": "Tv Mounting Services",
+            "seo_description": "Professional Tv mounting service delivered with care and expertise.",
+            "design_tokens": {
+              "primary_accent_color": "#9A7041",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#3E4548",
                 "#9A7041"
               ],
               "recommended_overlay_color": "rgba(0,0,0,0.5)",
