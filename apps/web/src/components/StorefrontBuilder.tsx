@@ -2,7 +2,10 @@
 
 import { FormEvent, useEffect, useState } from 'react';
 import { authFetch } from '@/auth/session';
-import { suggestedServiceImage } from '@/data/serviceImageLibrary';
+import {
+  SERVICE_IMAGE_OPTIONS as SERVICE_IMAGE_LIBRARY,
+  suggestedServiceImage,
+} from '@/data/serviceImageLibrary';
 
 type Service = {
   id: string;
@@ -219,6 +222,19 @@ const SERVICE_IMAGE_OPTIONS = [
     { value: '/storefront/services/pack-window-gutter/recurring-routes.jpg', label: 'Recurring Routes' },
   ]},
 ];
+
+const SERVICE_IMAGE_GROUPS = SERVICE_IMAGE_OPTIONS.map((group) => {
+  const packCode = group.images[0]?.value.match(/\/services\/(pack-[^/]+)\//)?.[1];
+  return {
+    industry: group.industry,
+    images: SERVICE_IMAGE_LIBRARY
+      .filter((option) => option.packCode === packCode)
+      .map((option) => ({
+        value: option.value,
+        label: option.serviceName.replace(/\b\w/g, (letter) => letter.toUpperCase()),
+      })),
+  };
+});
 
 export function StorefrontBuilder() {
   const [settings, setSettings] = useState<any>(null);
@@ -614,8 +630,8 @@ export function StorefrontBuilder() {
                         }}
                       >
                         <option value="">None</option>
-                        {SERVICE_IMAGE_OPTIONS.map(group => (
-                          <optgroup key={group.industry} label={group.industry}>
+                        {SERVICE_IMAGE_GROUPS.map(group => (
+                          <optgroup key={group.industry} label={`${group.industry} — Suggested services`}>
                             {group.images.map(img => <option key={img.value} value={img.value}>{img.label}</option>)}
                           </optgroup>
                         ))}
