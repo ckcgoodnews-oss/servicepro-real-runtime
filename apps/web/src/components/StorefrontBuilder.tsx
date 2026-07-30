@@ -295,7 +295,7 @@ export function StorefrontBuilder() {
           </small>
         </div>
         {branding.publicSlug && published && <a target="_blank" href={`/p/?business=${encodeURIComponent(branding.publicSlug)}`}>View live storefront</a>}
-        <button type="submit" form="storefront-form" className="button button-small" onClick={(e) => { e.preventDefault(); document.getElementById('storefront-form')?.requestSubmit(); }}>{published ? 'Save & publish' : 'Save draft'}</button>
+        <button type="button" className="button button-small" onClick={() => { (document.getElementById('storefront-form') as HTMLFormElement)?.requestSubmit(); }}>{published ? 'Save & publish' : 'Save draft'}</button>
       </section>
 
       <form className="storefront-service-add" id="add-service-page" onSubmit={addService}>
