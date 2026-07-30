@@ -9,6 +9,7 @@ type Service = {
   code: string;
   name: string;
   description?: string;
+  basePrice?: number;
 };
 
 type ServicePresentation = {
@@ -583,6 +584,21 @@ export function StorefrontBuilder() {
                         value={servicePresentation[service.id]?.title || ''}
                         placeholder={service.name}
                         onChange={(event) => updatePresentation(service.id, 'title', event.target.value)}
+                      />
+                    </label>
+                    <label>
+                      Starting price ($)
+                      <input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        defaultValue={service.basePrice || 0}
+                        onBlur={async (event) => {
+                          const price = Number(event.target.value);
+                          if (price === (service.basePrice || 0)) return;
+                          await authFetch(`/api/v1/services/${service.id}`, { method: 'PATCH', body: JSON.stringify({ basePrice: price }) });
+                          setServices(prev => prev.map(s => s.id === service.id ? { ...s, basePrice: price } as any : s));
+                        }}
                       />
                     </label>
                     <label>
