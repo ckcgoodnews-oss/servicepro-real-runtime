@@ -590,7 +590,10 @@ export function StorefrontBuilder() {
                       <select
                         value={(servicePresentation[service.id]?.imageUrl && !(servicePresentation[service.id]?.imageUrl ?? '').startsWith('/storefront/')) ? 'custom' : (servicePresentation[service.id]?.imageUrl || '')}
                         onChange={(event) => {
-                          if (event.target.value === 'custom') return;
+                          if (event.target.value === 'custom') {
+                            updatePresentation(service.id, 'imageUrl', 'custom');
+                            return;
+                          }
                           updatePresentation(service.id, 'imageUrl', event.target.value);
                         }}
                       >
