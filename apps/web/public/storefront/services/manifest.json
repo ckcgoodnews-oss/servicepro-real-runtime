@@ -1,0 +1,2207 @@
+{
+  "asset_library": {
+    "version": "1.0",
+    "created_date": "2026-07-30",
+    "base_path": "/storefront/services/",
+    "generated_with": "OpenAI built-in image generation",
+    "delivery": {
+      "format": "JPG",
+      "width": 1200,
+      "height": 600,
+      "quality": 85,
+      "color_space": "sRGB"
+    },
+    "packs": {
+      "pack-electrical": {
+        "industry_id": "electrical",
+        "display_name": "Electrical Contractor Pack",
+        "primary_accent_color": "#D49328",
+        "services": {
+          "electrical-inspections": {
+            "file_name": "pack-electrical/electrical-inspections.jpg",
+            "public_url": "/storefront/services/pack-electrical/electrical-inspections.jpg",
+            "alt_text": "Licensed electrician testing a residential outlet during a comprehensive electrical inspection.",
+            "seo_title": "Professional Electrical Safety Inspections",
+            "seo_description": "Thorough residential electrical inspections performed with professional diagnostic equipment.",
+            "design_tokens": {
+              "primary_accent_color": "#D49328",
+              "dominant_colors": [
+                "#EEEAE3",
+                "#282A2C",
+                "#B1834D"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "panel-schedules": {
+            "file_name": "pack-electrical/panel-schedules.jpg",
+            "public_url": "/storefront/services/pack-electrical/panel-schedules.jpg",
+            "alt_text": "Licensed electrician documenting circuit positions at a modern residential electrical panel.",
+            "seo_title": "Accurate Electrical Panel Schedules",
+            "seo_description": "Professional circuit identification and panel documentation for safer, clearer electrical service.",
+            "design_tokens": {
+              "primary_accent_color": "#D49328",
+              "dominant_colors": [
+                "#D8D4CF",
+                "#303033",
+                "#A66C26"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "permit-tracking": {
+            "file_name": "pack-electrical/permit-tracking.jpg",
+            "public_url": "/storefront/services/pack-electrical/permit-tracking.jpg",
+            "alt_text": "Electrical project supervisor documenting permit progress at a modern commercial renovation.",
+            "seo_title": "Electrical Permit and Inspection Tracking",
+            "seo_description": "Organized electrical permit progress and inspection readiness for commercial project delivery.",
+            "design_tokens": {
+              "primary_accent_color": "#D49328",
+              "dominant_colors": [
+                "#D8D2C7",
+                "#343536",
+                "#C18A35"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-landscape": {
+        "industry_id": "landscaping",
+        "display_name": "Landscaping Operations Pack",
+        "primary_accent_color": "#56843F",
+        "services": {
+          "crew-routing": {
+            "file_name": "pack-landscape/crew-routing.jpg",
+            "public_url": "/storefront/services/pack-landscape/crew-routing.jpg",
+            "alt_text": "Landscape crew leader reviewing a route while an organized crew prepares equipment.",
+            "seo_title": "Professional Landscaping Crew Routing",
+            "seo_description": "Coordinated landscaping crews and efficient service routes for dependable property care.",
+            "design_tokens": {
+              "primary_accent_color": "#56843F",
+              "dominant_colors": [
+                "#7C9162",
+                "#273421",
+                "#C5B99D"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "property-zones": {
+            "file_name": "pack-landscape/property-zones.jpg",
+            "public_url": "/storefront/services/pack-landscape/property-zones.jpg",
+            "alt_text": "Landscape supervisor measuring service zones at an upscale residential property.",
+            "seo_title": "Landscape Property Zone Planning",
+            "seo_description": "Detailed landscape zone planning for lawns, beds, hardscapes, and recurring property service.",
+            "design_tokens": {
+              "primary_accent_color": "#56843F",
+              "dominant_colors": [
+                "#62833B",
+                "#2E3927",
+                "#B49D75"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 55,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "seasonal-work": {
+            "file_name": "pack-landscape/seasonal-work.jpg",
+            "public_url": "/storefront/services/pack-landscape/seasonal-work.jpg",
+            "alt_text": "Landscape technician completing autumn cleanup at a manicured residential property.",
+            "seo_title": "Professional Seasonal Landscape Work",
+            "seo_description": "Timely seasonal cleanup and landscape care that keeps premium properties looking their best.",
+            "design_tokens": {
+              "primary_accent_color": "#56843F",
+              "dominant_colors": [
+                "#63853A",
+                "#C87925",
+                "#33452B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-carpet": {
+        "industry_id": "carpet-cleaning",
+        "display_name": "Carpet & Upholstery Pack",
+        "primary_accent_color": "#9B6F4F",
+        "services": {
+          "recurring-service": {
+            "file_name": "pack-carpet/recurring-service.jpg",
+            "public_url": "/storefront/services/pack-carpet/recurring-service.jpg",
+            "alt_text": "Carpet-cleaning technician using professional extraction equipment in an upscale living room.",
+            "seo_title": "Recurring Carpet and Upholstery Service",
+            "seo_description": "Professional recurring carpet care that keeps residential interiors clean, comfortable, and inviting.",
+            "design_tokens": {
+              "primary_accent_color": "#9B6F4F",
+              "dominant_colors": [
+                "#E9DFCF",
+                "#3D3029",
+                "#A58464"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "room-based-estimates": {
+            "file_name": "pack-carpet/room-based-estimates.jpg",
+            "public_url": "/storefront/services/pack-carpet/room-based-estimates.jpg",
+            "alt_text": "Carpet-cleaning specialist measuring a furnished living room for a service estimate.",
+            "seo_title": "Room-Based Carpet Cleaning Estimates",
+            "seo_description": "Clear room-by-room carpet and upholstery estimates informed by careful professional measurements.",
+            "design_tokens": {
+              "primary_accent_color": "#9B6F4F",
+              "dominant_colors": [
+                "#E8DDCB",
+                "#2E3030",
+                "#936C4E"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 55,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "treatment-tracking": {
+            "file_name": "pack-carpet/treatment-tracking.jpg",
+            "public_url": "/storefront/services/pack-carpet/treatment-tracking.jpg",
+            "alt_text": "Upholstery technician applying spot treatment to a light-colored sofa and recording the service.",
+            "seo_title": "Tracked Carpet and Upholstery Treatments",
+            "seo_description": "Documented professional treatment for carpet and upholstery spots, stains, and specialty care.",
+            "design_tokens": {
+              "primary_accent_color": "#9B6F4F",
+              "dominant_colors": [
+                "#EEE8DE",
+                "#6A4934",
+                "#B79576"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-hvac": {
+        "industry_id": "hvac",
+        "display_name": "HVAC Service Pack",
+        "primary_accent_color": "#3C7EC4",
+        "services": {
+          "equipment-commissioning": {
+            "file_name": "pack-hvac/equipment-commissioning.jpg",
+            "public_url": "/storefront/services/pack-hvac/equipment-commissioning.jpg",
+            "alt_text": "Commercial HVAC technician commissioning rooftop equipment with professional diagnostic instruments.",
+            "seo_title": "Professional HVAC Equipment Commissioning",
+            "seo_description": "Careful commissioning and performance verification for newly installed commercial HVAC equipment.",
+            "design_tokens": {
+              "primary_accent_color": "#3C7EC4",
+              "dominant_colors": [
+                "#B8D5EA",
+                "#25364B",
+                "#AEB5B8"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 55,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "heating-and-cooling": {
+            "file_name": "pack-hvac/heating-and-cooling.jpg",
+            "public_url": "/storefront/services/pack-hvac/heating-and-cooling.jpg",
+            "alt_text": "HVAC technician diagnosing an outdoor heat-pump condenser at a modern residence.",
+            "seo_title": "Professional Heating and Cooling Service",
+            "seo_description": "Expert residential heating and cooling diagnostics performed with professional HVAC equipment.",
+            "design_tokens": {
+              "primary_accent_color": "#3C7EC4",
+              "dominant_colors": [
+                "#E2DED5",
+                "#31558A",
+                "#62714A"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "maintenance-agreements": {
+            "file_name": "pack-hvac/maintenance-agreements.jpg",
+            "public_url": "/storefront/services/pack-hvac/maintenance-agreements.jpg",
+            "alt_text": "HVAC technician completing scheduled furnace maintenance in a clean mechanical room.",
+            "seo_title": "HVAC Preventive Maintenance Agreements",
+            "seo_description": "Scheduled HVAC maintenance that protects comfort, equipment performance, and long-term reliability.",
+            "design_tokens": {
+              "primary_accent_color": "#3C7EC4",
+              "dominant_colors": [
+                "#E2DED7",
+                "#263247",
+                "#7C7D79"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 55,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-plumbing": {
+        "industry_id": "plumbing",
+        "display_name": "Plumbing Operations Pack",
+        "primary_accent_color": "#247D70",
+        "services": {
+          "drain-and-sewer": {
+            "file_name": "pack-plumbing/drain-and-sewer.jpg",
+            "public_url": "/storefront/services/pack-plumbing/drain-and-sewer.jpg",
+            "alt_text": "Professional plumber clearing a residential sewer cleanout with drain service equipment.",
+            "seo_title": "Professional Drain and Sewer Service",
+            "seo_description": "Dependable drain and sewer diagnostics and clearing performed by an equipped plumbing professional.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#EEE9DE",
+                "#26373D",
+                "#637C45"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 52,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "fixture-service": {
+            "file_name": "pack-plumbing/fixture-service.jpg",
+            "public_url": "/storefront/services/pack-plumbing/fixture-service.jpg",
+            "alt_text": "Professional plumber installing a modern faucet in an upscale residential bathroom.",
+            "seo_title": "Professional Plumbing Fixture Service",
+            "seo_description": "Careful faucet and fixture installation delivered in a clean, professionally maintained workspace.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#B5A58E",
+                "#20292B",
+                "#7D6A54"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "water-heaters": {
+            "file_name": "pack-plumbing/water-heaters.jpg",
+            "public_url": "/storefront/services/pack-plumbing/water-heaters.jpg",
+            "alt_text": "Professional plumber diagnosing a high-efficiency water heater in a clean utility room.",
+            "seo_title": "Professional Water Heater Service",
+            "seo_description": "Expert water-heater diagnostics and service in a clean residential mechanical space.",
+            "design_tokens": {
+              "primary_accent_color": "#247D70",
+              "dominant_colors": [
+                "#E8E4DC",
+                "#1E3536",
+                "#8F918D"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 56,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-residential-cleaning": {
+        "industry_id": "residential-cleaning",
+        "display_name": "Residential Cleaning Pack",
+        "primary_accent_color": "#5C91A8",
+        "services": {
+          "customer-preferences": {
+            "file_name": "pack-residential-cleaning/customer-preferences.jpg",
+            "public_url": "/storefront/services/pack-residential-cleaning/customer-preferences.jpg",
+            "alt_text": "Professional cleaner reviewing household service preferences with a homeowner in a bright living room.",
+            "seo_title": "Residential Cleaning Customer Preferences",
+            "seo_description": "Personalized residential cleaning guided by clearly documented household preferences.",
+            "design_tokens": {
+              "primary_accent_color": "#5C91A8",
+              "dominant_colors": [
+                "#EEEAE3",
+                "#343B43",
+                "#5C91A8"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "recurring-plans": {
+            "file_name": "pack-residential-cleaning/recurring-plans.jpg",
+            "public_url": "/storefront/services/pack-residential-cleaning/recurring-plans.jpg",
+            "alt_text": "Residential cleaning professional completing a scheduled recurring service in a bright modern home.",
+            "seo_title": "Recurring Residential Cleaning Plans",
+            "seo_description": "Reliable scheduled home cleaning delivered through an organized recurring service plan.",
+            "design_tokens": {
+              "primary_accent_color": "#5C91A8",
+              "dominant_colors": [
+                "#E9E5DC",
+                "#39434A",
+                "#5C91A8"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "room-checklists": {
+            "file_name": "pack-residential-cleaning/room-checklists.jpg",
+            "public_url": "/storefront/services/pack-residential-cleaning/room-checklists.jpg",
+            "alt_text": "Professional cleaner following a room checklist while cleaning a bright modern kitchen.",
+            "seo_title": "Room-by-Room Cleaning Checklists",
+            "seo_description": "Consistent residential cleaning supported by detailed room-specific service checklists.",
+            "design_tokens": {
+              "primary_accent_color": "#5C91A8",
+              "dominant_colors": [
+                "#EEE9DF",
+                "#3C454B",
+                "#5C91A8"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-commercial-cleaning": {
+        "industry_id": "commercial-cleaning",
+        "display_name": "Commercial Janitorial Pack",
+        "primary_accent_color": "#397B89",
+        "services": {
+          "facility-zones": {
+            "file_name": "pack-commercial-cleaning/facility-zones.jpg",
+            "public_url": "/storefront/services/pack-commercial-cleaning/facility-zones.jpg",
+            "alt_text": "Janitorial supervisor verifying cleaning zones in a modern commercial facility.",
+            "seo_title": "Commercial Janitorial Facility Zones",
+            "seo_description": "Organized facility-zone coverage for consistent commercial janitorial service.",
+            "design_tokens": {
+              "primary_accent_color": "#397B89",
+              "dominant_colors": [
+                "#E7E1D8",
+                "#343B3D",
+                "#397B89"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "quality-inspections": {
+            "file_name": "pack-commercial-cleaning/quality-inspections.jpg",
+            "public_url": "/storefront/services/pack-commercial-cleaning/quality-inspections.jpg",
+            "alt_text": "Janitorial quality inspector examining a polished commercial lobby floor.",
+            "seo_title": "Commercial Cleaning Quality Inspections",
+            "seo_description": "Professional janitorial quality inspections for consistently clean facilities.",
+            "design_tokens": {
+              "primary_accent_color": "#397B89",
+              "dominant_colors": [
+                "#E7E1D8",
+                "#343B3D",
+                "#397B89"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "supply-controls": {
+            "file_name": "pack-commercial-cleaning/supply-controls.jpg",
+            "public_url": "/storefront/services/pack-commercial-cleaning/supply-controls.jpg",
+            "alt_text": "Commercial cleaning supply manager checking organized janitorial inventory.",
+            "seo_title": "Commercial Janitorial Supply Controls",
+            "seo_description": "Organized supply controls keep commercial cleaning teams equipped and accountable.",
+            "design_tokens": {
+              "primary_accent_color": "#397B89",
+              "dominant_colors": [
+                "#E7E1D8",
+                "#343B3D",
+                "#397B89"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-pest-control": {
+        "industry_id": "pest-control",
+        "display_name": "Pest Control Pack",
+        "primary_accent_color": "#75613B",
+        "services": {
+          "compliance-logs": {
+            "file_name": "pack-pest-control/compliance-logs.jpg",
+            "public_url": "/storefront/services/pack-pest-control/compliance-logs.jpg",
+            "alt_text": "Pest-control supervisor reviewing compliance records beside secured treatment equipment.",
+            "seo_title": "Pest Control Compliance Logs",
+            "seo_description": "Accurate compliance records support safe and accountable pest-control operations.",
+            "design_tokens": {
+              "primary_accent_color": "#75613B",
+              "dominant_colors": [
+                "#E8E2D8",
+                "#403C31",
+                "#75613B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "device-monitoring": {
+            "file_name": "pack-pest-control/device-monitoring.jpg",
+            "public_url": "/storefront/services/pack-pest-control/device-monitoring.jpg",
+            "alt_text": "Pest-control technician inspecting a monitoring station in a clean commercial corridor.",
+            "seo_title": "Professional Pest Device Monitoring",
+            "seo_description": "Routine device monitoring delivers precise, proactive pest-control service.",
+            "design_tokens": {
+              "primary_accent_color": "#75613B",
+              "dominant_colors": [
+                "#E8E2D8",
+                "#403C31",
+                "#75613B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "treatment-records": {
+            "file_name": "pack-pest-control/treatment-records.jpg",
+            "public_url": "/storefront/services/pack-pest-control/treatment-records.jpg",
+            "alt_text": "Pest-control technician documenting a completed residential perimeter treatment.",
+            "seo_title": "Pest Control Treatment Records",
+            "seo_description": "Detailed treatment records provide transparent, reliable pest-control service history.",
+            "design_tokens": {
+              "primary_accent_color": "#75613B",
+              "dominant_colors": [
+                "#E8E2D8",
+                "#403C31",
+                "#75613B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-roofing": {
+        "industry_id": "roofing",
+        "display_name": "Roofing Contractor Pack",
+        "primary_accent_color": "#8A4F42",
+        "services": {
+          "claims-documentation": {
+            "file_name": "pack-roofing/claims-documentation.jpg",
+            "public_url": "/storefront/services/pack-roofing/claims-documentation.jpg",
+            "alt_text": "Roofing inspector photographing and documenting storm-related shingle damage.",
+            "seo_title": "Roofing Claims Documentation",
+            "seo_description": "Clear photographic documentation supports accurate roofing storm claims.",
+            "design_tokens": {
+              "primary_accent_color": "#8A4F42",
+              "dominant_colors": [
+                "#D8D0C5",
+                "#343536",
+                "#8A4F42"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "material-takeoffs": {
+            "file_name": "pack-roofing/material-takeoffs.jpg",
+            "public_url": "/storefront/services/pack-roofing/material-takeoffs.jpg",
+            "alt_text": "Roofing estimator verifying staged shingles and installation materials at a jobsite.",
+            "seo_title": "Roofing Material Takeoffs",
+            "seo_description": "Accurate roofing material takeoffs keep projects supplied and organized.",
+            "design_tokens": {
+              "primary_accent_color": "#8A4F42",
+              "dominant_colors": [
+                "#D8D0C5",
+                "#343536",
+                "#8A4F42"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "roof-diagrams": {
+            "file_name": "pack-roofing/roof-diagrams.jpg",
+            "public_url": "/storefront/services/pack-roofing/roof-diagrams.jpg",
+            "alt_text": "Safety-equipped roofing inspector measuring roof planes and reviewing a roof diagram.",
+            "seo_title": "Professional Roof Diagrams",
+            "seo_description": "Precise roof measurements and diagrams support reliable estimates and project planning.",
+            "design_tokens": {
+              "primary_accent_color": "#8A4F42",
+              "dominant_colors": [
+                "#D8D0C5",
+                "#343536",
+                "#8A4F42"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-garage-door": {
+        "industry_id": "garage-door",
+        "display_name": "Garage Door Service Pack",
+        "primary_accent_color": "#596879",
+        "services": {
+          "door-assets": {
+            "file_name": "pack-garage-door/door-assets.jpg",
+            "public_url": "/storefront/services/pack-garage-door/door-assets.jpg",
+            "alt_text": "Garage-door technician recording a sectional door and opener asset.",
+            "seo_title": "Garage Door Asset Records",
+            "seo_description": "Detailed door and opener records support reliable garage-door service.",
+            "design_tokens": {
+              "primary_accent_color": "#596879",
+              "dominant_colors": [
+                "#E6E1D8",
+                "#373B3F",
+                "#596879"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "safety-checks": {
+            "file_name": "pack-garage-door/safety-checks.jpg",
+            "public_url": "/storefront/services/pack-garage-door/safety-checks.jpg",
+            "alt_text": "Garage-door technician testing a residential door safety sensor.",
+            "seo_title": "Garage Door Safety Checks",
+            "seo_description": "Professional safety checks verify dependable garage-door operation.",
+            "design_tokens": {
+              "primary_accent_color": "#596879",
+              "dominant_colors": [
+                "#E6E1D8",
+                "#373B3F",
+                "#596879"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "spring-lifecycle": {
+            "file_name": "pack-garage-door/spring-lifecycle.jpg",
+            "public_url": "/storefront/services/pack-garage-door/spring-lifecycle.jpg",
+            "alt_text": "Garage-door technician inspecting a torsion spring assembly and recording its condition.",
+            "seo_title": "Garage Door Spring Lifecycle",
+            "seo_description": "Spring condition and cycle tracking support proactive garage-door maintenance.",
+            "design_tokens": {
+              "primary_accent_color": "#596879",
+              "dominant_colors": [
+                "#E6E1D8",
+                "#373B3F",
+                "#596879"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-appliance-repair": {
+        "industry_id": "appliance-repair",
+        "display_name": "Appliance Repair Pack",
+        "primary_accent_color": "#536FA3",
+        "services": {
+          "model-diagnostics": {
+            "file_name": "pack-appliance-repair/model-diagnostics.jpg",
+            "public_url": "/storefront/services/pack-appliance-repair/model-diagnostics.jpg",
+            "alt_text": "Appliance technician diagnosing a modern refrigerator with professional test equipment.",
+            "seo_title": "Appliance Model Diagnostics",
+            "seo_description": "Professional model-specific diagnostics identify appliance faults accurately.",
+            "design_tokens": {
+              "primary_accent_color": "#536FA3",
+              "dominant_colors": [
+                "#E6E1D8",
+                "#373B3F",
+                "#536FA3"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "parts-tracking": {
+            "file_name": "pack-appliance-repair/parts-tracking.jpg",
+            "public_url": "/storefront/services/pack-appliance-repair/parts-tracking.jpg",
+            "alt_text": "Appliance technician verifying organized replacement components at a service bench.",
+            "seo_title": "Appliance Repair Parts Tracking",
+            "seo_description": "Organized parts tracking keeps appliance repairs efficient and accountable.",
+            "design_tokens": {
+              "primary_accent_color": "#536FA3",
+              "dominant_colors": [
+                "#E6E1D8",
+                "#373B3F",
+                "#536FA3"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "warranty-service": {
+            "file_name": "pack-appliance-repair/warranty-service.jpg",
+            "public_url": "/storefront/services/pack-appliance-repair/warranty-service.jpg",
+            "alt_text": "Appliance technician reviewing a completed dishwasher warranty repair with a homeowner.",
+            "seo_title": "Appliance Warranty Service",
+            "seo_description": "Clear warranty-service documentation supports a trustworthy repair experience.",
+            "design_tokens": {
+              "primary_accent_color": "#536FA3",
+              "dominant_colors": [
+                "#E6E1D8",
+                "#373B3F",
+                "#536FA3"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-handyman": {
+        "industry_id": "handyman",
+        "display_name": "Handyman Services Pack",
+        "primary_accent_color": "#9A7041",
+        "services": {
+          "flexible-estimates": {
+            "file_name": "pack-handyman/flexible-estimates.jpg",
+            "public_url": "/storefront/services/pack-handyman/flexible-estimates.jpg",
+            "alt_text": "Handyman measuring damaged trim and discussing repair options with a homeowner.",
+            "seo_title": "Flexible Handyman Estimates",
+            "seo_description": "Flexible estimates clarify scope and options for varied household repairs.",
+            "design_tokens": {
+              "primary_accent_color": "#9A7041",
+              "dominant_colors": [
+                "#E6E1D8",
+                "#373B3F",
+                "#9A7041"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "multi-task-jobs": {
+            "file_name": "pack-handyman/multi-task-jobs.jpg",
+            "public_url": "/storefront/services/pack-handyman/multi-task-jobs.jpg",
+            "alt_text": "Skilled handyman completing several organized small repairs in a modern home.",
+            "seo_title": "Multi-Task Handyman Jobs",
+            "seo_description": "One organized visit addresses multiple household repair tasks.",
+            "design_tokens": {
+              "primary_accent_color": "#9A7041",
+              "dominant_colors": [
+                "#E6E1D8",
+                "#373B3F",
+                "#9A7041"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "project-punch-lists": {
+            "file_name": "pack-handyman/project-punch-lists.jpg",
+            "public_url": "/storefront/services/pack-handyman/project-punch-lists.jpg",
+            "alt_text": "Handyman and homeowner inspecting final project details in a renovated room.",
+            "seo_title": "Handyman Project Punch Lists",
+            "seo_description": "Detailed punch-list walkthroughs help close projects with confidence.",
+            "design_tokens": {
+              "primary_accent_color": "#9A7041",
+              "dominant_colors": [
+                "#E6E1D8",
+                "#373B3F",
+                "#9A7041"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-painting": {
+        "industry_id": "painting",
+        "display_name": "Painting Contractor Pack",
+        "primary_accent_color": "#9168A7",
+        "services": {
+          "color-schedules": {
+            "file_name": "pack-painting/color-schedules.jpg",
+            "public_url": "/storefront/services/pack-painting/color-schedules.jpg",
+            "alt_text": "Painting consultant and homeowner comparing organized color selections.",
+            "seo_title": "Professional Painting Color Schedules",
+            "seo_description": "Organized room-by-room color and finish selections support a cohesive painting project.",
+            "design_tokens": {
+              "primary_accent_color": "#9168A7",
+              "dominant_colors": [
+                "#E8E2D9",
+                "#34383C",
+                "#9168A7"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "paint-usage": {
+            "file_name": "pack-painting/paint-usage.jpg",
+            "public_url": "/storefront/services/pack-painting/paint-usage.jpg",
+            "alt_text": "Professional painter pouring paint and recording material usage.",
+            "seo_title": "Painting Material Usage Tracking",
+            "seo_description": "Accurate paint-usage records keep crews supplied and projects accountable.",
+            "design_tokens": {
+              "primary_accent_color": "#9168A7",
+              "dominant_colors": [
+                "#E8E2D9",
+                "#34383C",
+                "#9168A7"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "surface-measurements": {
+            "file_name": "pack-painting/surface-measurements.jpg",
+            "public_url": "/storefront/services/pack-painting/surface-measurements.jpg",
+            "alt_text": "Professional painter measuring an interior wall for an estimate.",
+            "seo_title": "Painting Surface Measurements",
+            "seo_description": "Precise surface measurements support reliable painting estimates and material plans.",
+            "design_tokens": {
+              "primary_accent_color": "#9168A7",
+              "dominant_colors": [
+                "#E8E2D9",
+                "#34383C",
+                "#9168A7"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-pressure-washing": {
+        "industry_id": "pressure-washing",
+        "display_name": "Pressure Washing Pack",
+        "primary_accent_color": "#287FA1",
+        "services": {
+          "area-based-pricing": {
+            "file_name": "pack-pressure-washing/area-based-pricing.jpg",
+            "public_url": "/storefront/services/pack-pressure-washing/area-based-pricing.jpg",
+            "alt_text": "Exterior-cleaning technician measuring a residential driveway for service pricing.",
+            "seo_title": "Area-Based Pressure Washing Pricing",
+            "seo_description": "Measured service areas support transparent pressure-washing estimates.",
+            "design_tokens": {
+              "primary_accent_color": "#287FA1",
+              "dominant_colors": [
+                "#E8E2D9",
+                "#34383C",
+                "#287FA1"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "chemical-tracking": {
+            "file_name": "pack-pressure-washing/chemical-tracking.jpg",
+            "public_url": "/storefront/services/pack-pressure-washing/chemical-tracking.jpg",
+            "alt_text": "Pressure-washing technician safely measuring and documenting cleaning concentrate.",
+            "seo_title": "Pressure Washing Chemical Tracking",
+            "seo_description": "Careful mixture tracking supports safe and consistent exterior cleaning.",
+            "design_tokens": {
+              "primary_accent_color": "#287FA1",
+              "dominant_colors": [
+                "#E8E2D9",
+                "#34383C",
+                "#287FA1"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "photo-documentation": {
+            "file_name": "pack-pressure-washing/photo-documentation.jpg",
+            "public_url": "/storefront/services/pack-pressure-washing/photo-documentation.jpg",
+            "alt_text": "Pressure-washing technician photographing the cleaned section of a stone patio.",
+            "seo_title": "Pressure Washing Photo Documentation",
+            "seo_description": "Clear service photos document exterior-cleaning progress and results.",
+            "design_tokens": {
+              "primary_accent_color": "#287FA1",
+              "dominant_colors": [
+                "#E8E2D9",
+                "#34383C",
+                "#287FA1"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-pool-spa": {
+        "industry_id": "pool-spa",
+        "display_name": "Pool & Spa Service Pack",
+        "primary_accent_color": "#238AA2",
+        "services": {
+          "chemistry-logs": {
+            "file_name": "pack-pool-spa/chemistry-logs.jpg",
+            "public_url": "/storefront/services/pack-pool-spa/chemistry-logs.jpg",
+            "alt_text": "Pool-service professional testing water chemistry and recording the readings.",
+            "seo_title": "Pool Water Chemistry Logs",
+            "seo_description": "Accurate chemistry logs support clear, comfortable, well-maintained pool water.",
+            "design_tokens": {
+              "primary_accent_color": "#238AA2",
+              "dominant_colors": [
+                "#E8E2D9",
+                "#34383C",
+                "#238AA2"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "route-service": {
+            "file_name": "pack-pool-spa/route-service.jpg",
+            "public_url": "/storefront/services/pack-pool-spa/route-service.jpg",
+            "alt_text": "Pool-service technician arriving with organized equipment for a scheduled route stop.",
+            "seo_title": "Scheduled Pool Route Service",
+            "seo_description": "Organized recurring routes deliver reliable professional pool care.",
+            "design_tokens": {
+              "primary_accent_color": "#238AA2",
+              "dominant_colors": [
+                "#E8E2D9",
+                "#34383C",
+                "#238AA2"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "seasonal-care": {
+            "file_name": "pack-pool-spa/seasonal-care.jpg",
+            "public_url": "/storefront/services/pack-pool-spa/seasonal-care.jpg",
+            "alt_text": "Pool-service professionals securing a cover and winterizing equipment for autumn.",
+            "seo_title": "Seasonal Pool and Spa Care",
+            "seo_description": "Professional seasonal care prepares pool systems for changing weather.",
+            "design_tokens": {
+              "primary_accent_color": "#238AA2",
+              "dominant_colors": [
+                "#E8E2D9",
+                "#34383C",
+                "#238AA2"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-locksmith-security": {
+        "industry_id": "locksmith-security",
+        "display_name": "Locksmith & Security Pack",
+        "primary_accent_color": "#47566A",
+        "services": {
+          "access-control": {
+            "file_name": "pack-locksmith-security/access-control.jpg",
+            "public_url": "/storefront/services/pack-locksmith-security/access-control.jpg",
+            "alt_text": "Security technician programming a commercial card reader and access-control panel.",
+            "seo_title": "Commercial Access Control Service",
+            "seo_description": "Professional access-control programming and testing for modern commercial facilities.",
+            "design_tokens": {
+              "primary_accent_color": "#47566A",
+              "dominant_colors": [
+                "#DEDCD7",
+                "#313A46",
+                "#47566A"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "key-records": {
+            "file_name": "pack-locksmith-security/key-records.jpg",
+            "public_url": "/storefront/services/pack-locksmith-security/key-records.jpg",
+            "alt_text": "Locksmith operating a precision key machine while verifying organized records.",
+            "seo_title": "Professional Key Records",
+            "seo_description": "Organized key records support precise and accountable locksmith service.",
+            "design_tokens": {
+              "primary_accent_color": "#47566A",
+              "dominant_colors": [
+                "#DEDCD7",
+                "#313A46",
+                "#47566A"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "security-hardware": {
+            "file_name": "pack-locksmith-security/security-hardware.jpg",
+            "public_url": "/storefront/services/pack-locksmith-security/security-hardware.jpg",
+            "alt_text": "Door-hardware professional installing a residential handle and strike plate.",
+            "seo_title": "Residential Security Hardware",
+            "seo_description": "Careful residential door-hardware installation improves a welcoming entry.",
+            "design_tokens": {
+              "primary_accent_color": "#47566A",
+              "dominant_colors": [
+                "#DEDCD7",
+                "#313A46",
+                "#47566A"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-tree-care": {
+        "industry_id": "tree-care",
+        "display_name": "Tree Care & Arborist Pack",
+        "primary_accent_color": "#3F7749",
+        "services": {
+          "tree-inventory": {
+            "file_name": "pack-tree-care/tree-inventory.jpg",
+            "public_url": "/storefront/services/pack-tree-care/tree-inventory.jpg",
+            "alt_text": "Certified arborist measuring and cataloging a mature residential tree.",
+            "seo_title": "Professional Tree Inventory",
+            "seo_description": "Organized tree inventories document valuable landscape assets and their condition.",
+            "design_tokens": {
+              "primary_accent_color": "#3F7749",
+              "dominant_colors": [
+                "#E1E2DC",
+                "#344039",
+                "#3F7749"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "risk-assessments": {
+            "file_name": "pack-tree-care/risk-assessments.jpg",
+            "public_url": "/storefront/services/pack-tree-care/risk-assessments.jpg",
+            "alt_text": "Certified arborist inspecting the canopy and structure of a mature tree.",
+            "seo_title": "Tree Risk Assessments",
+            "seo_description": "Professional arborist assessments identify structural risks and care priorities.",
+            "design_tokens": {
+              "primary_accent_color": "#3F7749",
+              "dominant_colors": [
+                "#E1E2DC",
+                "#344039",
+                "#3F7749"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "treatment-plans": {
+            "file_name": "pack-tree-care/treatment-plans.jpg",
+            "public_url": "/storefront/services/pack-tree-care/treatment-plans.jpg",
+            "alt_text": "Tree-care professional applying a targeted trunk treatment and documenting the plan.",
+            "seo_title": "Tree Treatment Plans",
+            "seo_description": "Targeted treatment plans support healthy, resilient landscape trees.",
+            "design_tokens": {
+              "primary_accent_color": "#3F7749",
+              "dominant_colors": [
+                "#E1E2DC",
+                "#344039",
+                "#3F7749"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-snow-removal": {
+        "industry_id": "snow-removal",
+        "display_name": "Snow & Ice Management Pack",
+        "primary_accent_color": "#6688A6",
+        "services": {
+          "storm-dispatch": {
+            "file_name": "pack-snow-removal/storm-dispatch.jpg",
+            "public_url": "/storefront/services/pack-snow-removal/storm-dispatch.jpg",
+            "alt_text": "Snow-operations manager coordinating a pre-dawn fleet dispatch.",
+            "seo_title": "Snow Storm Dispatch",
+            "seo_description": "Coordinated storm dispatch keeps professional snow fleets prepared and accountable.",
+            "design_tokens": {
+              "primary_accent_color": "#6688A6",
+              "dominant_colors": [
+                "#E1E2DC",
+                "#344039",
+                "#6688A6"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "salt-usage": {
+            "file_name": "pack-snow-removal/salt-usage.jpg",
+            "public_url": "/storefront/services/pack-snow-removal/salt-usage.jpg",
+            "alt_text": "Commercial spreader applying de-icing material to a cleared parking lot at dawn.",
+            "seo_title": "De-Icing Material Tracking",
+            "seo_description": "Controlled salt application supports safer commercial winter surfaces.",
+            "design_tokens": {
+              "primary_accent_color": "#6688A6",
+              "dominant_colors": [
+                "#E1E2DC",
+                "#344039",
+                "#6688A6"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "proof-of-service": {
+            "file_name": "pack-snow-removal/proof-of-service.jpg",
+            "public_url": "/storefront/services/pack-snow-removal/proof-of-service.jpg",
+            "alt_text": "Snow-removal team lead photographing a freshly cleared commercial parking lot.",
+            "seo_title": "Snow Removal Proof of Service",
+            "seo_description": "Clear post-service documentation verifies completed snow and ice work.",
+            "design_tokens": {
+              "primary_accent_color": "#6688A6",
+              "dominant_colors": [
+                "#E1E2DC",
+                "#344039",
+                "#6688A6"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-irrigation": {
+        "industry_id": "irrigation",
+        "display_name": "Irrigation Service Pack",
+        "primary_accent_color": "#3D8D73",
+        "services": {
+          "zone-maps": {
+            "file_name": "pack-irrigation/zone-maps.jpg",
+            "public_url": "/storefront/services/pack-irrigation/zone-maps.jpg",
+            "alt_text": "Irrigation technician reviewing sprinkler zones across a residential lawn.",
+            "seo_title": "Irrigation Zone Maps",
+            "seo_description": "Accurate sprinkler-zone maps support efficient landscape watering and service.",
+            "design_tokens": {
+              "primary_accent_color": "#3D8D73",
+              "dominant_colors": [
+                "#E1E2DC",
+                "#344039",
+                "#3D8D73"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "controller-records": {
+            "file_name": "pack-irrigation/controller-records.jpg",
+            "public_url": "/storefront/services/pack-irrigation/controller-records.jpg",
+            "alt_text": "Irrigation specialist programming and documenting a modern controller.",
+            "seo_title": "Irrigation Controller Records",
+            "seo_description": "Documented controller settings keep irrigation schedules organized and repeatable.",
+            "design_tokens": {
+              "primary_accent_color": "#3D8D73",
+              "dominant_colors": [
+                "#E1E2DC",
+                "#344039",
+                "#3D8D73"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "winterization": {
+            "file_name": "pack-irrigation/winterization.jpg",
+            "public_url": "/storefront/services/pack-irrigation/winterization.jpg",
+            "alt_text": "Irrigation technician connecting a compressor for seasonal system winterization.",
+            "seo_title": "Irrigation Winterization",
+            "seo_description": "Professional winterization helps protect irrigation systems through cold weather.",
+            "design_tokens": {
+              "primary_accent_color": "#3D8D73",
+              "dominant_colors": [
+                "#E1E2DC",
+                "#344039",
+                "#3D8D73"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-septic": {
+        "industry_id": "septic",
+        "display_name": "Septic & Wastewater Pack",
+        "primary_accent_color": "#75684C",
+        "services": {
+          "system-assets": {
+            "file_name": "pack-septic/system-assets.jpg",
+            "public_url": "/storefront/services/pack-septic/system-assets.jpg",
+            "alt_text": "Septic professional inspecting and recording a residential access-port asset.",
+            "seo_title": "Septic System Asset Records",
+            "seo_description": "Detailed septic asset records support reliable inspection and maintenance.",
+            "design_tokens": {
+              "primary_accent_color": "#75684C",
+              "dominant_colors": [
+                "#E3DED5",
+                "#383A38",
+                "#75684C"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "pumping-history": {
+            "file_name": "pack-septic/pumping-history.jpg",
+            "public_url": "/storefront/services/pack-septic/pumping-history.jpg",
+            "alt_text": "Septic-service operator documenting a clean residential vacuum-truck operation.",
+            "seo_title": "Septic Pumping History",
+            "seo_description": "Accurate pumping history keeps wastewater service transparent and organized.",
+            "design_tokens": {
+              "primary_accent_color": "#75684C",
+              "dominant_colors": [
+                "#E3DED5",
+                "#383A38",
+                "#75684C"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "disposal-records": {
+            "file_name": "pack-septic/disposal-records.jpg",
+            "public_url": "/storefront/services/pack-septic/disposal-records.jpg",
+            "alt_text": "Wastewater-service professional completing disposal documentation at a permitted facility.",
+            "seo_title": "Wastewater Disposal Records",
+            "seo_description": "Documented disposal supports compliant and accountable wastewater operations.",
+            "design_tokens": {
+              "primary_accent_color": "#75684C",
+              "dominant_colors": [
+                "#E3DED5",
+                "#383A38",
+                "#75684C"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-chimney-fireplace": {
+        "industry_id": "chimney-fireplace",
+        "display_name": "Chimney & Fireplace Pack",
+        "primary_accent_color": "#9B513D",
+        "services": {
+          "inspection-levels": {
+            "file_name": "pack-chimney-fireplace/inspection-levels.jpg",
+            "public_url": "/storefront/services/pack-chimney-fireplace/inspection-levels.jpg",
+            "alt_text": "Chimney inspector performing a video inspection inside a brick fireplace.",
+            "seo_title": "Professional Chimney Inspection Levels",
+            "seo_description": "Video-assisted chimney inspection provides detailed flue and fireplace findings.",
+            "design_tokens": {
+              "primary_accent_color": "#9B513D",
+              "dominant_colors": [
+                "#E3DED5",
+                "#383A38",
+                "#9B513D"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "sweeping-records": {
+            "file_name": "pack-chimney-fireplace/sweeping-records.jpg",
+            "public_url": "/storefront/services/pack-chimney-fireplace/sweeping-records.jpg",
+            "alt_text": "Chimney professional documenting organized sweeping equipment beside a fireplace.",
+            "seo_title": "Chimney Sweeping Records",
+            "seo_description": "Clear sweeping records document professional fireplace and flue maintenance.",
+            "design_tokens": {
+              "primary_accent_color": "#9B513D",
+              "dominant_colors": [
+                "#E3DED5",
+                "#383A38",
+                "#9B513D"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "safety-findings": {
+            "file_name": "pack-chimney-fireplace/safety-findings.jpg",
+            "public_url": "/storefront/services/pack-chimney-fireplace/safety-findings.jpg",
+            "alt_text": "Chimney inspector reviewing documented fireplace findings with a homeowner.",
+            "seo_title": "Chimney Safety Findings",
+            "seo_description": "Clear safety findings help homeowners understand fireplace care priorities.",
+            "design_tokens": {
+              "primary_accent_color": "#9B513D",
+              "dominant_colors": [
+                "#E3DED5",
+                "#383A38",
+                "#9B513D"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-solar": {
+        "industry_id": "solar",
+        "display_name": "Solar Service Pack",
+        "primary_accent_color": "#C48728",
+        "services": {
+          "system-commissioning": {
+            "file_name": "pack-solar/system-commissioning.jpg",
+            "public_url": "/storefront/services/pack-solar/system-commissioning.jpg",
+            "alt_text": "Solar technicians performing final commissioning tests on a residential array.",
+            "seo_title": "Solar System Commissioning",
+            "seo_description": "Professional commissioning verifies safe, reliable solar-system operation.",
+            "design_tokens": {
+              "primary_accent_color": "#C48728",
+              "dominant_colors": [
+                "#E3DED5",
+                "#383A38",
+                "#C48728"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "production-checks": {
+            "file_name": "pack-solar/production-checks.jpg",
+            "public_url": "/storefront/services/pack-solar/production-checks.jpg",
+            "alt_text": "Solar technician checking rooftop panel performance with diagnostic equipment.",
+            "seo_title": "Solar Production Checks",
+            "seo_description": "Diagnostic production checks help solar arrays perform efficiently.",
+            "design_tokens": {
+              "primary_accent_color": "#C48728",
+              "dominant_colors": [
+                "#E3DED5",
+                "#383A38",
+                "#C48728"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "battery-service": {
+            "file_name": "pack-solar/battery-service.jpg",
+            "public_url": "/storefront/services/pack-solar/battery-service.jpg",
+            "alt_text": "Solar-energy technician inspecting a wall-mounted home battery system.",
+            "seo_title": "Home Solar Battery Service",
+            "seo_description": "Professional battery-system service supports dependable home energy storage.",
+            "design_tokens": {
+              "primary_accent_color": "#C48728",
+              "dominant_colors": [
+                "#E3DED5",
+                "#383A38",
+                "#C48728"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-home-inspection": {
+        "industry_id": "home-inspection",
+        "display_name": "Home Inspection Pack",
+        "primary_accent_color": "#637389",
+        "services": {
+          "structured-findings": {
+            "file_name": "pack-home-inspection/structured-findings.jpg",
+            "public_url": "/storefront/services/pack-home-inspection/structured-findings.jpg",
+            "alt_text": "Home inspector examining an electrical panel and recording structured findings.",
+            "seo_title": "Structured Home Inspection Findings",
+            "seo_description": "Methodical inspection findings clearly document residential systems and conditions.",
+            "design_tokens": {
+              "primary_accent_color": "#637389",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#637389"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "photo-evidence": {
+            "file_name": "pack-home-inspection/photo-evidence.jpg",
+            "public_url": "/storefront/services/pack-home-inspection/photo-evidence.jpg",
+            "alt_text": "Home inspector safely photographing residential roof and gutter details.",
+            "seo_title": "Home Inspection Photo Evidence",
+            "seo_description": "Clear photographic evidence supports complete and transparent home inspections.",
+            "design_tokens": {
+              "primary_accent_color": "#637389",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#637389"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "client-reports": {
+            "file_name": "pack-home-inspection/client-reports.jpg",
+            "public_url": "/storefront/services/pack-home-inspection/client-reports.jpg",
+            "alt_text": "Home inspector presenting a detailed report to prospective homeowners.",
+            "seo_title": "Professional Home Inspection Reports",
+            "seo_description": "Clear client reports turn detailed inspection findings into useful decisions.",
+            "design_tokens": {
+              "primary_accent_color": "#637389",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#637389"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-restoration": {
+        "industry_id": "restoration",
+        "display_name": "Restoration & Remediation Pack",
+        "primary_accent_color": "#7D5B8F",
+        "services": {
+          "moisture-mapping": {
+            "file_name": "pack-restoration/moisture-mapping.jpg",
+            "public_url": "/storefront/services/pack-restoration/moisture-mapping.jpg",
+            "alt_text": "Restoration technician mapping moisture across a water-affected interior wall.",
+            "seo_title": "Professional Moisture Mapping",
+            "seo_description": "Detailed moisture mapping guides focused drying and restoration work.",
+            "design_tokens": {
+              "primary_accent_color": "#7D5B8F",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#7D5B8F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "equipment-logs": {
+            "file_name": "pack-restoration/equipment-logs.jpg",
+            "public_url": "/storefront/services/pack-restoration/equipment-logs.jpg",
+            "alt_text": "Restoration technician documenting positioned drying equipment.",
+            "seo_title": "Restoration Equipment Logs",
+            "seo_description": "Accurate equipment logs support controlled and accountable structural drying.",
+            "design_tokens": {
+              "primary_accent_color": "#7D5B8F",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#7D5B8F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "loss-documentation": {
+            "file_name": "pack-restoration/loss-documentation.jpg",
+            "public_url": "/storefront/services/pack-restoration/loss-documentation.jpg",
+            "alt_text": "Restoration project manager documenting a fire-affected interior area.",
+            "seo_title": "Restoration Loss Documentation",
+            "seo_description": "Thorough loss documentation supports clear restoration scope and recovery planning.",
+            "design_tokens": {
+              "primary_accent_color": "#7D5B8F",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#7D5B8F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-moving": {
+        "industry_id": "moving",
+        "display_name": "Moving Services Pack",
+        "primary_accent_color": "#4F72A3",
+        "services": {
+          "inventory-surveys": {
+            "file_name": "pack-moving/inventory-surveys.jpg",
+            "public_url": "/storefront/services/pack-moving/inventory-surveys.jpg",
+            "alt_text": "Moving consultant measuring and cataloging household furniture with a homeowner.",
+            "seo_title": "Moving Inventory Surveys",
+            "seo_description": "Detailed inventory surveys support accurate and carefully planned moves.",
+            "design_tokens": {
+              "primary_accent_color": "#4F72A3",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#4F72A3"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "truck-planning": {
+            "file_name": "pack-moving/truck-planning.jpg",
+            "public_url": "/storefront/services/pack-moving/truck-planning.jpg",
+            "alt_text": "Professional moving crew strategically loading protected furniture into a truck.",
+            "seo_title": "Moving Truck Planning",
+            "seo_description": "Organized truck planning protects belongings and improves moving efficiency.",
+            "design_tokens": {
+              "primary_accent_color": "#4F72A3",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#4F72A3"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "delivery-proof": {
+            "file_name": "pack-moving/delivery-proof.jpg",
+            "public_url": "/storefront/services/pack-moving/delivery-proof.jpg",
+            "alt_text": "Moving team lead receiving a customer signature after successful delivery.",
+            "seo_title": "Moving Delivery Proof",
+            "seo_description": "Digital delivery confirmation clearly documents a successful move.",
+            "design_tokens": {
+              "primary_accent_color": "#4F72A3",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#4F72A3"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-junk-removal": {
+        "industry_id": "junk-removal",
+        "display_name": "Junk Removal Pack",
+        "primary_accent_color": "#77704B",
+        "services": {
+          "volume-pricing": {
+            "file_name": "pack-junk-removal/volume-pricing.jpg",
+            "public_url": "/storefront/services/pack-junk-removal/volume-pricing.jpg",
+            "alt_text": "Junk-removal specialist measuring an orderly group of unwanted household items.",
+            "seo_title": "Junk Removal Volume Pricing",
+            "seo_description": "Measured volume estimates provide transparent junk-removal pricing.",
+            "design_tokens": {
+              "primary_accent_color": "#77704B",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#77704B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "load-capacity": {
+            "file_name": "pack-junk-removal/load-capacity.jpg",
+            "public_url": "/storefront/services/pack-junk-removal/load-capacity.jpg",
+            "alt_text": "Professional crew loading sorted household items into a clean removal truck.",
+            "seo_title": "Junk Removal Load Capacity",
+            "seo_description": "Organized loading uses truck capacity safely and efficiently.",
+            "design_tokens": {
+              "primary_accent_color": "#77704B",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#77704B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "disposal-tracking": {
+            "file_name": "pack-junk-removal/disposal-tracking.jpg",
+            "public_url": "/storefront/services/pack-junk-removal/disposal-tracking.jpg",
+            "alt_text": "Team member scanning a reusable item at an organized sorting facility.",
+            "seo_title": "Responsible Disposal Tracking",
+            "seo_description": "Tracked sorting supports donation, recycling, and responsible disposal.",
+            "design_tokens": {
+              "primary_accent_color": "#77704B",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#77704B"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-window-gutter": {
+        "industry_id": "window-gutter",
+        "display_name": "Window & Gutter Cleaning Pack",
+        "primary_accent_color": "#38859A",
+        "services": {
+          "measurement-pricing": {
+            "file_name": "pack-window-gutter/measurement-pricing.jpg",
+            "public_url": "/storefront/services/pack-window-gutter/measurement-pricing.jpg",
+            "alt_text": "Window-cleaning professional measuring residential windows for an estimate.",
+            "seo_title": "Window Cleaning Measurement Pricing",
+            "seo_description": "Accurate pane counts and measurements support transparent cleaning estimates.",
+            "design_tokens": {
+              "primary_accent_color": "#38859A",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#38859A"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "access-notes": {
+            "file_name": "pack-window-gutter/access-notes.jpg",
+            "public_url": "/storefront/services/pack-window-gutter/access-notes.jpg",
+            "alt_text": "Window cleaner safely using a water-fed pole on second-story windows.",
+            "seo_title": "Window Cleaning Access Notes",
+            "seo_description": "Documented access conditions support safe, efficient window cleaning.",
+            "design_tokens": {
+              "primary_accent_color": "#38859A",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#38859A"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "recurring-routes": {
+            "file_name": "pack-window-gutter/recurring-routes.jpg",
+            "public_url": "/storefront/services/pack-window-gutter/recurring-routes.jpg",
+            "alt_text": "Gutter-cleaning crew completing a documented autumn route service.",
+            "seo_title": "Recurring Window and Gutter Routes",
+            "seo_description": "Organized recurring routes keep windows and gutters consistently maintained.",
+            "design_tokens": {
+              "primary_accent_color": "#38859A",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#38859A"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-flooring": {
+        "industry_id": "flooring",
+        "display_name": "Flooring Installation Pack",
+        "primary_accent_color": "#8A6949",
+        "services": {
+          "room-takeoffs": {
+            "file_name": "pack-flooring/room-takeoffs.jpg",
+            "public_url": "/storefront/services/pack-flooring/room-takeoffs.jpg",
+            "alt_text": "Flooring installer measuring a room beside arranged hardwood samples.",
+            "seo_title": "Flooring Room Takeoffs",
+            "seo_description": "Precise room takeoffs support accurate flooring estimates and planning.",
+            "design_tokens": {
+              "primary_accent_color": "#8A6949",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#8A6949"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "waste-factors": {
+            "file_name": "pack-flooring/waste-factors.jpg",
+            "public_url": "/storefront/services/pack-flooring/waste-factors.jpg",
+            "alt_text": "Flooring installer organizing planks at a dust-controlled cutting station.",
+            "seo_title": "Flooring Waste Factors",
+            "seo_description": "Careful layout and cutting controls flooring waste and material use.",
+            "design_tokens": {
+              "primary_accent_color": "#8A6949",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#8A6949"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "install-milestones": {
+            "file_name": "pack-flooring/install-milestones.jpg",
+            "public_url": "/storefront/services/pack-flooring/install-milestones.jpg",
+            "alt_text": "Flooring professional installing the final row of engineered hardwood.",
+            "seo_title": "Flooring Installation Milestones",
+            "seo_description": "Documented milestones highlight precise progress through flooring installation.",
+            "design_tokens": {
+              "primary_accent_color": "#8A6949",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#8A6949"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-property-maintenance": {
+        "industry_id": "property-maintenance",
+        "display_name": "Property Maintenance Pack",
+        "primary_accent_color": "#56705F",
+        "services": {
+          "multi-site-assets": {
+            "file_name": "pack-property-maintenance/multi-site-assets.jpg",
+            "public_url": "/storefront/services/pack-property-maintenance/multi-site-assets.jpg",
+            "alt_text": "Property-maintenance manager reviewing assets at an apartment community.",
+            "seo_title": "Multi-Site Property Assets",
+            "seo_description": "Centralized asset records support consistent maintenance across properties.",
+            "design_tokens": {
+              "primary_accent_color": "#56705F",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#56705F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "preventive-plans": {
+            "file_name": "pack-property-maintenance/preventive-plans.jpg",
+            "public_url": "/storefront/services/pack-property-maintenance/preventive-plans.jpg",
+            "alt_text": "Maintenance technician completing a scheduled commercial filter replacement.",
+            "seo_title": "Property Preventive Maintenance Plans",
+            "seo_description": "Scheduled preventive work helps building systems remain dependable.",
+            "design_tokens": {
+              "primary_accent_color": "#56705F",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#56705F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "owner-reporting": {
+            "file_name": "pack-property-maintenance/owner-reporting.jpg",
+            "public_url": "/storefront/services/pack-property-maintenance/owner-reporting.jpg",
+            "alt_text": "Property-maintenance manager presenting a summary report to an owner.",
+            "seo_title": "Property Owner Reporting",
+            "seo_description": "Clear owner reporting provides transparent maintenance status and priorities.",
+            "design_tokens": {
+              "primary_accent_color": "#56705F",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#56705F"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      },
+      "pack-fencing": {
+        "industry_id": "fencing",
+        "display_name": "Fence & Gate Pack",
+        "primary_accent_color": "#7F674C",
+        "services": {
+          "linear-estimates": {
+            "file_name": "pack-fencing/linear-estimates.jpg",
+            "public_url": "/storefront/services/pack-fencing/linear-estimates.jpg",
+            "alt_text": "Fencing contractor measuring a marked residential property line.",
+            "seo_title": "Fence Linear Estimates",
+            "seo_description": "Accurate linear measurements support reliable fence project estimates.",
+            "design_tokens": {
+              "primary_accent_color": "#7F674C",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#7F674C"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "material-layouts": {
+            "file_name": "pack-fencing/material-layouts.jpg",
+            "public_url": "/storefront/services/pack-fencing/material-layouts.jpg",
+            "alt_text": "Fencing professional checking organized cedar installation materials.",
+            "seo_title": "Fence Material Layouts",
+            "seo_description": "Organized material layouts keep fence installations efficient and precise.",
+            "design_tokens": {
+              "primary_accent_color": "#7F674C",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#7F674C"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          },
+          "gate-hardware": {
+            "file_name": "pack-fencing/gate-hardware.jpg",
+            "public_url": "/storefront/services/pack-fencing/gate-hardware.jpg",
+            "alt_text": "Fencing professional aligning decorative hardware on a cedar gate.",
+            "seo_title": "Professional Gate Hardware",
+            "seo_description": "Precision-installed gate hardware combines dependable operation and craftsmanship.",
+            "design_tokens": {
+              "primary_accent_color": "#7F674C",
+              "dominant_colors": [
+                "#E5E1DA",
+                "#383C3C",
+                "#7F674C"
+              ],
+              "recommended_overlay_color": "rgba(0,0,0,0.5)",
+              "safe_text_area_coordinates": {
+                "x_start_pct": 58,
+                "y_start_pct": 10,
+                "x_end_pct": 95,
+                "y_end_pct": 90
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

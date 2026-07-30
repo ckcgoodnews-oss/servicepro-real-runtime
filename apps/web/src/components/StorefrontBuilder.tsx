@@ -118,7 +118,7 @@ export function StorefrontBuilder() {
     if (!starterPack?.services?.length) return;
     setAddingStarters(true);
     setMessage('');
-    const created: Service[] = [];
+    const created: Array<{ service: Service; imageUrl?: string }> = [];
     const failures: string[] = [];
     for (const suggestion of starterPack.services) {
       const response = await authFetch('/api/v1/services', {
@@ -133,17 +133,17 @@ export function StorefrontBuilder() {
         }),
       });
       const body = await response.json().catch(() => ({}));
-      if (response.ok && body.data?.id) created.push(body.data);
+      if (response.ok && body.data?.id) created.push({ service: body.data, imageUrl: suggestion.imageUrl });
       else failures.push(suggestion.name);
     }
     setAddingStarters(false);
     if (created.length) {
       setDirty(true);
-      setServices((current) => [...current, ...created]);
-      setSelectedServiceIds((current) => [...new Set([...current, ...created.map((service) => service.id)])]);
+      setServices((current) => [...current, ...created.map(c => c.service)]);
+      setSelectedServiceIds((current) => [...new Set([...current, ...created.map(c => c.service.id)])]);
       setServicePresentation((current) => ({
         ...current,
-        ...Object.fromEntries(created.map((service) => [service.id, suggestedPresentation(service)])),
+        ...Object.fromEntries(created.map(c => [c.service.id, { ...suggestedPresentation(c.service), imageUrl: c.imageUrl || '' }])),
       }));
     }
     setMessage(
