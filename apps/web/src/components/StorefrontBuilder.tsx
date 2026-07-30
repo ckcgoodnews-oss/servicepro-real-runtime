@@ -342,7 +342,7 @@ export function StorefrontBuilder() {
         </section>
       )}
 
-      <form id="storefront-form" key={`sf-${settings?.tenantId || ''}-${settings?.branding?.publicSlug || ''}`} onSubmit={save} onChange={() => setDirty(true)}>
+      <form id="storefront-form" onSubmit={save} onChange={() => setDirty(true)}>
         <section className="storefront-builder-section" id="storefront-branding">
           <header><span>Branding</span><h3>Business identity and public appearance</h3><p>Choose the public address, theme, company message, and images.</p></header>
           <div className="form-columns">
@@ -492,7 +492,7 @@ export function StorefrontBuilder() {
         </fieldset>
         <div className="storefront-save-bar">
           <span>{published ? 'Saving will update the public website immediately.' : 'Saving will keep this storefront private.'}</span>
-          <button className="button">{published ? 'Save & publish changes' : 'Save draft'}</button>
+          <button type="submit" className="button">{published ? 'Save & publish changes' : 'Save draft'}</button>
           <button type="button" className="button-small" style={{background:'var(--red)',color:'white',marginLeft:'auto'}} onClick={async () => {
             if (!confirm('Delete this public storefront? This will remove your public page and all storefront settings. Your services and business data are not affected.')) return;
             const response = await authFetch('/api/v1/tenant/branding', {
