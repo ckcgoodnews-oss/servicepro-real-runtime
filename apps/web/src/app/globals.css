@@ -63,3 +63,18 @@
 .app-shell .eyebrow{font-size:12px}
 .app-shell th,.app-shell td{font-size:14px}
 .app-shell .search-button{font-size:13px}
+
+
+/* Blanket font size minimum — force 13px floor on all workspace text */
+.app-shell .workspace,.app-shell .workspace *{font-size:revert}
+.app-shell .workspace{font-size:15px;line-height:1.6}
+.app-shell .workspace small{font-size:13px !important;line-height:1.5}
+.app-shell .workspace td,.app-shell .workspace th{font-size:14px !important}
+.app-shell .workspace .eyebrow{font-size:12px !important}
+.app-shell .workspace .priority{font-size:12px !important}
+.app-shell .workspace .settings-grid p,.app-shell .workspace .settings-grid strong{font-size:13px !important}
+.app-shell .workspace .panel *{font-size:inherit}
+.app-shell .workspace .panel{font-size:15px}
+.app-shell .workspace .panel small{font-size:13px !important}
+.app-shell .workspace .panel strong{font-size:15px}
+.app-shell .workspace .panel h2,.app-shell .workspace .panel h3{font-size:18px}
