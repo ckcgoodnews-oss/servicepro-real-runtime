@@ -219,9 +219,9 @@ export function StorefrontBuilder() {
       body: JSON.stringify(branding),
     });
     const responseBody = await response.json().catch(() => ({}));
-    // Also update company name if changed
+    // Always update company name from form
     const newCompanyName = String(form.get('companyName') || '').trim();
-    if (newCompanyName && newCompanyName !== (settings.companyName || '')) {
+    if (newCompanyName) {
       await authFetch('/api/v1/tenant/settings', {
         method: 'PATCH',
         body: JSON.stringify({ companyName: newCompanyName }),
@@ -295,7 +295,7 @@ export function StorefrontBuilder() {
           </small>
         </div>
         {branding.publicSlug && published && <a target="_blank" href={`/p/?business=${encodeURIComponent(branding.publicSlug)}`}>View live storefront</a>}
-        <button type="submit" form="storefront-form" className="button button-small">{published ? 'Save & publish' : 'Save draft'}</button>
+        <button type="submit" form="storefront-form" className="button button-small" onClick={(e) => { e.preventDefault(); document.getElementById('storefront-form')?.requestSubmit(); }}>{published ? 'Save & publish' : 'Save draft'}</button>
       </section>
 
       <form className="storefront-service-add" id="add-service-page" onSubmit={addService}>
