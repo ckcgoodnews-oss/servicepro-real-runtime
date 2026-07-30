@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from 'react';
 import { authFetch } from '@/auth/session';
-import { SERVICE_IMAGE_OPTIONS, suggestedServiceImage } from '@/data/serviceImageLibrary';
+import { suggestedServiceImage } from '@/data/serviceImageLibrary';
 
 type Service = {
   id: string;
@@ -64,6 +64,159 @@ const INDUSTRY_IMAGE_OPTIONS = [
   { value: '/storefront/industries/solar.svg', label: 'Solar' },
   { value: '/storefront/industries/tree-care.svg', label: 'Tree Care' },
   { value: '/storefront/industries/window-gutter.svg', label: 'Window & Gutter' },
+];
+
+const SERVICE_IMAGE_OPTIONS = [
+  { industry: 'Appliance Repair', images: [
+    { value: '/storefront/services/pack-appliance-repair/model-diagnostics.jpg', label: 'Model Diagnostics' },
+    { value: '/storefront/services/pack-appliance-repair/parts-tracking.jpg', label: 'Parts Tracking' },
+    { value: '/storefront/services/pack-appliance-repair/warranty-service.jpg', label: 'Warranty Service' },
+  ]},
+  { industry: 'Carpet & Upholstery', images: [
+    { value: '/storefront/services/pack-carpet/room-based-estimates.jpg', label: 'Room-Based Estimates' },
+    { value: '/storefront/services/pack-carpet/treatment-tracking.jpg', label: 'Treatment Tracking' },
+    { value: '/storefront/services/pack-carpet/recurring-service.jpg', label: 'Recurring Service' },
+  ]},
+  { industry: 'Chimney & Fireplace', images: [
+    { value: '/storefront/services/pack-chimney-fireplace/inspection-levels.jpg', label: 'Inspection Levels' },
+    { value: '/storefront/services/pack-chimney-fireplace/sweeping-records.jpg', label: 'Sweeping Records' },
+    { value: '/storefront/services/pack-chimney-fireplace/safety-findings.jpg', label: 'Safety Findings' },
+  ]},
+  { industry: 'Commercial Janitorial', images: [
+    { value: '/storefront/services/pack-commercial-cleaning/facility-zones.jpg', label: 'Facility Zones' },
+    { value: '/storefront/services/pack-commercial-cleaning/quality-inspections.jpg', label: 'Quality Inspections' },
+    { value: '/storefront/services/pack-commercial-cleaning/supply-controls.jpg', label: 'Supply Controls' },
+  ]},
+  { industry: 'Electrical', images: [
+    { value: '/storefront/services/pack-electrical/panel-schedules.jpg', label: 'Panel Schedules' },
+    { value: '/storefront/services/pack-electrical/electrical-inspections.jpg', label: 'Electrical Inspections' },
+    { value: '/storefront/services/pack-electrical/permit-tracking.jpg', label: 'Permit Tracking' },
+  ]},
+  { industry: 'Fencing', images: [
+    { value: '/storefront/services/pack-fencing/linear-estimates.jpg', label: 'Linear Estimates' },
+    { value: '/storefront/services/pack-fencing/material-layouts.jpg', label: 'Material Layouts' },
+    { value: '/storefront/services/pack-fencing/gate-hardware.jpg', label: 'Gate Hardware' },
+  ]},
+  { industry: 'Flooring', images: [
+    { value: '/storefront/services/pack-flooring/room-takeoffs.jpg', label: 'Room Takeoffs' },
+    { value: '/storefront/services/pack-flooring/waste-factors.jpg', label: 'Waste Factors' },
+    { value: '/storefront/services/pack-flooring/install-milestones.jpg', label: 'Install Milestones' },
+  ]},
+  { industry: 'Garage Door', images: [
+    { value: '/storefront/services/pack-garage-door/door-assets.jpg', label: 'Door Assets' },
+    { value: '/storefront/services/pack-garage-door/safety-checks.jpg', label: 'Safety Checks' },
+    { value: '/storefront/services/pack-garage-door/spring-lifecycle.jpg', label: 'Spring Lifecycle' },
+  ]},
+  { industry: 'Handyman', images: [
+    { value: '/storefront/services/pack-handyman/multi-task-jobs.jpg', label: 'Multi-Task Jobs' },
+    { value: '/storefront/services/pack-handyman/project-punch-lists.jpg', label: 'Project Punch Lists' },
+    { value: '/storefront/services/pack-handyman/flexible-estimates.jpg', label: 'Flexible Estimates' },
+  ]},
+  { industry: 'Home Inspection', images: [
+    { value: '/storefront/services/pack-home-inspection/structured-findings.jpg', label: 'Structured Findings' },
+    { value: '/storefront/services/pack-home-inspection/photo-evidence.jpg', label: 'Photo Evidence' },
+    { value: '/storefront/services/pack-home-inspection/client-reports.jpg', label: 'Client Reports' },
+  ]},
+  { industry: 'HVAC', images: [
+    { value: '/storefront/services/pack-hvac/heating-and-cooling.jpg', label: 'Heating & Cooling' },
+    { value: '/storefront/services/pack-hvac/maintenance-agreements.jpg', label: 'Maintenance Agreements' },
+    { value: '/storefront/services/pack-hvac/equipment-commissioning.jpg', label: 'Equipment Commissioning' },
+  ]},
+  { industry: 'Irrigation', images: [
+    { value: '/storefront/services/pack-irrigation/zone-maps.jpg', label: 'Zone Maps' },
+    { value: '/storefront/services/pack-irrigation/controller-records.jpg', label: 'Controller Records' },
+    { value: '/storefront/services/pack-irrigation/winterization.jpg', label: 'Winterization' },
+  ]},
+  { industry: 'Junk Removal', images: [
+    { value: '/storefront/services/pack-junk-removal/volume-pricing.jpg', label: 'Volume Pricing' },
+    { value: '/storefront/services/pack-junk-removal/load-capacity.jpg', label: 'Load Capacity' },
+    { value: '/storefront/services/pack-junk-removal/disposal-tracking.jpg', label: 'Disposal Tracking' },
+  ]},
+  { industry: 'Landscaping', images: [
+    { value: '/storefront/services/pack-landscape/property-zones.jpg', label: 'Property Zones' },
+    { value: '/storefront/services/pack-landscape/crew-routing.jpg', label: 'Crew Routing' },
+    { value: '/storefront/services/pack-landscape/seasonal-work.jpg', label: 'Seasonal Work' },
+  ]},
+  { industry: 'Locksmith & Security', images: [
+    { value: '/storefront/services/pack-locksmith-security/key-records.jpg', label: 'Key Records' },
+    { value: '/storefront/services/pack-locksmith-security/access-control.jpg', label: 'Access Control' },
+    { value: '/storefront/services/pack-locksmith-security/security-hardware.jpg', label: 'Security Hardware' },
+  ]},
+  { industry: 'Moving Services', images: [
+    { value: '/storefront/services/pack-moving/inventory-surveys.jpg', label: 'Inventory Surveys' },
+    { value: '/storefront/services/pack-moving/truck-planning.jpg', label: 'Truck Planning' },
+    { value: '/storefront/services/pack-moving/delivery-proof.jpg', label: 'Delivery Proof' },
+  ]},
+  { industry: 'Painting', images: [
+    { value: '/storefront/services/pack-painting/color-schedules.jpg', label: 'Color Schedules' },
+    { value: '/storefront/services/pack-painting/surface-measurements.jpg', label: 'Surface Measurements' },
+    { value: '/storefront/services/pack-painting/paint-usage.jpg', label: 'Paint Usage' },
+  ]},
+  { industry: 'Pest Control', images: [
+    { value: '/storefront/services/pack-pest-control/treatment-records.jpg', label: 'Treatment Records' },
+    { value: '/storefront/services/pack-pest-control/device-monitoring.jpg', label: 'Device Monitoring' },
+    { value: '/storefront/services/pack-pest-control/compliance-logs.jpg', label: 'Compliance Logs' },
+  ]},
+  { industry: 'Plumbing', images: [
+    { value: '/storefront/services/pack-plumbing/drain-and-sewer.jpg', label: 'Drain & Sewer' },
+    { value: '/storefront/services/pack-plumbing/water-heaters.jpg', label: 'Water Heaters' },
+    { value: '/storefront/services/pack-plumbing/fixture-service.jpg', label: 'Fixture Service' },
+  ]},
+  { industry: 'Pool & Spa', images: [
+    { value: '/storefront/services/pack-pool-spa/chemistry-logs.jpg', label: 'Chemistry Logs' },
+    { value: '/storefront/services/pack-pool-spa/route-service.jpg', label: 'Route Service' },
+    { value: '/storefront/services/pack-pool-spa/seasonal-care.jpg', label: 'Seasonal Care' },
+  ]},
+  { industry: 'Pressure Washing', images: [
+    { value: '/storefront/services/pack-pressure-washing/area-based-pricing.jpg', label: 'Area-Based Pricing' },
+    { value: '/storefront/services/pack-pressure-washing/chemical-tracking.jpg', label: 'Chemical Tracking' },
+    { value: '/storefront/services/pack-pressure-washing/photo-documentation.jpg', label: 'Photo Documentation' },
+  ]},
+  { industry: 'Property Maintenance', images: [
+    { value: '/storefront/services/pack-property-maintenance/multi-site-assets.jpg', label: 'Multi-Site Assets' },
+    { value: '/storefront/services/pack-property-maintenance/preventive-plans.jpg', label: 'Preventive Plans' },
+    { value: '/storefront/services/pack-property-maintenance/owner-reporting.jpg', label: 'Owner Reporting' },
+  ]},
+  { industry: 'Residential Cleaning', images: [
+    { value: '/storefront/services/pack-residential-cleaning/room-checklists.jpg', label: 'Room Checklists' },
+    { value: '/storefront/services/pack-residential-cleaning/recurring-plans.jpg', label: 'Recurring Plans' },
+    { value: '/storefront/services/pack-residential-cleaning/customer-preferences.jpg', label: 'Customer Preferences' },
+  ]},
+  { industry: 'Restoration', images: [
+    { value: '/storefront/services/pack-restoration/moisture-mapping.jpg', label: 'Moisture Mapping' },
+    { value: '/storefront/services/pack-restoration/equipment-logs.jpg', label: 'Equipment Logs' },
+    { value: '/storefront/services/pack-restoration/loss-documentation.jpg', label: 'Loss Documentation' },
+  ]},
+  { industry: 'Roofing', images: [
+    { value: '/storefront/services/pack-roofing/roof-diagrams.jpg', label: 'Roof Diagrams' },
+    { value: '/storefront/services/pack-roofing/material-takeoffs.jpg', label: 'Material Takeoffs' },
+    { value: '/storefront/services/pack-roofing/claims-documentation.jpg', label: 'Claims Documentation' },
+  ]},
+  { industry: 'Septic & Wastewater', images: [
+    { value: '/storefront/services/pack-septic/system-assets.jpg', label: 'System Assets' },
+    { value: '/storefront/services/pack-septic/pumping-history.jpg', label: 'Pumping History' },
+    { value: '/storefront/services/pack-septic/disposal-records.jpg', label: 'Disposal Records' },
+  ]},
+  { industry: 'Snow & Ice', images: [
+    { value: '/storefront/services/pack-snow-removal/storm-dispatch.jpg', label: 'Storm Dispatch' },
+    { value: '/storefront/services/pack-snow-removal/salt-usage.jpg', label: 'Salt Usage' },
+    { value: '/storefront/services/pack-snow-removal/proof-of-service.jpg', label: 'Proof of Service' },
+  ]},
+  { industry: 'Solar', images: [
+    { value: '/storefront/services/pack-solar/system-commissioning.jpg', label: 'System Commissioning' },
+    { value: '/storefront/services/pack-solar/production-checks.jpg', label: 'Production Checks' },
+    { value: '/storefront/services/pack-solar/battery-service.jpg', label: 'Battery Service' },
+  ]},
+  { industry: 'Tree Care', images: [
+    { value: '/storefront/services/pack-tree-care/tree-inventory.jpg', label: 'Tree Inventory' },
+    { value: '/storefront/services/pack-tree-care/risk-assessments.jpg', label: 'Risk Assessments' },
+    { value: '/storefront/services/pack-tree-care/treatment-plans.jpg', label: 'Treatment Plans' },
+  ]},
+  { industry: 'Window & Gutter', images: [
+    { value: '/storefront/services/pack-window-gutter/measurement-pricing.jpg', label: 'Measurement Pricing' },
+    { value: '/storefront/services/pack-window-gutter/access-notes.jpg', label: 'Access Notes' },
+    { value: '/storefront/services/pack-window-gutter/recurring-routes.jpg', label: 'Recurring Routes' },
+  ]},
 ];
 
 export function StorefrontBuilder() {
@@ -244,12 +397,6 @@ export function StorefrontBuilder() {
 
   if (!settings) return <section className="panel">Loading storefront builder...</section>;
   const branding = settings.branding || {};
-  const activePackCode = starterPack?.services
-    ?.map((service: { imageUrl?: string }) => service.imageUrl?.match(/\/services\/(pack-[^/]+)\//)?.[1])
-    .find(Boolean);
-  const serviceImageOptions = activePackCode
-    ? SERVICE_IMAGE_OPTIONS.filter((option) => option.packCode === activePackCode)
-    : SERVICE_IMAGE_OPTIONS;
 
   return (
     <section className="panel storefront-builder">
@@ -448,11 +595,13 @@ export function StorefrontBuilder() {
                         }}
                       >
                         <option value="">None</option>
-                        <optgroup label={activePackCode ? 'Recommended service images' : 'Service images'}>
-                          {serviceImageOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                        </optgroup>
-                        <optgroup label="Industry images">
-                          {INDUSTRY_IMAGE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+                        {SERVICE_IMAGE_OPTIONS.map(group => (
+                          <optgroup key={group.industry} label={group.industry}>
+                            {group.images.map(img => <option key={img.value} value={img.value}>{img.label}</option>)}
+                          </optgroup>
+                        ))}
+                        <optgroup label="Industry Hero Images">
+                          {INDUSTRY_IMAGE_OPTIONS.map(opt => <option key={opt.value} value={opt.value}>{opt.label} (Hero)</option>)}
                         </optgroup>
                         <option value="custom">Custom URL...</option>
                       </select>
