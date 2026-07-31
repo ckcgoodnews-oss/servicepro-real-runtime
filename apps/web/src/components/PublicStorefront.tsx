@@ -141,7 +141,7 @@ export function PublicStorefront() {
           {data.serviceArea && <span>📍 Serving {data.serviceArea}</span>}
         </div>
       </section>
-      {data.services.length > 1 && (
+      {!selectedService && data.services.length > 1 && (
         <section className="storefront-carousel">
           <div className="storefront-carousel-track">
             {data.services.filter((s: any) => s.imageUrl).map((service: any, i: number) => (
