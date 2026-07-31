@@ -96,3 +96,23 @@
 /* Reduce excessive whitespace in request section */
 .storefront-request{padding-block:48px;gap:32px;max-width:1100px;margin:0 auto}
 .storefront-why-choose{margin-bottom:0;padding-bottom:0}
+
+
+/* Auto-fit: responsive container queries + viewport-based sizing */
+.public-storefront{container-type:inline-size}
+.public-storefront *{box-sizing:border-box}
+.public-storefront img{max-width:100%;height:auto}
+.public-storefront h1{font-size:clamp(28px,5cqi,56px)}
+.public-storefront h2{font-size:clamp(22px,4cqi,36px)}
+.public-storefront h3{font-size:clamp(16px,2.5cqi,22px)}
+.public-storefront p,.public-storefront li{font-size:clamp(14px,1.8cqi,18px);line-height:1.6}
+.public-storefront header nav{font-size:clamp(12px,1.5cqi,15px)}
+.public-storefront .storefront-cta-button{font-size:clamp(14px,1.8cqi,18px);padding:clamp(12px,1.5cqi,18px) clamp(20px,3cqi,36px)}
+.public-storefront .storefront-hero{min-height:clamp(300px,50cqi,650px);padding:clamp(30px,5cqi,80px) clamp(20px,4cqi,60px)}
+.public-storefront .storefront-services>div{grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
+.public-storefront .storefront-why-grid{grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr))}
+.public-storefront .storefront-blog-grid{grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
+.public-storefront .storefront-financing{grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))}
+.public-storefront .storefront-carousel-track{aspect-ratio:clamp(16,2,21)/9}
+.public-storefront .storefront-trust-bar>div{font-size:clamp(12px,1.5cqi,15px)}
+.public-storefront footer{font-size:clamp(12px,1.4cqi,15px)}
