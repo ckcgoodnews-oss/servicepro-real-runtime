@@ -25,6 +25,14 @@ type ServicePresentation = {
   benefits?: string;
 };
 
+const STOREFRONT_COLOR_SCHEMES = [
+  { name: 'Service Blue', primary: '#147cb8', accent: '#4bb6ed', dark: '#071f38' },
+  { name: 'Evergreen', primary: '#176b5b', accent: '#b9e55b', dark: '#102c2a' },
+  { name: 'Bold Red', primary: '#c92f32', accent: '#f4b942', dark: '#301519' },
+  { name: 'Modern Purple', primary: '#6d4bc3', accent: '#c9a7ff', dark: '#24163f' },
+  { name: 'Warm Orange', primary: '#d76522', accent: '#ffc857', dark: '#382014' },
+];
+
 function normalizeStartingPrice(value: string) {
   const trimmed = value.trim();
   return /^(?:\$?\s*0+(?:\.0+)?|starting (?:at|from)\s+\$?\s*0+(?:\.0+)?)$/i.test(trimmed) ? '' : trimmed;
@@ -388,6 +396,9 @@ export function StorefrontBuilder() {
       publicSlug: form.get('slug'),
       publicPublished: published,
       publicTheme: form.get('theme'),
+      publicPrimaryColor: form.get('primaryColor'),
+      publicAccentColor: form.get('accentColor'),
+      publicDarkColor: form.get('darkColor'),
       publicTagline: form.get('tagline'),
       publicDescription: form.get('description'),
       publicServiceArea: form.get('serviceArea'),
@@ -541,6 +552,41 @@ export function StorefrontBuilder() {
             </select>
           </label>
         </div>
+          <fieldset className="storefront-color-settings">
+            <legend>Color scheme</legend>
+            <p>Choose a preset or customize the primary, accent, and dark website colors.</p>
+            <div className="storefront-color-presets">
+              {STOREFRONT_COLOR_SCHEMES.map((scheme) => (
+                <button
+                  type="button"
+                  key={scheme.name}
+                  onClick={(event) => {
+                    const fieldset = event.currentTarget.closest('fieldset');
+                    const setColor = (name: string, value: string) => {
+                      const input = fieldset?.querySelector<HTMLInputElement>(`input[name="${name}"]`);
+                      if (input) input.value = value;
+                    };
+                    setColor('primaryColor', scheme.primary);
+                    setColor('accentColor', scheme.accent);
+                    setColor('darkColor', scheme.dark);
+                    setDirty(true);
+                  }}
+                >
+                  <span aria-hidden="true">
+                    <i style={{ background: scheme.dark }} />
+                    <i style={{ background: scheme.primary }} />
+                    <i style={{ background: scheme.accent }} />
+                  </span>
+                  {scheme.name}
+                </button>
+              ))}
+            </div>
+            <div className="storefront-color-fields">
+              <label>Primary color<input type="color" name="primaryColor" defaultValue={branding.publicPrimaryColor || '#147cb8'} /></label>
+              <label>Accent color<input type="color" name="accentColor" defaultValue={branding.publicAccentColor || '#4bb6ed'} /></label>
+              <label>Dark color<input type="color" name="darkColor" defaultValue={branding.publicDarkColor || '#071f38'} /></label>
+            </div>
+          </fieldset>
           <label className="publish-toggle">
           <input type="checkbox" name="published" checked={published} onChange={(event) => { setPublished(event.target.checked); setDirty(true); }} />
           {published ? 'Published — saving changes updates the live website' : 'Publish this storefront'}

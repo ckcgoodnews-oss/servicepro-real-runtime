@@ -91,7 +91,15 @@ async function profile(req, res, slug) {
       hours: branding.publicHours || '',
       logoUrl: branding.logoUrl || '',
       heroImageUrl: branding.heroImageUrl || defaultHero,
-      theme: themes.find(item => item.slug === branding.publicTheme) || themes[0],
+      theme: {
+        ...(themes.find(item => item.slug === branding.publicTheme) || themes[0]),
+        config: {
+          ...(themes.find(item => item.slug === branding.publicTheme) || themes[0]).config,
+          ...(branding.publicPrimaryColor ? { primary: branding.publicPrimaryColor } : {}),
+          ...(branding.publicAccentColor ? { accent: branding.publicAccentColor, secondary: branding.publicAccentColor } : {}),
+          ...(branding.publicDarkColor ? { dark: branding.publicDarkColor } : {})
+        }
+      },
       services: services
         .filter(item => item.active !== false && (branding.publicServiceIds || []).includes(item.id))
         .map(item => ({
