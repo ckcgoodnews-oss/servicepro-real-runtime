@@ -18,3 +18,29 @@
 .storefront-why-grid article p{font-size:14px;line-height:1.55;color:#4a6b63;margin:0}
 @media(max-width:900px){.storefront-why-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.storefront-why-grid{grid-template-columns:1fr}.storefront-header-actions{flex-direction:column;gap:8px}.storefront-trust-bar>div{flex-direction:column;align-items:flex-start;gap:12px}.storefront-hero-ctas{flex-direction:column;align-items:flex-start}}
+
+
+/* Fluid reveal animations for storefront elements */
+.storefront-reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.storefront-reveal.revealed{opacity:1;transform:translateY(0)}
+.storefront-reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .7s ease,transform .7s ease}
+.storefront-reveal-left.revealed{opacity:1;transform:translateX(0)}
+.storefront-reveal-right{opacity:0;transform:translateX(40px);transition:opacity .7s ease,transform .7s ease}
+.storefront-reveal-right.revealed{opacity:1;transform:translateX(0)}
+.storefront-reveal-scale{opacity:0;transform:scale(.92);transition:opacity .6s ease,transform .6s ease}
+.storefront-reveal-scale.revealed{opacity:1;transform:scale(1)}
+.storefront-services article{opacity:0;transform:translateY(24px);transition:opacity .5s ease,transform .5s ease}
+.storefront-services article.revealed{opacity:1;transform:translateY(0)}
+.storefront-services article:nth-child(2){transition-delay:.1s}
+.storefront-services article:nth-child(3){transition-delay:.2s}
+.storefront-services article:nth-child(4){transition-delay:.25s}
+.storefront-services article:nth-child(5){transition-delay:.3s}
+.storefront-services article:nth-child(6){transition-delay:.35s}
+.storefront-why-grid article{opacity:0;transform:translateY(20px);transition:opacity .5s ease,transform .5s ease}
+.storefront-why-grid article.revealed{opacity:1;transform:translateY(0)}
+.storefront-why-grid article:nth-child(2){transition-delay:.1s}
+.storefront-why-grid article:nth-child(3){transition-delay:.2s}
+.storefront-why-grid article:nth-child(4){transition-delay:.3s}
+.storefront-service-page img{opacity:0;transform:translateX(30px);transition:opacity .7s ease,transform .7s ease}
+.storefront-service-page img.revealed{opacity:1;transform:translateX(0)}
+@media(prefers-reduced-motion:reduce){.storefront-reveal,.storefront-reveal-left,.storefront-reveal-right,.storefront-reveal-scale,.storefront-services article,.storefront-why-grid article,.storefront-service-page img{opacity:1;transform:none;transition:none}}

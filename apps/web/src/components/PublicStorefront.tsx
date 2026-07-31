@@ -3,6 +3,27 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { apiUrl } from '@/auth/session';
 
+function useRevealOnScroll() {
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+    );
+    const elements = document.querySelectorAll(
+      '.storefront-reveal, .storefront-reveal-left, .storefront-reveal-right, .storefront-reveal-scale, .storefront-services article, .storefront-why-grid article, .storefront-service-page img'
+    );
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  });
+}
+
 export function PublicStorefront() {
   const [data, setData] = useState<any>(null);
   const [slug, setSlug] = useState('');
@@ -43,6 +64,8 @@ export function PublicStorefront() {
     setSent(true);
     event.currentTarget.reset();
   }
+
+  useRevealOnScroll();
 
   if (error) {
     return (
@@ -125,8 +148,8 @@ export function PublicStorefront() {
         </section>
       )}
       {!selectedService && <section className="storefront-services" id="services">
-        <span>What we do</span>
-        <h2>Professional services for your property</h2>
+        <span className="storefront-reveal">What we do</span>
+        <h2 className="storefront-reveal">Professional services for your property</h2>
         <div>
           {data.services.map((service: any) => (
             <article key={service.id}>
@@ -142,7 +165,7 @@ export function PublicStorefront() {
         </div>
       </section>}
       <section className="storefront-why-choose">
-        <h2>Why customers choose {data.companyName}</h2>
+        <h2 className="storefront-reveal">Why customers choose {data.companyName}</h2>
         <div className="storefront-why-grid">
           <article><strong>Upfront Pricing</strong><p>You approve the cost before work starts — no hidden fees or surprises.</p></article>
           <article><strong>Local & Trusted</strong><p>Family-owned and community-focused. Your neighbors already trust us.</p></article>
