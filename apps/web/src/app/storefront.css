@@ -59,3 +59,28 @@
 .storefront-carousel-dots button{width:10px;height:10px;border-radius:50%;border:2px solid var(--store-primary,#1c7c68);background:transparent;cursor:pointer;padding:0;transition:background .2s}
 .storefront-carousel-dots button.active{background:var(--store-primary,#1c7c68)}
 @media(max-width:600px){.storefront-carousel-track{aspect-ratio:16/9}.storefront-carousel-caption strong{font-size:18px}.storefront-carousel-caption{padding:18px 20px}}
+
+/* Blog section */
+.storefront-blog{max-width:1100px;margin:60px auto;padding:0 24px}
+.storefront-blog h2{font-size:28px;text-align:center;margin:0 0 32px;color:#1a3d36}
+.storefront-blog-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.storefront-blog-grid article{border:1px solid rgba(0,0,0,.08);border-radius:12px;overflow:hidden;background:white;transition:transform .2s,box-shadow .2s}
+.storefront-blog-grid article:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.storefront-blog-grid img{width:100%;height:160px;object-fit:cover}
+.storefront-blog-grid div{padding:20px}
+.storefront-blog-grid span{font-size:11px;font-weight:700;text-transform:uppercase;color:var(--store-primary,#1c7c68);letter-spacing:.5px}
+.storefront-blog-grid h3{font-size:17px;margin:8px 0}
+.storefront-blog-grid p{font-size:14px;line-height:1.5;color:#4a6b63;margin:0 0 12px}
+.storefront-blog-grid small{font-size:12px;color:#8a9e99}
+
+/* Financing section */
+.storefront-financing{max-width:900px;margin:60px auto;padding:48px;background:linear-gradient(135deg,#f0f9f6,#e8f5f0);border-radius:20px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.storefront-financing>div span{font-size:14px;font-weight:700;color:var(--store-primary,#1c7c68)}
+.storefront-financing>div h2{font-size:26px;margin:12px 0;color:#1a3d36}
+.storefront-financing>div p{font-size:15px;line-height:1.6;color:#4a6b63}
+.storefront-financing form{display:grid;gap:12px}
+.storefront-financing form>div{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.storefront-financing input,.storefront-financing select,.storefront-financing textarea{padding:14px;border:1px solid rgba(0,0,0,.1);border-radius:8px;font-size:15px;background:white}
+.storefront-financing button{padding:16px;border:0;border-radius:8px;background:var(--store-primary,#1c7c68);color:white;font-size:16px;font-weight:700;cursor:pointer}
+.storefront-financing button:hover{opacity:.9}
+@media(max-width:800px){.storefront-blog-grid{grid-template-columns:1fr}.storefront-financing{grid-template-columns:1fr;padding:32px 24px}}

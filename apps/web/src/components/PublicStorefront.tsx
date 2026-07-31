@@ -31,6 +31,8 @@ export function PublicStorefront() {
   const [sent, setSent] = useState(false);
   const [serviceId, setServiceId] = useState('');
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  const [financingSent, setFinancingSent] = useState(false);
 
   useEffect(() => {
     const value = (new URLSearchParams(location.search).get('business') || '').trim().toLowerCase();
@@ -45,6 +47,10 @@ export function PublicStorefront() {
         const body = await response.json();
         if (!response.ok) throw Error(body.error?.message || 'Storefront unavailable');
         setData(body.data);
+        fetch(apiUrl(`/api/public/blog/${encodeURIComponent(value)}`))
+          .then(r => r.ok ? r.json() : { data: [] })
+          .then(body => setBlogPosts(body.data || []))
+          .catch(() => {});
       })
       .catch((problem) => setError(problem.message));
   }, []);
@@ -64,6 +70,17 @@ export function PublicStorefront() {
     }
     setSent(true);
     event.currentTarget.reset();
+  }
+
+  async function submitFinancing(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const response = await fetch(apiUrl(`/api/public/financing/${encodeURIComponent(slug)}`), {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(form)),
+    });
+    if (response.ok) { setFinancingSent(true); event.currentTarget.reset(); }
   }
 
   useRevealOnScroll();
@@ -112,6 +129,8 @@ export function PublicStorefront() {
             </a>
           ))}
           <a href="#request">Request service</a>
+          <a href="#blog">Blog</a>
+          <a href="#financing">Financing</a>
         </nav>
         <div className="storefront-header-actions">
           {data.contactPhone && <a className="storefront-call" href={`tel:${data.contactPhone}`}>📞 {data.contactPhone}</a>}
@@ -196,6 +215,24 @@ export function PublicStorefront() {
           ))}
         </div>
       </section>}
+      {!selectedService && blogPosts.length > 0 && (
+        <section className="storefront-blog" id="blog">
+          <h2 className="storefront-reveal">Latest from our blog</h2>
+          <div className="storefront-blog-grid">
+            {blogPosts.slice(0, 3).map((post: any) => (
+              <article key={post.id} className="storefront-reveal">
+                {post.imageUrl && <img src={post.imageUrl} alt="" />}
+                <div>
+                  {post.category && <span>{post.category}</span>}
+                  <h3>{post.title}</h3>
+                  <p>{post.excerpt}</p>
+                  <small>{new Date(post.createdAt).toLocaleDateString()}</small>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
       <section className="storefront-why-choose">
         <h2 className="storefront-reveal">Why customers choose {data.companyName}</h2>
         <div className="storefront-why-grid">
@@ -229,6 +266,26 @@ export function PublicStorefront() {
           </form>
         )}
       </section>
+      {!selectedService && (
+        <section className="storefront-financing" id="financing">
+          <div>
+            <span>💰 Flexible payment options</span>
+            <h2 className="storefront-reveal">Financing available</h2>
+            <p>Don&apos;t let budget hold you back. Apply for financing in under 2 minutes — no impact on your credit score.</p>
+          </div>
+          {financingSent ? (
+            <div className="storefront-success"><h3>Application received!</h3><p>We&apos;ll review your application and contact you within 1 business day.</p></div>
+          ) : (
+            <form onSubmit={submitFinancing}>
+              <div><input name="name" placeholder="Full name" required /><input name="phone" placeholder="Phone" required /></div>
+              <input name="email" type="email" placeholder="Email" required />
+              <div><input name="amount" type="number" min="500" step="100" placeholder="Estimated project amount ($)" required /><select name="projectType"><option value="">Project type</option><option value="repair">Repair</option><option value="replacement">Replacement</option><option value="installation">New installation</option><option value="renovation">Renovation</option></select></div>
+              <textarea name="projectDescription" placeholder="Brief description of the project" rows={3} />
+              <button>Check financing options</button>
+            </form>
+          )}
+        </section>
+      )}
       <footer>
         <strong>{data.companyName}</strong>
         <span>{data.contactEmail} · {data.contactPhone}</span>

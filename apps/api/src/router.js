@@ -31,6 +31,8 @@ const aiAssistant = require('./routes/aiAssistant');
 const automation = require('./routes/automation');
 const websiteBuilder = require('./routes/websiteBuilder');
 const fileUpload = require('./routes/fileUpload');
+const blog = require('./routes/blog');
+const financing = require('./routes/financing');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -160,6 +162,10 @@ async function router(req, res) {
   const publicStorefrontMatch=req.url.match(/^\/api\/public\/storefront\/([^/?]+)$/);
   if(publicStorefrontMatch&&req.method==='GET')return publicStorefront.profile(req,res,decodeURIComponent(publicStorefrontMatch[1]));
   if(publicStorefrontMatch&&req.method==='POST')return publicStorefront.requestService(req,res,decodeURIComponent(publicStorefrontMatch[1]));
+  const publicBlogMatch = req.url.match(/^\/api\/public\/blog\/([^/?]+)$/);
+  if (publicBlogMatch && req.method === 'GET') return blog.publicList(req, res, decodeURIComponent(publicBlogMatch[1]));
+  const publicFinancingMatch = req.url.match(/^\/api\/public\/financing\/([^/?]+)$/);
+  if (publicFinancingMatch && req.method === 'POST') return financing.submitApplication(req, res, decodeURIComponent(publicFinancingMatch[1]));
 
   if (req.url.startsWith('/portal/api/')) {
     if (!portalAuthGuard(req, res)) return;
@@ -624,6 +630,36 @@ async function router(req, res) {
   if (dispatchMatch && req.method === 'PATCH') {
     if (!requirePermission(PERMISSIONS.DISPATCH_WRITE)(req, res)) return;
     return dispatch.updateStatus(req, res, dispatchMatch[1]);
+  }
+
+  // Blog
+  if (req.url === '/api/v1/blog' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.KNOWLEDGE_READ)(req, res)) return;
+    return blog.list(req, res);
+  }
+  if (req.url === '/api/v1/blog' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.KNOWLEDGE_WRITE)(req, res)) return;
+    return blog.create(req, res);
+  }
+  const blogMatch = req.url.match(/^\/api\/v1\/blog\/([^/]+)$/);
+  if (blogMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.KNOWLEDGE_WRITE)(req, res)) return;
+    return blog.update(req, res, blogMatch[1]);
+  }
+  if (blogMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.KNOWLEDGE_WRITE)(req, res)) return;
+    return blog.remove(req, res, blogMatch[1]);
+  }
+
+  // Financing
+  if (req.url === '/api/v1/financing' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.BILLING_READ || PERMISSIONS.REPORTS_READ)(req, res)) return;
+    return financing.listApplications(req, res);
+  }
+  const financingStatusMatch = req.url.match(/^\/api\/v1\/financing\/([^/]+)\/status$/);
+  if (financingStatusMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.BILLING_WRITE || PERMISSIONS.REPORTS_WRITE)(req, res)) return;
+    return financing.updateStatus(req, res, financingStatusMatch[1]);
   }
 
   // CRM Leads
