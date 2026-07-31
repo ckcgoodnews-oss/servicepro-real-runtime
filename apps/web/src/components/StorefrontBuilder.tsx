@@ -394,6 +394,8 @@ export function StorefrontBuilder() {
       publicHours: form.get('hours'),
       logoUrl: (form.get('logoUrl') === 'custom' ? form.get('logoUrlCustom') : form.get('logoUrl')) || '',
       heroImageUrl: (form.get('heroImageUrl') === 'custom' ? form.get('heroImageUrlCustom') : form.get('heroImageUrl')) || '/storefront/field-service-hero.png',
+      primaryColor: form.get('primaryColor') || form.get('primaryColorHex') || '',
+      secondaryColor: form.get('secondaryColor') || form.get('secondaryColorHex') || '',
       publicServiceIds: selectedServiceIds,
       publicServicePresentation: servicePresentation,
     };
@@ -541,6 +543,24 @@ export function StorefrontBuilder() {
             </select>
           </label>
         </div>
+          <div className="form-columns storefront-color-row">
+            <label>
+              Primary color
+              <div className="color-picker-wrap">
+                <input type="color" name="primaryColor" defaultValue={branding.primaryColor || '#1c7c68'} onChange={() => setDirty(true)} />
+                <input type="text" name="primaryColorHex" defaultValue={branding.primaryColor || '#1c7c68'} placeholder="#1c7c68" pattern="^#[0-9a-fA-F]{6}$" onChange={(e) => { const colorInput = e.currentTarget.previousElementSibling as HTMLInputElement; if (colorInput && /^#[0-9a-fA-F]{6}$/.test(e.target.value)) colorInput.value = e.target.value; setDirty(true); }} />
+                <button type="button" className="eyedropper-btn" title="Pick color from screen" onClick={async () => { try { const dropper = new (window as any).EyeDropper(); const result = await dropper.open(); const inputs = document.querySelectorAll<HTMLInputElement>('input[name="primaryColor"], input[name="primaryColorHex"]'); inputs.forEach(inp => { inp.value = result.sRGBHex; }); setDirty(true); } catch {} }}>🎯</button>
+              </div>
+            </label>
+            <label>
+              Secondary color
+              <div className="color-picker-wrap">
+                <input type="color" name="secondaryColor" defaultValue={branding.secondaryColor || '#b9e55b'} onChange={() => setDirty(true)} />
+                <input type="text" name="secondaryColorHex" defaultValue={branding.secondaryColor || '#b9e55b'} placeholder="#b9e55b" pattern="^#[0-9a-fA-F]{6}$" onChange={(e) => { const colorInput = e.currentTarget.previousElementSibling as HTMLInputElement; if (colorInput && /^#[0-9a-fA-F]{6}$/.test(e.target.value)) colorInput.value = e.target.value; setDirty(true); }} />
+                <button type="button" className="eyedropper-btn" title="Pick color from screen" onClick={async () => { try { const dropper = new (window as any).EyeDropper(); const result = await dropper.open(); const inputs = document.querySelectorAll<HTMLInputElement>('input[name="secondaryColor"], input[name="secondaryColorHex"]'); inputs.forEach(inp => { inp.value = result.sRGBHex; }); setDirty(true); } catch {} }}>🎯</button>
+              </div>
+            </label>
+          </div>
           <label className="publish-toggle">
           <input type="checkbox" name="published" checked={published} onChange={(event) => { setPublished(event.target.checked); setDirty(true); }} />
           {published ? 'Published — saving changes updates the live website' : 'Publish this storefront'}

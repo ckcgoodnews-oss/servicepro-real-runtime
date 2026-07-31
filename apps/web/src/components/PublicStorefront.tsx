@@ -108,8 +108,8 @@ export function PublicStorefront() {
   if (!data) return <main className="public-storefront-loading">Loading business...</main>;
 
   const style = {
-    '--store-primary': data.theme.config.primary,
-    '--store-secondary': data.theme.config.secondary,
+    '--store-primary': data.primaryColor || data.theme.config.primary,
+    '--store-secondary': data.secondaryColor || data.theme.config.secondary,
   } as React.CSSProperties;
   const selectedService = data.services.find((service: any) => service.id === serviceId);
 

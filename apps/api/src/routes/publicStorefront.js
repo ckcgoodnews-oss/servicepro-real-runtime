@@ -92,6 +92,8 @@ async function profile(req, res, slug) {
       logoUrl: branding.logoUrl || '',
       heroImageUrl: branding.heroImageUrl || defaultHero,
       theme: themes.find(item => item.slug === branding.publicTheme) || themes[0],
+      primaryColor: branding.primaryColor || '',
+      secondaryColor: branding.secondaryColor || '',
       services: services
         .filter(item => item.active !== false && (branding.publicServiceIds || []).includes(item.id))
         .map(item => ({
