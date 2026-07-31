@@ -138,17 +138,19 @@ export function PublicStorefront() {
         </div>
       </header>
       <section
-        className="storefront-hero"
+        className={`storefront-hero ${selectedService ? 'storefront-hero-compact' : ''}`}
         style={{ backgroundImage: `linear-gradient(90deg,rgba(8,25,23,.9),rgba(8,25,23,.12)),url(${data.heroImageUrl})` }}
       >
         <div>
-          <span>Local service professionals</span>
-          <h1>{data.tagline || `Service you can count on from ${data.companyName}.`}</h1>
-          <p>{data.description}</p>
-          <div className="storefront-hero-ctas">
-            <a className="storefront-cta-button" href="#request">Schedule Service</a>
-            {data.contactPhone && <a className="storefront-call-hero" href={`tel:${data.contactPhone}`}>Or call {data.contactPhone}</a>}
-          </div>
+          {!selectedService && <span>Local service professionals</span>}
+          <h1>{selectedService ? data.companyName : (data.tagline || `Service you can count on from ${data.companyName}.`)}</h1>
+          {!selectedService && <p>{data.description}</p>}
+          {!selectedService && (
+            <div className="storefront-hero-ctas">
+              <a className="storefront-cta-button" href="#request">Schedule Service</a>
+              {data.contactPhone && <a className="storefront-call-hero" href={`tel:${data.contactPhone}`}>Or call {data.contactPhone}</a>}
+            </div>
+          )}
         </div>
       </section>
       <section className="storefront-trust-bar">

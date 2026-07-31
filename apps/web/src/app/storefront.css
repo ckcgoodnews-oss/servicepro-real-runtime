@@ -84,3 +84,8 @@
 .storefront-financing button{padding:16px;border:0;border-radius:8px;background:var(--store-primary,#1c7c68);color:white;font-size:16px;font-weight:700;cursor:pointer}
 .storefront-financing button:hover{opacity:.9}
 @media(max-width:800px){.storefront-blog-grid{grid-template-columns:1fr}.storefront-financing{grid-template-columns:1fr;padding:32px 24px}}
+
+
+/* Compact hero on service pages */
+.storefront-hero-compact{min-height:140px;padding-block:24px 20px}
+.storefront-hero-compact h1{font-size:clamp(22px,3vw,32px);margin:0}
