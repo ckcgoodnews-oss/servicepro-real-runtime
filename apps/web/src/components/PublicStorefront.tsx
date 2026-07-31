@@ -235,16 +235,18 @@ export function PublicStorefront() {
           </div>
         </section>
       )}
-      <section className="storefront-why-choose" id="request">
-        <h2 className="storefront-reveal">Why customers choose {data.companyName}</h2>
-        <div className="storefront-why-grid">
-          <article><strong>Upfront Pricing</strong><p>You approve the cost before work starts — no hidden fees or surprises.</p></article>
-          <article><strong>Local & Trusted</strong><p>Family-owned and community-focused. Your neighbors already trust us.</p></article>
-          <article><strong>Licensed & Insured</strong><p>All technicians are background-checked, trained, and treat your property with care.</p></article>
-          <article><strong>Fast Response</strong><p>We answer when you call. Same-day and emergency service available.</p></article>
-        </div>
-      </section>
-      <section className="storefront-request">
+      {!selectedService && (
+        <section className="storefront-why-choose" id="request">
+          <h2 className="storefront-reveal">Why customers choose {data.companyName}</h2>
+          <div className="storefront-why-grid">
+            <article><strong>Upfront Pricing</strong><p>You approve the cost before work starts — no hidden fees or surprises.</p></article>
+            <article><strong>Local & Trusted</strong><p>Family-owned and community-focused. Your neighbors already trust us.</p></article>
+            <article><strong>Licensed & Insured</strong><p>All technicians are background-checked, trained, and treat your property with care.</p></article>
+            <article><strong>Fast Response</strong><p>We answer when you call. Same-day and emergency service available.</p></article>
+          </div>
+        </section>
+      )}
+      <section className="storefront-request" id={selectedService ? 'request' : undefined}>
         <div>
           <span>Let&apos;s get started</span>
           <h2>Request service or more information</h2>
