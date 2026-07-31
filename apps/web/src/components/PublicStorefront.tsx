@@ -30,6 +30,7 @@ export function PublicStorefront() {
   const [error, setError] = useState('');
   const [sent, setSent] = useState(false);
   const [serviceId, setServiceId] = useState('');
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   useEffect(() => {
     const value = (new URLSearchParams(location.search).get('business') || '').trim().toLowerCase();
@@ -66,6 +67,17 @@ export function PublicStorefront() {
   }
 
   useRevealOnScroll();
+
+  // Auto-rotate carousel
+  useEffect(() => {
+    if (!data?.services?.length) return;
+    const slides = data.services.filter((s: any) => s.imageUrl);
+    if (slides.length < 2) return;
+    const timer = setInterval(() => {
+      setCarouselIndex(prev => (prev + 1) % slides.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [data]);
 
   if (error) {
     return (
@@ -129,6 +141,26 @@ export function PublicStorefront() {
           {data.serviceArea && <span>📍 Serving {data.serviceArea}</span>}
         </div>
       </section>
+      {data.services.length > 1 && (
+        <section className="storefront-carousel">
+          <div className="storefront-carousel-track">
+            {data.services.filter((s: any) => s.imageUrl).map((service: any, i: number) => (
+              <a key={service.id} className={`storefront-carousel-slide ${i === carouselIndex ? 'active' : ''}`} href={`/p/?business=${encodeURIComponent(slug)}&service=${encodeURIComponent(service.id)}`}>
+                <img src={service.imageUrl} alt={service.name} />
+                <div className="storefront-carousel-caption">
+                  <strong>{service.name}</strong>
+                  {service.startingPrice && <span>Starting at ${service.startingPrice}</span>}
+                </div>
+              </a>
+            ))}
+          </div>
+          <div className="storefront-carousel-dots">
+            {data.services.filter((s: any) => s.imageUrl).map((_: any, i: number) => (
+              <button key={i} className={i === carouselIndex ? 'active' : ''} onClick={() => setCarouselIndex(i)} aria-label={`Show slide ${i + 1}`} />
+            ))}
+          </div>
+        </section>
+      )}
       {selectedService && (
         <section className="storefront-service-page">
           <a href={`/p/?business=${encodeURIComponent(slug)}#services`}>← All services</a>
