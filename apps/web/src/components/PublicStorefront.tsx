@@ -78,7 +78,10 @@ export function PublicStorefront() {
           ))}
           <a href="#request">Request service</a>
         </nav>
-        {data.contactPhone && <a className="storefront-call" href={`tel:${data.contactPhone}`}>{data.contactPhone}</a>}
+        <div className="storefront-header-actions">
+          {data.contactPhone && <a className="storefront-call" href={`tel:${data.contactPhone}`}>📞 {data.contactPhone}</a>}
+          <a className="storefront-cta-button" href="#request">Schedule Service</a>
+        </div>
       </header>
       <section
         className="storefront-hero"
@@ -88,7 +91,19 @@ export function PublicStorefront() {
           <span>Local service professionals</span>
           <h1>{data.tagline || `Service you can count on from ${data.companyName}.`}</h1>
           <p>{data.description}</p>
-          <a href="#request">Request service</a>
+          <div className="storefront-hero-ctas">
+            <a className="storefront-cta-button" href="#request">Schedule Service</a>
+            {data.contactPhone && <a className="storefront-call-hero" href={`tel:${data.contactPhone}`}>Or call {data.contactPhone}</a>}
+          </div>
+        </div>
+      </section>
+      <section className="storefront-trust-bar">
+        <div>
+          <span>⭐ Top-rated service</span>
+          <span>✓ Licensed & insured</span>
+          <span>🏠 Locally owned</span>
+          <span>💲 Upfront pricing</span>
+          {data.serviceArea && <span>📍 Serving {data.serviceArea}</span>}
         </div>
       </section>
       {selectedService && (
@@ -126,6 +141,15 @@ export function PublicStorefront() {
           ))}
         </div>
       </section>}
+      <section className="storefront-why-choose">
+        <h2>Why customers choose {data.companyName}</h2>
+        <div className="storefront-why-grid">
+          <article><strong>Upfront Pricing</strong><p>You approve the cost before work starts — no hidden fees or surprises.</p></article>
+          <article><strong>Local & Trusted</strong><p>Family-owned and community-focused. Your neighbors already trust us.</p></article>
+          <article><strong>Licensed & Insured</strong><p>All technicians are background-checked, trained, and treat your property with care.</p></article>
+          <article><strong>Fast Response</strong><p>We answer when you call. Same-day and emergency service available.</p></article>
+        </div>
+      </section>
       <section className="storefront-request" id="request">
         <div>
           <span>Let&apos;s get started</span>
