@@ -89,3 +89,10 @@
 /* Compact hero on service pages */
 .storefront-hero-compact{min-height:140px;padding-block:24px 20px}
 .storefront-hero-compact h1{font-size:clamp(22px,3vw,32px);margin:0}
+
+
+/* Fix anchor scroll offset for sticky header */
+.storefront-request,.storefront-why-choose,.storefront-services,.storefront-blog,.storefront-financing{scroll-margin-top:90px}
+/* Reduce excessive whitespace in request section */
+.storefront-request{padding-block:48px;gap:32px;max-width:1100px;margin:0 auto}
+.storefront-why-choose{margin-bottom:0;padding-bottom:0}
