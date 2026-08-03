@@ -7,8 +7,31 @@ const trialService = require('../services/trialService');
 /**
  * POST /api/v1/trial/register
  * Self-service trial registration. No auth required.
+ * Rate limited: max 5 registrations per IP per hour.
  */
+const registrationAttempts = new Map(); // IP -> { count, resetAt }
+const REG_LIMIT = 5;
+const REG_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
+function checkRegistrationRateLimit(req) {
+  const ip = req.socket?.remoteAddress || req.headers['x-forwarded-for'] || 'unknown';
+  const now = Date.now();
+  const entry = registrationAttempts.get(ip);
+  if (!entry || now > entry.resetAt) {
+    registrationAttempts.set(ip, { count: 1, resetAt: now + REG_WINDOW_MS });
+    return true;
+  }
+  entry.count++;
+  if (entry.count > REG_LIMIT) return false;
+  return true;
+}
+
 async function register(req, res) {
+  // Rate limit registration attempts
+  if (!checkRegistrationRateLimit(req)) {
+    return sendJson(res, 429, { error: { code: 'rate_limited', message: 'Too many registration attempts. Please try again later.' } });
+  }
+
   const { email, name, password, companyName, phone, country, timezone, industry, teamSize, source, campaign, plan } = req.body || {};
 
   // Validate
@@ -244,7 +267,30 @@ async function selectIndustry(req, res) {
     await req.context.repositories.tenantSettings.updateSettings(tenantId, { industry });
   }
 
-  return sendJson(res, 200, { data: { industry, updated: true } });
+  // Auto-install matching industry pack if available
+  let packInstalled = null;
+  try {
+    if (req.context.repositories.serviceMarketplace) {
+      const catalog = await req.context.repositories.serviceMarketplace.listCatalog();
+      const packCode = `pack-${industry.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+      const pack = catalog.find(item =>
+        item.itemType === 'service_pack' &&
+        (item.code === packCode || (item.industries || []).includes(industry.toLowerCase()))
+      );
+      if (pack) {
+        const existing = await req.context.repositories.serviceMarketplace.listInstallations(tenantId);
+        const alreadyInstalled = existing.find(i => i.itemId === pack.id);
+        if (!alreadyInstalled) {
+          await req.context.repositories.serviceMarketplace.install(tenantId, pack.id);
+          packInstalled = { id: pack.id, name: pack.name, code: pack.code };
+        } else {
+          packInstalled = { id: pack.id, name: pack.name, code: pack.code, alreadyInstalled: true };
+        }
+      }
+    }
+  } catch { /* graceful — pack installation is optional */ }
+
+  return sendJson(res, 200, { data: { industry, updated: true, packInstalled } });
 }
 
 /**
@@ -406,6 +452,28 @@ async function convert(req, res) {
   }});
 }
 
+/**
+ * GET /api/v1/trial/help
+ * Trial-specific help content and tutorials. Requires auth.
+ */
+async function help(req, res) {
+  const tutorials = [
+    { id: 'quick-start', title: 'Five-minute quick start', description: 'Get ServicePro running in 5 minutes.', url: '/documentation#quick-start', duration: '5 min' },
+    { id: 'first-customer', title: 'Create your first customer', description: 'Add a customer with contact details and service history.', url: '/customers', duration: '2 min', guided: true },
+    { id: 'schedule-job', title: 'Schedule your first job', description: 'Create an appointment and assign a technician.', url: '/scheduling', duration: '3 min', guided: true },
+    { id: 'dispatch', title: 'Dispatch a technician', description: 'Assign work and track status in real time.', url: '/dispatch', duration: '2 min', guided: true },
+    { id: 'work-order', title: 'Complete a work order', description: 'Walk through the full job lifecycle.', url: '/jobs', duration: '5 min', guided: true },
+    { id: 'invoice', title: 'Create and send an invoice', description: 'Generate an invoice and record payment.', url: '/invoices', duration: '3 min', guided: true },
+    { id: 'portal', title: 'Preview the customer portal', description: 'See what your customers see.', url: '/portal', duration: '2 min' },
+    { id: 'storefront', title: 'Build your storefront', description: 'Create a professional website for your business.', url: '/storefront-builder', duration: '10 min' },
+    { id: 'team', title: 'Invite your team', description: 'Add technicians and office staff.', url: '/team', duration: '3 min' },
+    { id: 'trial-info', title: 'Understand your trial', description: 'What\'s included, limits, and how to upgrade.', url: '/documentation#trial', duration: '3 min' },
+    { id: 'upgrade', title: 'Upgrade your account', description: 'Choose a plan and continue with ServicePro.', url: '/settings/upgrade', duration: '2 min' }
+  ];
+
+  return sendJson(res, 200, { data: { tutorials, total: tutorials.length } });
+}
+
 module.exports = {
   register,
   verifyEmail,
@@ -418,5 +486,6 @@ module.exports = {
   getOnboarding,
   completeOnboardingStep,
   upgradeRequest,
-  convert
+  convert,
+  help
 };

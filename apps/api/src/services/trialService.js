@@ -125,11 +125,33 @@ function sampleDataManifest(industry) {
   };
 }
 
+/**
+ * First-value milestone: composite of meaningful actions
+ * that demonstrate the user has experienced core product value.
+ */
+const FIRST_VALUE_MILESTONES = [
+  { key: 'customer_created', label: 'Created a customer' },
+  { key: 'appointment_scheduled', label: 'Scheduled an appointment' },
+  { key: 'job_completed', label: 'Completed a work order' },
+  { key: 'invoice_created', label: 'Created an invoice' }
+];
+
+function firstValueProgress(milestones = []) {
+  const completed = FIRST_VALUE_MILESTONES.filter(m => milestones.includes(m.key));
+  return {
+    milestones: FIRST_VALUE_MILESTONES.map(m => ({ ...m, completed: milestones.includes(m.key) })),
+    completed: completed.length,
+    total: FIRST_VALUE_MILESTONES.length,
+    achieved: completed.length === FIRST_VALUE_MILESTONES.length
+  };
+}
+
 module.exports = {
   TRIAL_DURATION_DAYS,
   TRIAL_PLAN,
   TRIAL_STATUSES,
   ONBOARDING_STEPS,
+  FIRST_VALUE_MILESTONES,
   generateTenantId,
   generateVerificationToken,
   hashToken,
@@ -139,5 +161,6 @@ module.exports = {
   validateRegistration,
   normalizeEmail,
   trialEntitlements,
-  sampleDataManifest
+  sampleDataManifest,
+  firstValueProgress
 };

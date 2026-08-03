@@ -34,6 +34,7 @@ const fileUpload = require('./routes/fileUpload');
 const blog = require('./routes/blog');
 const financing = require('./routes/financing');
 const trial = require('./routes/trial');
+const trialAdmin = require('./routes/trialAdmin');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -303,6 +304,21 @@ async function router(req, res) {
   if (req.url === '/api/v1/platform/tenant-dashboard' && req.method === 'GET') return platformTenantDashboard.dashboard(req, res);
   if (req.url === '/api/v1/platform/owners' && req.method === 'GET') return platformAccess.list(req, res);
   if (req.url === '/api/v1/platform/tenant-management' && req.method === 'GET') return tenantManagement.list(req, res);
+
+  // Trial administration (platform admin)
+  if (req.url === '/api/v1/platform/trials' && req.method === 'GET') return trialAdmin.listTrials(req, res);
+  if (req.url === '/api/v1/platform/trials/funnel' && req.method === 'GET') return trialAdmin.trialFunnel(req, res);
+  const trialAdminDetailMatch = req.url.match(/^\/api\/v1\/platform\/trials\/([^/]+)$/);
+  if (trialAdminDetailMatch && req.method === 'GET') return trialAdmin.getTrialDetail(req, res, decodeURIComponent(trialAdminDetailMatch[1]));
+  const trialAdminExtendMatch = req.url.match(/^\/api\/v1\/platform\/trials\/([^/]+)\/extend$/);
+  if (trialAdminExtendMatch && req.method === 'POST') return trialAdmin.extendTrial(req, res, decodeURIComponent(trialAdminExtendMatch[1]));
+  const trialAdminCancelMatch = req.url.match(/^\/api\/v1\/platform\/trials\/([^/]+)\/cancel$/);
+  if (trialAdminCancelMatch && req.method === 'POST') return trialAdmin.cancelTrial(req, res, decodeURIComponent(trialAdminCancelMatch[1]));
+  const trialAdminSuspendMatch = req.url.match(/^\/api\/v1\/platform\/trials\/([^/]+)\/suspend$/);
+  if (trialAdminSuspendMatch && req.method === 'POST') return trialAdmin.suspendTrial(req, res, decodeURIComponent(trialAdminSuspendMatch[1]));
+  const trialAdminConvertMatch = req.url.match(/^\/api\/v1\/platform\/trials\/([^/]+)\/convert$/);
+  if (trialAdminConvertMatch && req.method === 'POST') return trialAdmin.convertTrial(req, res, decodeURIComponent(trialAdminConvertMatch[1]));
+
   if (req.url === '/api/v1/admin/workspaces' && req.method === 'GET') return workspaces.list(req, res);
   if (req.url === '/api/v1/workspace/current' && req.method === 'GET') return workspaces.current(req, res);
   if (req.url === '/api/admin/switch-tenant' && req.method === 'POST') return workspaces.switchTenant(req, res);
@@ -361,6 +377,7 @@ async function router(req, res) {
   if (trialOnboardingStepMatch && req.method === 'PATCH') return trial.completeOnboardingStep(req, res, decodeURIComponent(trialOnboardingStepMatch[1]));
   if (req.url === '/api/v1/trial/upgrade-request' && req.method === 'POST') return trial.upgradeRequest(req, res);
   if (req.url === '/api/v1/trial/convert' && req.method === 'POST') return trial.convert(req, res);
+  if (req.url === '/api/v1/trial/help' && req.method === 'GET') return trial.help(req, res);
 
   if (req.url === '/api/v1/authz' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.ADMIN_AUTHZ_READ)(req, res)) return;
