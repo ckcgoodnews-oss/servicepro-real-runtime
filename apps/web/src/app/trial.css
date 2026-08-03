@@ -1,0 +1,258 @@
+/* Trial Registration */
+.trial-register-page .trial-card {
+  max-width: 440px;
+}
+
+.trial-form .trial-step {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.trial-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.trial-form select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: var(--bg-surface, #fff);
+}
+
+.trial-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 1rem;
+  font-size: 0.85rem;
+  color: var(--text-muted, #666);
+}
+
+.trial-benefits li {
+  white-space: nowrap;
+}
+
+/* Trial Banner */
+.trial-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  gap: 1rem;
+}
+
+.trial-banner-info {
+  background: var(--info-bg, #e8f4fd);
+  border: 1px solid var(--info-border, #b3d9f2);
+}
+
+.trial-banner-warning {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+}
+
+.trial-banner-urgent {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+.trial-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.trial-plan {
+  opacity: 0.7;
+  font-size: 0.8rem;
+}
+
+.trial-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Onboarding Checklist */
+.onboarding-checklist {
+  background: var(--bg-surface, #fff);
+  border: 1px solid var(--border-color, #e5e5e5);
+  border-radius: 10px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.onboarding-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.onboarding-header h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.onboarding-header .muted {
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+}
+
+.onboarding-progress {
+  height: 4px;
+  background: var(--border-color, #e5e5e5);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+}
+
+.onboarding-progress-bar {
+  height: 100%;
+  background: var(--accent-color, #2563eb);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.onboarding-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.onboarding-steps li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.onboarding-steps .step-icon {
+  width: 1.2rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.onboarding-steps .step-done {
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+.onboarding-steps a {
+  color: var(--accent-color, #2563eb);
+  text-decoration: none;
+}
+
+.onboarding-steps a:hover {
+  text-decoration: underline;
+}
+
+/* Upgrade Page */
+.upgrade-workspace {
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.plan-card {
+  border: 2px solid var(--border-color, #e5e5e5);
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.plan-card:hover,
+.plan-card:focus-visible {
+  border-color: var(--accent-color, #2563eb);
+}
+
+.plan-selected {
+  border-color: var(--accent-color, #2563eb);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.plan-recommended {
+  border-color: var(--accent-color, #2563eb);
+}
+
+.plan-badge {
+  position: absolute;
+  top: -0.6rem;
+  left: 1rem;
+  background: var(--accent-color, #2563eb);
+  color: #fff;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.plan-card h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+}
+
+.plan-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+
+.plan-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+}
+
+.plan-card li {
+  padding: 0.2rem 0;
+}
+
+.upgrade-form {
+  margin-top: 1.5rem;
+}
+
+.upgrade-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+/* Verify Email Page */
+.verify-info {
+  background: var(--info-bg, #e8f4fd);
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.verify-info p {
+  margin: 0.3rem 0;
+}

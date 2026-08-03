@@ -33,6 +33,7 @@ const websiteBuilder = require('./routes/websiteBuilder');
 const fileUpload = require('./routes/fileUpload');
 const blog = require('./routes/blog');
 const financing = require('./routes/financing');
+const trial = require('./routes/trial');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -166,6 +167,11 @@ async function router(req, res) {
   if (publicBlogMatch && req.method === 'GET') return blog.publicList(req, res, decodeURIComponent(publicBlogMatch[1]));
   const publicFinancingMatch = req.url.match(/^\/api\/public\/financing\/([^/?]+)$/);
   if (publicFinancingMatch && req.method === 'POST') return financing.submitApplication(req, res, decodeURIComponent(publicFinancingMatch[1]));
+
+  // Trial routes (public — no auth required)
+  if (req.url === '/api/v1/trial/register' && req.method === 'POST') return trial.register(req, res);
+  if (req.url === '/api/v1/trial/verify-email' && req.method === 'POST') return trial.verifyEmail(req, res);
+  if (req.url === '/api/v1/trial/resend-verification' && req.method === 'POST') return trial.resendVerification(req, res);
 
   if (req.url.startsWith('/portal/api/')) {
     if (!portalAuthGuard(req, res)) return;
@@ -343,6 +349,19 @@ async function router(req, res) {
   }
   if(req.url==='/api/v1/storefront/themes'&&req.method==='GET')return publicStorefront.listThemes(req,res);
   if(req.url==='/api/v1/storefront/starter-services'&&req.method==='GET')return publicStorefront.starterServices(req,res);
+
+  // Trial routes (authenticated)
+  if (req.url === '/api/v1/trial/status' && req.method === 'GET') return trial.status(req, res);
+  if (req.url === '/api/v1/trial/usage' && req.method === 'GET') return trial.usage(req, res);
+  if (req.url === '/api/v1/trial/select-industry' && req.method === 'POST') return trial.selectIndustry(req, res);
+  if (req.url === '/api/v1/trial/sample-data' && req.method === 'POST') return trial.installSampleData(req, res);
+  if (req.url === '/api/v1/trial/sample-data' && req.method === 'DELETE') return trial.removeSampleData(req, res);
+  if (req.url === '/api/v1/trial/onboarding' && req.method === 'GET') return trial.getOnboarding(req, res);
+  const trialOnboardingStepMatch = req.url.match(/^\/api\/v1\/trial\/onboarding\/([^/]+)$/);
+  if (trialOnboardingStepMatch && req.method === 'PATCH') return trial.completeOnboardingStep(req, res, decodeURIComponent(trialOnboardingStepMatch[1]));
+  if (req.url === '/api/v1/trial/upgrade-request' && req.method === 'POST') return trial.upgradeRequest(req, res);
+  if (req.url === '/api/v1/trial/convert' && req.method === 'POST') return trial.convert(req, res);
+
   if (req.url === '/api/v1/authz' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.ADMIN_AUTHZ_READ)(req, res)) return;
     return auth.authz(req, res);
