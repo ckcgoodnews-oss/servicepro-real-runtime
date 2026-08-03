@@ -12,6 +12,35 @@ function sameDay(value, today = new Date()) {
   );
 }
 
+function humanizeSlug(value) {
+  return String(value || '')
+    .replace(/[-_]+/g, ' ')
+    .replace(/\b\w/g, character => character.toUpperCase());
+}
+
+function formatDashboardActivity(row) {
+  const raw = String(row.action || row.eventType || '').trim();
+  const request = raw.match(/^(GET|POST|PUT|PATCH|DELETE)\s+([^?\s]+)/i);
+  if (!request) {
+    return {
+      displayTitle: humanizeSlug(raw) || 'System activity',
+      displayContext: humanizeSlug(row.entityType) || 'ServicePro'
+    };
+  }
+
+  const method = request[1].toUpperCase();
+  const path = request[2];
+  const storefront = path.match(/^\/api\/public\/storefront\/([^/]+)$/i);
+  const blog = path.match(/^\/api\/public\/blog\/([^/]+)$/i);
+
+  if (storefront) return { displayTitle: 'Public storefront viewed', displayContext: humanizeSlug(storefront[1]) };
+  if (blog) return { displayTitle: 'Public blog viewed', displayContext: humanizeSlug(blog[1]) };
+  if (path === '/') return { displayTitle: 'Website homepage viewed', displayContext: 'Public website' };
+  if (/\/auth\/login$/i.test(path)) return { displayTitle: method === 'POST' ? 'User signed in' : 'Sign-in page viewed', displayContext: 'Authentication' };
+  if (method === 'GET') return { displayTitle: 'Application page viewed', displayContext: humanizeSlug(path.split('/').filter(Boolean).pop() || 'ServicePro') };
+  return { displayTitle: 'Application data updated', displayContext: humanizeSlug(path.split('/').filter(Boolean).pop() || 'ServicePro') };
+}
+
 async function summary(req, res) {
   const repositories = req.context.repositories;
 
@@ -125,7 +154,8 @@ async function summary(req, res) {
         eventType: row.eventType,
         action: row.action,
         entityType: row.entityType,
-        createdAt: row.createdAt
+        createdAt: row.createdAt,
+        ...formatDashboardActivity(row)
       }))
     }
   });
@@ -133,5 +163,6 @@ async function summary(req, res) {
 
 module.exports = {
   summary,
-  sameDay
+  sameDay,
+  formatDashboardActivity
 };

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { authFetch } from '@/auth/session';
+import { RepositoryDocumentationLibrary } from '@/components/RepositoryDocumentationLibrary';
 
 type Audience = 'platform_admin' | 'owner' | 'staff';
 type Section = { heading: string; body: string; steps?: string[]; code?: string; wireframe?: string };
@@ -253,6 +254,7 @@ function allowedAudiences(platformAdmin: boolean, roles: string[]) {
 }
 
 export function DocumentationWorkspace() {
+  const [view, setView] = useState<'library' | 'manuals'>('library');
   const [platformAdmin, setPlatformAdmin] = useState(false);
   const [roles, setRoles] = useState<string[]>([]);
   const [audience, setAudience] = useState<Audience | 'all'>('all');
@@ -289,11 +291,13 @@ export function DocumentationWorkspace() {
   }
 
   return <section className="docs-workspace">
-    <div className="docs-hero"><div><span>Role-aware documentation center</span><h2>ServicePro full-suite operating manuals.</h2><p>Guides, Tutorials, API reference, and Release notes are displayed only when authorized for your platform or tenant role.</p></div><label><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search documentation" /></label></div>
+    <div className="docs-hero"><div><span>Documentation center</span><h2>Find guidance without leaving ServicePro.</h2><p>Browse the complete 639-document product library or switch to concise role-based operating manuals.</p></div>{view === 'manuals' && <label><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search operating manuals" /></label>}</div>
+    <div className="docs-view-switch" role="tablist" aria-label="Documentation view"><button type="button" role="tab" aria-selected={view === 'library'} className={view === 'library' ? 'active' : ''} onClick={() => setView('library')}>Complete library <span>639</span></button><button type="button" role="tab" aria-selected={view === 'manuals'} className={view === 'manuals' ? 'active' : ''} onClick={() => setView('manuals')}>Operating manuals <span>{manuals.length}</span></button></div>
+    {view === 'library' ? <RepositoryDocumentationLibrary /> : <>
     <div className="docs-role-notice">Viewing documentation for <strong>{platformAdmin ? 'Platform administrator' : roles.includes('owner') ? 'Business owner' : 'Staff member'}</strong>. Restricted internal manuals are omitted.</div>
     <div className="docs-tabs">{availableAudiences.map((value) => <button key={value} className={audience === value ? 'active' : ''} onClick={() => setAudience(value as Audience | 'all')}>{audienceLabels[value as Audience | 'all']}</button>)}</div>
     <div className="docs-layout"><aside className="docs-index"><p>{visible.length} manuals</p>{visible.map((manual) => <button key={manual.id} className={selected?.id === manual.id ? 'active' : ''} onClick={() => setSelectedId(manual.id)}><span>{audienceLabels[manual.audience]}</span><strong>{manual.title}</strong><small>{manual.minutes} min · {manual.sections.length} chapters</small></button>)}</aside>
       <article className="docs-article">{selected ? <><header><span>{audienceLabels[selected.audience]} · {selected.category}</span><h2>{selected.title}</h2><p>{selected.summary}</p><small>{selected.minutes} minute read · {selected.sections.length} chapters</small></header>{selected.sections.map((section, index) => <section key={section.heading}><h3>{index + 1}. {section.heading}</h3><p>{section.body}</p>{section.steps && <ol>{section.steps.map((step) => <li key={step}>{step}</li>)}</ol>}{section.wireframe && <figure className="docs-wireframe"><figcaption>UI / architecture reference</figcaption><pre>{section.wireframe}</pre></figure>}{section.code && <div className="docs-code"><button onClick={() => void copy(section.code!, `${selected.id}-${index}`)}>{copied === `${selected.id}-${index}` ? 'Copied' : 'Copy'}</button><pre><code>{section.code}</code></pre></div>}</section>)}</> : <div className="docs-empty">No authorized manuals match this search.</div>}</article>
-    </div>
+    </div></>}
   </section>;
 }
