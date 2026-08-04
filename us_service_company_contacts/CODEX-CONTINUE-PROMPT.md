@@ -1,12 +1,12 @@
 # Codex Continuation Prompt — US Service Company Contacts
 
-You are continuing development of the `us_service_company_contacts` Python CLI application located at `D:\ServiceRepo\us_service_company_contacts\`.
+You are continuing development of the `us_service_company_contacts` Python CLI application located at `I:\ServiceRepo\us_service_company_contacts\`.
 
 ## Git State
 
 ```bash
 # Always start by syncing with remote
-cd D:\ServiceRepo
+cd I:\ServiceRepo
 git pull --rebase origin main
 
 # If conflicts with untracked files:
@@ -23,13 +23,13 @@ git push origin main
 ```
 
 **Current remote branch:** `main`  
-**Last known commit:** `ee5fa98`  
+**Last known commit:** `fb5a3ed`  
 **Repository:** `https://github.com/ckcgoodnews-oss/servicepro-real-runtime.git`
 
 ## Project Location
 
 ```
-D:\ServiceRepo\us_service_company_contacts/
+I:\ServiceRepo\us_service_company_contacts/
 ├── .env.example
 ├── .gitignore
 ├── README.md
@@ -135,7 +135,7 @@ D:\ServiceRepo\us_service_company_contacts/
 ## Environment Setup
 
 ```powershell
-cd D:\ServiceRepo\us_service_company_contacts
+cd I:\ServiceRepo\us_service_company_contacts
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
