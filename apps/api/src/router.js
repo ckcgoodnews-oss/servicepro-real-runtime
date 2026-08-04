@@ -35,6 +35,7 @@ const blog = require('./routes/blog');
 const financing = require('./routes/financing');
 const trial = require('./routes/trial');
 const trialAdmin = require('./routes/trialAdmin');
+const { trialAccessGuard } = require('./middleware/trialAccessGuard');
 const trialMarketplace = require('./routes/trialMarketplace');
 
 const auth = require('./routes/auth');
@@ -300,6 +301,7 @@ async function router(req, res) {
     const tenantModulesMatch=req.url.match(/^\/api\/v1\/platform\/tenants\/([^/]+)\/modules$/);if(tenantModulesMatch&&req.method==='GET')return moduleAccess.platformGet(req,res,tenantModulesMatch[1]);if(tenantModulesMatch&&req.method==='PUT')return moduleAccess.platformSet(req,res,tenantModulesMatch[1]);
     if (!(await moduleAccessGuard(req,res))) return;
     await attachOperationalTenant(req);
+    if (await trialAccessGuard(req, res)) return;
   }
 
   if (req.url === '/api/v1/platform/tenant-dashboard' && req.method === 'GET') return platformTenantDashboard.dashboard(req, res);
