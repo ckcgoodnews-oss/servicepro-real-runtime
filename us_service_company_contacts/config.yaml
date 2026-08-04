@@ -1,0 +1,40 @@
+# US Service Company Contacts - Configuration
+# See README.md for full documentation.
+
+collection:
+  default_states: ["IN", "OH", "KY"]
+  default_categories: ["plumbing", "hvac", "electrician"]
+  default_limit: 5000
+
+rate_limiting:
+  requests_per_second: 0.5
+  max_workers: 5
+  max_pages_per_domain: 5
+  http_timeout: 30
+  retry_max_attempts: 3
+  retry_backoff_factor: 2
+
+enrichment:
+  crawl_pages:
+    - "/"
+    - "/contact"
+    - "/contact-us"
+    - "/about"
+    - "/about-us"
+    - "/service-area"
+    - "/locations"
+
+verification:
+  dns_timeout: 10
+  phone_default_region: "US"
+
+export:
+  default_output: "service_companies.csv"
+  minimum_confidence: 0
+
+logging:
+  level: "INFO"
+  log_file: "logs/service_contacts.log"
+  audit_file: "logs/crawl_audit.log"
+  max_bytes: 10485760
+  backup_count: 5
