@@ -52,6 +52,48 @@ GOLD = "C7922B"
 TOTAL_DXA = 9360
 
 
+def add_bookmark(paragraph, name: str, bookmark_id: int):
+    start = OxmlElement("w:bookmarkStart")
+    start.set(qn("w:id"), str(bookmark_id))
+    start.set(qn("w:name"), name)
+    end = OxmlElement("w:bookmarkEnd")
+    end.set(qn("w:id"), str(bookmark_id))
+    paragraph_properties = paragraph._p.find(qn("w:pPr"))
+    insert_at = 1 if paragraph_properties is not None else 0
+    paragraph._p.insert(insert_at, start)
+    paragraph._p.append(end)
+
+
+def add_internal_hyperlink(paragraph, label: str, anchor: str):
+    hyperlink = OxmlElement("w:hyperlink")
+    hyperlink.set(qn("w:anchor"), anchor)
+    run = OxmlElement("w:r")
+    props = OxmlElement("w:rPr")
+    style = OxmlElement("w:rStyle")
+    style.set(qn("w:val"), "Hyperlink")
+    props.append(style)
+    run.append(props)
+    text = OxmlElement("w:t")
+    text.text = label
+    run.append(text)
+    hyperlink.append(run)
+    paragraph._p.append(hyperlink)
+
+
+class NavigableDocTemplate(SimpleDocTemplate):
+    def afterFlowable(self, flowable):
+        anchor = getattr(flowable, "_bookmark_name", None)
+        if not anchor:
+            return
+        title = getattr(flowable, "_bookmark_title", anchor)
+        requested_level = getattr(flowable, "_outline_level", 0)
+        previous_level = getattr(self, "_last_outline_level", -1)
+        level = max(0, min(requested_level, previous_level + 1))
+        self.canv.bookmarkPage(anchor)
+        self.canv.addOutlineEntry(title, anchor, level=level, closed=False)
+        self._last_outline_level = level
+
+
 def clean_inline(text: str) -> str:
     text = re.sub(r"\[([^]]+)]\([^)]+\)", r"\1", text)
     text = text.replace("**", "").replace("__", "").replace("`", "")
@@ -245,6 +287,15 @@ def add_rich_text(paragraph, text):
 
 def build_docx(source_text: str, output: Path, title: str, subtitle: str, document_type: str = "ServicePro Documentation"):
     blocks = list(split_blocks(source_text))
+    navigation = []
+    skipped = 0
+    for block in blocks:
+        if block[0] == "heading" and block[1] <= 2 and skipped < 2:
+            skipped += 1
+            continue
+        if block[0] == "heading":
+            level = min(3, max(1, block[1] - 1))
+            navigation.append((level, block[2], f"section_{len(navigation) + 1:03d}"))
     doc = Document()
     style_doc(doc)
     section = doc.sections[0]
@@ -281,7 +332,8 @@ def build_docx(source_text: str, output: Path, title: str, subtitle: str, docume
     r.font.size = Pt(9.5); r.font.color.rgb = RGBColor.from_string(MUTED)
     doc.add_page_break()
 
-    doc.add_heading("Document Control", level=1)
+    document_control_heading = doc.add_heading("Document Control", level=1)
+    add_bookmark(document_control_heading, "document_control", 1)
     table = doc.add_table(rows=4, cols=2)
     meta = [("Purpose", "Enterprise platform overview and buyer evaluation reference"),
             ("Audience", "Business leaders, platform administrators, evaluators, partners, and technical stakeholders"),
@@ -295,9 +347,21 @@ def build_docx(source_text: str, output: Path, title: str, subtitle: str, docume
             if idx == 0:
                 row.cells[idx].paragraphs[0].runs[0].bold = True
     set_table_geometry(table, [2100, 7260])
-    doc.add_paragraph("Navigation note: use Word's Navigation Pane to move through the heading hierarchy. The source document's linked table of contents is retained below.")
+    doc.add_paragraph("Use the linked table of contents below or Word's Navigation Pane to move through this document.")
+    toc_heading = doc.add_heading("Table of Contents", level=1)
+    add_bookmark(toc_heading, "table_of_contents", 2)
+    document_control_entry = doc.add_paragraph()
+    document_control_entry.paragraph_format.space_after = Pt(3)
+    add_internal_hyperlink(document_control_entry, "Document Control", "document_control")
+    for level, heading_title, anchor in navigation:
+        entry = doc.add_paragraph()
+        entry.paragraph_format.left_indent = Inches(0.22 * (level - 1))
+        entry.paragraph_format.space_after = Pt(3)
+        add_internal_hyperlink(entry, heading_title, anchor)
+    doc.add_page_break()
 
     skip_first_title = 0
+    heading_cursor = 0
     for block in blocks:
         kind = block[0]
         if kind == "heading" and block[1] <= 2 and skip_first_title < 2:
@@ -305,7 +369,9 @@ def build_docx(source_text: str, output: Path, title: str, subtitle: str, docume
             continue
         if kind == "heading":
             level = min(3, max(1, block[1] - 1))
-            doc.add_heading(block[2], level=level)
+            heading = doc.add_heading(block[2], level=level)
+            add_bookmark(heading, navigation[heading_cursor][2], heading_cursor + 3)
+            heading_cursor += 1
         elif kind == "paragraph":
             add_rich_text(doc.add_paragraph(), block[1])
         elif kind in ("bullets", "numbers"):
@@ -366,6 +432,16 @@ def pdf_text(text):
 
 
 def build_pdf(source_text: str, output: Path, title: str, subtitle: str, document_type: str = "ServicePro Documentation"):
+    blocks = list(split_blocks(source_text))
+    navigation = []
+    skipped = 0
+    for block in blocks:
+        if block[0] == "heading" and block[1] <= 2 and skipped < 2:
+            skipped += 1
+            continue
+        if block[0] == "heading":
+            level = min(3, max(1, block[1] - 1))
+            navigation.append((level, block[2], f"pdf_section_{len(navigation) + 1:03d}"))
     styles = getSampleStyleSheet()
     body = ParagraphStyle("Body", parent=styles["BodyText"], fontName="Helvetica", fontSize=9.2, leading=12.2, textColor=colors.HexColor("#243447"), spaceAfter=6)
     h1 = ParagraphStyle("H1", parent=styles["Heading1"], fontName="Helvetica-Bold", fontSize=17, leading=21, textColor=colors.HexColor("#17365D"), spaceBefore=14, spaceAfter=7, keepWithNext=True)
@@ -379,15 +455,31 @@ def build_pdf(source_text: str, output: Path, title: str, subtitle: str, documen
         canvas.drawRightString(7.68*inch, 0.42*inch, f"ServicePro Documentation Library  |  {doc.page}"); canvas.restoreState()
 
     output.parent.mkdir(parents=True, exist_ok=True)
-    doc = SimpleDocTemplate(str(output), pagesize=LETTER, rightMargin=.82*inch, leftMargin=.82*inch, topMargin=.75*inch, bottomMargin=.68*inch, title=title, author="ServicePro")
-    story = [Spacer(1, 1.42*inch), Paragraph(pdf_text(document_type.upper()), ParagraphStyle("K", parent=body, alignment=TA_CENTER, textColor=colors.HexColor("#C7922B"), fontName="Helvetica-Bold", fontSize=9)), Spacer(1, 10), Paragraph(pdf_text(title), ParagraphStyle("T", parent=h1, alignment=TA_CENTER, fontSize=28, leading=32, spaceAfter=12)), Paragraph(pdf_text(subtitle), ParagraphStyle("S", parent=body, alignment=TA_CENTER, fontSize=13, leading=17, textColor=colors.HexColor("#2E74B5"))), Spacer(1, 1.1*inch), Paragraph(f"Publication edition  |  {date.today().isoformat()}", ParagraphStyle("D", parent=body, alignment=TA_CENTER, textColor=colors.HexColor("#66788A"))), PageBreak(), Paragraph("Document Control", h1)]
+    doc = NavigableDocTemplate(str(output), pagesize=LETTER, rightMargin=.82*inch, leftMargin=.82*inch, topMargin=.75*inch, bottomMargin=.68*inch, title=title, author="ServicePro")
+    document_control = Paragraph('<a name="pdf_document_control"/>Document Control', h1)
+    document_control._bookmark_name = "pdf_document_control"
+    document_control._bookmark_title = "Document Control"
+    document_control._outline_level = 0
+    story = [Spacer(1, 1.42*inch), Paragraph(pdf_text(document_type.upper()), ParagraphStyle("K", parent=body, alignment=TA_CENTER, textColor=colors.HexColor("#C7922B"), fontName="Helvetica-Bold", fontSize=9)), Spacer(1, 10), Paragraph(pdf_text(title), ParagraphStyle("T", parent=h1, alignment=TA_CENTER, fontSize=28, leading=32, spaceAfter=12)), Paragraph(pdf_text(subtitle), ParagraphStyle("S", parent=body, alignment=TA_CENTER, fontSize=13, leading=17, textColor=colors.HexColor("#2E74B5"))), Spacer(1, 1.1*inch), Paragraph(f"Publication edition  |  {date.today().isoformat()}", ParagraphStyle("D", parent=body, alignment=TA_CENTER, textColor=colors.HexColor("#66788A"))), PageBreak(), document_control]
     meta = [[Paragraph("Purpose", h3), Paragraph("Enterprise platform overview and buyer evaluation reference", body)], [Paragraph("Audience", h3), Paragraph("Business leaders, platform administrators, evaluators, partners, and technical stakeholders", body)], [Paragraph("Scope", h3), Paragraph("Capabilities, architecture, security, deployment, adoption, outcomes, and terminology", body)], [Paragraph("Source", h3), Paragraph("ServicePro repository documentation; technical meaning preserved", body)]]
     t = Table(meta, colWidths=[1.35*inch, 5.15*inch], repeatRows=0)
-    t.setStyle(TableStyle([("BACKGROUND",(0,0),(0,-1),colors.HexColor("#DCE6F1")),("GRID",(0,0),(-1,-1),.35,colors.HexColor("#AAB7C4")),("VALIGN",(0,0),(-1,-1),"MIDDLE"),("LEFTPADDING",(0,0),(-1,-1),7),("RIGHTPADDING",(0,0),(-1,-1),7),("TOPPADDING",(0,0),(-1,-1),5),("BOTTOMPADDING",(0,0),(-1,-1),5)])); story += [t, Spacer(1, 8)]
+    t.setStyle(TableStyle([("BACKGROUND",(0,0),(0,-1),colors.HexColor("#DCE6F1")),("GRID",(0,0),(-1,-1),.35,colors.HexColor("#AAB7C4")),("VALIGN",(0,0),(-1,-1),"MIDDLE"),("LEFTPADDING",(0,0),(-1,-1),7),("RIGHTPADDING",(0,0),(-1,-1),7),("TOPPADDING",(0,0),(-1,-1),5),("BOTTOMPADDING",(0,0),(-1,-1),5)])); story += [t, Spacer(1, 12), Paragraph("Table of Contents", h1), Paragraph('<a href="#pdf_document_control" color="#2E74B5">Document Control</a>', body)]
+    for level, heading_title, anchor in navigation:
+        toc_style = ParagraphStyle(f"TOC{level}", parent=body, leftIndent=(level - 1) * 14, textColor=colors.HexColor("#2E74B5"), spaceAfter=4)
+        story.append(Paragraph(f'<a href="#{anchor}" color="#2E74B5">{html.escape(heading_title)}</a>', toc_style))
+    story.append(PageBreak())
     skip = 0
-    for b in split_blocks(source_text):
+    heading_cursor = 0
+    for b in blocks:
         if b[0] == "heading" and b[1] <= 2 and skip < 2: skip += 1; continue
-        if b[0] == "heading": story.append(Paragraph(pdf_text(b[2]), [h1,h2,h3][min(2,max(0,b[1]-2))]))
+        if b[0] == "heading":
+            level, heading_title, anchor = navigation[heading_cursor]
+            heading = Paragraph(f'<a name="{anchor}"/>{pdf_text(b[2])}', [h1,h2,h3][level - 1])
+            heading._bookmark_name = anchor
+            heading._bookmark_title = heading_title
+            heading._outline_level = level - 1
+            story.append(heading)
+            heading_cursor += 1
         elif b[0] == "paragraph": story.append(Paragraph(pdf_text(b[1]), body))
         elif b[0] in ("bullets","numbers"):
             items=[ListItem(Paragraph(pdf_text(x),body), leftIndent=10) for x in b[1]]

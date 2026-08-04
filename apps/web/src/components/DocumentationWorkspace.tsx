@@ -23,6 +23,18 @@ const audienceLabels: Record<Audience | 'all', string> = {
   staff: 'Staff and technicians',
 };
 
+const audienceDescriptions: Record<Audience, string> = {
+  platform_admin: 'Deployment, security, integrations, and platform governance',
+  owner: 'Workspace setup, team access, storefronts, and business controls',
+  staff: 'Scheduling, customers, work orders, and daily field workflows',
+};
+
+const audienceIcons: Record<Audience, string> = {
+  platform_admin: '⚙',
+  owner: '◆',
+  staff: '✓',
+};
+
 const manuals: Manual[] = [
   {
     id: 'platform-admin-manual',
@@ -294,10 +306,13 @@ export function DocumentationWorkspace() {
     <div className="docs-hero"><div><span>Documentation center</span><h2>Find guidance without leaving ServicePro.</h2><p>Browse the complete 639-document product library or switch to concise role-based operating manuals.</p></div>{view === 'manuals' && <label><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search operating manuals" /></label>}</div>
     <div className="docs-view-switch" role="tablist" aria-label="Documentation view"><button type="button" role="tab" aria-selected={view === 'library'} className={view === 'library' ? 'active' : ''} onClick={() => setView('library')}>Complete library <span>639</span></button><button type="button" role="tab" aria-selected={view === 'manuals'} className={view === 'manuals' ? 'active' : ''} onClick={() => setView('manuals')}>Operating manuals <span>{manuals.length}</span></button></div>
     {view === 'library' ? <RepositoryDocumentationLibrary /> : <>
-    <div className="docs-role-notice">Viewing documentation for <strong>{platformAdmin ? 'Platform administrator' : roles.includes('owner') ? 'Business owner' : 'Staff member'}</strong>. Restricted internal manuals are omitted.</div>
-    <div className="docs-tabs">{availableAudiences.map((value) => <button key={value} className={audience === value ? 'active' : ''} onClick={() => setAudience(value as Audience | 'all')}>{audienceLabels[value as Audience | 'all']}</button>)}</div>
-    <div className="docs-layout"><aside className="docs-index"><p>{visible.length} manuals</p>{visible.map((manual) => <button key={manual.id} className={selected?.id === manual.id ? 'active' : ''} onClick={() => setSelectedId(manual.id)}><span>{audienceLabels[manual.audience]}</span><strong>{manual.title}</strong><small>{manual.minutes} min · {manual.sections.length} chapters</small></button>)}</aside>
-      <article className="docs-article">{selected ? <><header><span>{audienceLabels[selected.audience]} · {selected.category}</span><h2>{selected.title}</h2><p>{selected.summary}</p><small>{selected.minutes} minute read · {selected.sections.length} chapters</small></header>{selected.sections.map((section, index) => <section key={section.heading}><h3>{index + 1}. {section.heading}</h3><p>{section.body}</p>{section.steps && <ol>{section.steps.map((step) => <li key={step}>{step}</li>)}</ol>}{section.wireframe && <figure className="docs-wireframe"><figcaption>UI / architecture reference</figcaption><pre>{section.wireframe}</pre></figure>}{section.code && <div className="docs-code"><button onClick={() => void copy(section.code!, `${selected.id}-${index}`)}>{copied === `${selected.id}-${index}` ? 'Copied' : 'Copy'}</button><pre><code>{section.code}</code></pre></div>}</section>)}</> : <div className="docs-empty">No authorized manuals match this search.</div>}</article>
+    <div className="docs-role-notice"><span>Personalized library</span><p>Showing guides available to your <strong>{platformAdmin ? 'platform administrator' : roles.includes('owner') ? 'business owner' : 'staff member'}</strong> account. Internal material you cannot access stays hidden.</p></div>
+    <nav className="docs-audience-cards" aria-label="Choose a manual audience">
+      <button className={audience === 'all' ? 'active' : ''} onClick={() => setAudience('all')}><span className="docs-audience-icon">⌂</span><span><strong>All guides</strong><small>Browse every manual available to you</small></span></button>
+      {availableAudiences.filter((value): value is Audience => value !== 'all').map((value) => <button key={value} className={audience === value ? 'active' : ''} onClick={() => setAudience(value)}><span className="docs-audience-icon">{audienceIcons[value]}</span><span><strong>{audienceLabels[value]}</strong><small>{audienceDescriptions[value]}</small></span></button>)}
+    </nav>
+    <div className="docs-layout"><aside className="docs-index"><p>{visible.length} guides available</p>{visible.map((manual) => <button key={manual.id} className={selected?.id === manual.id ? 'active' : ''} onClick={() => setSelectedId(manual.id)}><span className="docs-index-eyebrow">{audienceLabels[manual.audience]}</span><strong>{manual.title}</strong><small><span>{manual.minutes} min read</span><span>{manual.sections.length} chapters</span></small></button>)}</aside>
+      <article className="docs-article">{selected ? <><header><div className="docs-header-badges"><span>{audienceLabels[selected.audience]}</span><span>{selected.category}</span></div><h2>{selected.title}</h2><p>{selected.summary}</p><small>{selected.minutes} minute read <span aria-hidden="true">•</span> {selected.sections.length} chapters</small></header>{selected.sections.map((section, index) => <section key={section.heading}><h3><span>{String(index + 1).padStart(2, '0')}</span>{section.heading}</h3><p>{section.body}</p>{section.steps && <ol>{section.steps.map((step) => <li key={step}>{step}</li>)}</ol>}{section.wireframe && <figure className="docs-wireframe"><figcaption>UI / architecture reference</figcaption><pre>{section.wireframe}</pre></figure>}{section.code && <div className="docs-code"><button onClick={() => void copy(section.code!, `${selected.id}-${index}`)}>{copied === `${selected.id}-${index}` ? 'Copied' : 'Copy'}</button><pre><code>{section.code}</code></pre></div>}</section>)}</> : <div className="docs-empty">No authorized manuals match this search.</div>}</article>
     </div></>}
   </section>;
 }

@@ -3,7 +3,9 @@
 
 import json
 import sys
+import zipfile
 from pathlib import Path
+from xml.etree import ElementTree
 
 from docx import Document
 from pypdf import PdfReader
@@ -30,8 +32,23 @@ def main():
         assert markdown.startswith("---\n") and f"# {record['title']}" in markdown
         word = Document(paths["docx"])
         assert len(word.paragraphs) > 0 and any(p.text.strip() for p in word.paragraphs)
+        with zipfile.ZipFile(paths["docx"]) as package:
+            xml = ElementTree.fromstring(package.read("word/document.xml"))
+            namespace = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
+            bookmarks = xml.findall(".//w:bookmarkStart", namespace)
+            hyperlinks = [node for node in xml.findall(".//w:hyperlink", namespace) if node.get("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}anchor")]
+            assert bookmarks and hyperlinks, f"missing Word TOC navigation: {paths['docx']}"
+            bookmark_names = {node.get("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}name") for node in bookmarks}
+            hyperlink_anchors = {node.get("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}anchor") for node in hyperlinks}
+            assert hyperlink_anchors <= bookmark_names, f"Word TOC links missing bookmark targets: {paths['docx']}"
+            for paragraph in xml.findall(".//w:p", namespace):
+                children = list(paragraph)
+                properties_positions = [idx for idx, child in enumerate(children) if child.tag == "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}pPr"]
+                assert not properties_positions or properties_positions == [0], f"invalid Word paragraph property order: {paths['docx']}"
         pdf = PdfReader(paths["pdf"])
         assert len(pdf.pages) >= 1
+        assert pdf.outline, f"missing PDF outline: {paths['pdf']}"
+        assert any(page.get("/Annots") for page in pdf.pages), f"missing PDF TOC links: {paths['pdf']}"
         page_count += len(pdf.pages)
         if number % 100 == 0:
             print(f"validated {number}/{len(documents)}")
