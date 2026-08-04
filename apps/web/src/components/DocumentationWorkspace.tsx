@@ -5,13 +5,16 @@ import { authFetch } from '@/auth/session';
 import { RepositoryDocumentationLibrary } from '@/components/RepositoryDocumentationLibrary';
 
 type Audience = 'platform_admin' | 'owner' | 'staff';
-type Section = { heading: string; body: string; steps?: string[]; code?: string; wireframe?: string };
+type Section = { heading: string; body: string; why?: string; tip?: string; steps?: string[]; code?: string; wireframe?: string };
 type Manual = {
   id: string;
   audience: Audience;
   category: string;
   title: string;
   summary: string;
+  introduction: string;
+  prerequisites: string[];
+  outcomes: string[];
   minutes: number;
   sections: Section[];
 };
@@ -42,16 +45,22 @@ const manuals: Manual[] = [
     category: 'Infrastructure and control plane',
     title: 'Platform Administrator Guide',
     summary: 'Deploy, secure, operate, and support the complete ServicePro platform across Render, Cloudflare, and Supabase.',
+    introduction: 'Use this guide as the operating playbook for the shared ServicePro environment. It connects infrastructure decisions to tenant safety, release reliability, and day-to-day support so administrators understand both what to do and why each control exists.',
+    prerequisites: ['Platform administrator access', 'Render, Cloudflare, and Supabase access', 'An approved release commit and rollback plan'],
+    outcomes: ['Explain the production architecture', 'Release changes without bypassing safeguards', 'Provision and support tenant owners', 'Respond to incidents with an auditable process'],
     minutes: 35,
     sections: [
       {
         heading: 'Production architecture',
         body: 'Cloudflare serves the public web application and DNS, Render runs the Node API and workers, and Supabase PostgreSQL and Storage hold tenant data and public assets. Keep the API at api.aardvark-enterprises.net and the public application at aardvark-enterprises.net.',
+        why: 'A clear ownership boundary prevents configuration drift: Cloudflare controls the edge, Render controls application execution, and Supabase controls durable tenant data.',
         wireframe: '[ Browser / Tenant Storefront ]\n              |\n       [ Cloudflare DNS + SSL ]\n          |               |\n [ Static Web App ]   [ api.aardvark-enterprises.net ]\n                              |\n                    [ Render Node API / Workers ]\n                              |\n                   [ Supabase Postgres + Storage ]',
       },
       {
         heading: 'Render deployment',
         body: 'Create one Node web service for the API. Connect the production GitHub repository and main branch. Use the repository root, install production dependencies, start the API, and configure /readyz as the health check. Run migrations as a controlled release step before traffic reaches code that requires the new schema.',
+        why: 'Deploying schema and application changes in the correct order prevents new code from reaching a database that is not ready for it.',
+        tip: 'Record the commit SHA, migration range, operator, and validation results for every production release.',
         steps: [
           'Connect the repository and select main with automatic deploys after checks pass.',
           'Set build command to npm ci --omit=dev and start command to npm start.',
@@ -66,6 +75,7 @@ const manuals: Manual[] = [
       {
         heading: 'Cloudflare configuration',
         body: 'Use Full (strict) SSL/TLS, proxy public DNS records, and keep API responses out of broad caching rules. Cache hashed static assets aggressively; bypass cache for /api/*, authentication, and tenant-specific dynamic responses. The current storefront uses path routing (/p/?business=slug), so wildcard subdomains are optional.',
+        why: 'Edge caching improves speed only when the response is safe to share. Authentication and tenant-specific data must always bypass broad caching.',
         steps: [
           'Point the apex and www hostnames to the deployed web application; redirect www to the apex.',
           'Point api to the Render service and keep HTTPS enforced.',
@@ -77,6 +87,7 @@ const manuals: Manual[] = [
       {
         heading: 'Supabase database, pooling, RLS, and storage',
         body: 'Use the pooler connection string for the Render runtime and a direct or session-compatible connection for migrations when required. Keep RLS enabled on browser-accessible tables and enforce tenant_id membership in every policy. ServicePro API repositories also apply tenant scoping; both layers are intentional.',
+        why: 'Repository scoping and database RLS provide defense in depth. One layer protects tenants even if a defect reaches the other.',
         steps: [
           'Store DATABASE_URL only in Render secrets and set DATABASE_SSL=true.',
           'Run migrations in numeric order and confirm postgres_runtime_migrations after every release.',
@@ -90,6 +101,7 @@ const manuals: Manual[] = [
       {
         heading: 'Administrative operations',
         body: 'Only emails in PLATFORM_ADMIN_EMAILS receive the permanent platform control plane. Platform administrators create owner accounts, issue or extend timed owner access, assign one marketplace site type, enable tenant modules, manage global themes, and review audit activity. Platform administrators never require owner activation tokens.',
+        why: 'Platform administration can affect every tenant, so permanent access is deliberately narrow and every support action must remain attributable.',
         steps: [
           'Open Platform Admin and provision the owner in the correct tenant.',
           'Assign the service-company marketplace/site pack.',
@@ -103,6 +115,8 @@ const manuals: Manual[] = [
       {
         heading: 'Release and incident checklist',
         body: 'Back up before schema changes, deploy migrations before dependent code, keep rollback instructions with every release, and never troubleshoot by disabling tenant isolation or RLS.',
+        why: 'The fastest safe recovery path is a rehearsed rollback—not weakening tenant isolation during an incident.',
+        tip: 'If validation fails, stop the rollout, preserve evidence, and use the documented rollback before attempting another deployment.',
         steps: [
           'Confirm a current database backup and recovery point.',
           'Run tests and the production web build.',
@@ -115,6 +129,7 @@ const manuals: Manual[] = [
       {
         heading: 'Documentation release lineage',
         body: 'Sprint 728 introduced the documentation portal. This role-based suite supersedes its general index while preserving searchable Guides, Tutorials, API reference, and Release notes.',
+        why: 'Release lineage helps operators identify which guidance is authoritative when older sprint documents remain searchable in the complete library.',
       },
     ],
   },
@@ -124,6 +139,9 @@ const manuals: Manual[] = [
     category: 'Engineering and integration',
     title: 'Web Developer & Technical Integration Guide',
     summary: 'Understand the repository, configure environments, extend modules and migrations, and add storefront themes safely.',
+    introduction: 'This guide translates ServicePro architecture into repeatable engineering decisions. Use it when changing authorization, database structure, module access, public themes, or production configuration.',
+    prerequisites: ['Repository access and a supported Node runtime', 'A development tenant for isolation testing', 'Familiarity with API, web, and PostgreSQL boundaries'],
+    outcomes: ['Trace a request through authorization', 'Configure environments without exposing secrets', 'Add modules and migrations safely', 'Validate tenant isolation before release'],
     minutes: 30,
     sections: [
       {
@@ -181,21 +199,28 @@ const manuals: Manual[] = [
     category: 'Tenant administration',
     title: 'Business Owner Guide',
     summary: 'Activate access, configure the business workspace, manage staff permissions, publish the storefront, and process incoming leads.',
+    introduction: 'This manual takes a business from first sign-in to a working customer-acquisition and service-delivery workspace. Each chapter explains the business result, the controls involved, and the checks to make before moving on.',
+    prerequisites: ['A valid owner activation link', 'Company identity, hours, and contact information', 'A list of staff roles and the services you sell'],
+    outcomes: ['Activate and secure the owner account', 'Delegate access using least privilege', 'Publish a trustworthy storefront', 'Turn public requests into scheduled work'],
     minutes: 22,
     sections: [
       {
         heading: 'Set up your service workspace',
         body: 'Use the one-time activation link supplied by ServicePro. Create your password before the token expires. Your access lifetime is controlled by the platform team; contact support before expiry if an extension is required.',
+        why: 'The activation link establishes the first trusted owner for the workspace. Treat it like a temporary credential and complete setup promptly.',
+        tip: 'Before inviting staff, confirm the workspace name, enabled modules, timezone, and primary contact information.',
         steps: ['Open the activation link once.', 'Confirm the intended business and email.', 'Create a unique password and sign in.', 'Review the enabled modules on Overview.', 'Do not share the activation link or owner credentials.'],
       },
       {
         heading: 'Understand entitlements',
         body: 'Platform administrators choose which modules your company purchased. You and your team can use only those enabled modules. Owners cannot enable marketplace packs, create other owners, or grant unavailable modules.',
+        why: 'Entitlements define the company boundary; team permissions define who may work inside that boundary.',
         wireframe: '[ Platform modules enabled for company ]\n                    |\n                 [ Owner ]\n                    |\n       +------------+-------------+\n   [ Manager ] [ Technician ] [ Billing ]\n     only delegated enabled modules',
       },
       {
         heading: 'Manage the team',
         body: 'Open Team Management to create staff accounts and assign the least access needed. Available roles are admin, manager, technician, billing, and read-only.',
+        why: 'Least-privilege access protects customer and financial information while keeping each employee’s workspace focused.',
         steps: [
           'Select Add team member and enter the employee identity.',
           'Choose the role closest to the employee responsibilities.',
@@ -207,6 +232,8 @@ const manuals: Manual[] = [
       {
         heading: 'Build and publish the public storefront',
         body: 'Open Public Storefront, choose the public slug and approved theme, enter company branding, select visible services, and customize each automatically suggested service page.',
+        why: 'The storefront is often a customer’s first interaction with the business. Accurate services, contact details, and expectations reduce unqualified requests.',
+        tip: 'Use the public preview on both desktop and mobile, then submit a real test request and confirm it appears in the correct workspace.',
         steps: [
           'Choose a lowercase public slug such as plumber and confirm the preview URL.',
           'Add company headline, description, service area, hours, logo, and hero image.',
@@ -220,6 +247,7 @@ const manuals: Manual[] = [
       {
         heading: 'Manage incoming leads',
         body: 'A public request creates a tenant-scoped prospective customer and open job. Review new requests promptly, verify contact and scope, schedule qualified staff, and document all follow-up.',
+        why: 'Prompt qualification keeps the pipeline clean and prevents web inquiries from becoming invisible or duplicated work.',
         steps: ['Open Work Orders and locate the new website request.', 'Review or merge the customer record.', 'Confirm service scope and priority.', 'Schedule and assign the work.', 'Send confirmation and maintain status through completion.'],
       },
     ],
@@ -230,30 +258,40 @@ const manuals: Manual[] = [
     category: 'Daily operations',
     title: 'Staff & Field Technician Guide',
     summary: 'Navigate permitted modules, work with customers and jobs, document field activity, and complete service workflows.',
+    introduction: 'This is the daily operating guide for office staff and field technicians. It follows a job from the morning review through dispatch, service documentation, customer follow-up, and a complete handoff to billing.',
+    prerequisites: ['An individual ServicePro account', 'The correct role and assigned modules', 'A phone or computer approved by your company'],
+    outcomes: ['Prioritize the day’s work', 'Maintain accurate customer and job records', 'Document labor, parts, assets, and approvals', 'Complete secure handoffs without missing information'],
     minutes: 18,
     sections: [
       {
         heading: 'Your workspace and permissions',
         body: 'Navigation reflects modules assigned by the owner. A missing or denied module means your role does not currently include it; ask the business owner rather than sharing another user account.',
+        why: 'Individual accounts keep customer activity accurate and make every change traceable to the person who performed it.',
       },
       {
         heading: 'Daily operating workflow',
         body: 'Start at Overview, review assigned and urgent work, check Schedule, then open each work order before travel or service.',
+        why: 'A consistent start-of-day review catches priority changes, missing information, and schedule conflicts before they affect the customer.',
+        tip: 'Recheck notifications after lunch and before leaving the final job; dispatch may have added follow-up work or changed priorities.',
         steps: ['Review notifications and today’s schedule.', 'Open the assigned work order and confirm customer, address, scope, and priority.', 'Update status when traveling, on site, blocked, and completed.', 'Record notes, labor, materials, asset details, and customer approvals.', 'Verify follow-up work and close only when documentation is complete.'],
         wireframe: '[ Overview ] -> [ Schedule ] -> [ Work Order ]\n                                  | status / notes / materials\n                                  v\n                            [ Customer + Asset ]\n                                  |\n                            [ Complete / Invoice ]',
       },
       {
         heading: 'Create and dispatch your first work order',
         body: 'Search before creating a customer to prevent duplicates. Keep contact details and service locations accurate. Convert qualified requests into work orders and preserve the original request context in notes.',
+        why: 'Duplicate records fragment history, invoices, and communications. Searching first keeps one reliable customer record.',
         steps: ['Search by name, phone, email, and address.', 'Create or update the customer record.', 'Record the requested service and urgency.', 'Create the work order with the correct location and service.', 'Escalate safety, access, payment, or scheduling concerns.'],
       },
       {
         heading: 'Assets, inventory, and billing boundaries',
         body: 'If assigned, record serviced equipment, serial/model information, condition, photos, parts, and quantities. Billing users verify approved work and issue invoices; technicians should not alter financial records unless explicitly permitted.',
+        why: 'Complete field records give billing defensible evidence and give the next technician a reliable service history.',
       },
       {
         heading: 'Security and field-use standards',
         body: 'Use only your account, protect customer information, avoid storing passwords in notes, and report unexpected access or suspicious messages. Sign out on shared devices and notify the owner immediately if a device is lost.',
+        why: 'Field devices contain customer, location, and payment context. Fast reporting limits exposure and lets the owner revoke access.',
+        tip: 'Never copy customer data into personal notes, messaging apps, or unapproved photo storage.',
       },
     ],
   },
@@ -312,7 +350,10 @@ export function DocumentationWorkspace() {
       {availableAudiences.filter((value): value is Audience => value !== 'all').map((value) => <button key={value} className={audience === value ? 'active' : ''} onClick={() => setAudience(value)}><span className="docs-audience-icon">{audienceIcons[value]}</span><span><strong>{audienceLabels[value]}</strong><small>{audienceDescriptions[value]}</small></span></button>)}
     </nav>
     <div className="docs-layout"><aside className="docs-index"><p>{visible.length} guides available</p>{visible.map((manual) => <button key={manual.id} className={selected?.id === manual.id ? 'active' : ''} onClick={() => setSelectedId(manual.id)}><span className="docs-index-eyebrow">{audienceLabels[manual.audience]}</span><strong>{manual.title}</strong><small><span>{manual.minutes} min read</span><span>{manual.sections.length} chapters</span></small></button>)}</aside>
-      <article className="docs-article">{selected ? <><header><div className="docs-header-badges"><span>{audienceLabels[selected.audience]}</span><span>{selected.category}</span></div><h2>{selected.title}</h2><p>{selected.summary}</p><small>{selected.minutes} minute read <span aria-hidden="true">•</span> {selected.sections.length} chapters</small></header>{selected.sections.map((section, index) => <section key={section.heading}><h3><span>{String(index + 1).padStart(2, '0')}</span>{section.heading}</h3><p>{section.body}</p>{section.steps && <ol>{section.steps.map((step) => <li key={step}>{step}</li>)}</ol>}{section.wireframe && <figure className="docs-wireframe"><figcaption>UI / architecture reference</figcaption><pre>{section.wireframe}</pre></figure>}{section.code && <div className="docs-code"><button onClick={() => void copy(section.code!, `${selected.id}-${index}`)}>{copied === `${selected.id}-${index}` ? 'Copied' : 'Copy'}</button><pre><code>{section.code}</code></pre></div>}</section>)}</> : <div className="docs-empty">No authorized manuals match this search.</div>}</article>
+      <article id="documentation-manuals-top" className="docs-article">{selected ? <><header><div className="docs-header-badges"><span>{audienceLabels[selected.audience]}</span><span>{selected.category}</span></div><h2>{selected.title}</h2><p>{selected.summary}</p><small>{selected.minutes} minute read <span aria-hidden="true">•</span> {selected.sections.length} chapters <span aria-hidden="true">•</span> Updated operating edition</small></header>
+        <section className="docs-manual-overview" aria-label="Guide overview"><div><span className="docs-section-label">About this guide</span><p>{selected.introduction}</p><h3>Before you begin</h3><ul>{selected.prerequisites.map((item) => <li key={item}>{item}</li>)}</ul></div><div className="docs-outcomes"><span className="docs-section-label">After this guide, you can</span>{selected.outcomes.map((item) => <p key={item}><span aria-hidden="true">✓</span>{item}</p>)}</div></section>
+        <nav className="docs-chapter-nav" aria-label={`${selected.title} chapters`}><span>In this guide</span><div>{selected.sections.map((section, index) => <a key={section.heading} href={`#${selected.id}-chapter-${index + 1}`}><small>{String(index + 1).padStart(2, '0')}</small>{section.heading}</a>)}</div></nav>
+        {selected.sections.map((section, index) => <section id={`${selected.id}-chapter-${index + 1}`} className="docs-manual-chapter" key={section.heading}><a className="docs-back-link" href="#documentation-manuals-top">Back to guide contents</a><h3><span>{String(index + 1).padStart(2, '0')}</span>{section.heading}</h3><p className="docs-chapter-lead">{section.body}</p>{section.why && <aside className="docs-why"><strong>Why this matters</strong><p>{section.why}</p></aside>}{section.steps && <div className="docs-procedure"><h4>Recommended procedure</h4><ol>{section.steps.map((step) => <li key={step}>{step}</li>)}</ol></div>}{section.tip && <aside className="docs-tip"><strong>Operational guidance</strong><p>{section.tip}</p></aside>}{section.wireframe && <figure className="docs-wireframe"><figcaption>UI / architecture reference</figcaption><pre>{section.wireframe}</pre></figure>}{section.code && <div className="docs-code"><button onClick={() => void copy(section.code!, `${selected.id}-${index}`)}>{copied === `${selected.id}-${index}` ? 'Copied' : 'Copy'}</button><pre><code>{section.code}</code></pre></div>}</section>)}</> : <div className="docs-empty">No authorized manuals match this search.</div>}</article>
     </div></>}
   </section>;
 }
