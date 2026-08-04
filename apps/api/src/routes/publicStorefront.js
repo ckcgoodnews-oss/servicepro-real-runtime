@@ -67,6 +67,19 @@ async function profile(req, res, slug) {
     });
   }
   const { settings, operationalTenant } = value;
+
+  // Check trial expiration — if expired, return branded CTA page
+  try {
+    const trial = await req.context.repositories.trials.findByTenantId(settings.tenantId);
+    if (trial) {
+      const { isSiteServable, expiredSiteResponse } = require('../services/trialMarketplaceService');
+      const check = isSiteServable(trial);
+      if (!check.servable && check.reason === 'expired') {
+        return sendJson(res, 200, { data: expiredSiteResponse(trial) });
+      }
+    }
+  } catch { /* graceful — serve normally if trial check fails */ }
+
   const branding = settings.branding || {};
   const presentation = branding.publicServicePresentation || {};
   let services = await req.context.repositories.services.list(operationalTenant);
