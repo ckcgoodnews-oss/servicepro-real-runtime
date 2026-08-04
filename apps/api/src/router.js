@@ -50,6 +50,12 @@ const leadCaptureForms = require('./routes/leadCaptureForms');
 const campaignAttribution = require('./routes/campaignAttribution');
 const configDashboards = require('./routes/configDashboards');
 const aiInsights = require('./routes/aiInsights');
+const salesSequences = require('./routes/salesSequences');
+const meetingBookings = require('./routes/meetingBookings');
+const callLogs = require('./routes/callLogs');
+const automationRules = require('./routes/automationRules');
+const globalSearch = require('./routes/globalSearch');
+const dataImports = require('./routes/dataImports');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -1229,6 +1235,167 @@ async function router(req, res) {
   if (aiInsightMatch && req.method === 'PATCH') {
     if (!requirePermission(PERMISSIONS.AI_INSIGHTS_WRITE)(req, res)) return;
     return aiInsights.updateStatus(req, res, aiInsightMatch[1]);
+  }
+
+  // Sales Sequences (Wave 7)
+  if (req.url === '/api/v1/sequences' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.SEQUENCES_READ)(req, res)) return;
+    return salesSequences.list(req, res);
+  }
+  if (req.url === '/api/v1/sequences' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.SEQUENCES_WRITE)(req, res)) return;
+    return salesSequences.create(req, res);
+  }
+  const seqEnrollMatch = req.url.match(/^\/api\/v1\/sequences\/([^/]+)\/enroll$/);
+  if (seqEnrollMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.SEQUENCES_WRITE)(req, res)) return;
+    return salesSequences.enroll(req, res, seqEnrollMatch[1]);
+  }
+  const seqEnrollmentsMatch = req.url.match(/^\/api\/v1\/sequences\/([^/]+)\/enrollments$/);
+  if (seqEnrollmentsMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.SEQUENCES_READ)(req, res)) return;
+    return salesSequences.listEnrollments(req, res, seqEnrollmentsMatch[1]);
+  }
+  const seqUnenrollMatch = req.url.match(/^\/api\/v1\/sequences\/enrollments\/([^/]+)\/unenroll$/);
+  if (seqUnenrollMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.SEQUENCES_WRITE)(req, res)) return;
+    return salesSequences.unenroll(req, res, seqUnenrollMatch[1]);
+  }
+  const seqMatch = req.url.match(/^\/api\/v1\/sequences\/([^/]+)$/);
+  if (seqMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.SEQUENCES_READ)(req, res)) return;
+    return salesSequences.get(req, res, seqMatch[1]);
+  }
+  if (seqMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.SEQUENCES_WRITE)(req, res)) return;
+    return salesSequences.update(req, res, seqMatch[1]);
+  }
+  if (seqMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.SEQUENCES_WRITE)(req, res)) return;
+    return salesSequences.remove(req, res, seqMatch[1]);
+  }
+
+  // Meeting Bookings (Wave 7)
+  if (req.url === '/api/v1/meetings/pages' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MEETINGS_READ)(req, res)) return;
+    return meetingBookings.listPages(req, res);
+  }
+  if (req.url === '/api/v1/meetings/pages' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.MEETINGS_WRITE)(req, res)) return;
+    return meetingBookings.createPage(req, res);
+  }
+  const mtgPageMatch = req.url.match(/^\/api\/v1\/meetings\/pages\/([^/]+)$/);
+  if (mtgPageMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MEETINGS_READ)(req, res)) return;
+    return meetingBookings.getPage(req, res, mtgPageMatch[1]);
+  }
+  if (mtgPageMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.MEETINGS_WRITE)(req, res)) return;
+    return meetingBookings.updatePage(req, res, mtgPageMatch[1]);
+  }
+  if (mtgPageMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.MEETINGS_WRITE)(req, res)) return;
+    return meetingBookings.deletePage(req, res, mtgPageMatch[1]);
+  }
+  if (req.url === '/api/v1/meetings/bookings' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MEETINGS_READ)(req, res)) return;
+    return meetingBookings.listBookings(req, res);
+  }
+  const mtgBookMatch = req.url.match(/^\/api\/v1\/meetings\/pages\/([^/]+)\/book$/);
+  if (mtgBookMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.MEETINGS_WRITE)(req, res)) return;
+    return meetingBookings.createBooking(req, res, mtgBookMatch[1]);
+  }
+  const mtgBookingMatch = req.url.match(/^\/api\/v1\/meetings\/bookings\/([^/]+)$/);
+  if (mtgBookingMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.MEETINGS_WRITE)(req, res)) return;
+    return meetingBookings.updateBooking(req, res, mtgBookingMatch[1]);
+  }
+
+  // Call Logs (Wave 7)
+  if (req.url === '/api/v1/calls' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CALLS_READ)(req, res)) return;
+    return callLogs.list(req, res);
+  }
+  if (req.url === '/api/v1/calls' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.CALLS_WRITE)(req, res)) return;
+    return callLogs.create(req, res);
+  }
+  if (req.url === '/api/v1/calls/stats' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CALLS_READ)(req, res)) return;
+    return callLogs.stats(req, res);
+  }
+  const callMatch = req.url.match(/^\/api\/v1\/calls\/([^/]+)$/);
+  if (callMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CALLS_READ)(req, res)) return;
+    return callLogs.get(req, res, callMatch[1]);
+  }
+  if (callMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.CALLS_WRITE)(req, res)) return;
+    return callLogs.update(req, res, callMatch[1]);
+  }
+
+  // Automation Rules (Wave 8)
+  if (req.url === '/api/v1/automation-rules' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_RULES_READ)(req, res)) return;
+    return automationRules.list(req, res);
+  }
+  if (req.url === '/api/v1/automation-rules' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_RULES_WRITE)(req, res)) return;
+    return automationRules.create(req, res);
+  }
+  if (req.url === '/api/v1/automation-rules/trigger' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_RULES_WRITE)(req, res)) return;
+    return automationRules.trigger(req, res);
+  }
+  const autoRuleExecMatch = req.url.match(/^\/api\/v1\/automation-rules\/([^/]+)\/executions$/);
+  if (autoRuleExecMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_RULES_READ)(req, res)) return;
+    return automationRules.listExecutions(req, res, autoRuleExecMatch[1]);
+  }
+  const autoRuleMatch = req.url.match(/^\/api\/v1\/automation-rules\/([^/]+)$/);
+  if (autoRuleMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_RULES_READ)(req, res)) return;
+    return automationRules.get(req, res, autoRuleMatch[1]);
+  }
+  if (autoRuleMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_RULES_WRITE)(req, res)) return;
+    return automationRules.update(req, res, autoRuleMatch[1]);
+  }
+  if (autoRuleMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.AUTOMATION_RULES_WRITE)(req, res)) return;
+    return automationRules.remove(req, res, autoRuleMatch[1]);
+  }
+
+  // Global Search (Wave 9)
+  if (req.url.startsWith('/api/v1/search') && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return globalSearch.search(req, res);
+  }
+
+  // Data Imports (Wave 9)
+  if (req.url === '/api/v1/imports' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.IMPORTS_READ)(req, res)) return;
+    return dataImports.list(req, res);
+  }
+  if (req.url === '/api/v1/imports' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.IMPORTS_WRITE)(req, res)) return;
+    return dataImports.create(req, res);
+  }
+  const importProcessMatch = req.url.match(/^\/api\/v1\/imports\/([^/]+)\/process$/);
+  if (importProcessMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.IMPORTS_WRITE)(req, res)) return;
+    return dataImports.process(req, res, importProcessMatch[1]);
+  }
+  const importMappingMatch = req.url.match(/^\/api\/v1\/imports\/([^/]+)\/mapping$/);
+  if (importMappingMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.IMPORTS_WRITE)(req, res)) return;
+    return dataImports.updateMapping(req, res, importMappingMatch[1]);
+  }
+  const importMatch = req.url.match(/^\/api\/v1\/imports\/([^/]+)$/);
+  if (importMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.IMPORTS_READ)(req, res)) return;
+    return dataImports.get(req, res, importMatch[1]);
   }
 
   // Marketing Campaigns

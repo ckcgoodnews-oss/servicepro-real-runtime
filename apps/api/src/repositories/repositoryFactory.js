@@ -62,7 +62,12 @@ const KEY_ALIASES = {
   leadCaptureForm: 'leadCaptureForms',
   campaignAttribution: 'campaignAttributions',
   dashboard: 'customDashboards',
-  aiInsight: 'aiInsights'
+  aiInsight: 'aiInsights',
+  salesSequence: 'salesSequences',
+  meetingBooking: 'meetingBookings',
+  callLog: 'callLogs',
+  automationRule: 'automationRules',
+  dataImport: 'dataImports'
 };
 
 function keyFromCreator(name) {
