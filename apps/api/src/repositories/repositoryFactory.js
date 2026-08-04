@@ -57,7 +57,12 @@ const KEY_ALIASES = {
   task: 'tasks',
   leadAssignmentRule: 'leadAssignmentRules',
   board: 'boards',
-  ticket: 'tickets'
+  ticket: 'tickets',
+  audienceSegment: 'audienceSegments',
+  leadCaptureForm: 'leadCaptureForms',
+  campaignAttribution: 'campaignAttributions',
+  dashboard: 'customDashboards',
+  aiInsight: 'aiInsights'
 };
 
 function keyFromCreator(name) {

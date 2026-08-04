@@ -45,6 +45,11 @@ const tasks = require('./routes/tasks');
 const crmProperties = require('./routes/crmProperties');
 const boards = require('./routes/boards');
 const tickets = require('./routes/tickets');
+const audienceSegments = require('./routes/audienceSegments');
+const leadCaptureForms = require('./routes/leadCaptureForms');
+const campaignAttribution = require('./routes/campaignAttribution');
+const configDashboards = require('./routes/configDashboards');
+const aiInsights = require('./routes/aiInsights');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -1055,6 +1060,175 @@ async function router(req, res) {
   if (ticketMatch && req.method === 'DELETE') {
     if (!requirePermission(PERMISSIONS.TICKETS_DELETE)(req, res)) return;
     return tickets.remove(req, res, ticketMatch[1]);
+  }
+
+  // Audience Segments
+  if (req.url === '/api/v1/marketing/segments' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MARKETING_READ)(req, res)) return;
+    return audienceSegments.list(req, res);
+  }
+  if (req.url === '/api/v1/marketing/segments' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
+    return audienceSegments.create(req, res);
+  }
+  const segmentMembersMatch = req.url.match(/^\/api\/v1\/marketing\/segments\/([^/]+)\/members$/);
+  if (segmentMembersMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
+    return audienceSegments.addMember(req, res, segmentMembersMatch[1]);
+  }
+  const segmentMemberRemoveMatch = req.url.match(/^\/api\/v1\/marketing\/segments\/([^/]+)\/members\/([^/]+)$/);
+  if (segmentMemberRemoveMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
+    return audienceSegments.removeMember(req, res, segmentMemberRemoveMatch[1], segmentMemberRemoveMatch[2]);
+  }
+  const segmentEvaluateMatch = req.url.match(/^\/api\/v1\/marketing\/segments\/([^/]+)\/evaluate$/);
+  if (segmentEvaluateMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
+    return audienceSegments.evaluate(req, res, segmentEvaluateMatch[1]);
+  }
+  const segmentMatch = req.url.match(/^\/api\/v1\/marketing\/segments\/([^/]+)$/);
+  if (segmentMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MARKETING_READ)(req, res)) return;
+    return audienceSegments.get(req, res, segmentMatch[1]);
+  }
+  if (segmentMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
+    return audienceSegments.update(req, res, segmentMatch[1]);
+  }
+  if (segmentMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
+    return audienceSegments.remove(req, res, segmentMatch[1]);
+  }
+
+  // Lead Capture Forms
+  if (req.url === '/api/v1/forms' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.FORMS_READ)(req, res)) return;
+    return leadCaptureForms.list(req, res);
+  }
+  if (req.url === '/api/v1/forms' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.FORMS_WRITE)(req, res)) return;
+    return leadCaptureForms.create(req, res);
+  }
+  const formSubmissionsMatch = req.url.match(/^\/api\/v1\/forms\/([^/]+)\/submissions$/);
+  if (formSubmissionsMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.FORMS_READ)(req, res)) return;
+    return leadCaptureForms.listSubmissions(req, res, formSubmissionsMatch[1]);
+  }
+  const formMatch = req.url.match(/^\/api\/v1\/forms\/([^/]+)$/);
+  if (formMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.FORMS_READ)(req, res)) return;
+    return leadCaptureForms.get(req, res, formMatch[1]);
+  }
+  if (formMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.FORMS_WRITE)(req, res)) return;
+    return leadCaptureForms.update(req, res, formMatch[1]);
+  }
+  if (formMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.FORMS_WRITE)(req, res)) return;
+    return leadCaptureForms.remove(req, res, formMatch[1]);
+  }
+
+  // Public form submission (no auth — uses tenant slug)
+  const publicFormSubmitMatch = req.url.match(/^\/api\/public\/forms\/([^/]+)\/submit$/);
+  if (publicFormSubmitMatch && req.method === 'POST') {
+    return leadCaptureForms.submit(req, res, decodeURIComponent(publicFormSubmitMatch[1]));
+  }
+
+  // Campaign Attribution
+  if (req.url === '/api/v1/attribution' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MARKETING_READ)(req, res)) return;
+    return campaignAttribution.listForEntity(req, res);
+  }
+  if (req.url === '/api/v1/attribution' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.MARKETING_WRITE)(req, res)) return;
+    return campaignAttribution.record(req, res);
+  }
+  if (req.url === '/api/v1/attribution/summary' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MARKETING_READ)(req, res)) return;
+    return campaignAttribution.summary(req, res);
+  }
+  const attributionCampaignMatch = req.url.match(/^\/api\/v1\/attribution\/campaigns\/([^/]+)$/);
+  if (attributionCampaignMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MARKETING_READ)(req, res)) return;
+    return campaignAttribution.listForCampaign(req, res, attributionCampaignMatch[1]);
+  }
+  const attributionSendStatsMatch = req.url.match(/^\/api\/v1\/attribution\/campaigns\/([^/]+)\/sends$/);
+  if (attributionSendStatsMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.MARKETING_READ)(req, res)) return;
+    return campaignAttribution.sendStats(req, res, attributionSendStatsMatch[1]);
+  }
+
+  // Configurable Dashboards (Wave 5)
+  if (req.url === '/api/v1/dashboards' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.DASHBOARDS_READ)(req, res)) return;
+    return configDashboards.list(req, res);
+  }
+  if (req.url === '/api/v1/dashboards' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.DASHBOARDS_WRITE)(req, res)) return;
+    return configDashboards.create(req, res);
+  }
+  const dashboardWidgetsMatch = req.url.match(/^\/api\/v1\/dashboards\/([^/]+)\/widgets$/);
+  if (dashboardWidgetsMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.DASHBOARDS_READ)(req, res)) return;
+    return configDashboards.listWidgets(req, res, dashboardWidgetsMatch[1]);
+  }
+  if (dashboardWidgetsMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.DASHBOARDS_WRITE)(req, res)) return;
+    return configDashboards.addWidget(req, res, dashboardWidgetsMatch[1]);
+  }
+  const dashboardWidgetMatch = req.url.match(/^\/api\/v1\/dashboards\/widgets\/([^/]+)$/);
+  if (dashboardWidgetMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.DASHBOARDS_WRITE)(req, res)) return;
+    return configDashboards.updateWidget(req, res, dashboardWidgetMatch[1]);
+  }
+  if (dashboardWidgetMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.DASHBOARDS_WRITE)(req, res)) return;
+    return configDashboards.removeWidget(req, res, dashboardWidgetMatch[1]);
+  }
+  const dashboardWidgetDataMatch = req.url.match(/^\/api\/v1\/dashboards\/widgets\/([^/]+)\/data$/);
+  if (dashboardWidgetDataMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.DASHBOARDS_READ)(req, res)) return;
+    return configDashboards.widgetData(req, res, dashboardWidgetDataMatch[1]);
+  }
+  const dashboardMatch = req.url.match(/^\/api\/v1\/dashboards\/([^/]+)$/);
+  if (dashboardMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.DASHBOARDS_READ)(req, res)) return;
+    return configDashboards.get(req, res, dashboardMatch[1]);
+  }
+  if (dashboardMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.DASHBOARDS_WRITE)(req, res)) return;
+    return configDashboards.update(req, res, dashboardMatch[1]);
+  }
+  if (dashboardMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.DASHBOARDS_WRITE)(req, res)) return;
+    return configDashboards.remove(req, res, dashboardMatch[1]);
+  }
+
+  // AI Insights (Wave 6)
+  if (req.url === '/api/v1/ai-insights' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AI_INSIGHTS_READ)(req, res)) return;
+    return aiInsights.list(req, res);
+  }
+  if (req.url === '/api/v1/ai-insights/counts' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AI_INSIGHTS_READ)(req, res)) return;
+    return aiInsights.counts(req, res);
+  }
+  if (req.url === '/api/v1/ai-insights/generate' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.AI_INSIGHTS_WRITE)(req, res)) return;
+    return aiInsights.generate(req, res);
+  }
+  if (req.url === '/api/v1/ai-insights/generate-deals' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.AI_INSIGHTS_WRITE)(req, res)) return;
+    return aiInsights.generateBulkDeals(req, res);
+  }
+  const aiInsightMatch = req.url.match(/^\/api\/v1\/ai-insights\/([^/]+)$/);
+  if (aiInsightMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.AI_INSIGHTS_READ)(req, res)) return;
+    return aiInsights.get(req, res, aiInsightMatch[1]);
+  }
+  if (aiInsightMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.AI_INSIGHTS_WRITE)(req, res)) return;
+    return aiInsights.updateStatus(req, res, aiInsightMatch[1]);
   }
 
   // Marketing Campaigns
