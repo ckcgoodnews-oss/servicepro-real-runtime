@@ -47,7 +47,8 @@ const KEY_ALIASES = {
   warehouse: 'warehouses',
   workflow: 'workflows',
   workspace: 'workspaces',
-  trial: 'trials'
+  trial: 'trials',
+  trialSite: 'trialSites'
 };
 
 function keyFromCreator(name) {

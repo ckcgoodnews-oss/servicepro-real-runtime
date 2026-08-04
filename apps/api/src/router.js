@@ -35,6 +35,7 @@ const blog = require('./routes/blog');
 const financing = require('./routes/financing');
 const trial = require('./routes/trial');
 const trialAdmin = require('./routes/trialAdmin');
+const trialMarketplace = require('./routes/trialMarketplace');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -378,6 +379,13 @@ async function router(req, res) {
   if (req.url === '/api/v1/trial/upgrade-request' && req.method === 'POST') return trial.upgradeRequest(req, res);
   if (req.url === '/api/v1/trial/convert' && req.method === 'POST') return trial.convert(req, res);
   if (req.url === '/api/v1/trial/help' && req.method === 'GET') return trial.help(req, res);
+
+  // Trial marketplace and site routes (authenticated)
+  if (req.url === '/api/v1/trial/marketplace/offerings' && req.method === 'GET') return trialMarketplace.listOfferings(req, res);
+  if (req.url === '/api/v1/trial/marketplace/select' && req.method === 'POST') return trialMarketplace.confirmSelections(req, res);
+  if (req.url === '/api/v1/trial/site' && req.method === 'GET') return trialMarketplace.getSite(req, res);
+  if (req.url === '/api/v1/trial/site' && req.method === 'PATCH') return trialMarketplace.editSite(req, res);
+  if (req.url === '/api/v1/trial/site/leads' && req.method === 'GET') return trialMarketplace.listLeads(req, res);
 
   if (req.url === '/api/v1/authz' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.ADMIN_AUTHZ_READ)(req, res)) return;
