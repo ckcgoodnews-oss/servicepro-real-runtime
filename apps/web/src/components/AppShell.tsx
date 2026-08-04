@@ -12,10 +12,15 @@ import { WorkspaceHeader } from '@/components/WorkspaceHeader';
 
 const navigation = [
   { label: 'Overview', href: '/dashboard', icon: '⌂' },
+  { label: 'Deals', href: '/deals', icon: '$' },
+  { label: 'Contacts', href: '/contacts', icon: '◉' },
   { label: 'Work orders', href: '/work-orders', icon: '▤' },
+  { label: 'Boards', href: '/boards', icon: '⊞' },
+  { label: 'Tickets', href: '/tickets', icon: '⊡' },
   { label: 'Schedule', href: '/schedule', icon: '◫' },
   { label: 'Customers', href: '/customers', icon: '◎' },
   { label: 'Assets', href: '/assets', icon: '◇' },
+  { label: 'AI Insights', href: '/ai-insights', icon: '✦' },
   { label: 'Knowledge', href: '/knowledge', icon: 'K' },
   { label: 'Notifications', href: '/notifications', icon: '!' },
   { label: 'Organization', href: '/organization', icon: '◎' },

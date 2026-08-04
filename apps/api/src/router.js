@@ -203,6 +203,13 @@ async function router(req, res) {
     if (req.url === '/portal/api/bookings' && req.method === 'POST') return portal.createBooking(req, res);
     if (req.url === '/portal/api/invoices' && req.method === 'GET') return portal.listInvoices(req, res);
     if (req.url === '/portal/api/estimates' && req.method === 'GET') return portal.listEstimates(req, res);
+    if (req.url === '/portal/api/tickets' && req.method === 'GET') return portal.listTickets(req, res);
+    if (req.url === '/portal/api/tickets' && req.method === 'POST') return portal.createTicket(req, res);
+    const portalTicketCommentsMatch = req.url.match(/^\/portal\/api\/tickets\/([^/]+)\/comments$/);
+    if (portalTicketCommentsMatch && req.method === 'GET') return portal.listTicketComments(req, res, portalTicketCommentsMatch[1]);
+    if (portalTicketCommentsMatch && req.method === 'POST') return portal.addTicketComment(req, res, portalTicketCommentsMatch[1]);
+    const portalTicketMatch = req.url.match(/^\/portal\/api\/tickets\/([^/]+)$/);
+    if (portalTicketMatch && req.method === 'GET') return portal.getTicket(req, res, portalTicketMatch[1]);
   
   if (req.url.startsWith('/api/v1/ai-platform/')) {
     const permission = req.method === 'GET' ? PERMISSIONS.PHASE10_READ : PERMISSIONS.PHASE10_WRITE;
@@ -779,6 +786,12 @@ async function router(req, res) {
   if (crmContactMatch && req.method === 'DELETE') {
     if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
     return crmContacts.remove(req, res, crmContactMatch[1]);
+  }
+
+  // CRM Contact Merge
+  if (req.url === '/api/v1/crm/contacts/merge' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return crmContacts.merge(req, res);
   }
 
   // Deals & Pipeline

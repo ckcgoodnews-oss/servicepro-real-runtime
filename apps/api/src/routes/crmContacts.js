@@ -63,4 +63,77 @@ function count(req, res) {
     .then(data => sendJson(res, 200, { data }));
 }
 
-module.exports = { list, get, create, update, remove, count };
+function merge(req, res) {
+  const { primary_id, duplicate_id } = req.body || {};
+  if (!primary_id || !duplicate_id) {
+    return sendJson(res, 400, { error: { code: 'validation_failed', message: 'primary_id and duplicate_id are required' } });
+  }
+  if (primary_id === duplicate_id) {
+    return sendJson(res, 400, { error: { code: 'validation_failed', message: 'Cannot merge a contact with itself' } });
+  }
+
+  const t = tenant(req);
+  const primary = repo(req).findById(t, primary_id);
+  const duplicate = repo(req).findById(t, duplicate_id);
+
+  if (!primary) return sendJson(res, 404, { error: { code: 'not_found', message: 'Primary contact not found' } });
+  if (!duplicate) return sendJson(res, 404, { error: { code: 'not_found', message: 'Duplicate contact not found' } });
+
+  // Merge strategy: fill empty fields on primary from duplicate
+  const mergeFields = ['email', 'phone', 'mobile', 'job_title', 'company_id', 'source'];
+  const updates = {};
+  for (const field of mergeFields) {
+    const camelField = field.replace(/_([a-z])/g, (_, c) => c.toUpperCase());
+    if (!primary[camelField] && duplicate[camelField]) {
+      updates[field] = duplicate[camelField];
+    }
+  }
+
+  // Merge tags
+  const mergedTags = [...new Set([...(primary.tags || []), ...(duplicate.tags || [])])];
+  if (mergedTags.length > (primary.tags || []).length) updates.tags = mergedTags;
+
+  // Merge custom properties
+  if (duplicate.properties && Object.keys(duplicate.properties).length) {
+    const mergedProps = { ...duplicate.properties, ...primary.properties };
+    updates.properties = mergedProps;
+  }
+
+  // Apply merge to primary
+  if (Object.keys(updates).length > 0) {
+    repo(req).update(t, primary_id, updates);
+  }
+
+  // Re-associate records from duplicate to primary
+  const assocRepo = req.context.repositories.recordAssociations;
+  if (assocRepo) {
+    const dupAssocs = assocRepo.listForEntity(t, 'contact', duplicate_id);
+    for (const assoc of dupAssocs) {
+      if (assoc.sourceType === 'contact' && assoc.sourceId === duplicate_id) {
+        assocRepo.create(t, { source_type: 'contact', source_id: primary_id, target_type: assoc.targetType, target_id: assoc.targetId, association_type: assoc.associationType });
+      } else {
+        assocRepo.create(t, { source_type: assoc.sourceType, source_id: assoc.sourceId, target_type: 'contact', target_id: primary_id, association_type: assoc.associationType });
+      }
+    }
+  }
+
+  // Log the merge in activity timeline
+  const actRepo = req.context.repositories.activityTimeline;
+  if (actRepo) {
+    actRepo.create(t, {
+      entity_type: 'contact', entity_id: primary_id, activity_type: 'merge',
+      title: `Merged with ${duplicate.firstName || ''} ${duplicate.lastName || ''} (${duplicate.email || duplicate.id})`.trim(),
+      metadata: { merged_contact_id: duplicate_id, merged_fields: Object.keys(updates) },
+      performed_by: req.user?.email || null
+    });
+  }
+
+  // Delete the duplicate
+  repo(req).delete(t, duplicate_id);
+
+  // Return the updated primary
+  const result = repo(req).findById(t, primary_id);
+  sendJson(res, 200, { data: result, merged: { primary_id, duplicate_id, fields_merged: Object.keys(updates) } });
+}
+
+module.exports = { list, get, create, update, remove, count, merge };

@@ -84,4 +84,66 @@ function listEstimates(req, res) {
     .then(estimates => sendJson(res, 200, { data: estimates.filter(e => e.customerId === req.context.portalCustomerId) }));
 }
 
-module.exports = { login, me, createAccount, listAccounts, listBookings, createBooking, listInvoices, listEstimates };
+// --- Portal Ticket Integration (Wave 10) ---
+function listTickets(req, res) {
+  const customerId = req.context.portalCustomerId;
+  Promise.resolve(req.context.repositories.tickets.list(req.context.tenantId, { customer_id: customerId }))
+    .then(data => sendJson(res, 200, { data }));
+}
+
+function getTicket(req, res, id) {
+  Promise.resolve(req.context.repositories.tickets.findById(req.context.tenantId, id))
+    .then(ticket => {
+      if (!ticket || ticket.customerId !== req.context.portalCustomerId) {
+        return sendJson(res, 404, { error: { code: 'not_found', message: 'Ticket not found' } });
+      }
+      sendJson(res, 200, { data: ticket });
+    });
+}
+
+function createTicket(req, res) {
+  const { subject, description, category } = req.body || {};
+  if (!subject) return sendJson(res, 400, { error: { code: 'validation_failed', message: 'subject is required' } });
+  Promise.resolve(req.context.repositories.tickets.create(req.context.tenantId, {
+    subject,
+    description: description || '',
+    category: category || null,
+    channel: 'portal',
+    priority: 'medium',
+    customer_id: req.context.portalCustomerId,
+    contact_id: null
+  }))
+    .then(data => sendJson(res, 201, { data }));
+}
+
+function listTicketComments(req, res, id) {
+  Promise.resolve(req.context.repositories.tickets.findById(req.context.tenantId, id))
+    .then(ticket => {
+      if (!ticket || ticket.customerId !== req.context.portalCustomerId) {
+        return sendJson(res, 404, { error: { code: 'not_found', message: 'Ticket not found' } });
+      }
+      // Only show non-internal comments to portal users
+      return Promise.resolve(req.context.repositories.tickets.listComments(req.context.tenantId, id, false))
+        .then(comments => sendJson(res, 200, { data: comments }));
+    });
+}
+
+function addTicketComment(req, res, id) {
+  const { content } = req.body || {};
+  if (!content) return sendJson(res, 400, { error: { code: 'validation_failed', message: 'content is required' } });
+  Promise.resolve(req.context.repositories.tickets.findById(req.context.tenantId, id))
+    .then(ticket => {
+      if (!ticket || ticket.customerId !== req.context.portalCustomerId) {
+        return sendJson(res, 404, { error: { code: 'not_found', message: 'Ticket not found' } });
+      }
+      return Promise.resolve(req.context.repositories.tickets.addComment(req.context.tenantId, id, {
+        author_id: req.context.portalAccountId,
+        author_type: 'customer',
+        content,
+        is_internal: false
+      }))
+        .then(comment => sendJson(res, 201, { data: comment }));
+    });
+}
+
+module.exports = { login, me, createAccount, listAccounts, listBookings, createBooking, listInvoices, listEstimates, listTickets, getTicket, createTicket, listTicketComments, addTicketComment };
