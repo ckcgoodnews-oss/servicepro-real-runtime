@@ -20,6 +20,6 @@ function response() { return { setHeader(){}, end(raw){ this.body=JSON.parse(raw
   assert.deepStrictEqual(data.kpis,{openWork:1,appointmentsToday:1,customers:1,outstanding:200});
   assert.equal(data.attention[0].customer,'Maria Johnson'); assert.equal(data.recentWork.length,2); assert.equal(data.notifications.length,1); assert.equal(data.activity.length,1);
   const root=path.resolve(__dirname,'..'); const component=fs.readFileSync(path.join(root,'apps/web/src/components/DashboardOverview.tsx'),'utf8'); const router=fs.readFileSync(path.join(root,'apps/api/src/router.js'),'utf8');
-  assert.match(component,/dashboard\/summary/); assert.match(component,/Needs attention/); assert.match(component,/Quick actions/); assert.match(component,/Recent work/); assert.match(component,/Activity & notifications/); assert.match(router,/\/api\/v1\/dashboard\/summary/);
+  assert.match(component,/dashboard\/summary/); assert.match(component,/Needs attention/); assert.match(component,/Quick actions/); assert.match(component,/Recent work/); assert.match(component,/Recent activity/); assert.match(component,/Customer visits, team actions, and notifications/); assert.match(router,/\/api\/v1\/dashboard\/summary/);
   console.log('Sprint 718 live dashboard test passed.');
 })().catch(error=>{console.error(error);process.exit(1);});
