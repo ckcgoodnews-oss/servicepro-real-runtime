@@ -48,7 +48,14 @@ const KEY_ALIASES = {
   workflow: 'workflows',
   workspace: 'workspaces',
   trial: 'trials',
-  trialSite: 'trialSites'
+  trialSite: 'trialSites',
+  deal: 'deals',
+  recordAssociation: 'recordAssociations',
+  activityTimeline: 'activityTimeline',
+  crmContact: 'crmContacts',
+  crmPropertyDefinition: 'crmPropertyDefinitions',
+  task: 'tasks',
+  leadAssignmentRule: 'leadAssignmentRules'
 };
 
 function keyFromCreator(name) {

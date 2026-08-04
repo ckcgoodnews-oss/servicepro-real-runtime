@@ -37,6 +37,12 @@ const trial = require('./routes/trial');
 const trialAdmin = require('./routes/trialAdmin');
 const { trialAccessGuard } = require('./middleware/trialAccessGuard');
 const trialMarketplace = require('./routes/trialMarketplace');
+const deals = require('./routes/deals');
+const crmContacts = require('./routes/crmContacts');
+const recordAssociations = require('./routes/recordAssociations');
+const activityTimeline = require('./routes/activityTimeline');
+const tasks = require('./routes/tasks');
+const crmProperties = require('./routes/crmProperties');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -733,6 +739,174 @@ async function router(req, res) {
   if (crmLeadMatch && req.method === 'DELETE') {
     if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
     return crmLeads.remove(req, res, crmLeadMatch[1]);
+  }
+
+  // CRM Contacts
+  if (req.url === '/api/v1/crm/contacts' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return crmContacts.list(req, res);
+  }
+  if (req.url === '/api/v1/crm/contacts' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return crmContacts.create(req, res);
+  }
+  if (req.url === '/api/v1/crm/contacts/count' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return crmContacts.count(req, res);
+  }
+  const crmContactMatch = req.url.match(/^\/api\/v1\/crm\/contacts\/([^/]+)$/);
+  if (crmContactMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return crmContacts.get(req, res, crmContactMatch[1]);
+  }
+  if (crmContactMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return crmContacts.update(req, res, crmContactMatch[1]);
+  }
+  if (crmContactMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return crmContacts.remove(req, res, crmContactMatch[1]);
+  }
+
+  // Deals & Pipeline
+  if (req.url === '/api/v1/deals' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.DEALS_READ)(req, res)) return;
+    return deals.list(req, res);
+  }
+  if (req.url === '/api/v1/deals' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.DEALS_WRITE)(req, res)) return;
+    return deals.create(req, res);
+  }
+  if (req.url === '/api/v1/deals/forecast' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.DEALS_READ)(req, res)) return;
+    return deals.forecast(req, res);
+  }
+  if (req.url === '/api/v1/deals/pipelines' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.DEALS_READ)(req, res)) return;
+    return deals.listPipelines(req, res);
+  }
+  if (req.url === '/api/v1/deals/pipelines' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.DEALS_WRITE)(req, res)) return;
+    return deals.createPipeline(req, res);
+  }
+  const dealPipelineMatch = req.url.match(/^\/api\/v1\/deals\/pipelines\/([^/]+)$/);
+  if (dealPipelineMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.DEALS_READ)(req, res)) return;
+    return deals.getPipeline(req, res, dealPipelineMatch[1]);
+  }
+  if (dealPipelineMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.DEALS_WRITE)(req, res)) return;
+    return deals.updatePipeline(req, res, dealPipelineMatch[1]);
+  }
+  const dealProductsMatch = req.url.match(/^\/api\/v1\/deals\/([^/]+)\/products$/);
+  if (dealProductsMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.DEALS_READ)(req, res)) return;
+    return deals.listProducts(req, res, dealProductsMatch[1]);
+  }
+  if (dealProductsMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.DEALS_WRITE)(req, res)) return;
+    return deals.addProduct(req, res, dealProductsMatch[1]);
+  }
+  const dealProductRemoveMatch = req.url.match(/^\/api\/v1\/deals\/products\/([^/]+)$/);
+  if (dealProductRemoveMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.DEALS_WRITE)(req, res)) return;
+    return deals.removeProduct(req, res, dealProductRemoveMatch[1]);
+  }
+  const dealMatch = req.url.match(/^\/api\/v1\/deals\/([^/]+)$/);
+  if (dealMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.DEALS_READ)(req, res)) return;
+    return deals.get(req, res, dealMatch[1]);
+  }
+  if (dealMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.DEALS_WRITE)(req, res)) return;
+    return deals.update(req, res, dealMatch[1]);
+  }
+  if (dealMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.DEALS_DELETE)(req, res)) return;
+    return deals.remove(req, res, dealMatch[1]);
+  }
+
+  // Tasks
+  if (req.url === '/api/v1/tasks' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.TASKS_READ)(req, res)) return;
+    return tasks.list(req, res);
+  }
+  if (req.url === '/api/v1/tasks' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.TASKS_WRITE)(req, res)) return;
+    return tasks.create(req, res);
+  }
+  if (req.url === '/api/v1/tasks/overdue' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.TASKS_READ)(req, res)) return;
+    return tasks.overdue(req, res);
+  }
+  if (req.url === '/api/v1/tasks/counts' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.TASKS_READ)(req, res)) return;
+    return tasks.countByStatus(req, res);
+  }
+  const taskMatch = req.url.match(/^\/api\/v1\/tasks\/([^/]+)$/);
+  if (taskMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.TASKS_READ)(req, res)) return;
+    return tasks.get(req, res, taskMatch[1]);
+  }
+  if (taskMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.TASKS_WRITE)(req, res)) return;
+    return tasks.update(req, res, taskMatch[1]);
+  }
+  if (taskMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.TASKS_DELETE)(req, res)) return;
+    return tasks.remove(req, res, taskMatch[1]);
+  }
+
+  // Record Associations
+  if (req.url === '/api/v1/associations' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return recordAssociations.list(req, res);
+  }
+  if (req.url === '/api/v1/associations' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return recordAssociations.create(req, res);
+  }
+  const assocMatch = req.url.match(/^\/api\/v1\/associations\/([^/]+)$/);
+  if (assocMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return recordAssociations.remove(req, res, assocMatch[1]);
+  }
+
+  // Activity Timeline
+  if (req.url === '/api/v1/activity' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return activityTimeline.list(req, res);
+  }
+  if (req.url === '/api/v1/activity' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return activityTimeline.create(req, res);
+  }
+  if (req.url === '/api/v1/activity/recent' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return activityTimeline.recent(req, res);
+  }
+
+  // CRM Property Definitions
+  if (req.url === '/api/v1/crm/properties' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return crmProperties.list(req, res);
+  }
+  if (req.url === '/api/v1/crm/properties' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return crmProperties.create(req, res);
+  }
+  const crmPropMatch = req.url.match(/^\/api\/v1\/crm\/properties\/([^/]+)$/);
+  if (crmPropMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.CRM_READ)(req, res)) return;
+    return crmProperties.get(req, res, crmPropMatch[1]);
+  }
+  if (crmPropMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return crmProperties.update(req, res, crmPropMatch[1]);
+  }
+  if (crmPropMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
+    return crmProperties.remove(req, res, crmPropMatch[1]);
   }
 
   // Marketing Campaigns
