@@ -11,9 +11,18 @@ function inline(text:string):ReactNode[] {
     if(token.startsWith('**')&&token.endsWith('**')) return <strong key={index}>{token.slice(2,-2)}</strong>;
     if(token.startsWith('`')&&token.endsWith('`')) return <code key={index}>{token.slice(1,-1)}</code>;
     const link=token.match(/^\[([^\]]+)]\(([^)]+)\)$/);
-    if(link) return <a key={index} href={link[2]} target={link[2].startsWith('http')?'_blank':undefined} rel="noreferrer">{link[1]}</a>;
+    if(link){
+      const samePage=link[2].match(/^https?:\/\/(?:www\.)?aardvark-enterprises\.net\/docs\/?(#[^\s]*)$/i)||link[2].match(/^\/docs\/?(#[^\s]*)$/i);
+      const href=samePage?samePage[1]:link[2];
+      const external=/^https?:\/\//i.test(href);
+      return <a key={index} href={href} target={external?'_blank':undefined} rel={external?'noreferrer':undefined}>{link[1]}</a>;
+    }
     return <Fragment key={index}>{token}</Fragment>;
   });
+}
+
+function headingSlug(text:string):string {
+  return text.replace(/\[([^\]]+)]\([^)]+\)/g,'$1').replace(/[*_`]/g,'').toLowerCase().trim().replace(/[^a-z0-9\s-]/g,'').replace(/\s+/g,'-').replace(/-+/g,'-');
 }
 
 function parseMarkdown(markdown:string):Block[] {
@@ -33,8 +42,14 @@ function parseMarkdown(markdown:string):Block[] {
 
 function MarkdownDocument({markdown}:{markdown:string}){
   const blocks=useMemo(()=>parseMarkdown(markdown),[markdown]);
+  useEffect(()=>{
+    if(!window.location.hash)return;
+    const targetId=decodeURIComponent(window.location.hash.slice(1));
+    const frame=window.requestAnimationFrame(()=>document.getElementById(targetId)?.scrollIntoView({block:'start'}));
+    return()=>window.cancelAnimationFrame(frame);
+  },[blocks]);
   return <div className="repository-markdown">{blocks.map((block,index)=>{
-    if(block.type==='heading'){if(block.level===1)return <h1 key={index}>{inline(block.text)}</h1>;if(block.level===2)return <h2 key={index}>{inline(block.text)}</h2>;if(block.level===3)return <h3 key={index}>{inline(block.text)}</h3>;return <h4 key={index}>{inline(block.text)}</h4>;}
+    if(block.type==='heading'){const id=headingSlug(block.text);const content=<><a className="repository-heading-anchor" href={`#${id}`} aria-label={`Link to ${block.text}`}>#</a>{inline(block.text)}</>;if(block.level===1)return <h1 id={id} key={index}>{content}</h1>;if(block.level===2)return <h2 id={id} key={index}>{content}</h2>;if(block.level===3)return <h3 id={id} key={index}>{content}</h3>;return <h4 id={id} key={index}>{content}</h4>;}
     if(block.type==='paragraph')return <p key={index}>{inline(block.text)}</p>;
     if(block.type==='quote')return <blockquote key={index}>{inline(block.text)}</blockquote>;
     if(block.type==='rule')return <hr key={index}/>;
