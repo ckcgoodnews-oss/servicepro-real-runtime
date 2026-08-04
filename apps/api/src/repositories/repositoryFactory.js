@@ -55,7 +55,9 @@ const KEY_ALIASES = {
   crmContact: 'crmContacts',
   crmPropertyDefinition: 'crmPropertyDefinitions',
   task: 'tasks',
-  leadAssignmentRule: 'leadAssignmentRules'
+  leadAssignmentRule: 'leadAssignmentRules',
+  board: 'boards',
+  ticket: 'tickets'
 };
 
 function keyFromCreator(name) {

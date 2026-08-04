@@ -43,6 +43,8 @@ const recordAssociations = require('./routes/recordAssociations');
 const activityTimeline = require('./routes/activityTimeline');
 const tasks = require('./routes/tasks');
 const crmProperties = require('./routes/crmProperties');
+const boards = require('./routes/boards');
+const tickets = require('./routes/tickets');
 
 const auth = require('./routes/auth');
 const portal = require('./routes/portal');
@@ -907,6 +909,152 @@ async function router(req, res) {
   if (crmPropMatch && req.method === 'DELETE') {
     if (!requirePermission(PERMISSIONS.CRM_WRITE)(req, res)) return;
     return crmProperties.remove(req, res, crmPropMatch[1]);
+  }
+
+  // Work Management Boards
+  if (req.url === '/api/v1/boards' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.BOARDS_READ)(req, res)) return;
+    return boards.listBoards(req, res);
+  }
+  if (req.url === '/api/v1/boards' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.BOARDS_WRITE)(req, res)) return;
+    return boards.createBoard(req, res);
+  }
+  if (req.url === '/api/v1/boards/templates' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.BOARDS_READ)(req, res)) return;
+    return boards.listTemplates(req, res);
+  }
+  if (req.url === '/api/v1/boards/templates' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.BOARDS_WRITE)(req, res)) return;
+    return boards.createTemplate(req, res);
+  }
+  const boardGroupsMatch = req.url.match(/^\/api\/v1\/boards\/([^/]+)\/groups$/);
+  if (boardGroupsMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.BOARDS_READ)(req, res)) return;
+    return boards.listGroups(req, res, boardGroupsMatch[1]);
+  }
+  if (boardGroupsMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.BOARDS_WRITE)(req, res)) return;
+    return boards.createGroup(req, res, boardGroupsMatch[1]);
+  }
+  const boardGroupMatch = req.url.match(/^\/api\/v1\/boards\/groups\/([^/]+)$/);
+  if (boardGroupMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.BOARDS_WRITE)(req, res)) return;
+    return boards.updateGroup(req, res, boardGroupMatch[1]);
+  }
+  if (boardGroupMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.BOARDS_WRITE)(req, res)) return;
+    return boards.deleteGroup(req, res, boardGroupMatch[1]);
+  }
+  const boardItemsMatch = req.url.match(/^\/api\/v1\/boards\/([^/]+)\/items$/);
+  if (boardItemsMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.BOARDS_READ)(req, res)) return;
+    return boards.listItems(req, res, boardItemsMatch[1]);
+  }
+  if (boardItemsMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.BOARDS_WRITE)(req, res)) return;
+    return boards.createItem(req, res, boardItemsMatch[1]);
+  }
+  const boardItemSubitemsMatch = req.url.match(/^\/api\/v1\/boards\/items\/([^/]+)\/subitems$/);
+  if (boardItemSubitemsMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.BOARDS_READ)(req, res)) return;
+    return boards.listSubitems(req, res, boardItemSubitemsMatch[1]);
+  }
+  const boardItemMatch = req.url.match(/^\/api\/v1\/boards\/items\/([^/]+)$/);
+  if (boardItemMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.BOARDS_READ)(req, res)) return;
+    return boards.getItem(req, res, boardItemMatch[1]);
+  }
+  if (boardItemMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.BOARDS_WRITE)(req, res)) return;
+    return boards.updateItem(req, res, boardItemMatch[1]);
+  }
+  if (boardItemMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.BOARDS_DELETE)(req, res)) return;
+    return boards.deleteItem(req, res, boardItemMatch[1]);
+  }
+  const boardViewsMatch = req.url.match(/^\/api\/v1\/boards\/([^/]+)\/views$/);
+  if (boardViewsMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.BOARDS_READ)(req, res)) return;
+    return boards.listViews(req, res, boardViewsMatch[1]);
+  }
+  if (boardViewsMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.BOARDS_WRITE)(req, res)) return;
+    return boards.createView(req, res, boardViewsMatch[1]);
+  }
+  const boardViewMatch = req.url.match(/^\/api\/v1\/boards\/views\/([^/]+)$/);
+  if (boardViewMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.BOARDS_WRITE)(req, res)) return;
+    return boards.updateView(req, res, boardViewMatch[1]);
+  }
+  if (boardViewMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.BOARDS_WRITE)(req, res)) return;
+    return boards.deleteView(req, res, boardViewMatch[1]);
+  }
+  const boardMatch = req.url.match(/^\/api\/v1\/boards\/([^/]+)$/);
+  if (boardMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.BOARDS_READ)(req, res)) return;
+    return boards.getBoard(req, res, boardMatch[1]);
+  }
+  if (boardMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.BOARDS_WRITE)(req, res)) return;
+    return boards.updateBoard(req, res, boardMatch[1]);
+  }
+  if (boardMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.BOARDS_DELETE)(req, res)) return;
+    return boards.deleteBoard(req, res, boardMatch[1]);
+  }
+
+  // Tickets (Customer Service Hub)
+  if (req.url === '/api/v1/tickets' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.TICKETS_READ)(req, res)) return;
+    return tickets.list(req, res);
+  }
+  if (req.url === '/api/v1/tickets' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.TICKETS_WRITE)(req, res)) return;
+    return tickets.create(req, res);
+  }
+  if (req.url === '/api/v1/tickets/metrics' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.TICKETS_READ)(req, res)) return;
+    return tickets.metrics(req, res);
+  }
+  if (req.url === '/api/v1/tickets/pipelines' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.TICKETS_READ)(req, res)) return;
+    return tickets.listPipelines(req, res);
+  }
+  if (req.url === '/api/v1/tickets/pipelines' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.TICKETS_WRITE)(req, res)) return;
+    return tickets.createPipeline(req, res);
+  }
+  if (req.url === '/api/v1/tickets/sla-policies' && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.TICKETS_READ)(req, res)) return;
+    return tickets.listSlaPolicies(req, res);
+  }
+  if (req.url === '/api/v1/tickets/sla-policies' && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.TICKETS_WRITE)(req, res)) return;
+    return tickets.createSlaPolicy(req, res);
+  }
+  const ticketCommentsMatch = req.url.match(/^\/api\/v1\/tickets\/([^/]+)\/comments$/);
+  if (ticketCommentsMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.TICKETS_READ)(req, res)) return;
+    return tickets.listComments(req, res, ticketCommentsMatch[1]);
+  }
+  if (ticketCommentsMatch && req.method === 'POST') {
+    if (!requirePermission(PERMISSIONS.TICKETS_WRITE)(req, res)) return;
+    return tickets.addComment(req, res, ticketCommentsMatch[1]);
+  }
+  const ticketMatch = req.url.match(/^\/api\/v1\/tickets\/([^/]+)$/);
+  if (ticketMatch && req.method === 'GET') {
+    if (!requirePermission(PERMISSIONS.TICKETS_READ)(req, res)) return;
+    return tickets.get(req, res, ticketMatch[1]);
+  }
+  if (ticketMatch && req.method === 'PATCH') {
+    if (!requirePermission(PERMISSIONS.TICKETS_WRITE)(req, res)) return;
+    return tickets.update(req, res, ticketMatch[1]);
+  }
+  if (ticketMatch && req.method === 'DELETE') {
+    if (!requirePermission(PERMISSIONS.TICKETS_DELETE)(req, res)) return;
+    return tickets.remove(req, res, ticketMatch[1]);
   }
 
   // Marketing Campaigns
