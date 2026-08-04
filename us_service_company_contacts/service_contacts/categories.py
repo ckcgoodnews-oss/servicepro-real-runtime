@@ -9,8 +9,8 @@ class ServiceCategory(NamedTuple):
 
 
 CATEGORIES: dict[str, ServiceCategory] = {
-    "plumbing": ServiceCategory("Plumbing", [("craft", "plumber"), ("shop", "plumber")]),
-    "hvac": ServiceCategory("HVAC", [("craft", "hvac"), ("shop", "hvac"), ("craft", "heating_engineer")]),
+    "plumbing": ServiceCategory("Plumbing", [("craft", "plumber"), ("shop", "plumber"), ("office", "plumber"), ("service", "plumbing"), ("shop", "plumbing")]),
+    "hvac": ServiceCategory("HVAC", [("craft", "hvac"), ("shop", "hvac"), ("craft", "heating_engineer"), ("office", "hvac"), ("service", "hvac"), ("service", "air_conditioning"), ("service", "heating"), ("shop", "heating")]),
     "electrician": ServiceCategory("Electrician", [("craft", "electrician"), ("shop", "electrical")]),
     "roofing": ServiceCategory("Roofing", [("craft", "roofer"), ("shop", "roofing")]),
     "landscaping": ServiceCategory("Landscaping", [("craft", "gardener"), ("shop", "garden_centre")]),
