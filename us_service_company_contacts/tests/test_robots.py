@@ -13,7 +13,7 @@ def setup_function():
 def test_allowed_when_no_disallow(mock_get):
     mock_response = MagicMock()
     mock_response.status_code = 200
-    mock_response.text = "User-agent: *\\nAllow: /"
+    mock_response.text = "User-agent: *\nAllow: /"
     mock_get.return_value = mock_response
 
     assert can_fetch("https://example.com/contact") is True
@@ -23,7 +23,7 @@ def test_allowed_when_no_disallow(mock_get):
 def test_blocked_by_robots(mock_get):
     mock_response = MagicMock()
     mock_response.status_code = 200
-    mock_response.text = "User-agent: *\\nDisallow: /"
+    mock_response.text = "User-agent: *\nDisallow: /"
     mock_get.return_value = mock_response
 
     assert can_fetch("https://blocked.com/page") is False
