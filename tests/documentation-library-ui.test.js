@@ -28,6 +28,11 @@ assert.match(workspace, /id="documentation-manuals-top"/);
 assert.match(manualStyles, /\.docs-manual-overview/);
 assert.match(manualStyles, /\.docs-chapter-nav/);
 assert.match(manualStyles, /scroll-margin-top/);
+assert.match(workspace, /function ManualDiagram/);
+assert.match(workspace, /<ManualDiagram source={section\.wireframe}/);
+assert.doesNotMatch(workspace, /<pre>{section\.wireframe}<\/pre>/);
+assert.match(manualStyles, /\.docs-workflow-track/);
+assert.match(manualStyles, /\.docs-workflow-card/);
 
 for (const document of index.documents) {
   assert.ok(fs.existsSync(path.join(publicRoot, document.markdownUrl)));

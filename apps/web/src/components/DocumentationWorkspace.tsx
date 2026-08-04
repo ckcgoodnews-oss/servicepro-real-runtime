@@ -297,6 +297,27 @@ const manuals: Manual[] = [
   },
 ];
 
+function ManualDiagram({ source }: { source: string }) {
+  const nodes = Array.from(source.matchAll(/\[\s*([^\]]+?)\s*\]/g), (match) => match[1].trim());
+  const uniqueNodes = nodes.filter((node, index) => nodes.indexOf(node) === index);
+  const detail = source
+    .split('\n')
+    .map((line) => line.replace(/\[[^\]]+\]/g, '').replace(/[|+\\/v>-]+/g, ' ').trim())
+    .filter((line) => line.length > 3)
+    .join(' • ');
+
+  return <figure className="docs-workflow" aria-label={`Workflow: ${uniqueNodes.join(' to ')}`}>
+    <figcaption><span>Visual workflow</span><strong>How the pieces connect</strong></figcaption>
+    <div className="docs-workflow-track">
+      {uniqueNodes.map((node, index) => <div className="docs-workflow-step" key={node}>
+        <div className="docs-workflow-card"><small>{String(index + 1).padStart(2, '0')}</small><span>{node}</span></div>
+        {index < uniqueNodes.length - 1 && <span className="docs-workflow-arrow" aria-hidden="true">→</span>}
+      </div>)}
+    </div>
+    {detail && <p><span aria-hidden="true">i</span>{detail}</p>}
+  </figure>;
+}
+
 function allowedAudiences(platformAdmin: boolean, roles: string[]) {
   if (platformAdmin) return new Set<Audience>(['platform_admin', 'owner', 'staff']);
   if (roles.includes('owner')) return new Set<Audience>(['owner', 'staff']);
@@ -353,7 +374,7 @@ export function DocumentationWorkspace() {
       <article id="documentation-manuals-top" className="docs-article">{selected ? <><header><div className="docs-header-badges"><span>{audienceLabels[selected.audience]}</span><span>{selected.category}</span></div><h2>{selected.title}</h2><p>{selected.summary}</p><small>{selected.minutes} minute read <span aria-hidden="true">•</span> {selected.sections.length} chapters <span aria-hidden="true">•</span> Updated operating edition</small></header>
         <section className="docs-manual-overview" aria-label="Guide overview"><div><span className="docs-section-label">About this guide</span><p>{selected.introduction}</p><h3>Before you begin</h3><ul>{selected.prerequisites.map((item) => <li key={item}>{item}</li>)}</ul></div><div className="docs-outcomes"><span className="docs-section-label">After this guide, you can</span>{selected.outcomes.map((item) => <p key={item}><span aria-hidden="true">✓</span>{item}</p>)}</div></section>
         <nav className="docs-chapter-nav" aria-label={`${selected.title} chapters`}><span>In this guide</span><div>{selected.sections.map((section, index) => <a key={section.heading} href={`#${selected.id}-chapter-${index + 1}`}><small>{String(index + 1).padStart(2, '0')}</small>{section.heading}</a>)}</div></nav>
-        {selected.sections.map((section, index) => <section id={`${selected.id}-chapter-${index + 1}`} className="docs-manual-chapter" key={section.heading}><a className="docs-back-link" href="#documentation-manuals-top">Back to guide contents</a><h3><span>{String(index + 1).padStart(2, '0')}</span>{section.heading}</h3><p className="docs-chapter-lead">{section.body}</p>{section.why && <aside className="docs-why"><strong>Why this matters</strong><p>{section.why}</p></aside>}{section.steps && <div className="docs-procedure"><h4>Recommended procedure</h4><ol>{section.steps.map((step) => <li key={step}>{step}</li>)}</ol></div>}{section.tip && <aside className="docs-tip"><strong>Operational guidance</strong><p>{section.tip}</p></aside>}{section.wireframe && <figure className="docs-wireframe"><figcaption>UI / architecture reference</figcaption><pre>{section.wireframe}</pre></figure>}{section.code && <div className="docs-code"><button onClick={() => void copy(section.code!, `${selected.id}-${index}`)}>{copied === `${selected.id}-${index}` ? 'Copied' : 'Copy'}</button><pre><code>{section.code}</code></pre></div>}</section>)}</> : <div className="docs-empty">No authorized manuals match this search.</div>}</article>
+        {selected.sections.map((section, index) => <section id={`${selected.id}-chapter-${index + 1}`} className="docs-manual-chapter" key={section.heading}><a className="docs-back-link" href="#documentation-manuals-top">Back to guide contents</a><h3><span>{String(index + 1).padStart(2, '0')}</span>{section.heading}</h3><p className="docs-chapter-lead">{section.body}</p>{section.why && <aside className="docs-why"><strong>Why this matters</strong><p>{section.why}</p></aside>}{section.steps && <div className="docs-procedure"><h4>Recommended procedure</h4><ol>{section.steps.map((step) => <li key={step}>{step}</li>)}</ol></div>}{section.tip && <aside className="docs-tip"><strong>Operational guidance</strong><p>{section.tip}</p></aside>}{section.wireframe && <ManualDiagram source={section.wireframe} />}{section.code && <div className="docs-code"><button onClick={() => void copy(section.code!, `${selected.id}-${index}`)}>{copied === `${selected.id}-${index}` ? 'Copied' : 'Copy'}</button><pre><code>{section.code}</code></pre></div>}</section>)}</> : <div className="docs-empty">No authorized manuals match this search.</div>}</article>
     </div></>}
   </section>;
 }
