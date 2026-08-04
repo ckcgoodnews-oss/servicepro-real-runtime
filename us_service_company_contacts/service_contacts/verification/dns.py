@@ -1,7 +1,7 @@
 """DNS and MX record verification."""
 
 import logging
-from datetime import datetime
+from datetime import UTC, datetime
 
 import dns.resolver
 import tldextract
@@ -27,7 +27,7 @@ def verify_domain(url_or_domain: str) -> dict:
             "domain": "",
             "domain_has_dns": None,
             "domain_has_mx": None,
-            "domain_checked_at": datetime.utcnow().isoformat(),
+            "domain_checked_at": datetime.now(UTC).isoformat(),
         }
 
     has_dns = _check_dns(domain)
@@ -37,7 +37,7 @@ def verify_domain(url_or_domain: str) -> dict:
         "domain": domain,
         "domain_has_dns": has_dns,
         "domain_has_mx": has_mx,
-        "domain_checked_at": datetime.utcnow().isoformat(),
+        "domain_checked_at": datetime.now(UTC).isoformat(),
     }
 
 

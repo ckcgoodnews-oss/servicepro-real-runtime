@@ -62,6 +62,8 @@ python -m service_contacts --help
 | `ADMIN_CONTACT_EMAIL` | admin@example.com | Contact email in User-Agent |
 | `DATABASE_URL` | sqlite:///data/service_contacts.db | SQLite database path |
 | `OVERPASS_ENDPOINT` | https://overpass-api.de/api/interpreter | Overpass API URL |
+| `OVERPASS_FALLBACK_ENDPOINTS` | Kumi, NCHC | Comma-separated fallback endpoints tried in order |
+| `OVERPASS_TIMEOUT` | 60 | Per-attempt Overpass timeout in seconds |
 | `HTTP_TIMEOUT` | 30 | Request timeout (seconds) |
 | `REQUESTS_PER_SECOND` | 0.5 | Max requests per second per domain |
 | `MAX_WORKERS` | 5 | Concurrent workers |
@@ -89,7 +91,7 @@ python -m service_contacts export --output my_contacts.csv
 
 ```bash
 # Run everything in one command
-python -m service_contacts run --states IN,OH --categories plumbing,hvac --limit 1000 --output results.csv
+python -m service_contacts run --states IN,OH --categories plumbing,hvac --limit 1000 --timeout 60 --output results.csv
 ```
 
 ### All Commands
@@ -112,6 +114,7 @@ python -m service_contacts resume
 | `--categories` | Comma-separated categories or ALL |
 | `--limit` | Maximum records to collect |
 | `--workers` | Concurrent enrichment workers |
+| `--timeout` | Overpass timeout per attempt in seconds (collect and run; default 60) |
 | `--output` | Output CSV file path |
 | `--only-with-email` | Export only records with email |
 | `--only-with-phone` | Export only records with phone |
@@ -124,6 +127,10 @@ python -m service_contacts resume
 ```bash
 python -m service_contacts collect --states ALL --categories ALL --limit 10000 --dry-run
 ```
+
+### Run Artifacts
+
+Collection always refreshes `data/failed_records.csv`. It contains one row per failed provider/state/category query and remains header-only when there are no failures. A full `run` also writes `data/run_summary.json` with inputs, UTC timestamps, duration, stage counts, output path, and final status (`completed`, `completed_with_failures`, `dry_run`, or `failed`). These operational artifacts are ignored by Git.
 
 ## CSV Output Format
 

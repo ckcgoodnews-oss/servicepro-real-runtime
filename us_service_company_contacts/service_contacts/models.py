@@ -1,8 +1,8 @@
 """SQLAlchemy models for staging database."""
 
-from datetime import datetime
+from datetime import UTC, datetime
 
-from sqlalchemy import Column, DateTime, Float, Integer, String, Text, Boolean, create_engine
+from sqlalchemy import Boolean, Column, DateTime, Float, Integer, String, Text, create_engine
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from service_contacts.config import DATABASE_URL
@@ -33,7 +33,7 @@ class SourceRecord(Base):
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
     raw_data = Column(Text, default="")
-    date_collected = Column(DateTime, default=datetime.utcnow)
+    date_collected = Column(DateTime, default=lambda: datetime.now(UTC))
     processed = Column(Boolean, default=False)
 
 
@@ -71,7 +71,7 @@ class Company(Base):
     source_name = Column(String(100), default="")
     source_url = Column(Text, default="")
     source_record_id = Column(String(255), default="")
-    date_collected = Column(DateTime, default=datetime.utcnow)
+    date_collected = Column(DateTime, default=lambda: datetime.now(UTC))
     date_verified = Column(DateTime, nullable=True)
     robots_allowed = Column(Boolean, nullable=True)
     confidence_score = Column(Integer, default=0)
@@ -99,7 +99,7 @@ class CrawlLog(Base):
     url = Column(Text, nullable=False)
     status_code = Column(Integer, nullable=True)
     robots_allowed = Column(Boolean, nullable=True)
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime, default=lambda: datetime.now(UTC))
     duration_ms = Column(Integer, default=0)
     result = Column(String(50), default="")
     error = Column(Text, default="")
@@ -113,7 +113,7 @@ class VerificationEvent(Base):
     check_type = Column(String(50), nullable=False)
     result = Column(String(100), default="")
     details = Column(Text, default="")
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime, default=lambda: datetime.now(UTC))
 
 
 class ExportRun(Base):
@@ -123,7 +123,7 @@ class ExportRun(Base):
     filename = Column(Text, nullable=False)
     record_count = Column(Integer, default=0)
     filters = Column(Text, default="")
-    timestamp = Column(DateTime, default=datetime.utcnow)
+    timestamp = Column(DateTime, default=lambda: datetime.now(UTC))
 
 
 def get_engine(url: str | None = None):

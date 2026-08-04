@@ -1,7 +1,7 @@
 """Retry configuration utilities."""
 
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 import requests
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 
 def transient_retry(max_attempts: int = 3):

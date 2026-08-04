@@ -2,11 +2,11 @@
 
 import logging
 import time
-from datetime import datetime
+from datetime import UTC, datetime
 from urllib.parse import urljoin, urlparse
 
 import requests
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 from service_contacts.config import HTTP_TIMEOUT, MAX_PAGES_PER_DOMAIN, REQUESTS_PER_SECOND, USER_AGENT
 from service_contacts.enrichment.robots import can_fetch
@@ -26,7 +26,7 @@ class CrawlResult:
         self.status_code = status_code
         self.html = html
         self.error = error
-        self.timestamp = datetime.utcnow()
+        self.timestamp = datetime.now(UTC)
 
 
 def crawl_website(base_url: str) -> list[CrawlResult]:

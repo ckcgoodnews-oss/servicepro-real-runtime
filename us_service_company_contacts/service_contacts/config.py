@@ -27,9 +27,18 @@ USER_AGENT = env("USER_AGENT", "ServiceContactsBot/1.0 (+mailto:admin@example.co
 ADMIN_CONTACT_EMAIL = env("ADMIN_CONTACT_EMAIL", "admin@example.com")
 DATABASE_URL = env("DATABASE_URL", f"sqlite:///{BASE_DIR / 'data' / 'service_contacts.db'}")
 OVERPASS_ENDPOINT = env("OVERPASS_ENDPOINT", "https://overpass-api.de/api/interpreter")
+OVERPASS_FALLBACK_ENDPOINTS = [
+    endpoint.strip()
+    for endpoint in env(
+        "OVERPASS_FALLBACK_ENDPOINTS",
+        "https://overpass.kumi.systems/api/interpreter,https://overpass.nchc.org.tw/api/interpreter",
+    ).split(",")
+    if endpoint.strip()
+]
 
 # Rate limiting
 HTTP_TIMEOUT = env_int("HTTP_TIMEOUT", 30)
+OVERPASS_TIMEOUT = env_int("OVERPASS_TIMEOUT", 60)
 REQUESTS_PER_SECOND = env_float("REQUESTS_PER_SECOND", 0.5)
 MAX_WORKERS = env_int("MAX_WORKERS", 5)
 MAX_PAGES_PER_DOMAIN = env_int("MAX_PAGES_PER_DOMAIN", 5)

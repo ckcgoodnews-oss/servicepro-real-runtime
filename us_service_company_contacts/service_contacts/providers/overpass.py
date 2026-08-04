@@ -3,14 +3,20 @@
 import json
 import logging
 import time
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Iterator
 
 import requests
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 from service_contacts.categories import CATEGORIES, US_STATE_BOUNDS
-from service_contacts.config import OVERPASS_ENDPOINT, HTTP_TIMEOUT, REQUESTS_PER_SECOND, USER_AGENT
+from service_contacts.config import (
+    OVERPASS_ENDPOINT,
+    OVERPASS_FALLBACK_ENDPOINTS,
+    OVERPASS_TIMEOUT,
+    REQUESTS_PER_SECOND,
+    USER_AGENT,
+)
 from service_contacts.models import SourceRecord
 from service_contacts.providers.base import BaseProvider
 
@@ -22,8 +28,12 @@ class OverpassProvider(BaseProvider):
 
     name = "openstreetmap_overpass"
 
-    def __init__(self):
+    def __init__(self, timeout: int | None = None, endpoints: list[str] | None = None):
         self._last_request_time = 0.0
+        configured = endpoints or [OVERPASS_ENDPOINT, *OVERPASS_FALLBACK_ENDPOINTS]
+        self.endpoints = list(dict.fromkeys(configured))
+        self.timeout = timeout or OVERPASS_TIMEOUT
+        self.failures: list[dict[str, str]] = []
         self._session = requests.Session()
         self._session.headers["User-Agent"] = USER_AGENT
 
@@ -64,6 +74,16 @@ class OverpassProvider(BaseProvider):
                             break
                 except Exception as e:
                     logger.error(f"Overpass query failed for {cat_key}/{state}: {e}")
+                    self.failures.append(
+                        {
+                            "provider": self.name,
+                            "state": state.upper(),
+                            "category": cat_key,
+                            "error_type": type(e).__name__,
+                            "error": str(e),
+                            "failed_at": datetime.now(UTC).isoformat(),
+                        }
+                    )
                     continue
 
         logger.info(f"Overpass collection complete: {count} records")
@@ -83,6 +103,12 @@ class OverpassProvider(BaseProvider):
         wait=wait_exponential(multiplier=2, min=4, max=60),
         retry=retry_if_exception_type((requests.Timeout, requests.ConnectionError)),
     )
+    def _post_query(self, endpoint: str, query: str) -> requests.Response:
+        self._rate_limit()
+        response = self._session.post(endpoint, data={"data": query}, timeout=self.timeout)
+        response.raise_for_status()
+        return response
+
     def _query_overpass(
         self,
         state: str,
@@ -92,8 +118,6 @@ class OverpassProvider(BaseProvider):
         remaining: int,
     ) -> list[SourceRecord]:
         """Execute a single Overpass query and parse results."""
-        self._rate_limit()
-
         # Build Overpass QL query
         bbox = f"{bounds[0]},{bounds[1]},{bounds[2]},{bounds[3]}"
         tag_filters = []
@@ -109,12 +133,18 @@ class OverpassProvider(BaseProvider):
         out body center {min(remaining, 500)};
         """
 
-        response = self._session.post(
-            OVERPASS_ENDPOINT,
-            data={"data": query},
-            timeout=HTTP_TIMEOUT,
-        )
-        response.raise_for_status()
+        last_error: Exception | None = None
+        response: requests.Response | None = None
+        for endpoint in self.endpoints:
+            try:
+                logger.debug("Trying Overpass endpoint %s", endpoint)
+                response = self._post_query(endpoint, query)
+                break
+            except (requests.Timeout, requests.ConnectionError, requests.HTTPError) as exc:
+                last_error = exc
+                logger.warning("Overpass endpoint failed (%s): %s", endpoint, exc)
+        if response is None:
+            raise RuntimeError(f"All Overpass endpoints failed: {last_error}") from last_error
         data = response.json()
 
         records = []
@@ -145,7 +175,7 @@ class OverpassProvider(BaseProvider):
                 latitude=lat,
                 longitude=lon,
                 raw_data=json.dumps(tags),
-                date_collected=datetime.utcnow(),
+                date_collected=datetime.now(UTC),
                 processed=False,
             )
             records.append(record)

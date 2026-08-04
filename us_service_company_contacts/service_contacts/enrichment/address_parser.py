@@ -1,7 +1,7 @@
 """Address extraction from HTML."""
 
-import re
 import logging
+import re
 
 from bs4 import BeautifulSoup
 

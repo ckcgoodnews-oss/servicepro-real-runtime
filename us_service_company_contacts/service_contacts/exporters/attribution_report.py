@@ -3,7 +3,7 @@
 import json
 import logging
 from collections import Counter
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 
 logger = logging.getLogger("service_contacts.attribution")
@@ -16,7 +16,7 @@ def generate_attribution_report(records: list[dict], output_dir: str = "data") -
     category_counts = Counter(r.get("service_category", "unknown") for r in records)
 
     report = {
-        "generated_at": datetime.utcnow().isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "total_records": len(records),
         "sources": dict(source_counts.most_common()),
         "states": dict(state_counts.most_common()),

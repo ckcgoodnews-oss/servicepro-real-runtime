@@ -1,10 +1,7 @@
 """CLI interface using Typer."""
 
-import json
-import logging
-from datetime import datetime
-from pathlib import Path
-from typing import Optional
+from datetime import UTC, datetime
+from typing import Any, cast
 
 import typer
 from rich.console import Console
@@ -13,16 +10,17 @@ from rich.table import Table
 
 from service_contacts.categories import ALL_CATEGORY_NAMES, ALL_STATES
 from service_contacts.config import DATA_DIR
-from service_contacts.database import init_db, get_session
+from service_contacts.database import get_session, init_db
 from service_contacts.deduplication.merge import deduplicate
 from service_contacts.enrichment.contact_parser import parse_contacts
 from service_contacts.enrichment.crawler import crawl_website
 from service_contacts.exporters.attribution_report import generate_attribution_report
 from service_contacts.exporters.csv_exporter import export_csv
+from service_contacts.exporters.run_artifacts import export_failed_records, export_run_summary
 from service_contacts.logging_config import setup_logging
-from service_contacts.models import Company, SourceRecord, ExportRun
+from service_contacts.models import Company, ExportRun, SourceRecord
 from service_contacts.providers.overpass import OverpassProvider
-from service_contacts.verification.dns import verify_domain, extract_domain
+from service_contacts.verification.dns import verify_domain
 from service_contacts.verification.email import verify_email
 from service_contacts.verification.phone import verify_phone
 from service_contacts.verification.scoring import calculate_confidence
@@ -49,9 +47,10 @@ def collect(
     categories: str = typer.Option("plumbing,hvac,electrician", help="Comma-separated categories or ALL"),
     limit: int = typer.Option(5000, help="Maximum records to collect"),
     dry_run: bool = typer.Option(False, help="Show what would be collected without network requests"),
+    timeout: int = typer.Option(60, min=1, help="Overpass request timeout in seconds"),
 ):
     """Collect business records from data sources."""
-    logger = setup_logging()
+    setup_logging()
     engine = init_db()
     session = get_session(engine)
 
@@ -64,9 +63,9 @@ def collect(
         console.print("[yellow]DRY RUN — no network requests will be made[/yellow]")
         console.print(f"  States: {', '.join(state_list[:10])}{'...' if len(state_list) > 10 else ''}")
         console.print(f"  Categories: {', '.join(cat_list[:10])}{'...' if len(cat_list) > 10 else ''}")
-        return
+        return 0, 0
 
-    provider = OverpassProvider()
+    provider = OverpassProvider(timeout=timeout)
     count = 0
 
     with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), console=console) as progress:
@@ -80,7 +79,11 @@ def collect(
 
     session.commit()
     session.close()
+    failed_path = export_failed_records(provider.failures, DATA_DIR / "failed_records.csv")
     console.print(f"[green]✓ Collected {count} records[/green]")
+    if provider.failures:
+        console.print(f"[yellow]⚠ Recorded {len(provider.failures)} failed queries in {failed_path}[/yellow]")
+    return count, len(provider.failures)
 
 
 @app.command()
@@ -89,24 +92,24 @@ def enrich(
     resume: bool = typer.Option(False, help="Resume from last position"),
 ):
     """Enrich collected records with website data and contacts."""
-    logger = setup_logging()
+    setup_logging()
     engine = init_db()
     session = get_session(engine)
 
     # Get unprocessed source records
-    records = session.query(SourceRecord).filter(SourceRecord.processed == False).limit(1000).all()
+    records = session.query(SourceRecord).filter(SourceRecord.processed.is_(False)).limit(1000).all()
     console.print(f"[bold]Enriching {len(records)} records[/bold]")
 
     enriched_count = 0
     for record in records:
         if not record.website:
-            record.processed = True
+            record.processed = True  # type: ignore[assignment]
             continue
 
         console.print(f"  Crawling: {record.website[:60]}...")
 
         # Crawl website
-        crawl_results = crawl_website(record.website)
+        crawl_results = crawl_website(cast(str, record.website))
         contacts = parse_contacts(crawl_results)
 
         # Create/update company record
@@ -139,7 +142,7 @@ def enrich(
             company.postal_code = addr.get("postal_code", company.postal_code)
 
         session.add(company)
-        record.processed = True
+        record.processed = True  # type: ignore[assignment]
         enriched_count += 1
 
         if enriched_count % 10 == 0:
@@ -148,16 +151,17 @@ def enrich(
     session.commit()
     session.close()
     console.print(f"[green]✓ Enriched {enriched_count} records[/green]")
+    return enriched_count
 
 
 @app.command()
 def verify():
     """Verify websites, DNS, email, and phone for all companies."""
-    logger = setup_logging()
+    setup_logging()
     engine = init_db()
     session = get_session(engine)
 
-    companies = session.query(Company).filter(Company.date_verified == None).limit(500).all()
+    companies = session.query(Company).filter(Company.date_verified.is_(None)).limit(500).all()
     console.print(f"[bold]Verifying {len(companies)} companies[/bold]")
 
     for company in companies:
@@ -194,11 +198,12 @@ def verify():
         # Confidence score
         company_dict = {c.name: getattr(company, c.name) for c in company.__table__.columns}
         company.confidence_score = calculate_confidence(company_dict)
-        company.date_verified = datetime.utcnow()
+        company.date_verified = datetime.now(UTC)
 
     session.commit()
     session.close()
     console.print(f"[green]✓ Verified {len(companies)} companies[/green]")
+    return len(companies)
 
 
 @app.command()
@@ -209,7 +214,7 @@ def export(
     minimum_confidence: int = typer.Option(0, help="Minimum confidence score"),
 ):
     """Export verified companies to CSV."""
-    logger = setup_logging()
+    setup_logging()
     engine = init_db()
     session = get_session(engine)
 
@@ -235,6 +240,7 @@ def export(
     session.close()
 
     console.print(f"[green]✓ Exported {len(merged)} records to {result_path}[/green]")
+    return len(merged)
 
 
 @app.command()
@@ -245,15 +251,44 @@ def run(
     output: str = typer.Option("service_companies.csv", help="Output CSV path"),
     workers: int = typer.Option(5, help="Concurrent workers"),
     dry_run: bool = typer.Option(False, help="Dry run only"),
+    timeout: int = typer.Option(60, min=1, help="Overpass request timeout in seconds"),
 ):
     """Run full pipeline: collect → enrich → verify → export."""
     console.print("[bold]Running full pipeline[/bold]")
-    collect(states=states, categories=categories, limit=limit, dry_run=dry_run)
-    if dry_run:
-        return
-    enrich(workers=workers, resume=False)
-    verify()
-    export(output=output, only_with_email=False, only_with_phone=False, minimum_confidence=0)
+    started_at = datetime.now(UTC)
+    summary: dict[str, Any] = {
+        "status": "running",
+        "started_at": started_at.isoformat(),
+        "inputs": {"states": states, "categories": categories, "limit": limit, "workers": workers, "timeout": timeout},
+        "output": output,
+        "counts": {"collected": 0, "failed": 0, "enriched": 0, "verified": 0, "exported": 0},
+    }
+    try:
+        collected, failed = collect(states=states, categories=categories, limit=limit, dry_run=dry_run, timeout=timeout)
+        summary["counts"]["collected"] = collected
+        summary["counts"]["failed"] = failed
+        if dry_run:
+            summary["status"] = "dry_run"
+            return
+        summary["counts"]["enriched"] = enrich(workers=workers, resume=False)
+        summary["counts"]["verified"] = verify()
+        summary["counts"]["exported"] = export(
+            output=output,
+            only_with_email=False,
+            only_with_phone=False,
+            minimum_confidence=0,
+        )
+        summary["status"] = "completed_with_failures" if failed else "completed"
+    except Exception as exc:
+        summary["status"] = "failed"
+        summary["error"] = {"type": type(exc).__name__, "message": str(exc)}
+        raise
+    finally:
+        finished_at = datetime.now(UTC)
+        summary["finished_at"] = finished_at.isoformat()
+        summary["duration_seconds"] = round((finished_at - started_at).total_seconds(), 3)
+        summary_path = export_run_summary(summary, DATA_DIR / "run_summary.json")
+        console.print(f"[cyan]Run summary: {summary_path}[/cyan]")
 
 
 @app.command()
@@ -265,9 +300,9 @@ def stats():
 
     source_count = session.query(SourceRecord).count()
     company_count = session.query(Company).count()
-    verified_count = session.query(Company).filter(Company.date_verified != None).count()
-    with_email = session.query(Company).filter(Company.email != "", Company.email != None).count()
-    with_phone = session.query(Company).filter(Company.phone != "", Company.phone != None).count()
+    verified_count = session.query(Company).filter(Company.date_verified.is_not(None)).count()
+    with_email = session.query(Company).filter(Company.email != "", Company.email.is_not(None)).count()
+    with_phone = session.query(Company).filter(Company.phone != "", Company.phone.is_not(None)).count()
 
     table = Table(title="Database Statistics")
     table.add_column("Metric", style="cyan")

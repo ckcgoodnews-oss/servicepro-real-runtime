@@ -6,7 +6,7 @@ from urllib.robotparser import RobotFileParser
 
 import requests
 
-from service_contacts.config import USER_AGENT, HTTP_TIMEOUT
+from service_contacts.config import HTTP_TIMEOUT, USER_AGENT
 
 logger = logging.getLogger("service_contacts.robots")
 

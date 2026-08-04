@@ -2,7 +2,6 @@
 
 import logging
 from logging.handlers import RotatingFileHandler
-from pathlib import Path
 
 from service_contacts.config import LOG_DIR
 

@@ -2,10 +2,10 @@
 
 import logging
 
+from service_contacts.enrichment.address_parser import extract_address
 from service_contacts.enrichment.crawler import CrawlResult
 from service_contacts.enrichment.email_parser import extract_emails
 from service_contacts.enrichment.phone_parser import extract_phones
-from service_contacts.enrichment.address_parser import extract_address
 
 logger = logging.getLogger("service_contacts.contact_parser")
 

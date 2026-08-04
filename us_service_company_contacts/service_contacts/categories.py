@@ -2,6 +2,7 @@
 
 from typing import NamedTuple
 
+
 class ServiceCategory(NamedTuple):
     name: str
     osm_tags: list[tuple[str, str]]  # (key, value) pairs for Overpass

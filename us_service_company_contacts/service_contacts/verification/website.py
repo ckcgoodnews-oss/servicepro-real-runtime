@@ -1,7 +1,7 @@
 """Website availability verification."""
 
 import logging
-from datetime import datetime
+from datetime import UTC, datetime
 
 import requests
 
@@ -23,7 +23,7 @@ def verify_website(url: str) -> dict:
             "website_status": "invalid",
             "website_http_status": None,
             "website_final_url": "",
-            "website_checked_at": datetime.utcnow().isoformat(),
+            "website_checked_at": datetime.now(UTC).isoformat(),
             "robots_allowed": None,
         }
 
@@ -37,7 +37,7 @@ def verify_website(url: str) -> dict:
             "website_status": "blocked_by_robots",
             "website_http_status": None,
             "website_final_url": "",
-            "website_checked_at": datetime.utcnow().isoformat(),
+            "website_checked_at": datetime.now(UTC).isoformat(),
             "robots_allowed": False,
         }
 
@@ -69,7 +69,7 @@ def verify_website(url: str) -> dict:
             "website_status": status,
             "website_http_status": status_code,
             "website_final_url": final_url,
-            "website_checked_at": datetime.utcnow().isoformat(),
+            "website_checked_at": datetime.now(UTC).isoformat(),
             "robots_allowed": True,
         }
 
@@ -78,7 +78,7 @@ def verify_website(url: str) -> dict:
             "website_status": "timeout",
             "website_http_status": None,
             "website_final_url": "",
-            "website_checked_at": datetime.utcnow().isoformat(),
+            "website_checked_at": datetime.now(UTC).isoformat(),
             "robots_allowed": robots_allowed,
         }
 
@@ -88,6 +88,6 @@ def verify_website(url: str) -> dict:
             "website_status": "inaccessible",
             "website_http_status": None,
             "website_final_url": "",
-            "website_checked_at": datetime.utcnow().isoformat(),
+            "website_checked_at": datetime.now(UTC).isoformat(),
             "robots_allowed": robots_allowed,
         }

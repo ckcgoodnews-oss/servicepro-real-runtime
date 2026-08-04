@@ -1,7 +1,7 @@
 """Phone number extraction and normalization."""
 
-import re
 import logging
+import re
 
 import phonenumbers
 

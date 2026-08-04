@@ -1,7 +1,6 @@
 """CSV export with required column order."""
 
 import logging
-from datetime import datetime
 from pathlib import Path
 
 import pandas as pd

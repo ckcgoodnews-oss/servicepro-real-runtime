@@ -3,7 +3,7 @@
 import logging
 from collections import defaultdict
 
-from service_contacts.utils.normalization import normalize_domain, normalize_company_name, normalize_phone_for_dedup
+from service_contacts.utils.normalization import normalize_company_name, normalize_domain, normalize_phone_for_dedup
 
 logger = logging.getLogger("service_contacts.deduplication")
 
@@ -105,7 +105,7 @@ def _merge_records(records: list[dict]) -> dict:
     base = dict(records[0])
 
     # Merge categories
-    categories = set()
+    categories: set[str] = set()
     for r in records:
         cat = r.get("service_category", "")
         if cat:
@@ -114,7 +114,7 @@ def _merge_records(records: list[dict]) -> dict:
         base["service_category"] = ";".join(sorted(categories))
 
     # Merge source URLs
-    sources = set()
+    sources: set[str] = set()
     for r in records:
         src = r.get("source_url", "")
         if src:

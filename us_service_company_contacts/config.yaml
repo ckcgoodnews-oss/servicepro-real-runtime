@@ -11,6 +11,10 @@ rate_limiting:
   max_workers: 5
   max_pages_per_domain: 5
   http_timeout: 30
+  overpass_timeout: 60
+  overpass_fallback_endpoints:
+    - "https://overpass.kumi.systems/api/interpreter"
+    - "https://overpass.nchc.org.tw/api/interpreter"
   retry_max_attempts: 3
   retry_backoff_factor: 2
 

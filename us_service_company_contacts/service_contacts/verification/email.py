@@ -2,8 +2,8 @@
 
 import logging
 
-from service_contacts.enrichment.email_parser import is_valid_email_syntax, ROLE_PREFIXES
-from service_contacts.verification.dns import extract_domain, _check_mx
+from service_contacts.enrichment.email_parser import ROLE_PREFIXES, is_valid_email_syntax
+from service_contacts.verification.dns import _check_mx, extract_domain
 
 logger = logging.getLogger("service_contacts.verification.email")
 

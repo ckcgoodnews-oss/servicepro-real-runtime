@@ -1,7 +1,7 @@
 """Email extraction and classification from HTML."""
 
-import re
 import logging
+import re
 
 logger = logging.getLogger("service_contacts.email_parser")
 
