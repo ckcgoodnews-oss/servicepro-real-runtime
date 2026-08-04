@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { authFetch } from '@/auth/session';
-import { RepositoryDocumentationLibrary } from '@/components/RepositoryDocumentationLibrary';
+import { RepositoryDocumentationLibrary, type DocumentationRole } from '@/components/RepositoryDocumentationLibrary';
 
 type Audience = 'platform_admin' | 'owner' | 'staff';
 type Section = { heading: string; body: string; why?: string; tip?: string; steps?: string[]; code?: string; wireframe?: string };
@@ -328,6 +328,7 @@ export function DocumentationWorkspace() {
   const [view, setView] = useState<'library' | 'manuals'>('library');
   const [platformAdmin, setPlatformAdmin] = useState(false);
   const [roles, setRoles] = useState<string[]>([]);
+  const [accessResolved, setAccessResolved] = useState(false);
   const [audience, setAudience] = useState<Audience | 'all'>('all');
   const [query, setQuery] = useState('');
   const [selectedId, setSelectedId] = useState('');
@@ -343,7 +344,7 @@ export function DocumentationWorkspace() {
     }).catch(() => {
       setRoles([]);
       setPlatformAdmin(false);
-    });
+    }).finally(() => setAccessResolved(true));
   }, []);
 
   const permitted = useMemo(() => allowedAudiences(platformAdmin, roles), [platformAdmin, roles]);
@@ -354,6 +355,7 @@ export function DocumentationWorkspace() {
     && JSON.stringify(manual).toLowerCase().includes(query.toLowerCase())
   ), [audience, permitted, query]);
   const selected = visible.find((manual) => manual.id === selectedId) || visible[0];
+  const documentationRole:DocumentationRole = platformAdmin ? 'platform_admin' : roles.includes('owner') ? 'owner' : 'staff';
 
   async function copy(value: string, key: string) {
     await navigator.clipboard.writeText(value);
@@ -362,9 +364,9 @@ export function DocumentationWorkspace() {
   }
 
   return <section className="docs-workspace">
-    <div className="docs-hero"><div><span>Documentation center</span><h2>Find guidance without leaving ServicePro.</h2><p>Browse the complete 639-document product library or switch to concise role-based operating manuals.</p></div>{view === 'manuals' && <label><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search operating manuals" /></label>}</div>
-    <div className="docs-view-switch" role="tablist" aria-label="Documentation view"><button type="button" role="tab" aria-selected={view === 'library'} className={view === 'library' ? 'active' : ''} onClick={() => setView('library')}>Complete library <span>639</span></button><button type="button" role="tab" aria-selected={view === 'manuals'} className={view === 'manuals' ? 'active' : ''} onClick={() => setView('manuals')}>Operating manuals <span>{manuals.length}</span></button></div>
-    {view === 'library' ? <RepositoryDocumentationLibrary /> : <>
+    <div className="docs-hero"><div><span>Documentation center</span><h2>Find guidance without leaving ServicePro.</h2><p>Browse the document collections approved for your role or switch to concise operating manuals.</p></div>{view === 'manuals' && <label><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search operating manuals" /></label>}</div>
+    <div className="docs-view-switch" role="tablist" aria-label="Documentation view"><button type="button" role="tab" aria-selected={view === 'library'} className={view === 'library' ? 'active' : ''} onClick={() => setView('library')}>Document library</button><button type="button" role="tab" aria-selected={view === 'manuals'} className={view === 'manuals' ? 'active' : ''} onClick={() => setView('manuals')}>Operating manuals <span>{manuals.length}</span></button></div>
+    {!accessResolved ? <div className="docs-empty" aria-live="polite">Loading documentation access…</div> : view === 'library' ? <RepositoryDocumentationLibrary role={documentationRole} /> : <>
     <div className="docs-role-notice"><span>Personalized library</span><p>Showing guides available to your <strong>{platformAdmin ? 'platform administrator' : roles.includes('owner') ? 'business owner' : 'staff member'}</strong> account. Internal material you cannot access stays hidden.</p></div>
     <nav className="docs-audience-cards" aria-label="Choose a manual audience">
       <button className={audience === 'all' ? 'active' : ''} onClick={() => setAudience('all')}><span className="docs-audience-icon">⌂</span><span><strong>All guides</strong><small>Browse every manual available to you</small></span></button>

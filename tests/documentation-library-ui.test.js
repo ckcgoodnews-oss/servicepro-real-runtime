@@ -11,9 +11,10 @@ const manualStyles = fs.readFileSync(path.join(root, 'apps/web/src/app/docs-manu
 
 assert.strictEqual(index.documentCount, 639);
 assert.strictEqual(index.documents.length, 639);
-assert.match(workspace, /Complete library/);
+assert.match(workspace, /Document library/);
 assert.match(workspace, /RepositoryDocumentationLibrary/);
-assert.match(renderer, /Search all \{library\.documentCount\} documents/);
+assert.match(renderer, /Role-based document library/);
+assert.match(renderer, /Search \{permittedDocuments\.length\} available documents/);
 assert.match(renderer, /Markdown/);
 assert.match(renderer, /Word/);
 assert.match(renderer, /PDF/);
@@ -38,6 +39,18 @@ assert.match(workspace, /<ManualDiagram source={section\.wireframe}/);
 assert.doesNotMatch(workspace, /<pre>{section\.wireframe}<\/pre>/);
 assert.match(manualStyles, /\.docs-workflow-track/);
 assert.match(manualStyles, /\.docs-workflow-card/);
+
+const rolePolicy = {
+  owner: ['Platform overview', 'Product', 'User guides', 'Operations and reference'],
+  staff: ['User guides'],
+};
+const countFor = (categories) => categories.reduce((total, name) => total + index.categories[name], 0);
+assert.strictEqual(countFor(rolePolicy.owner), 30);
+assert.strictEqual(countFor(rolePolicy.staff), 12);
+for (const category of rolePolicy.owner) assert.match(renderer, new RegExp(category));
+assert.match(renderer, /platform_admin:null/);
+assert.match(workspace, /accessResolved/);
+assert.match(workspace, /<RepositoryDocumentationLibrary role={documentationRole}/);
 
 for (const document of index.documents) {
   assert.ok(fs.existsSync(path.join(publicRoot, document.markdownUrl)));
