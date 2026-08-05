@@ -1,8 +1,61 @@
 # CRM & Revenue Operations Architecture
 
+> **ServicePRO v8.0** | Last updated: August 4, 2026
+
+![CRM Revenue Operations](./images/placeholder-crm-revenue-ops.png)
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Quick Start](#quick-start) 
+- [Data Model Architecture](#data-model-architecture)
+- [Revenue Lifecycle](#revenue-lifecycle)
+- [API Reference](#api-reference)
+- [Integration Patterns](#integration-patterns)
+- [Best Practices](#best-practices)
+- [FAQ](#faq)
+
 ## Overview
 
-ServicePRO's CRM and revenue operations layer provides a complete lead-to-revenue pipeline integrated with field service operations. This document covers the deals, contacts, pipelines, forecasting, and product catalog integration.
+ServicePRO's CRM and revenue operations layer provides a complete lead-to-revenue pipeline that seamlessly integrates with field service operations, creating a unified customer-to-cash flow.
+
+### Business Value for Field Service
+
+**For Aqua Pro Plumbing:** Track Jennifer Martinez from initial website inquiry → contact record → $12,500 HVAC deal → estimate approval → work order scheduling → technician dispatch → completion → invoice → payment → renewal opportunity identification.
+
+> 💡 **Key Integration:** Unlike standalone CRM systems, ServicePRO's revenue operations integrate natively with dispatch, scheduling, work orders, and field service completion, eliminating data sync issues and duplicate entry.
+
+---
+
+## Quick Start
+
+### Understanding the Revenue Flow
+
+```mermaid
+graph TD
+    A[Marketing Lead] --> B[Contact Record]
+    B --> C[Deal/Opportunity] 
+    C --> D[Estimate/Quote]
+    D --> E[Work Order]
+    E --> F[Field Service] --> G[Completion]
+    G --> H[Invoice] --> I[Payment]
+    I --> J[Renewal Opportunity]
+    
+    style A fill:#e1f5fe
+    style C fill:#f3e5f5
+    style E fill:#e8f5e8  
+    style H fill:#fff3e0
+    style J fill:#f1f8e9
+```
+
+### Core Revenue Operations
+
+1. **Lead Management** — Capture and qualify potential customers
+2. **Deal Pipeline** — Track opportunities through sales stages  
+3. **Quote-to-Cash** — Seamless estimate → work order → invoice flow
+4. **Customer Lifecycle** — Ongoing service and renewal management
+
+---
 
 ## Data Model
 
