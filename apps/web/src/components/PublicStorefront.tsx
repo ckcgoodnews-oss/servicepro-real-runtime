@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { apiUrl } from '@/auth/session';
 
 function useRevealOnScroll() {
@@ -25,6 +26,7 @@ function useRevealOnScroll() {
 }
 
 export function PublicStorefront() {
+  const searchParams = useSearchParams();
   const [data, setData] = useState<any>(null);
   const [slug, setSlug] = useState('');
   const [error, setError] = useState('');
@@ -34,9 +36,13 @@ export function PublicStorefront() {
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
   const [financingSent, setFinancingSent] = useState(false);
 
+  // React to URL param changes for service selection (hero shrink)
   useEffect(() => {
-    const value = (new URLSearchParams(location.search).get('business') || '').trim().toLowerCase();
-    setServiceId(new URLSearchParams(location.search).get('service') || '');
+    setServiceId(searchParams.get('service') || '');
+  }, [searchParams]);
+
+  useEffect(() => {
+    const value = (searchParams.get('business') || '').trim().toLowerCase();
     setSlug(value);
     if (!value) {
       setError('Business page not specified.');
@@ -53,7 +59,7 @@ export function PublicStorefront() {
           .catch(() => {});
       })
       .catch((problem) => setError(problem.message));
-  }, []);
+  }, [searchParams]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
