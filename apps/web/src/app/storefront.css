@@ -87,8 +87,8 @@
 
 
 /* Compact hero on service pages */
-.public-storefront .storefront-hero-compact{min-height:140px;padding-block:24px 20px}
-.public-storefront .storefront-hero-compact h1{font-size:clamp(22px,3vw,32px);margin:0}
+.public-storefront .storefront-hero.storefront-hero-compact{min-height:140px;padding-block:24px 20px}
+.public-storefront .storefront-hero.storefront-hero-compact h1{font-size:clamp(22px,3vw,32px);margin:0}
 
 
 /* Fix anchor scroll offset for sticky header */
