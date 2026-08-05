@@ -1,12 +1,11 @@
 const http = require('http');
 const { version } = require('../../../package.json');
 const { router } = require('./router');
-const { getRepositories } = require('./repositories/repositoryFactory');
+const { getBaseStore } = require('./repositories/repositoryFactory');
 
-// Initialize the configured store before accepting traffic. The repository store is
-// the authoritative runtime datastore and owns the complete demo seed used by the
-// online alpha. Do not initialize the legacy customer/job-only JSON store here.
-getRepositories();
+// Warm up the database pool at startup so the first real request is not
+// delayed by connection establishment. No query is actually run here.
+try { getBaseStore(); } catch (_) { /* non-fatal — will fail properly on first request */ }
 
 const port = Number(process.env.PORT || 3000);
 
