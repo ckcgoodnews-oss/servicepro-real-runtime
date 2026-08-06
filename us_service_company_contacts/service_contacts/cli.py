@@ -48,42 +48,131 @@ def collect(
     limit: int = typer.Option(5000, help="Maximum records to collect"),
     dry_run: bool = typer.Option(False, help="Show what would be collected without network requests"),
     timeout: int = typer.Option(60, min=1, help="Overpass request timeout in seconds"),
+    tile_size: float = typer.Option(0.5, help="Geographic tile size in degrees"),
+    requests_per_second: float = typer.Option(0.4, help="Max requests per second to Overpass"),
+    resume: bool = typer.Option(False, "--resume", help="Resume from last checkpoint"),
 ):
-    """Collect business records from data sources."""
+    """Collect business records from data sources with tile-level checkpointing."""
     setup_logging()
     engine = init_db()
     session = get_session(engine)
+
+    from service_contacts.models import CrawlQueue
+    from service_contacts.providers.geo_tiles import generate_tiles, tile_key
+    from service_contacts.categories import CATEGORIES, US_STATE_BOUNDS
+    import service_contacts.config as cfg
+
+    # Override config with CLI values
+    cfg.REQUESTS_PER_SECOND = requests_per_second
+    cfg.OVERPASS_TIMEOUT = timeout
 
     state_list = parse_list(states) or ALL_STATES
     cat_list = parse_list(categories) or ALL_CATEGORY_NAMES
 
     console.print(f"[bold]Collecting from {len(state_list)} states, {len(cat_list)} categories, limit {limit}[/bold]")
+    console.print(f"  Tile size: {tile_size}°, timeout: {timeout}s, rate: {requests_per_second} req/s")
 
     if dry_run:
         console.print("[yellow]DRY RUN — no network requests will be made[/yellow]")
+        total_tiles = 0
+        for st in state_list:
+            bounds = US_STATE_BOUNDS.get(st.upper())
+            if bounds:
+                total_tiles += len(generate_tiles(bounds, tile_size))
         console.print(f"  States: {', '.join(state_list[:10])}{'...' if len(state_list) > 10 else ''}")
         console.print(f"  Categories: {', '.join(cat_list[:10])}{'...' if len(cat_list) > 10 else ''}")
+        console.print(f"  Total tiles: {total_tiles} × {len(cat_list)} categories = ~{total_tiles * len(cat_list)} queries")
         return 0, 0
 
-    provider = OverpassProvider(timeout=timeout)
+    # Build or resume work queue
+    if resume:
+        pending = session.query(CrawlQueue).filter(CrawlQueue.status.in_(["pending", "failed"])).count()
+        console.print(f"[cyan]Resuming: {pending} pending/failed tiles in queue[/cyan]")
+    else:
+        # Clear old queue and rebuild
+        session.query(CrawlQueue).delete()
+        session.commit()
+        for st in state_list:
+            bounds = US_STATE_BOUNDS.get(st.upper())
+            if not bounds:
+                continue
+            tiles = generate_tiles(bounds, tile_size)
+            for cat_key in cat_list:
+                if cat_key not in CATEGORIES:
+                    continue
+                for idx, tile_bounds in enumerate(tiles):
+                    bbox_str = f"{tile_bounds[0]:.4f},{tile_bounds[1]:.4f},{tile_bounds[2]:.4f},{tile_bounds[3]:.4f}"
+                    session.add(CrawlQueue(
+                        state=st.upper(),
+                        category=cat_key,
+                        tile_index=idx,
+                        tile_bounds=bbox_str,
+                        status="pending",
+                    ))
+        session.commit()
+
+    # Process queue
+    provider = OverpassProvider(timeout=timeout, tile_size=tile_size)
     count = 0
+    completed_tiles = 0
+    failed_tiles = 0
 
-    with Progress(SpinnerColumn(), TextColumn("[progress.description]{task.description}"), console=console) as progress:
-        task = progress.add_task("Collecting...", total=None)
-        for record in provider.collect(state_list, cat_list, limit):
-            session.add(record)
-            count += 1
-            if count % 50 == 0:
-                session.commit()
-                progress.update(task, description=f"Collected {count} records...")
+    pending_items = session.query(CrawlQueue).filter(
+        CrawlQueue.status.in_(["pending", "failed"])
+    ).filter(CrawlQueue.attempts < 3).all()
 
-    session.commit()
+    console.print(f"[bold]Processing {len(pending_items)} tiles...[/bold]")
+
+    for item in pending_items:
+        if count >= limit:
+            break
+
+        # Parse tile bounds
+        parts = item.tile_bounds.split(",")
+        if len(parts) != 4:
+            continue
+        tile_bounds = tuple(float(p) for p in parts)
+
+        cat = CATEGORIES.get(item.category)
+        if not cat:
+            item.status = "skipped"
+            session.commit()
+            continue
+
+        osm_tags = cat.osm_tags
+        item.status = "running"
+        item.attempts = (item.attempts or 0) + 1
+        item.last_attempt_at = datetime.now(UTC)
+        session.commit()
+
+        try:
+            records = provider._query_tile(
+                item.state, tile_bounds, item.category, osm_tags, min(limit - count, 200)
+            )
+            # Save records immediately (every tile = checkpoint)
+            for record in records:
+                session.add(record)
+                count += 1
+            item.status = "completed"
+            item.records_found = len(records)
+            item.completed_at = datetime.now(UTC)
+            completed_tiles += 1
+            session.commit()  # Checkpoint per tile
+
+            if records:
+                console.print(f"  ✓ {item.state}/{item.category} tile {item.tile_index}: {len(records)} records")
+
+        except Exception as e:
+            item.status = "failed"
+            item.error = str(e)[:500]
+            failed_tiles += 1
+            session.commit()
+            # Continue with next tile — don't stop
+
     session.close()
-    failed_path = export_failed_records(provider.failures, DATA_DIR / "failed_records.csv")
-    console.print(f"[green]✓ Collected {count} records[/green]")
-    if provider.failures:
-        console.print(f"[yellow]⚠ Recorded {len(provider.failures)} failed queries in {failed_path}[/yellow]")
-    return count, len(provider.failures)
+    export_failed_records(provider.failures, DATA_DIR / "failed_records.csv")
+    console.print(f"[green]✓ Collected {count} records ({completed_tiles} tiles OK, {failed_tiles} failed)[/green]")
+    return count, failed_tiles
 
 
 @app.command()
@@ -252,6 +341,9 @@ def run(
     workers: int = typer.Option(5, help="Concurrent workers"),
     dry_run: bool = typer.Option(False, help="Dry run only"),
     timeout: int = typer.Option(60, min=1, help="Overpass request timeout in seconds"),
+    tile_size: float = typer.Option(0.5, help="Geographic tile size in degrees"),
+    requests_per_second: float = typer.Option(0.4, help="Max requests per second"),
+    resume: bool = typer.Option(False, "--resume", help="Resume from last checkpoint"),
 ):
     """Run full pipeline: collect → enrich → verify → export."""
     console.print("[bold]Running full pipeline[/bold]")
@@ -259,12 +351,15 @@ def run(
     summary: dict[str, Any] = {
         "status": "running",
         "started_at": started_at.isoformat(),
-        "inputs": {"states": states, "categories": categories, "limit": limit, "workers": workers, "timeout": timeout},
+        "inputs": {"states": states, "categories": categories, "limit": limit, "workers": workers, "timeout": timeout, "tile_size": tile_size},
         "output": output,
         "counts": {"collected": 0, "failed": 0, "enriched": 0, "verified": 0, "exported": 0},
     }
     try:
-        collected, failed = collect(states=states, categories=categories, limit=limit, dry_run=dry_run, timeout=timeout)
+        collected, failed = collect(
+            states=states, categories=categories, limit=limit, dry_run=dry_run,
+            timeout=timeout, tile_size=tile_size, requests_per_second=requests_per_second, resume=resume
+        )
         summary["counts"]["collected"] = collected
         summary["counts"]["failed"] = failed
         if dry_run:
@@ -319,12 +414,72 @@ def stats():
 
 @app.command()
 def resume():
-    """Resume an interrupted collection/enrichment run."""
+    """Resume collection from last checkpoint, then enrich and verify."""
     setup_logging()
-    console.print("[bold]Resuming interrupted run...[/bold]")
+    console.print("[bold]Resuming from last checkpoint...[/bold]")
+
+    engine = init_db()
+    session = get_session(engine)
+    from service_contacts.models import CrawlQueue
+
+    pending = session.query(CrawlQueue).filter(CrawlQueue.status.in_(["pending", "failed"])).filter(CrawlQueue.attempts < 3).count()
+    completed = session.query(CrawlQueue).filter(CrawlQueue.status == "completed").count()
+    session.close()
+
+    console.print(f"  Queue: {pending} pending/retryable, {completed} already completed")
+
+    if pending > 0:
+        collect(states="ALL", categories="ALL", limit=5000, dry_run=False, timeout=60, tile_size=0.5, requests_per_second=0.4, resume=True)
+
     enrich(workers=5, resume=True)
     verify()
     console.print("[green]✓ Resume complete[/green]")
+
+
+@app.command(name="failed-units")
+def failed_units():
+    """Show failed collection tiles that can be retried."""
+    setup_logging()
+    engine = init_db()
+    session = get_session(engine)
+    from service_contacts.models import CrawlQueue
+
+    failed = session.query(CrawlQueue).filter(CrawlQueue.status == "failed").all()
+
+    if not failed:
+        console.print("[green]No failed tiles.[/green]")
+        session.close()
+        return
+
+    table = Table(title=f"Failed Tiles ({len(failed)})")
+    table.add_column("State", style="cyan")
+    table.add_column("Category")
+    table.add_column("Tile")
+    table.add_column("Attempts", justify="right")
+    table.add_column("Error")
+
+    for item in failed[:50]:
+        table.add_row(item.state, item.category, str(item.tile_index), str(item.attempts), (item.error or "")[:60])
+
+    console.print(table)
+    session.close()
+
+
+@app.command(name="retry-failed")
+def retry_failed():
+    """Reset failed tiles to pending and resume collection."""
+    setup_logging()
+    engine = init_db()
+    session = get_session(engine)
+    from service_contacts.models import CrawlQueue
+
+    reset_count = session.query(CrawlQueue).filter(CrawlQueue.status == "failed").update({"status": "pending"})
+    session.commit()
+    session.close()
+
+    console.print(f"[cyan]Reset {reset_count} failed tiles to pending.[/cyan]")
+    if reset_count > 0:
+        resume()
 
 
 if __name__ == "__main__":

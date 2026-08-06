@@ -80,16 +80,22 @@ class Company(Base):
 
 
 class CrawlQueue(Base):
+    """Tracks collection work units (state/category/tile) for resume support."""
     __tablename__ = "crawl_queue"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    company_id = Column(Integer, nullable=False)
-    url = Column(Text, nullable=False)
-    status = Column(String(50), default="pending")
+    state = Column(String(10), nullable=False)
+    category = Column(String(100), nullable=False)
+    tile_index = Column(Integer, nullable=False)
+    tile_bounds = Column(String(100), default="")
+    status = Column(String(50), default="pending")  # pending, running, completed, failed, skipped
     attempts = Column(Integer, default=0)
+    records_found = Column(Integer, default=0)
+    endpoint_used = Column(String(255), default="")
+    error = Column(Text, default="")
     last_attempt_at = Column(DateTime, nullable=True)
     completed_at = Column(DateTime, nullable=True)
-    error = Column(Text, default="")
+    created_at = Column(DateTime, default=lambda: datetime.now(UTC))
 
 
 class CrawlLog(Base):
