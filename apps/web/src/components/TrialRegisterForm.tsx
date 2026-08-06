@@ -10,7 +10,10 @@ const INDUSTRIES = [
   'Roofing', 'Pest Control', 'Appliance Repair', 'Restoration',
   'Property Maintenance', 'Moving', 'Junk Removal', 'Painting',
   'Flooring', 'Fencing', 'Pool Service', 'Garage Door', 'Locksmith',
-  'Handyman', 'Other'
+  'Handyman', 'Concrete & Masonry', 'Insulation', 'Glass & Mirror',
+  'Elevator & Escalator', 'Fire Protection', 'Generator Service',
+  'Well & Water Treatment', 'Paving & Sealcoating', 'Demolition',
+  'Other'
 ].sort();
 
 export function TrialRegisterForm() {

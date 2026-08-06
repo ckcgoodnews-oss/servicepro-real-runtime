@@ -75,6 +75,15 @@ const INDUSTRY_IMAGE_OPTIONS = [
   { value: '/storefront/industries/solar.svg', label: 'Solar' },
   { value: '/storefront/industries/tree-care.svg', label: 'Tree Care' },
   { value: '/storefront/industries/window-gutter.svg', label: 'Window & Gutter' },
+  { value: '/storefront/industries/concrete-masonry.svg', label: 'Concrete & Masonry' },
+  { value: '/storefront/industries/insulation.svg', label: 'Insulation & Weatherization' },
+  { value: '/storefront/industries/glass-mirror.svg', label: 'Glass & Mirror' },
+  { value: '/storefront/industries/elevator.svg', label: 'Elevator & Escalator' },
+  { value: '/storefront/industries/fire-protection.svg', label: 'Fire Protection' },
+  { value: '/storefront/industries/generator.svg', label: 'Generator & Backup Power' },
+  { value: '/storefront/industries/well-water.svg', label: 'Well & Water Treatment' },
+  { value: '/storefront/industries/paving.svg', label: 'Paving & Sealcoating' },
+  { value: '/storefront/industries/demolition.svg', label: 'Demolition & Hauling' },
 ];
 
 const SERVICE_IMAGE_OPTIONS = [
@@ -227,6 +236,51 @@ const SERVICE_IMAGE_OPTIONS = [
     { value: '/storefront/services/pack-window-gutter/measurement-pricing.jpg', label: 'Measurement Pricing' },
     { value: '/storefront/services/pack-window-gutter/access-notes.jpg', label: 'Access Notes' },
     { value: '/storefront/services/pack-window-gutter/recurring-routes.jpg', label: 'Recurring Routes' },
+  ]},
+  { industry: 'Concrete & Masonry', images: [
+    { value: '/storefront/services/pack-concrete-masonry/pour-scheduling.jpg', label: 'Pour Scheduling' },
+    { value: '/storefront/services/pack-concrete-masonry/mix-specifications.jpg', label: 'Mix Specifications' },
+    { value: '/storefront/services/pack-concrete-masonry/cure-tracking.jpg', label: 'Cure Tracking' },
+  ]},
+  { industry: 'Insulation & Weatherization', images: [
+    { value: '/storefront/services/pack-insulation/energy-audits.jpg', label: 'Energy Audits' },
+    { value: '/storefront/services/pack-insulation/r-value-tracking.jpg', label: 'R-Value Tracking' },
+    { value: '/storefront/services/pack-insulation/rebate-documentation.jpg', label: 'Rebate Documentation' },
+  ]},
+  { industry: 'Glass & Mirror', images: [
+    { value: '/storefront/services/pack-glass-mirror/custom-measurements.jpg', label: 'Custom Measurements' },
+    { value: '/storefront/services/pack-glass-mirror/glass-specifications.jpg', label: 'Glass Specifications' },
+    { value: '/storefront/services/pack-glass-mirror/safety-compliance.jpg', label: 'Safety Compliance' },
+  ]},
+  { industry: 'Elevator & Escalator', images: [
+    { value: '/storefront/services/pack-elevator/inspection-cycles.jpg', label: 'Inspection Cycles' },
+    { value: '/storefront/services/pack-elevator/load-testing.jpg', label: 'Load Testing' },
+    { value: '/storefront/services/pack-elevator/code-compliance.jpg', label: 'Code Compliance' },
+  ]},
+  { industry: 'Fire Protection', images: [
+    { value: '/storefront/services/pack-fire-protection/sprinkler-inspections.jpg', label: 'Sprinkler Inspections' },
+    { value: '/storefront/services/pack-fire-protection/extinguisher-service.jpg', label: 'Extinguisher Service' },
+    { value: '/storefront/services/pack-fire-protection/compliance-reporting.jpg', label: 'Compliance Reporting' },
+  ]},
+  { industry: 'Generator & Backup Power', images: [
+    { value: '/storefront/services/pack-generator/load-testing.jpg', label: 'Load Testing' },
+    { value: '/storefront/services/pack-generator/fuel-tracking.jpg', label: 'Fuel Tracking' },
+    { value: '/storefront/services/pack-generator/transfer-switch-checks.jpg', label: 'Transfer Switch Checks' },
+  ]},
+  { industry: 'Well & Water Treatment', images: [
+    { value: '/storefront/services/pack-well-water/water-quality-tests.jpg', label: 'Water Quality Tests' },
+    { value: '/storefront/services/pack-well-water/pump-records.jpg', label: 'Pump Records' },
+    { value: '/storefront/services/pack-well-water/filter-maintenance.jpg', label: 'Filter Maintenance' },
+  ]},
+  { industry: 'Paving & Sealcoating', images: [
+    { value: '/storefront/services/pack-paving/area-takeoffs.jpg', label: 'Area Takeoffs' },
+    { value: '/storefront/services/pack-paving/material-tonnage.jpg', label: 'Material Tonnage' },
+    { value: '/storefront/services/pack-paving/cure-scheduling.jpg', label: 'Cure Scheduling' },
+  ]},
+  { industry: 'Demolition & Hauling', images: [
+    { value: '/storefront/services/pack-demolition/hazmat-identification.jpg', label: 'Hazmat Identification' },
+    { value: '/storefront/services/pack-demolition/debris-volumes.jpg', label: 'Debris Volumes' },
+    { value: '/storefront/services/pack-demolition/disposal-manifests.jpg', label: 'Disposal Manifests' },
   ]},
 ];
 

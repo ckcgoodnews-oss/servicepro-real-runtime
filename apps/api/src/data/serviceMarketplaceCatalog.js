@@ -28,7 +28,16 @@ const servicePacks = [
   ['window_gutter', 'Window & Gutter Cleaning Pack', 'Story, pane, linear-foot, and access-based estimating with safety and recurring-service checklists.', ['Measurement pricing', 'Access notes', 'Recurring routes'], '#38859a'],
   ['flooring', 'Flooring Installation Pack', 'Room measurements, material and waste calculations, subfloor findings, installation stages, and care guidance.', ['Room takeoffs', 'Waste factors', 'Install milestones'], '#8a6949'],
   ['property_maintenance', 'Property Maintenance Pack', 'Multi-site preventive maintenance, inspections, vendor coordination, and owner reporting for managed properties.', ['Multi-site assets', 'Preventive plans', 'Owner reporting'], '#56705f'],
-  ['fencing', 'Fence & Gate Pack', 'Linear-foot estimates, material layouts, post spacing, gate hardware, permits, and installation milestones.', ['Linear estimates', 'Material layouts', 'Gate hardware'], '#7f674c']
+  ['fencing', 'Fence & Gate Pack', 'Linear-foot estimates, material layouts, post spacing, gate hardware, permits, and installation milestones.', ['Linear estimates', 'Material layouts', 'Gate hardware'], '#7f674c'],
+  ['concrete_masonry', 'Concrete & Masonry Pack', 'Flatwork and structural estimates, pour schedules, mix specifications, cure tracking, and finish documentation.', ['Pour scheduling', 'Mix specifications', 'Cure tracking'], '#7a7a7a'],
+  ['insulation', 'Insulation & Weatherization Pack', 'R-value calculations, material coverage, blower-door test results, energy audit findings, and rebate documentation.', ['Energy audits', 'R-value tracking', 'Rebate documentation'], '#a89040'],
+  ['glass_mirror', 'Glass & Mirror Service Pack', 'Opening measurements, glass types, hardware specifications, safety glazing compliance, and installation staging.', ['Custom measurements', 'Glass specifications', 'Safety compliance'], '#5a9ebc'],
+  ['elevator', 'Elevator & Escalator Pack', 'Unit asset records, inspection cycles, load testing logs, code compliance, and modernization project tracking.', ['Inspection cycles', 'Load testing', 'Code compliance'], '#4a5d7a'],
+  ['fire_protection', 'Fire Protection Pack', 'Sprinkler system inspections, extinguisher service tags, alarm panel testing, deficiency tracking, and compliance reports.', ['Sprinkler inspections', 'Extinguisher service', 'Compliance reporting'], '#c94433'],
+  ['generator', 'Generator & Backup Power Pack', 'Generator asset records, load bank testing, fuel system maintenance, transfer switch checks, and runtime logs.', ['Load testing', 'Fuel tracking', 'Transfer switch checks'], '#5b8a3e'],
+  ['well_water', 'Well & Water Treatment Pack', 'Well records, pump specifications, water quality testing, filtration maintenance, and treatment system monitoring.', ['Water quality tests', 'Pump records', 'Filter maintenance'], '#3a7d9e'],
+  ['paving', 'Paving & Sealcoating Pack', 'Area measurements, material tonnage, base preparation, overlay specifications, and cure or dry-time tracking.', ['Area takeoffs', 'Material tonnage', 'Cure scheduling'], '#5c5c5c'],
+  ['demolition', 'Demolition & Hauling Pack', 'Scope of tear-down, hazardous material identification, debris volume, disposal manifests, and safety documentation.', ['Hazmat identification', 'Debris volumes', 'Disposal manifests'], '#8c5a3a']
 ];
 
 function defaultMarketplaceItems(stamp) {
