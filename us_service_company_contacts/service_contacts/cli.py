@@ -87,8 +87,13 @@ def collect(
     # Build or resume work queue
     if resume:
         pending = session.query(CrawlQueue).filter(CrawlQueue.status.in_(["pending", "failed"])).count()
-        console.print(f"[cyan]Resuming: {pending} pending/failed tiles in queue[/cyan]")
-    else:
+        if pending > 0:
+            console.print(f"[cyan]Resuming: {pending} pending/failed tiles in queue[/cyan]")
+        else:
+            console.print("[cyan]No pending tiles found — rebuilding queue[/cyan]")
+            resume = False  # Fall through to queue build below
+
+    if not resume:
         # Clear old queue and rebuild
         session.query(CrawlQueue).delete()
         session.commit()

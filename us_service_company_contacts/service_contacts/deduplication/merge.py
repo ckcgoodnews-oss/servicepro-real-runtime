@@ -80,7 +80,7 @@ def deduplicate(records: list[dict]) -> list[dict]:
         else:
             merged.append(_merge_records([records[i] for i in indices]))
 
-    logger.info(f"Deduplicated {len(records)} → {len(merged)} records")
+    logger.info(f"Deduplicated {len(records)} -> {len(merged)} records")
     return merged
 
 
