@@ -1,5 +1,6 @@
 """CLI interface using Typer."""
 
+import json
 from datetime import UTC, datetime
 from typing import Any, cast
 
@@ -81,7 +82,7 @@ def collect(
                 total_tiles += len(generate_tiles(bounds, tile_size))
         console.print(f"  States: {', '.join(state_list[:10])}{'...' if len(state_list) > 10 else ''}")
         console.print(f"  Categories: {', '.join(cat_list[:10])}{'...' if len(cat_list) > 10 else ''}")
-        console.print(f"  Total tiles: {total_tiles} × {len(cat_list)} categories = ~{total_tiles * len(cat_list)} queries")
+        console.print(f"  Total tiles: {total_tiles} (one combined query per tile, all categories classified locally)")
         return 0, 0
 
     # Build or resume work queue
@@ -94,7 +95,7 @@ def collect(
             resume = False  # Fall through to queue build below
 
     if not resume:
-        # Clear old queue and rebuild
+        # Clear old queue and rebuild — ONE entry per geographic tile (combined query)
         session.query(CrawlQueue).delete()
         session.commit()
         for st in state_list:
@@ -102,22 +103,20 @@ def collect(
             if not bounds:
                 continue
             tiles = generate_tiles(bounds, tile_size)
-            for cat_key in cat_list:
-                if cat_key not in CATEGORIES:
-                    continue
-                for idx, tile_bounds in enumerate(tiles):
-                    bbox_str = f"{tile_bounds[0]:.4f},{tile_bounds[1]:.4f},{tile_bounds[2]:.4f},{tile_bounds[3]:.4f}"
-                    session.add(CrawlQueue(
-                        state=st.upper(),
-                        category=cat_key,
-                        tile_index=idx,
-                        tile_bounds=bbox_str,
-                        status="pending",
-                    ))
+            for idx, tile_bounds_item in enumerate(tiles):
+                bbox_str = f"{tile_bounds_item[0]:.4f},{tile_bounds_item[1]:.4f},{tile_bounds_item[2]:.4f},{tile_bounds_item[3]:.4f}"
+                session.add(CrawlQueue(
+                    state=st.upper(),
+                    category="ALL",
+                    tile_index=idx,
+                    tile_bounds=bbox_str,
+                    status="pending",
+                ))
         session.commit()
 
-    # Process queue
+    # Process queue with combined multi-category queries
     provider = OverpassProvider(timeout=timeout, tile_size=tile_size)
+    provider.set_rate(requests_per_second)
     count = 0
     completed_tiles = 0
     failed_tiles = 0
@@ -126,7 +125,9 @@ def collect(
         CrawlQueue.status.in_(["pending", "failed"])
     ).filter(CrawlQueue.attempts < 3).all()
 
-    console.print(f"[bold]Processing {len(pending_items)} tiles...[/bold]")
+    console.print(f"[bold]Processing {len(pending_items)} geographic tiles (combined queries)...[/bold]")
+
+    requested_categories = set(cat_list) if cat_list else set(CATEGORIES.keys())
 
     for item in pending_items:
         if count >= limit:
@@ -135,44 +136,71 @@ def collect(
         # Parse tile bounds
         parts = item.tile_bounds.split(",")
         if len(parts) != 4:
-            continue
-        tile_bounds = tuple(float(p) for p in parts)
-
-        cat = CATEGORIES.get(item.category)
-        if not cat:
             item.status = "skipped"
             session.commit()
             continue
+        tile_bounds = tuple(float(p) for p in parts)
 
-        osm_tags = cat.osm_tags
         item.status = "running"
         item.attempts = (item.attempts or 0) + 1
         item.last_attempt_at = datetime.now(UTC)
         session.commit()
 
         try:
-            records = provider._query_tile(
-                item.state, tile_bounds, item.category, osm_tags, min(limit - count, 200)
-            )
-            # Save records immediately (every tile = checkpoint)
-            for record in records:
-                session.add(record)
+            from service_contacts.providers.overpass import classify_element
+            elements = provider._query_tile_combined(item.state, tile_bounds)
+
+            tile_records = 0
+            for element in elements:
+                if count >= limit:
+                    break
+                tags = element.get("tags", {})
+                name = tags.get("name", "").strip()
+                if not name:
+                    continue
+                category = classify_element(tags, requested_categories)
+                if not category:
+                    continue
+
+                lat = element.get("lat") or element.get("center", {}).get("lat")
+                lon = element.get("lon") or element.get("center", {}).get("lon")
+                session.add(SourceRecord(
+                    source_name="openstreetmap_overpass",
+                    source_url=f"https://www.openstreetmap.org/{element.get('type', 'node')}/{element.get('id', '')}",
+                    source_record_id=f"osm_{element.get('type', 'node')}_{element.get('id', '')}",
+                    company_name=name,
+                    service_category=category,
+                    website=tags.get("website", tags.get("contact:website", "")),
+                    email=tags.get("email", tags.get("contact:email", "")),
+                    phone=tags.get("phone", tags.get("contact:phone", "")),
+                    street_address=OverpassProvider._build_address(tags),
+                    city=tags.get("addr:city", ""),
+                    state=item.state,
+                    postal_code=tags.get("addr:postcode", ""),
+                    country="US",
+                    latitude=lat,
+                    longitude=lon,
+                    raw_data=json.dumps(tags),
+                    date_collected=datetime.now(UTC),
+                    processed=False,
+                ))
                 count += 1
+                tile_records += 1
+
             item.status = "completed"
-            item.records_found = len(records)
+            item.records_found = tile_records
             item.completed_at = datetime.now(UTC)
             completed_tiles += 1
-            session.commit()  # Checkpoint per tile
+            session.commit()
 
-            if records:
-                console.print(f"  ✓ {item.state}/{item.category} tile {item.tile_index}: {len(records)} records")
+            if tile_records > 0:
+                console.print(f"  [green]OK[/green] {item.state} tile {item.tile_index}: {tile_records} records (total: {count})")
 
         except Exception as e:
             item.status = "failed"
             item.error = str(e)[:500]
             failed_tiles += 1
             session.commit()
-            # Continue with next tile — don't stop
 
     session.close()
     export_failed_records(provider.failures, DATA_DIR / "failed_records.csv")
