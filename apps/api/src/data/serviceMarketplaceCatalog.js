@@ -37,7 +37,17 @@ const servicePacks = [
   ['generator', 'Generator & Backup Power Pack', 'Generator asset records, load bank testing, fuel system maintenance, transfer switch checks, and runtime logs.', ['Load testing', 'Fuel tracking', 'Transfer switch checks'], '#5b8a3e'],
   ['well_water', 'Well & Water Treatment Pack', 'Well records, pump specifications, water quality testing, filtration maintenance, and treatment system monitoring.', ['Water quality tests', 'Pump records', 'Filter maintenance'], '#3a7d9e'],
   ['paving', 'Paving & Sealcoating Pack', 'Area measurements, material tonnage, base preparation, overlay specifications, and cure or dry-time tracking.', ['Area takeoffs', 'Material tonnage', 'Cure scheduling'], '#5c5c5c'],
-  ['demolition', 'Demolition & Hauling Pack', 'Scope of tear-down, hazardous material identification, debris volume, disposal manifests, and safety documentation.', ['Hazmat identification', 'Debris volumes', 'Disposal manifests'], '#8c5a3a']
+  ['demolition', 'Demolition & Hauling Pack', 'Scope of tear-down, hazardous material identification, debris volume, disposal manifests, and safety documentation.', ['Hazmat identification', 'Debris volumes', 'Disposal manifests'], '#8c5a3a'],
+  ['auto_repair', 'Auto Repair Pack', 'Vehicle intake, diagnostic codes, repair orders, parts sourcing, labor tracking, and customer communication for general auto repair shops.', ['Repair orders', 'Diagnostic codes', 'Parts sourcing'], '#3d5c8a'],
+  ['oil_lube', 'Oil Change & Lube Pack', 'Quick-service scheduling, fluid tracking, mileage-based reminders, multi-bay management, and upsell checklists.', ['Service intervals', 'Fluid tracking', 'Bay management'], '#6b6b2e'],
+  ['tire_service', 'Tire & Alignment Pack', 'Tire inventory, fitment lookup, tread measurements, alignment records, seasonal rotation reminders, and fleet tire tracking.', ['Tire inventory', 'Alignment records', 'Rotation reminders'], '#4a4a4a'],
+  ['transmission', 'Transmission & Drivetrain Pack', 'Rebuild documentation, fluid analysis, torque specifications, parts lifecycle, and warranty tracking for drivetrain specialists.', ['Rebuild tracking', 'Fluid analysis', 'Warranty records'], '#7a4a3a'],
+  ['auto_body', 'Auto Body & Collision Pack', 'Damage assessment, insurance estimate coordination, paint matching, repair stages, and photo documentation for body shops.', ['Damage assessment', 'Insurance coordination', 'Paint matching'], '#5a3a6a'],
+  ['auto_electrical', 'Auto Electrical & Diagnostics Pack', 'Wiring diagrams, sensor testing, ECU programming, battery health tracking, and electrical fault documentation.', ['Sensor testing', 'ECU records', 'Battery tracking'], '#3a6a5a'],
+  ['brake_suspension', 'Brake & Suspension Pack', 'Pad measurements, rotor thickness, suspension geometry, component wear tracking, and road-test documentation.', ['Pad measurements', 'Geometry records', 'Wear tracking'], '#8a3a3a'],
+  ['exhaust_emissions', 'Exhaust & Emissions Pack', 'Emissions test results, catalytic converter records, leak diagnosis, state inspection compliance, and muffler service documentation.', ['Emissions testing', 'Converter records', 'State compliance'], '#5c7a4a'],
+  ['auto_detailing', 'Auto Detailing Pack', 'Detail packages, interior and exterior checklists, paint correction stages, ceramic coating records, and customer vehicle profiles.', ['Detail packages', 'Paint correction', 'Coating records'], '#2a5a7a'],
+  ['mobile_mechanic', 'Mobile Mechanic Pack', 'On-site service routing, tool inventory, customer location management, roadside diagnostics, and mobile payment processing.', ['Mobile routing', 'On-site service', 'Roadside diagnostics'], '#6a5a2a']
 ];
 
 function defaultMarketplaceItems(stamp) {
