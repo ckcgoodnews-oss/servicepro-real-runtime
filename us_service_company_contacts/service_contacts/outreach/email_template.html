@@ -2,179 +2,158 @@
 <html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
   <!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->
   <title>ServicePro for $company_name</title>
+  <!--[if !mso]><!-->
   <style>
-    body{margin:0;padding:0;background:#f0f4f3;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;-webkit-text-size-adjust:100%}
-    .outer{width:100%;max-width:680px;margin:0 auto}
-    .card{background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 8px 40px rgba(16,44,42,0.08)}
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 0; background: #f0f4f3; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+
+    .email-wrapper { width: 100%; padding: 20px 12px; background: #f0f4f3; }
+    .email-card { width: 100%; max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 32px rgba(16, 44, 42, 0.07); }
 
     /* Header */
-    .header{background:linear-gradient(145deg,#0b3d34 0%,#1c7c68 60%,#27a882 100%);padding:52px 48px 44px;text-align:center;position:relative;overflow:hidden}
-    .header::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(185,229,91,0.08)}
-    .header::after{content:'';position:absolute;bottom:-40px;left:-40px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,0.04)}
-    .logo{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#b9e55b;margin:0 0 20px;position:relative}
-    .header h1{color:#ffffff;font-size:32px;font-weight:800;margin:0 0 12px;line-height:1.2;letter-spacing:-0.5px;position:relative}
-    .header p{color:rgba(255,255,255,0.8);font-size:15px;margin:0;line-height:1.5;position:relative}
+    .email-header { background: linear-gradient(145deg, #0b3d34 0%, #1c7c68 60%, #22a07a 100%); padding: 40px 32px 36px; text-align: center; }
+    .logo-badge { display: inline-block; width: 44px; height: 44px; margin-bottom: 14px; }
+    .brand-text { font-size: 11px; font-weight: 800; letter-spacing: 2.5px; text-transform: uppercase; color: #b9e55b; margin: 0 0 16px; }
+    .email-header h1 { color: #ffffff; font-size: 26px; font-weight: 800; margin: 0 0 10px; line-height: 1.25; letter-spacing: -0.3px; }
+    .email-header p { color: rgba(255,255,255,0.75); font-size: 14px; margin: 0; line-height: 1.5; }
 
     /* Body */
-    .content{padding:44px 48px}
-    .greeting{font-size:16px;color:#1a2e2a;line-height:1.7;margin:0 0 24px}
-    .greeting strong{color:#0d503f}
+    .email-body { padding: 32px 28px; }
+    .greeting { font-size: 15px; color: #1a2e2a; line-height: 1.7; margin: 0 0 20px; }
+    .greeting strong { color: #0d503f; }
 
     /* Features */
-    .features{background:linear-gradient(135deg,#f0faf5 0%,#e8f7ef 100%);border-radius:12px;padding:28px 32px;margin:28px 0}
-    .features h2{font-size:16px;font-weight:700;color:#0d503f;margin:0 0 16px;display:flex;align-items:center;gap:8px}
-    .features h2::before{content:'';display:inline-block;width:4px;height:20px;background:#1c7c68;border-radius:2px}
-    .feature-list{margin:0;padding:0;list-style:none}
-    .feature-list li{display:flex;align-items:center;gap:12px;padding:10px 0;font-size:14px;color:#2d4a44;line-height:1.5;border-bottom:1px solid rgba(28,124,104,0.08)}
-    .feature-list li:last-child{border-bottom:none}
-    .feature-icon{width:32px;height:32px;background:#1c7c68;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:white;font-size:14px;font-weight:700}
+    .features-box { background: #f5fbf8; border: 1px solid #e4f2ec; border-radius: 12px; padding: 24px; margin: 24px 0; }
+    .features-title { font-size: 15px; font-weight: 700; color: #0d503f; margin: 0 0 16px; padding-left: 12px; border-left: 3px solid #1c7c68; }
+    .feature-row { display: flex; align-items: center; gap: 12px; padding: 9px 0; font-size: 13px; color: #2d4a44; line-height: 1.5; }
+    .feature-dot { width: 8px; height: 8px; background: #1c7c68; border-radius: 50%; flex-shrink: 0; }
 
     /* CTA */
-    .cta-wrap{text-align:center;padding:36px 0 8px}
-    .cta-btn{display:inline-block;background:linear-gradient(135deg,#1c7c68 0%,#27a882 100%);color:#ffffff!important;text-decoration:none;font-size:17px;font-weight:700;padding:18px 48px;border-radius:10px;letter-spacing:0.3px;box-shadow:0 6px 24px rgba(28,124,104,0.25);transition:transform 0.1s}
-    .cta-sub{display:block;margin-top:14px;font-size:12px;color:#6b8a82;letter-spacing:0.3px}
+    .cta-section { text-align: center; padding: 28px 0 12px; }
+    .cta-btn { display: inline-block; background: #1c7c68; color: #ffffff !important; text-decoration: none; font-size: 16px; font-weight: 700; padding: 16px 36px; border-radius: 10px; box-shadow: 0 4px 16px rgba(28,124,104,0.2); }
+    .cta-note { display: block; margin-top: 12px; font-size: 12px; color: #7a9e94; }
 
     /* Stats */
-    .stats{display:flex;justify-content:center;gap:32px;padding:28px 0;margin:8px 0 0;border-top:1px solid #eef3f1}
-    .stat{text-align:center}
-    .stat-num{display:block;font-size:24px;font-weight:800;color:#1c7c68}
-    .stat-label{font-size:11px;color:#6b8a82;text-transform:uppercase;letter-spacing:0.5px}
+    .stats-row { display: flex; justify-content: center; gap: 24px; padding: 20px 0; margin-top: 8px; border-top: 1px solid #eef3f1; }
+    .stat-item { text-align: center; }
+    .stat-num { display: block; font-size: 20px; font-weight: 800; color: #1c7c68; }
+    .stat-label { font-size: 10px; color: #7a9e94; text-transform: uppercase; letter-spacing: 0.5px; }
 
-    /* Testimonial */
-    .quote-section{background:#fafcfb;border-top:1px solid #eef3f1;padding:32px 48px;text-align:center}
-    .quote{font-size:14px;color:#4a6660;font-style:italic;line-height:1.7;margin:0 0 8px}
-    .quote-author{font-size:12px;color:#8ba8a0;font-weight:600}
+    /* Quote */
+    .quote-bar { background: #fafcfb; border-top: 1px solid #eef3f1; padding: 24px 28px; text-align: center; }
+    .quote-text { font-size: 13px; color: #4a6660; font-style: italic; line-height: 1.7; margin: 0 0 6px; }
+    .quote-author { font-size: 11px; color: #8ba8a0; font-weight: 600; }
 
     /* Footer */
-    .footer{background:#f4f8f6;padding:36px 48px;text-align:center;border-top:1px solid #e8ede9}
-    .footer-brand{font-size:12px;font-weight:700;color:#1c7c68;letter-spacing:1px;text-transform:uppercase;margin:0 0 12px}
-    .footer p{font-size:11px;color:#8a9e98;margin:4px 0;line-height:1.6}
-    .footer a{color:#1c7c68;text-decoration:none;font-weight:600}
-    .footer a:hover{text-decoration:underline}
-    .unsub{display:inline-block;margin-top:16px;padding:8px 20px;border:1px solid #d4ddd9;border-radius:6px;font-size:11px;color:#6b8a82;text-decoration:none;transition:all 0.15s}
-    .unsub:hover{border-color:#1c7c68;color:#1c7c68}
+    .email-footer { background: #f4f8f6; padding: 28px; text-align: center; border-top: 1px solid #e8ede9; }
+    .footer-brand { font-size: 11px; font-weight: 700; color: #1c7c68; letter-spacing: 1px; text-transform: uppercase; margin: 0 0 8px; }
+    .email-footer p { font-size: 10px; color: #8a9e98; margin: 3px 0; line-height: 1.5; }
+    .email-footer a { color: #1c7c68; text-decoration: none; font-weight: 600; }
+    .unsub-btn { display: inline-block; margin-top: 14px; padding: 7px 18px; border: 1px solid #d4ddd9; border-radius: 5px; font-size: 10px; color: #6b8a82; text-decoration: none; }
 
-    @media(max-width:640px){
-      .outer{margin:0}
-      .card{border-radius:0}
-      .header{padding:40px 28px 36px}
-      .header h1{font-size:26px}
-      .content,.quote-section,.footer{padding-left:28px;padding-right:28px}
-      .features{padding:20px 24px}
-      .stats{gap:20px}
-      .stat-num{font-size:20px}
+    /* Mobile */
+    @media only screen and (max-width: 480px) {
+      .email-wrapper { padding: 8px !important; }
+      .email-card { border-radius: 12px !important; }
+      .email-header { padding: 32px 20px 28px !important; }
+      .email-header h1 { font-size: 22px !important; }
+      .email-body { padding: 24px 20px !important; }
+      .features-box { padding: 18px !important; }
+      .feature-row { font-size: 12px !important; }
+      .cta-btn { padding: 14px 28px !important; font-size: 15px !important; width: 100% !important; }
+      .stats-row { gap: 16px !important; }
+      .stat-num { font-size: 18px !important; }
+      .quote-bar, .email-footer { padding: 20px !important; }
+    }
+
+    /* Tablet */
+    @media only screen and (min-width: 481px) and (max-width: 768px) {
+      .email-card { max-width: 560px !important; }
+      .email-header { padding: 36px 28px !important; }
     }
   </style>
+  <!--<![endif]-->
 </head>
 <body>
-<div style="padding:32px 16px;background:#f0f4f3;">
-  <div class="outer">
-    <div class="card">
+<div class="email-wrapper">
+  <div class="email-card">
 
-      <!-- Header -->
-      <div class="header">
-        <div style="text-align:center;margin-bottom:20px;">
-          <!-- Aardvark Logo - inline SVG for email compatibility -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 64 64" style="display:inline-block;vertical-align:middle;">
-            <!-- Shield background -->
-            <defs>
-              <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#b9e55b"/>
-                <stop offset="100%" style="stop-color:#7bc47a"/>
-              </linearGradient>
-            </defs>
-            <rect x="6" y="6" width="52" height="52" rx="14" fill="url(#shieldGrad)" opacity="0.95"/>
-            <!-- Aardvark silhouette -->
-            <path d="M18 42c0-2 1-4 3-5l2-1c1-1 2-3 2-5v-3c0-3 2-6 5-7l4-2c2-1 4-1 6 0l3 2c2 1 3 3 3 5v2c0 2 1 3 2 4l1 1c2 1 3 3 3 5v2c0 1-1 2-2 2H20c-1 0-2-1-2-2v-2z" fill="#0b3d34"/>
-            <!-- Long snout -->
-            <path d="M22 35c-3 0-6-1-7-2-1-1-1-2 0-3 1-1 3-1 5 0l4 1c1 0 2 1 2 2s-1 2-2 2h-2z" fill="#0b3d34"/>
-            <!-- Ear -->
-            <ellipse cx="38" cy="22" rx="4" ry="6" fill="#0b3d34"/>
-            <ellipse cx="38" cy="22" rx="2.5" ry="4" fill="#b9e55b" opacity="0.6"/>
-            <!-- Eye -->
-            <circle cx="34" cy="28" r="2" fill="#b9e55b"/>
-            <circle cx="34.5" cy="27.5" r="0.8" fill="#ffffff"/>
-            <!-- Tail -->
-            <path d="M50 38c2-2 4-5 3-8" stroke="#0b3d34" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-            <!-- Claws -->
-            <path d="M24 42v2M28 42v2M44 42v2M48 42v2" stroke="#0b3d34" stroke-width="1.5" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <p class="logo">AARDVARK ENTERPRISES</p>
-        <h1>Your Business, Supercharged</h1>
-        <p>The all-in-one platform for $service_category professionals</p>
+    <!-- Header -->
+    <div class="email-header">
+      <!-- Aardvark Logo 44px -->
+      <div class="logo-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 64 64">
+          <defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#b9e55b"/><stop offset="100%" stop-color="#7bc47a"/></linearGradient></defs>
+          <rect x="6" y="6" width="52" height="52" rx="14" fill="url(#g1)" opacity="0.95"/>
+          <path d="M18 42c0-2 1-4 3-5l2-1c1-1 2-3 2-5v-3c0-3 2-6 5-7l4-2c2-1 4-1 6 0l3 2c2 1 3 3 3 5v2c0 2 1 3 2 4l1 1c2 1 3 3 3 5v2c0 1-1 2-2 2H20c-1 0-2-1-2-2v-2z" fill="#0b3d34"/>
+          <path d="M22 35c-3 0-6-1-7-2-1-1-1-2 0-3 1-1 3-1 5 0l4 1c1 0 2 1 2 2s-1 2-2 2h-2z" fill="#0b3d34"/>
+          <ellipse cx="38" cy="22" rx="4" ry="6" fill="#0b3d34"/><ellipse cx="38" cy="22" rx="2.5" ry="4" fill="#b9e55b" opacity="0.6"/>
+          <circle cx="34" cy="28" r="2" fill="#b9e55b"/><circle cx="34.5" cy="27.5" r="0.8" fill="#fff"/>
+          <path d="M50 38c2-2 4-5 3-8" stroke="#0b3d34" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
       </div>
-
-      <!-- Content -->
-      <div class="content">
-        <p class="greeting">
-          Hi <strong>$company_name</strong>,
-        </p>
-        <p class="greeting">
-          Running a $service_category business is demanding — customers calling, crews in the field, estimates to write, invoices to chase. What if one platform handled all of it, and you could set it up in 5 minutes?
-        </p>
-
-        <!-- Features -->
-        <div class="features">
-          <h2>Everything You Need</h2>
-          <ul class="feature-list">
-            <li><span class="feature-icon">&#9201;</span> Smart scheduling & dispatch — assign jobs in seconds</li>
-            <li><span class="feature-icon">&#9993;</span> Professional estimates & invoices — send from anywhere</li>
-            <li><span class="feature-icon">&#127760;</span> Your own business website — customers book online 24/7</li>
-            <li><span class="feature-icon">&#9745;</span> Job tracking — from first call to final payment</li>
-            <li><span class="feature-icon">&#128200;</span> Real-time dashboards — see revenue, jobs, and team performance</li>
-            <li><span class="feature-icon">&#128241;</span> Mobile-ready — manage everything from your phone</li>
-          </ul>
-        </div>
-
-        <!-- CTA -->
-        <div class="cta-wrap">
-          <a href="https://app.aardvark-enterprises.net/start-free?source=email&industry=$service_category&company=$company_name"
-             class="cta-btn">
-            Start Free — 14 Days, No Card
-          </a>
-          <span class="cta-sub">Takes 5 minutes to set up &middot; Cancel anytime</span>
-        </div>
-
-        <!-- Stats -->
-        <div class="stats">
-          <div class="stat"><span class="stat-num">50+</span><span class="stat-label">Industries</span></div>
-          <div class="stat"><span class="stat-num">5 min</span><span class="stat-label">Setup</span></div>
-          <div class="stat"><span class="stat-num">$0</span><span class="stat-label">To start</span></div>
-        </div>
-      </div>
-
-      <!-- Testimonial -->
-      <div class="quote-section">
-        <p class="quote">"We went from sticky notes and spreadsheets to a professional operation in one afternoon. Our customers love the online booking."</p>
-        <p class="quote-author">— Service business owner, Indiana</p>
-      </div>
-
-      <!-- Footer -->
-      <div class="footer">
-        <p class="footer-brand">ServicePro by $sender_company</p>
-        <p>$physical_address</p>
-        <p style="margin-top:8px;">
-          <a href="https://app.aardvark-enterprises.net/start-free?source=email">Visit ServicePro</a> &middot;
-          <a href="mailto:$from_email?subject=Question about ServicePro">Ask a question</a>
-        </p>
-        <p style="margin-top:12px;font-size:10px;">
-          You received this because <strong>$company_name</strong> is publicly listed as a $service_category provider in $state.
-        </p>
-        <a href="mailto:$from_email?subject=Unsubscribe&body=Please remove $to_email from future emails."
-           class="unsub">
-          Unsubscribe
-        </a>
-        <p style="margin-top:10px;font-size:9px;color:#b0c0ba;">
-          One-time business introduction. We will not email you again unless you reply or sign up.
-        </p>
-      </div>
-
+      <p class="brand-text">Aardvark Enterprises</p>
+      <h1>Your Business, Supercharged</h1>
+      <p>The all-in-one platform for $service_category professionals</p>
     </div>
+
+    <!-- Body -->
+    <div class="email-body">
+      <p class="greeting">Hi <strong>$company_name</strong>,</p>
+      <p class="greeting">Running a $service_category business is demanding — customers calling, crews in the field, estimates to write, invoices to chase. What if one platform handled all of it?</p>
+
+      <!-- Features -->
+      <div class="features-box">
+        <p class="features-title">Everything You Need</p>
+        <div class="feature-row"><span class="feature-dot"></span>Smart scheduling &amp; dispatch — assign jobs in seconds</div>
+        <div class="feature-row"><span class="feature-dot"></span>Professional estimates &amp; invoices — send from anywhere</div>
+        <div class="feature-row"><span class="feature-dot"></span>Your own business website — customers book 24/7</div>
+        <div class="feature-row"><span class="feature-dot"></span>Job tracking — from first call to final payment</div>
+        <div class="feature-row"><span class="feature-dot"></span>Real-time dashboards — revenue, jobs, team performance</div>
+        <div class="feature-row"><span class="feature-dot"></span>Mobile-ready — manage everything from your phone</div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-section">
+        <a href="https://app.aardvark-enterprises.net/start-free?source=email&industry=$service_category&company=$company_name" class="cta-btn">
+          Start Free — 14 Days, No Card
+        </a>
+        <span class="cta-note">5-minute setup &middot; Cancel anytime &middot; No credit card</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-item"><span class="stat-num">50+</span><span class="stat-label">Industries</span></div>
+        <div class="stat-item"><span class="stat-num">5 min</span><span class="stat-label">Setup</span></div>
+        <div class="stat-item"><span class="stat-num">$0</span><span class="stat-label">To start</span></div>
+      </div>
+    </div>
+
+    <!-- Quote -->
+    <div class="quote-bar">
+      <p class="quote-text">"We went from sticky notes and spreadsheets to a professional operation in one afternoon."</p>
+      <p class="quote-author">— Service business owner, Indiana</p>
+    </div>
+
+    <!-- Footer -->
+    <div class="email-footer">
+      <p class="footer-brand">ServicePro by $sender_company</p>
+      <p>$physical_address</p>
+      <p style="margin-top:6px;">
+        <a href="https://app.aardvark-enterprises.net/start-free?source=email">Visit ServicePro</a> &middot;
+        <a href="mailto:$from_email?subject=Question about ServicePro">Ask a question</a>
+      </p>
+      <p style="margin-top:10px;font-size:9px;">You received this because $company_name is publicly listed as a $service_category provider in $state.</p>
+      <a href="mailto:$from_email?subject=Unsubscribe&body=Please remove $to_email from future emails." class="unsub-btn">Unsubscribe</a>
+      <p style="margin-top:8px;font-size:9px;color:#b0c0ba;">One-time introduction. We won't email again unless you reply or sign up.</p>
+    </div>
+
   </div>
 </div>
 </body>
