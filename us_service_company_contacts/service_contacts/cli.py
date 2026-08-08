@@ -2,6 +2,7 @@
 
 import json
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any, cast
 
 import typer
@@ -513,6 +514,95 @@ def retry_failed():
     console.print(f"[cyan]Reset {reset_count} failed tiles to pending.[/cyan]")
     if reset_count > 0:
         resume()
+
+
+@app.command()
+def outreach(
+    csv_path: str = typer.Option("results.csv", help="CSV file with collected contacts"),
+    template: str = typer.Option("trial-invite", help="Template name: trial-invite or followup"),
+    smtp_host: str = typer.Option("", help="SMTP host (e.g., smtp.gmail.com)"),
+    smtp_port: int = typer.Option(587, help="SMTP port"),
+    smtp_user: str = typer.Option("", help="SMTP username/email"),
+    smtp_password: str = typer.Option("", help="SMTP password or app password"),
+    from_name: str = typer.Option("", help="Sender display name"),
+    from_email: str = typer.Option("", help="Sender email address"),
+    company_name: str = typer.Option("", help="Your company name (required)"),
+    physical_address: str = typer.Option("", help="Your physical mailing address (CAN-SPAM required)"),
+    max_per_day: int = typer.Option(50, help="Maximum emails per day"),
+    max_per_hour: int = typer.Option(20, help="Maximum emails per hour"),
+    delay: float = typer.Option(5.0, help="Seconds between emails"),
+    dry_run: bool = typer.Option(False, help="Preview emails without sending"),
+    only_role_based: bool = typer.Option(True, help="Only send to role-based emails (info@, contact@, etc.)"),
+):
+    """Send CAN-SPAM compliant outreach to collected contacts."""
+    import pandas as pd
+    from service_contacts.outreach.sender import OutreachConfig, send_outreach
+    from service_contacts.outreach.templates import (
+        SERVICEPRO_TRIAL_INVITE_SUBJECT, SERVICEPRO_TRIAL_INVITE_BODY,
+        SERVICEPRO_FOLLOWUP_SUBJECT, SERVICEPRO_FOLLOWUP_BODY,
+    )
+
+    setup_logging()
+
+    if not dry_run and (not smtp_host or not from_email or not physical_address or not company_name):
+        console.print("[red]ERROR: --smtp-host, --from-email, --company-name, and --physical-address are required for live sends.[/red]")
+        console.print("[yellow]Use --dry-run to preview without sending.[/yellow]")
+        return
+
+    # Load contacts
+    csv_file = Path(csv_path)
+    if not csv_file.exists():
+        console.print(f"[red]CSV not found: {csv_path}[/red]")
+        return
+
+    df = pd.read_csv(csv_file)
+    console.print(f"Loaded {len(df)} contacts from {csv_path}")
+
+    # Filter to contacts with email
+    df = df[df["email"].notna() & (df["email"] != "")]
+    if only_role_based:
+        df = df[df["email_is_role_based"] == True]
+    console.print(f"  {len(df)} with {'role-based ' if only_role_based else ''}email addresses")
+
+    contacts = df.to_dict("records")
+
+    # Select template
+    if template == "followup":
+        subject = SERVICEPRO_FOLLOWUP_SUBJECT
+        body = SERVICEPRO_FOLLOWUP_BODY
+    else:
+        subject = SERVICEPRO_TRIAL_INVITE_SUBJECT
+        body = SERVICEPRO_TRIAL_INVITE_BODY
+
+    config = OutreachConfig(
+        smtp_host=smtp_host or "smtp.example.com",
+        smtp_port=smtp_port,
+        smtp_user=smtp_user or from_email,
+        smtp_password=smtp_password,
+        from_name=from_name or company_name,
+        from_email=from_email or "noreply@example.com",
+        reply_to=from_email,
+        physical_address=physical_address or "123 Main St, City, ST 12345",
+        company_name=company_name or "Your Company",
+        max_per_hour=max_per_hour,
+        max_per_day=max_per_day,
+        delay_between_emails=delay,
+        send_log_path=str(DATA_DIR / "outreach_log.csv"),
+        optout_path=str(DATA_DIR / "optout_list.csv"),
+    )
+
+    results = send_outreach(config, contacts, subject, body, dry_run=dry_run)
+
+    sent = sum(1 for r in results if r.status == "sent")
+    failed = sum(1 for r in results if r.status == "failed")
+    skipped = sum(1 for r in results if "skipped" in r.status)
+    dry = sum(1 for r in results if r.status == "dry_run")
+
+    if dry_run:
+        console.print(f"[yellow]DRY RUN: {dry} emails would be sent[/yellow]")
+    else:
+        console.print(f"[green]Sent: {sent}[/green] | Failed: {failed} | Skipped: {skipped}")
+    console.print(f"Log: {config.send_log_path}")
 
 
 if __name__ == "__main__":
