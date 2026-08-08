@@ -1,9 +1,25 @@
 """Email templates for B2B outreach campaigns."""
 
-# ServicePro trial invitation template
+from pathlib import Path
+
+# Load the premium HTML template
+_TEMPLATE_DIR = Path(__file__).parent
+
+def _load_html_template() -> str:
+    """Load the HTML email template file."""
+    template_path = _TEMPLATE_DIR / "email_template.html"
+    if template_path.exists():
+        return template_path.read_text(encoding="utf-8")
+    return SERVICEPRO_TRIAL_INVITE_BODY_FALLBACK
+
+
+# ServicePro trial invitation — premium HTML version
 SERVICEPRO_TRIAL_INVITE_SUBJECT = "Free tool for $company_name — manage jobs, invoices & scheduling"
 
-SERVICEPRO_TRIAL_INVITE_BODY = """
+SERVICEPRO_TRIAL_INVITE_BODY = _load_html_template()
+
+# Fallback plain HTML (used if template file missing)
+SERVICEPRO_TRIAL_INVITE_BODY_FALLBACK = """
 <p>Hi there,</p>
 
 <p>I noticed <strong>$company_name</strong> provides $service_category services in $state.
@@ -47,7 +63,7 @@ save time on scheduling, invoicing, and customer communication.</p>
 
 <p><a href="https://app.aardvark-enterprises.net/start-free?source=followup&industry=$service_category"
    style="display:inline-block;padding:10px 20px;background:#1c7c68;color:white;text-decoration:none;border-radius:6px;font-weight:bold;">
-   Try it free →
+   Try it free
 </a></p>
 
 <p>No worries if it's not a fit — I won't follow up again unless you reply.</p>
