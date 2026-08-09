@@ -3,6 +3,17 @@ const { sendJson } = require('../utils/http');
 const { issueAccessToken } = require('../services/tokenService');
 const { permissionsForRoles } = require('../auth/permissions');
 const trialService = require('../services/trialService');
+const { sendEmail } = require('../services/notificationService');
+
+async function sendVerificationEmail(email, name, token) {
+  const url = `${String(process.env.APP_BASE_URL || '').replace(/\/$/, '')}/verify-email?token=${encodeURIComponent(token)}`;
+  return sendEmail({
+    to: email,
+    subject: 'Verify your ServicePRO account',
+    text: `Welcome${name ? `, ${name}` : ''}. Verify your email: ${url}`,
+    html: `<p>Welcome to ServicePRO.</p><p><a href="${url}">Verify your email address</a></p><p>If you did not create this account, you can ignore this email.</p>`
+  });
+}
 
 /**
  * POST /api/v1/trial/register
@@ -120,6 +131,12 @@ async function register(req, res) {
     responseData.accessToken = accessToken;
     responseData.tokenType = 'Bearer';
     responseData.user = { id: user.id, tenantId, email: normalizedEmail, name, roles: ['owner', 'admin'] };
+  } else {
+    try {
+      await sendVerificationEmail(normalizedEmail, name, verificationToken);
+    } catch (error) {
+      return sendJson(res, error.status || 502, { error: { code: error.code || 'email_delivery_failed', message: 'Your account was created, but the verification email could not be delivered. Use resend verification to try again.' } });
+    }
   }
 
   return sendJson(res, 201, { data: responseData });
@@ -184,6 +201,11 @@ async function resendVerification(req, res) {
   await req.context.repositories.trials.update(trial.id, {
     verificationTokenHash: trialService.hashToken(newToken)
   });
+  try {
+    await sendVerificationEmail(trial.email, trial.name, newToken);
+  } catch (error) {
+    return sendJson(res, error.status || 502, { error: { code: error.code || 'email_delivery_failed', message: 'The verification email could not be delivered. Please try again.' } });
+  }
 
   const responseData = { accepted: true, message: 'Verification email resent.' };
   if (process.env.NODE_ENV !== 'production' && process.env.EXPOSE_AUTH_TOKENS === 'true') {

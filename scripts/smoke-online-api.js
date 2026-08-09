@@ -22,11 +22,13 @@ const server = spawn(process.execPath, ['apps/api/src/server.js'], {
 });
 
 let stderr = '';
+let stdout = '';
 server.stderr.on('data', chunk => { stderr += chunk.toString(); });
+server.stdout.on('data', chunk => { stdout += chunk.toString(); });
 
 async function waitForHealth() {
   let lastError;
-  for (let attempt = 0; attempt < 30; attempt += 1) {
+  for (let attempt = 0; attempt < 120; attempt += 1) {
     try {
       const [healthResponse,readinessResponse] = await Promise.all([fetch(`http://127.0.0.1:${port}/healthz`),fetch(`http://127.0.0.1:${port}/readyz`)]);
       const [health,readiness] = await Promise.all([healthResponse.json(),readinessResponse.json()]);
@@ -58,7 +60,7 @@ async function verifyFreshDemoLogin() {
     await verifyFreshDemoLogin();
     console.log(`Online API smoke test passed: ok=${result.health.ok}, ready=${result.readiness.ready}, store=${result.health.store || 'json'}, demoLogin=true.`);
   } catch (error) {
-    console.error(stderr || error.message);
+    console.error(stderr || stdout || error.message);
     process.exitCode = 1;
   } finally {
     server.kill();

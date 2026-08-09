@@ -3,6 +3,7 @@ const { sendJson } = require('../utils/http');
 const { verifyPassword } = require('../services/passwordService');
 const { issueAccessToken, issueOpaqueToken, hashToken } = require('../services/tokenService');
 const { permissionsForRoles } = require('../auth/permissions');
+const { sendEmail } = require('../services/notificationService');
 
 const ACCESS_TTL_SECONDS = () => Number(process.env.ACCESS_TOKEN_TTL_SECONDS || 900);
 const REFRESH_TTL_SECONDS = () => Number(process.env.REFRESH_TOKEN_TTL_SECONDS || 60 * 60 * 24 * 30);
@@ -100,6 +101,17 @@ async function requestPasswordReset(req, res) {
       await req.context.repositories.authSessions.createPasswordReset({ tenantId: user.tenantId, userId: user.id, tokenHash: hashToken(token), expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString() });
       await req.context.repositories.authEvents.log({ tenantId: user.tenantId, userId: user.id, eventType: 'auth.password_reset_requested', email: user.email, status: 'success' });
       if (process.env.NODE_ENV !== 'production' && process.env.EXPOSE_AUTH_TOKENS === 'true') return sendJson(res, 202, { data: { accepted: true, developmentToken: token } });
+      const resetUrl = `${String(process.env.APP_BASE_URL || '').replace(/\/$/, '')}/reset-password?token=${encodeURIComponent(token)}`;
+      try {
+        await sendEmail({
+          to: user.email,
+          subject: 'Reset your ServicePRO password',
+          text: `Reset your password within 30 minutes: ${resetUrl}`,
+          html: `<p>We received a request to reset your ServicePRO password.</p><p><a href="${resetUrl}">Reset your password</a></p><p>This link expires in 30 minutes. If you did not request this, you can ignore this email.</p>`
+        });
+      } catch (error) {
+        console.error(JSON.stringify({ level: 'error', event: 'password_reset_email_failed', code: error.code || 'email_failed' }));
+      }
     }
   }
   return sendJson(res, 202, { data: { accepted: true } });

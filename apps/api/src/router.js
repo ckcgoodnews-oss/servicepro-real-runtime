@@ -169,6 +169,8 @@ async function router(req, res) {
 
   if (applyRouteValidation(req, res)) return;
 
+  if (req.url === '/api/v1/payments/stripe/webhook' && req.method === 'POST') return payments.webhook(req, res);
+
   if (req.url === '/auth/login' && req.method === 'POST') return auth.login(req, res);
   if (req.url === '/auth/register' && req.method === 'POST') return auth.register(req, res);
   if (req.url === '/auth/refresh' && req.method === 'POST') return auth.refresh(req, res);

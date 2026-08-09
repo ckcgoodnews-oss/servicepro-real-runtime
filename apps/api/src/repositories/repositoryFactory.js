@@ -108,6 +108,7 @@ function getBaseStore() {
  * automatically runs after `SET LOCAL app.current_tenant = tenantId`.
  */
 function createRepositories(store) {
+  store = store || getBaseStore();
   const repositories = { store };
   for (const registration of repositoryCreators) {
     if (repositories[registration.key]) {

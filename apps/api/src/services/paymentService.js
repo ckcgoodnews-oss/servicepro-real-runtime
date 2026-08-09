@@ -1,7 +1,11 @@
 // Payment processing service - Stripe integration
 // Uses environment variables: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
 
-const STRIPE_KEY = process.env.STRIPE_SECRET_KEY || '';
+function stripeKey() { return process.env.STRIPE_SECRET_KEY || ''; }
+
+function paymentsEnabled() {
+  return String(process.env.FEATURE_PAYMENTS_ENABLED || '').toLowerCase() === 'true';
+}
 
 function money(value) {
   const amount = Number(value);
@@ -49,82 +53,86 @@ function applyPaymentToInvoice(invoice, amount, at = new Date().toISOString()) {
 }
 
 function isConfigured() {
-  return Boolean(STRIPE_KEY);
+  return Boolean(stripeKey() && process.env.STRIPE_WEBHOOK_SECRET);
 }
 
-async function createPaymentIntent(amountCents, currency = 'usd', metadata = {}) {
-  if (!isConfigured()) {
-    return { id: `pi_simulated_${Date.now()}`, amount: amountCents, currency, status: 'requires_payment_method', clientSecret: `pi_simulated_${Date.now()}_secret_sim`, metadata };
-  }
+async function stripeRequest(path, { method = 'GET', body, idempotencyKey } = {}) {
+  if (!stripeKey()) throw Object.assign(new Error('Stripe is not configured.'), { code: 'stripe_not_configured', status: 503 });
 
-  const res = await fetch('https://api.stripe.com/v1/payment_intents', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${STRIPE_KEY}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+  const headers = { Authorization: `Bearer ${stripeKey()}` };
+  if (body) headers['Content-Type'] = 'application/x-www-form-urlencoded';
+  if (idempotencyKey) headers['Idempotency-Key'] = idempotencyKey;
+  const res = await fetch(`https://api.stripe.com${path}`, { method, headers, body });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || data.error) {
+    const error = new Error(data.error?.message || `Stripe request failed with status ${res.status}.`);
+    error.code = data.error?.code || 'stripe_request_failed';
+    error.status = 502;
+    throw error;
+  }
+  return data;
+}
+
+async function createPaymentIntent(amountCents, currency = 'usd', metadata = {}, idempotencyKey = '') {
+  if (!paymentsEnabled()) throw Object.assign(new Error('Payments are disabled.'), { code: 'payments_disabled', status: 503 });
+  if (!Number.isInteger(amountCents) || amountCents <= 0) throw Object.assign(new Error('A positive integer amount in cents is required.'), { code: 'invalid_payment_amount', status: 400 });
+  return stripeRequest('/v1/payment_intents', {
+    method: 'POST', idempotencyKey,
     body: new URLSearchParams({
       amount: String(amountCents),
       currency,
+      'automatic_payment_methods[enabled]': 'true',
       'metadata[tenantId]': metadata.tenantId || '',
       'metadata[invoiceId]': metadata.invoiceId || '',
       'metadata[customerId]': metadata.customerId || ''
     })
   });
-  return res.json();
+}
+
+async function retrievePaymentIntent(intentId) {
+  if (!paymentsEnabled()) throw Object.assign(new Error('Payments are disabled.'), { code: 'payments_disabled', status: 503 });
+  return stripeRequest(`/v1/payment_intents/${encodeURIComponent(intentId)}`);
 }
 
 async function createCustomer(email, name, metadata = {}) {
-  if (!isConfigured()) {
-    return { id: `cus_simulated_${Date.now()}`, email, name, metadata };
-  }
-
-  const res = await fetch('https://api.stripe.com/v1/customers', {
+  return stripeRequest('/v1/customers', {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${STRIPE_KEY}`, 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({ email, name, 'metadata[tenantId]': metadata.tenantId || '' })
   });
-  return res.json();
 }
 
 async function listPaymentMethods(customerId) {
-  if (!isConfigured()) return { data: [] };
-
-  const res = await fetch(`https://api.stripe.com/v1/payment_methods?customer=${customerId}&type=card`, {
-    headers: { 'Authorization': `Bearer ${STRIPE_KEY}` }
-  });
-  return res.json();
+  return stripeRequest(`/v1/payment_methods?customer=${encodeURIComponent(customerId)}&type=card`);
 }
 
 async function createRefund(paymentIntentId, amountCents) {
-  if (!isConfigured()) {
-    return { id: `re_simulated_${Date.now()}`, amount: amountCents, status: 'succeeded' };
-  }
-
   const params = new URLSearchParams({ payment_intent: paymentIntentId });
   if (amountCents) params.set('amount', String(amountCents));
-
-  const res = await fetch('https://api.stripe.com/v1/refunds', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${STRIPE_KEY}`, 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: params
-  });
-  return res.json();
+  return stripeRequest('/v1/refunds', { method: 'POST', body: params });
 }
 
-function verifyWebhookSignature(payload, signature) {
+function verifyWebhookSignature(payload, signature, nowSeconds = Math.floor(Date.now() / 1000)) {
   const secret = process.env.STRIPE_WEBHOOK_SECRET || '';
   if (!secret) return null;
 
   const crypto = require('crypto');
-  const [, timestamp, sig] = (signature || '').match(/t=(\d+),v1=(\w+)/) || [];
-  if (!timestamp || !sig) return null;
+  const fields = String(signature || '').split(',').map(part => part.split('='));
+  const timestamp = fields.find(([key]) => key === 't')?.[1];
+  const signatures = fields.filter(([key]) => key === 'v1').map(([, value]) => value).filter(Boolean);
+  if (!timestamp || !signatures.length || Math.abs(nowSeconds - Number(timestamp)) > 300) return null;
 
   const expected = crypto.createHmac('sha256', secret).update(`${timestamp}.${payload}`).digest('hex');
-  return crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected)) ? JSON.parse(payload) : null;
+  const valid = signatures.some(sig => sig.length === expected.length && crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected)));
+  if (!valid) return null;
+  try { return JSON.parse(payload); } catch { return null; }
 }
 
 module.exports = {
   applyPaymentToInvoice,
+  paymentsEnabled,
   isConfigured,
   createPaymentIntent,
+  retrievePaymentIntent,
   createCustomer,
   listPaymentMethods,
   createRefund,

@@ -1,37 +1,35 @@
-// Notification service - Email (SendGrid) + SMS (Twilio)
-// Uses environment variables: SENDGRID_KEY, TWILIO_SID, TWILIO_AUTH_TOKEN, TWILIO_PHONE
-
-const SENDGRID_KEY = process.env.SENDGRID_KEY || '';
+// Notification service - Email (Resend) + SMS (Twilio)
 const TWILIO_SID = process.env.TWILIO_SID || '';
 const TWILIO_AUTH = process.env.TWILIO_AUTH_TOKEN || '';
 const TWILIO_PHONE = process.env.TWILIO_PHONE || '';
 
-function emailConfigured() { return Boolean(SENDGRID_KEY); }
+function emailConfigured() { return Boolean(process.env.RESEND_API_KEY && process.env.EMAIL_FROM); }
 function smsConfigured() { return Boolean(TWILIO_SID && TWILIO_AUTH && TWILIO_PHONE); }
 
 async function sendEmail({ to, subject, text, html, from }) {
-  const fromAddr = from || process.env.EMAIL_FROM || 'noreply@servicepro.app';
+  const fromAddr = from || process.env.EMAIL_FROM || '';
 
   if (!emailConfigured()) {
-    console.log(`[email-sim] To: ${to}, Subject: ${subject}`);
-    return { success: true, simulated: true, messageId: `sim_${Date.now()}` };
+    if (process.env.NODE_ENV !== 'production' && process.env.FEATURE_EMAIL_ENABLED !== 'true') {
+      return { success: true, simulated: true, messageId: `sim_${Date.now()}` };
+    }
+    throw Object.assign(new Error('Email delivery is not configured.'), { code: 'email_not_configured', status: 503 });
   }
 
-  const res = await fetch('https://api.sendgrid.com/v3/mail/send', {
+  const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
-    headers: { 'Authorization': `Bearer ${SENDGRID_KEY}`, 'Content-Type': 'application/json' },
+    headers: { 'Authorization': `Bearer ${process.env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      personalizations: [{ to: [{ email: to }] }],
-      from: { email: fromAddr },
+      to: Array.isArray(to) ? to : [to],
+      from: fromAddr,
       subject,
-      content: [
-        ...(text ? [{ type: 'text/plain', value: text }] : []),
-        ...(html ? [{ type: 'text/html', value: html }] : [])
-      ]
+      ...(text ? { text } : {}),
+      ...(html ? { html } : {})
     })
   });
-
-  return { success: res.status === 202, statusCode: res.status, messageId: res.headers.get('x-message-id') || '' };
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw Object.assign(new Error(data.message || `Email provider returned ${res.status}.`), { code: 'email_delivery_failed', status: 502 });
+  return { success: true, statusCode: res.status, messageId: data.id || '' };
 }
 
 async function sendSms({ to, body }) {

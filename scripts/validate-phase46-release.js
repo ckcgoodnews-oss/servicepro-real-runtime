@@ -21,7 +21,10 @@ function validatePhase46Release(){
   const shell=read('apps/web/src/components/AppShell.tsx');
   const navigationRoutes=[...shell.matchAll(/href:\s*'(\/[^']+)'/g)].map(match=>match[1]);
   for(const route of navigationRoutes)assert.ok(manifest.workspaceRoutes.includes(route),`${route} must be represented in the release manifest`);
-  assert.strictEqual(manifest.serviceModel.industryPacks,30);assert.strictEqual(manifest.serviceModel.marketplaceItems,34);
+  const {defaultMarketplaceItems}=require(path.join(root,'apps/api/src/data/serviceMarketplaceCatalog'));
+  const catalog=defaultMarketplaceItems('2026-07-15T00:00:00.000Z');
+  assert.strictEqual(manifest.serviceModel.industryPacks,catalog.filter(item=>item.itemType==='service_pack').length);
+  assert.strictEqual(manifest.serviceModel.marketplaceItems,catalog.length);
   return {version:manifest.version,tag:manifest.tag,routes:manifest.workspaceRoutes.length,checks:required.length+navigationRoutes.length+25};
 }
 

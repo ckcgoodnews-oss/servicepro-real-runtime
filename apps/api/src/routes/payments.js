@@ -1,7 +1,7 @@
 const { sendJson } = require('../utils/http');
 const { operationalTenant } = require('../services/tenantResolver');
-const { createPaymentIntent, createRefund, verifyWebhookSignature } = require('../services/paymentService');
-const { makeId, now } = require('../services/id');
+const { createPaymentIntent, retrievePaymentIntent, verifyWebhookSignature, paymentsEnabled, isConfigured } = require('../services/paymentService');
+const { getRepositoriesForTenant } = require('../repositories/repositoryFactory');
 
 function repo(req) { return req.context.repositories.payments; }
 function tenant(req) { return operationalTenant(req); }
@@ -19,92 +19,84 @@ function getById(req, res, id) {
 }
 
 function create(req, res) {
-  const { invoiceId, amountCents, method } = req.body || {};
-  if (!invoiceId || !amountCents) {
-    return sendJson(res, 400, { error: { code: 'validation_failed', message: 'invoiceId and amountCents are required' } });
+  const { invoiceId } = req.body || {};
+  if (!invoiceId) {
+    return sendJson(res, 400, { error: { code: 'validation_failed', message: 'invoiceId is required' } });
+  }
+  if (!paymentsEnabled() || !isConfigured()) {
+    return sendJson(res, 503, { error: { code: 'payments_unavailable', message: 'Payments are not configured.' } });
   }
 
   Promise.resolve()
     .then(async () => {
-      const intent = await createPaymentIntent(amountCents, 'usd', {
-        tenantId: tenant(req),
+      const tenantId = tenant(req);
+      const invoice = await req.context.repositories.invoices.findById(tenantId, invoiceId);
+      if (!invoice) return sendJson(res, 404, { error: { code: 'not_found', message: 'Invoice not found' } });
+      const amount = Number(invoice.balanceDue);
+      const amountCents = Math.round(amount * 100);
+      if (!Number.isFinite(amount) || amountCents <= 0) return sendJson(res, 409, { error: { code: 'invoice_already_paid', message: 'Invoice has no outstanding balance.' } });
+      const existing = await repo(req).findPendingByInvoice(tenantId, invoiceId);
+      if (existing) {
+        const intent = await retrievePaymentIntent(existing.stripePaymentIntentId);
+        return sendJson(res, 200, { data: existing, clientSecret: intent.client_secret });
+      }
+      const currency = String(process.env.STRIPE_CURRENCY || 'usd').toLowerCase();
+      const intent = await createPaymentIntent(amountCents, currency, {
+        tenantId,
         invoiceId,
-        customerId: req.body.customerId || ''
-      });
+        customerId: invoice.customerId || ''
+      }, `servicepro:${tenantId}:${invoiceId}:${amountCents}:${currency}`);
 
-      const payment = await repo(req).create(tenant(req), {
+      const payment = await repo(req).create(tenantId, {
         invoiceId,
-        amountCents,
-        method: method || 'card',
+        customerId: invoice.customerId || '',
+        amount,
+        currency,
+        method: 'stripe',
         status: 'pending',
         stripePaymentIntentId: intent.id || '',
-        clientSecret: intent.clientSecret || '',
-        processedBy: req.context.userId || '',
-        metadata: { stripeStatus: intent.status }
+        reference: intent.id || ''
       });
 
-      return sendJson(res, 201, { data: payment });
+      return sendJson(res, 201, { data: payment, clientSecret: intent.client_secret });
     })
     .catch(err => sendJson(res, err.status || 500, { error: { code: err.code || 'payment_failed', message: err.message } }));
 }
 
 function confirm(req, res, id) {
-  Promise.resolve()
-    .then(async () => {
-      const payment = await repo(req).findById(tenant(req), id);
-      if (!payment) return sendJson(res, 404, { error: { code: 'not_found', message: 'Payment not found' } });
-
-      const updated = await repo(req).update(tenant(req), id, {
-        status: 'completed',
-        completedAt: now()
-      });
-
-      // Mark invoice as paid
-      if (payment.invoiceId) {
-        await req.context.repositories.invoices.update(tenant(req), payment.invoiceId, { status: 'paid', paidAt: now() });
-      }
-
-      return sendJson(res, 200, { data: updated });
-    })
-    .catch(err => sendJson(res, err.status || 500, { error: { code: 'error', message: err.message } }));
+  return sendJson(res, 410, { error: { code: 'webhook_confirmation_required', message: 'Payments are confirmed by Stripe webhooks only.' } });
 }
 
 function refund(req, res, id) {
-  const { amountCents, reason } = req.body || {};
-
-  Promise.resolve()
-    .then(async () => {
-      const payment = await repo(req).findById(tenant(req), id);
-      if (!payment) return sendJson(res, 404, { error: { code: 'not_found', message: 'Payment not found' } });
-      if (payment.status !== 'completed') return sendJson(res, 400, { error: { code: 'invalid_state', message: 'Only completed payments can be refunded' } });
-
-      const stripeRefund = await createRefund(payment.stripePaymentIntentId, amountCents);
-
-      const updated = await repo(req).update(tenant(req), id, {
-        status: amountCents && amountCents < payment.amountCents ? 'partially_refunded' : 'refunded',
-        refundedAmountCents: amountCents || payment.amountCents,
-        refundReason: reason || '',
-        refundedAt: now(),
-        stripeRefundId: stripeRefund.id || ''
-      });
-
-      return sendJson(res, 200, { data: updated });
-    })
-    .catch(err => sendJson(res, err.status || 500, { error: { code: 'refund_failed', message: err.message } }));
+  return sendJson(res, 501, { error: { code: 'refund_reconciliation_unavailable', message: 'Refund reconciliation is not enabled.' } });
 }
 
 function webhook(req, res) {
   const signature = req.headers['stripe-signature'] || '';
-  const rawBody = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+  const rawBody = req.rawBody || '';
   const event = verifyWebhookSignature(rawBody, signature);
 
   if (!event) {
     return sendJson(res, 400, { error: { code: 'invalid_signature', message: 'Webhook signature verification failed' } });
   }
 
-  // Process webhook event
-  console.log(`[stripe-webhook] ${event.type}`, event.data?.object?.id);
-  return sendJson(res, 200, { received: true });
+  if (event.type !== 'payment_intent.succeeded') return sendJson(res, 200, { received: true, ignored: true });
+  const intent = event.data?.object || {};
+  const tenantId = intent.metadata?.tenantId;
+  if (!event.id || !tenantId || !intent.id) return sendJson(res, 422, { error: { code: 'invalid_event_metadata', message: 'Stripe event metadata is incomplete.' } });
+  Promise.resolve(getRepositoriesForTenant(tenantId).payments.completeStripePayment(tenantId, {
+    eventId: event.id,
+    eventType: event.type,
+    paymentIntentId: intent.id,
+    amountReceived: Number(intent.amount_received),
+    currency: String(intent.currency || '').toLowerCase()
+  }))
+    .then(result => {
+      if (result.missing) return sendJson(res, 422, { error: { code: 'payment_not_found', message: 'Stripe payment is not recognized.' } });
+      if (result.mismatch) return sendJson(res, 422, { error: { code: 'payment_mismatch', message: 'Stripe payment does not match the invoice.' } });
+      return sendJson(res, 200, { received: true, duplicate: Boolean(result.duplicate) });
+    })
+    .catch(err => sendJson(res, err.status || 500, { error: { code: err.code || 'webhook_processing_failed', message: err.message } }));
 }
 
 module.exports = { list, getById, create, confirm, refund, webhook };
