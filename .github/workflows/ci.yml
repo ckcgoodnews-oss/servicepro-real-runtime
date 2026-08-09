@@ -29,30 +29,49 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install web dependencies
+        run: npm ci --prefix apps/web
+
+      - name: Validate API entry point
+        run: node --check apps/api/src/server.js
 
       - name: Check migration ordering
         run: npm run migrations:check
 
-      - name: Run tests
-        run: npm test
+      - name: Run production-critical tests
+        run: npm run test:core
         env:
           DATA_STORE: json
           DATA_FILE: ./data/ci-runtime.json
           JWT_SECRET: ci-test-secret-ci-test-secret-ci-test-secret
           PORTAL_TOKEN_SECRET: ci-portal-secret-ci-portal-secret-ci-portal
 
-      - name: Install web dependencies
-        run: npm ci --prefix apps/web
+      - name: Run full runtime test suite
+        run: npm test
+        env:
+          DATA_STORE: json
+          DATA_FILE: ./data/ci-runtime-full.json
+          JWT_SECRET: ci-test-secret-ci-test-secret-ci-test-secret
+          PORTAL_TOKEN_SECRET: ci-portal-secret-ci-portal-secret-ci-portal
+
+      - name: Type-check frontend
+        run: npm run typecheck
+
+      - name: Audit production dependencies
+        run: npm run audit:production
 
       - name: Run root production build
         run: npm run build
         env:
-          NEXT_PUBLIC_API_BASE_URL: http://localhost:10000
+          NODE_ENV: production
+          NEXT_PUBLIC_API_BASE_URL: https://api.aardvark-enterprises.net
 
       - name: Build Cloudflare Pages export
         run: npm run web:build:pages
         env:
-          NEXT_PUBLIC_API_BASE_URL: http://localhost:10000
+          NODE_ENV: production
+          NEXT_PUBLIC_API_BASE_URL: https://api.aardvark-enterprises.net
 
