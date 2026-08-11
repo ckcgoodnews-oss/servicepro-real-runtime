@@ -15,7 +15,7 @@ function validatePhase46Release(){
   assert.strictEqual(manifest.version,'8.0.0-alpha.1');assert.strictEqual(manifest.tag,'v8.0.0-alpha.1');assert.strictEqual(manifest.status,'complete');assert.strictEqual(webPackage.version,manifest.version);
   match('apps/web/render.yaml',/rootDir:\s*apps\/web/);match('apps/web/render.yaml',/buildCommand:\s*npm ci && npm run build/);match('apps/web/render.yaml',/healthCheckPath:\s*\//);match('apps/web/render.yaml',/NEXT_PUBLIC_API_BASE_URL/);
   match('apps/web/wrangler.toml',/\[assets\][\s\S]*directory\s*=\s*"\.\/out"/);match('apps/web/next.config.mjs',/NEXT_OUTPUT === 'export'/);match('apps/web/next.config.mjs',/'standalone'/);match('apps/web/.env.example',/NEXT_PUBLIC_API_BASE_URL=/);
-  match('.github/workflows/ci.yml',/npm run web:build/);match('.github/workflows/ci.yml',/npm run web:build:pages/);
+  match('.github/workflows/ci.yml',/npm --prefix apps\/web run build/);match('.github/workflows/ci.yml',/npm --prefix apps\/web run build:pages/);
   for(let sprint=716;sprint<=730;sprint++)match('PHASE46_RELEASE_NOTES.md',new RegExp(`Sprint ${sprint}`),`Sprint ${sprint} release notes are required`);
   for(const route of manifest.workspaceRoutes){const file=`apps/web/src/app/(workspace)${route}/page.tsx`;assert.ok(exists(file),`${route} must have a workspace page`);}
   const shell=read('apps/web/src/components/AppShell.tsx');

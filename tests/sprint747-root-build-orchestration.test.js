@@ -9,6 +9,7 @@ assert.strictEqual(pkg.scripts['build:render:verify'], 'node scripts/verify-rend
 const build = fs.readFileSync(path.join(root, 'scripts', 'build-release.js'), 'utf8');
 for (const required of ['nodeMajor < 20', "'--check'", "'typecheck'", "'build'", 'release-manifest.json', 'routes-manifest.json', 'render.yaml']) assert(build.includes(required), required);
 const workflow = fs.readFileSync(path.join(root, '.github', 'workflows', 'ci.yml'), 'utf8');
-assert(workflow.includes('run: npm run build'));
+assert(workflow.includes('run: npm --prefix apps/web run build'));
+assert(workflow.includes('run: npm --prefix apps/web run build:pages'));
 assert(workflow.includes('NEXT_PUBLIC_API_BASE_URL'));
 console.log('Sprint 747 root build orchestration test passed.');

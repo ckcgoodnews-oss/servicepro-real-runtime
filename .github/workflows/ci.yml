@@ -1,77 +1,100 @@
-﻿name: CI
+name: Production CI
 
 on:
   pull_request:
-    branches:
-      - main
-      - develop
+    branches: [main, develop]
   push:
-    branches:
-      - main
-      - develop
+    branches: [main, develop, codex/production-hardening]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_ENV: test
+  DATA_STORE: json
+  JWT_SECRET: ci-test-secret-ci-test-secret-ci-test-secret
+  PORTAL_TOKEN_SECRET: ci-portal-secret-ci-portal-secret-ci-portal
 
 jobs:
-  test:
-    name: Node runtime tests
+  repository:
+    name: Repository, migrations, and syntax
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22
           cache: npm
+      - run: npm ci
+      - run: npm run scripts:check
+      - run: npm run migrations:check
+      - name: Validate production API JavaScript
+        shell: bash
+        run: |
+          node --check apps/api/src/server.js
+          node --check apps/api/src/router.js
+          node --check apps/api/src/routes/payments.js
+          node --check apps/api/src/routes/auth.js
+          node --check apps/api/src/routes/trial.js
+          node --check apps/api/src/services/paymentService.js
+          node --check apps/api/src/services/notificationService.js
+          node --check apps/api/src/repositories/paymentRepository.js
 
-      - name: Install root dependencies
-        run: npm ci
-
-      - name: Install web dependencies
-        run: npm ci --prefix apps/web
-
-      - name: Validate API entry point
-        run: node --check apps/api/src/server.js
-
-      - name: Check migration ordering
-        run: npm run migrations:check
-
-      - name: Run production-critical tests
+  tests:
+    name: Core and complete regression suites
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Core production tests
         run: npm run test:core
         env:
-          DATA_STORE: json
-          DATA_FILE: ./data/ci-runtime.json
-          JWT_SECRET: ci-test-secret-ci-test-secret-ci-test-secret
-          PORTAL_TOKEN_SECRET: ci-portal-secret-ci-portal-secret-ci-portal
-
-      - name: Run full runtime test suite
+          DATA_FILE: ./data/ci-runtime-core.json
+      - name: Complete regression suite
         run: npm test
         env:
-          DATA_STORE: json
           DATA_FILE: ./data/ci-runtime-full.json
-          JWT_SECRET: ci-test-secret-ci-test-secret-ci-test-secret
-          PORTAL_TOKEN_SECRET: ci-portal-secret-ci-portal-secret-ci-portal
 
-      - name: Type-check frontend
-        run: npm run typecheck
+  security:
+    name: Production dependency audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm --prefix apps/web ci
+      - run: npm run audit:production
 
-      - name: Audit production dependencies
-        run: npm run audit:production
-
-      - name: Run root production build
-        run: npm run build
+  web:
+    name: TypeScript and production builds
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - run: npm --prefix apps/web ci
+      - run: npm run typecheck
+      - name: Build Next.js standalone output
+        run: npm --prefix apps/web run build
         env:
           NODE_ENV: production
           NEXT_PUBLIC_API_BASE_URL: https://api.aardvark-enterprises.net
-
-      - name: Build Cloudflare Pages export
-        run: npm run web:build:pages
+      - name: Build Cloudflare static export
+        run: npm --prefix apps/web run build:pages
         env:
           NODE_ENV: production
           NEXT_PUBLIC_API_BASE_URL: https://api.aardvark-enterprises.net
-
