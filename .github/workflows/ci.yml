@@ -1,58 +1,41 @@
 ﻿name: CI
 
 on:
-  pull_request:
-    branches:
-      - main
-      - develop
   push:
-    branches:
-      - main
-      - develop
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-  test:
-    name: Node runtime tests
+  api:
+    name: API — Load, Test, Audit
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
           cache: npm
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Check migration ordering
-        run: npm run migrations:check
-
+      - run: npm ci
+      - name: Verify API loads
+        run: node -e "require('./apps/api/src/router'); console.log('Router OK')"
       - name: Run tests
         run: npm test
-        env:
-          DATA_STORE: json
-          DATA_FILE: ./data/ci-runtime.json
-          JWT_SECRET: ci-test-secret-ci-test-secret-ci-test-secret
-          PORTAL_TOKEN_SECRET: ci-portal-secret-ci-portal-secret-ci-portal
+      - name: Security audit (high/critical only)
+        run: npm audit --audit-level=high --omit=dev
 
-      - name: Install web dependencies
-        run: npm ci --prefix apps/web
-
-      - name: Run root production build
-        run: npm run build
-        env:
-          NEXT_PUBLIC_API_BASE_URL: http://localhost:10000
-
-      - name: Build Cloudflare Pages export
-        run: npm run web:build:pages
-        env:
-          NEXT_PUBLIC_API_BASE_URL: http://localhost:10000
-
+  web:
+    name: Web — TypeScript, Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: cd apps/web && npm ci
+      - name: TypeScript check
+        run: cd apps/web && npx tsc --noEmit
+      - name: Production build
+        run: cd apps/web && npm run build

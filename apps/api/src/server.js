@@ -3,6 +3,22 @@ const { version } = require('../../../package.json');
 const { router } = require('./router');
 const { getBaseStore } = require('./repositories/repositoryFactory');
 
+// --- Sentry Error Monitoring ---
+// Set SENTRY_DSN environment variable on Render to enable.
+// Sign up free at https://sentry.io
+if (process.env.SENTRY_DSN) {
+  try {
+    const Sentry = require('@sentry/node');
+    Sentry.init({
+      dsn: process.env.SENTRY_DSN,
+      environment: process.env.NODE_ENV || 'development',
+      release: `servicepro@${version}`,
+    });
+    process.on('uncaughtException', (err) => { Sentry.captureException(err); console.error('Uncaught:', err); process.exit(1); });
+    process.on('unhandledRejection', (err) => { Sentry.captureException(err); console.error('Unhandled rejection:', err); });
+  } catch (_) { /* @sentry/node not installed — monitoring disabled */ }
+}
+
 // Warm up the database pool at startup so the first real request is not
 // delayed by connection establishment. No query is actually run here.
 try { getBaseStore(); } catch (_) { /* non-fatal — will fail properly on first request */ }
