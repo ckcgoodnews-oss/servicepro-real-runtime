@@ -34,6 +34,10 @@ services:
         generateValue: true
       - key: PORTAL_TOKEN_SECRET
         generateValue: true
+      - key: SENTRY_DSN
+        sync: false
+      - key: SENTRY_ENVIRONMENT
+        value: production
 
   - type: web
     name: servicepro-web-alpha-ckcgoodnews
@@ -51,6 +55,14 @@ services:
         value: 20
       - key: NEXT_PUBLIC_API_BASE_URL
         sync: false
+      - key: SENTRY_DSN
+        sync: false
+      - key: SENTRY_ENVIRONMENT
+        value: production
+      - key: NEXT_PUBLIC_SENTRY_DSN
+        sync: false
+      - key: NEXT_PUBLIC_SENTRY_ENVIRONMENT
+        value: production
 
 databases:
   - name: servicepro-postgres

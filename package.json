@@ -627,6 +627,7 @@
                     "test:phase71":  "node tests/phase71-general-availability-cutover.integration.test.js"
                 },
     "dependencies":  {
+                         "@sentry/node":  "10.70.0",
                          "bcryptjs":  "^2.4.3",
                          "dotenv":  "16.4.7",
                          "pg":  "^8.13.1"

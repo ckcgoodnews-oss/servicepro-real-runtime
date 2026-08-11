@@ -19,11 +19,23 @@ Never commit live values. Variables prefixed `NEXT_PUBLIC_` are browser-visible 
 | `PORTAL_TOKEN_SECRET` | API | Yes | Yes | Portal-token signing | Rotate and invalidate old portal sessions |
 | `CORS_ALLOWED_ORIGINS` | API | Yes | No | Exact comma-separated HTTPS origins | Positive and negative preflight checks |
 | `EMAIL_FROM` | API | When email enabled | No | Verified sender identity | Delivered message passes SPF/DKIM/DMARC |
-| `SENDGRID_KEY` | API | Current email provider | Yes | Existing SendGrid service | Rotate provider key and revoke old |
+| `FEATURE_EMAIL_ENABLED` | API | Yes | No | Enables real Resend delivery | Must be `true` only after provider verification |
+| `RESEND_API_KEY` | API | When email enabled | Yes | Resend server API | Rotate in Resend/Render and revoke old |
+| `APP_BASE_URL` | API | Yes | No | Canonical application origin used in email links | Verify reset and trial links |
 | `STRIPE_SECRET_KEY` | API | When payments enabled | Yes | Stripe server API | Rotate in Stripe/Render; never use `NEXT_PUBLIC_` |
 | `STRIPE_WEBHOOK_SECRET` | API | When payments enabled | Yes | Stripe endpoint signature | Roll endpoint secret and verify signed event |
 | `NEXT_PUBLIC_API_BASE_URL` | Web | Yes | No | Canonical public API origin | Inspect built assets and browser traffic |
 | `NEXT_PUBLIC_APP_NAME` | Web | Optional | No | Product label | Visual smoke |
 | `NEXT_PUBLIC_DEFAULT_TENANT_ID` | Web | Architecture-dependent | No | Public tenant fallback | Confirm it cannot grant access |
+| `SENTRY_DSN` | API/Next server | Optional | Treat as restricted configuration | Server-side event ingestion DSN | Controlled staging event |
+| `SENTRY_ENVIRONMENT` | API/Next server | Optional | No | Deployment environment tag | Matches deployment tier |
+| `SENTRY_RELEASE` | API/Next server | Recommended | No | Immutable release SHA | Matches deployed commit |
+| `SENTRY_TRACES_SAMPLE_RATE` | API/Next server | Optional | No | Trace sampling, default `0` | Increase only after privacy/cost review |
+| `NEXT_PUBLIC_SENTRY_DSN` | Browser | Optional | No | Browser-visible Sentry DSN | Restricted to the browser project |
+| `NEXT_PUBLIC_SENTRY_ENVIRONMENT` | Browser | Optional | No | Browser environment tag | Matches deployment tier |
+| `NEXT_PUBLIC_SENTRY_RELEASE` | Browser | Recommended | No | Browser release SHA | Matches deployed assets |
+| `SENTRY_AUTH_TOKEN` | CI/build only | Only for source-map upload | Yes | Sentry artifact upload credential | Store only in CI secret storage |
+| `SENTRY_ORG` | CI/build only | With source-map upload | No | Sentry organization slug | Verify upload destination |
+| `SENTRY_PROJECT` | CI/build only | With source-map upload | No | Sentry project slug | Verify upload destination |
 
-Sentry and Resend variables must be added only when their runtime integrations are implemented; documenting unused secrets as required would create a false contract.
+Never expose `SENTRY_AUTH_TOKEN`, server DSNs, provider keys, database URLs, or authentication secrets through a `NEXT_PUBLIC_` variable.
