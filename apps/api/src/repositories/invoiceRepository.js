@@ -28,9 +28,13 @@ function createJsonInvoiceRepository(store) {
     list(tenantId) {
       return ensureCollection(store.read()).invoices.filter(x => x.tenantId === tenantId);
     },
+    listForCustomer(tenantId,customerId){return ensureCollection(store.read()).invoices.filter(x=>x.tenantId===tenantId&&x.customerId===customerId);},
+    findForCustomer(tenantId,customerId,id){return ensureCollection(store.read()).invoices.find(x=>x.tenantId===tenantId&&x.customerId===customerId&&x.id===id)||null;},
     findById(tenantId, id) {
       return ensureCollection(store.read()).invoices.find(x => x.tenantId === tenantId && x.id === id) || null;
     },
+    findByPaymentLinkHash(hash){return ensureCollection(store.read()).invoices.find(x=>x.paymentLinkToken===hash)||null;},
+    setPaymentLink(tenantId,id,hash,expiresAt){const data=ensureCollection(store.read()),row=data.invoices.find(x=>x.tenantId===tenantId&&x.id===id);if(!row)return null;row.paymentLinkToken=hash;row.paymentLinkExpiresAt=expiresAt;row.updatedAt=now();store.write(data);return row;},
     create(tenantId, input) {
       requireFields(input, ['customerId']);
       const data = ensureCollection(store.read());
@@ -118,17 +122,22 @@ function createPostgresInvoiceRepository(store) {
   const selectSql = `SELECT id::text, tenant_id as "tenantId", customer_id::text as "customerId",
     job_id::text as "jobId", status, tax_rate::float as "taxRate", lines,
     subtotal::float, tax::float, total::float, paid_amount::float as "paidAmount",
-    balance_due::float as "balanceDue", created_at as "createdAt", updated_at as "updatedAt" FROM invoices`;
+    balance_due::float as "balanceDue", currency, invoice_number as "invoiceNumber",
+    payment_link_expires_at as "paymentLinkExpiresAt", created_at as "createdAt", updated_at as "updatedAt" FROM invoices`;
 
   return {
     async list(tenantId) {
       const result = await store.query(`${selectSql} WHERE tenant_id = $1 ORDER BY created_at DESC`, [tenantId]);
       return result.rows;
     },
+    async listForCustomer(tenantId,customerId){const result=await store.query(`${selectSql} WHERE tenant_id=$1 AND customer_id=$2 ORDER BY created_at DESC`,[tenantId,customerId]);return result.rows;},
+    async findForCustomer(tenantId,customerId,id){const result=await store.query(`${selectSql} WHERE tenant_id=$1 AND customer_id=$2 AND id=$3 LIMIT 1`,[tenantId,customerId,id]);return result.rows[0]||null;},
     async findById(tenantId, id) {
       const result = await store.query(`${selectSql} WHERE tenant_id = $1 AND id = $2 LIMIT 1`, [tenantId, id]);
       return result.rows[0] || null;
     },
+    async findByPaymentLinkHash(hash){const result=await store.query(`${selectSql} WHERE payment_link_token=$1 LIMIT 1`,[hash]);return result.rows[0]||null;},
+    async setPaymentLink(tenantId,id,hash,expiresAt){const result=await store.query(`UPDATE invoices SET payment_link_token=$3,payment_link_expires_at=$4::timestamptz,updated_at=now() WHERE tenant_id=$1 AND id=$2 RETURNING id::text,tenant_id AS "tenantId",customer_id::text AS "customerId",balance_due::float AS "balanceDue",currency,payment_link_expires_at AS "paymentLinkExpiresAt"`,[tenantId,id,hash,expiresAt]);return result.rows[0]||null;},
     async create(tenantId, input) {
       requireFields(input, ['customerId']);
       const resolvedLines = await resolveServiceLinesAsync(tenantId, input.lines || [], serviceRepository);

@@ -1,0 +1,2 @@
+import {CustomerPortalSettings} from '@/components/CustomerPortalSettings';
+export const metadata={title:'Customer Portal settings'};export default function Page(){return <div className="dashboard-content settings-page"><div className="dashboard-intro"><div><p className="eyebrow"><span/> Customer Experience</p><h1>Customer Portal</h1><p>Control portal branding and customer-visible capabilities.</p></div></div><CustomerPortalSettings/></div>}

@@ -1,47 +1,9 @@
 'use client';
-
-import { PortalShell } from '@/components/PortalShell';
-
-export default function InvoicesPage() {
-  return (
-    <PortalShell activePath="/invoices">
-      <div className="page-header">
-        <h1>Invoices & Payments</h1>
-        <p>View invoices, make payments, and download receipts</p>
-      </div>
-
-      <div className="grid-cards" style={{ marginBottom: '1.5rem' }}>
-        <div className="card">
-          <p className="stat-label">Outstanding Balance</p>
-          <p className="stat-value">$0.00</p>
-        </div>
-        <div className="card">
-          <p className="stat-label">Total Paid (YTD)</p>
-          <p className="stat-value">$0.00</p>
-        </div>
-      </div>
-
-      <div className="card">
-        <h2 style={{ fontSize: '1rem', marginBottom: '0.75rem' }}>Invoice History</h2>
-        <table style={{ width: '100%', fontSize: '0.9rem', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid var(--color-border)', textAlign: 'left' }}>
-              <th style={{ padding: '0.5rem 0' }}>Invoice #</th>
-              <th>Date</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td colSpan={5} style={{ padding: '2rem 0', textAlign: 'center', color: 'var(--color-text-secondary)' }}>
-                No invoices yet
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </PortalShell>
-  );
-}
+import {useEffect,useMemo,useState} from 'react';
+import {Elements,PaymentElement,useElements,useStripe} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+import {PortalShell} from '@/components/PortalShell';
+import {createInvoicePayment,getInvoicePaymentInfo,getInvoices} from '@/lib/api';
+type Invoice={id:string;status:string;total?:number;paidAmount?:number;balanceDue?:number;createdAt:string};
+function PaymentForm({onDone}:{onDone:()=>void}){const stripe=useStripe(),elements=useElements(),[busy,setBusy]=useState(false),[error,setError]=useState('');return <form onSubmit={async e=>{e.preventDefault();if(!stripe||!elements)return;setBusy(true);const result=await stripe.confirmPayment({elements,confirmParams:{return_url:`${window.location.origin}/invoices?payment=returned`},redirect:'if_required'});if(result.error)setError(result.error.message||'Payment could not be completed.');else onDone();setBusy(false);}}><PaymentElement/><button className="btn btn-primary" disabled={!stripe||busy} type="submit">{busy?'Processing…':'Pay securely'}</button>{error&&<p role="alert">{error}</p>}</form>}
+export default function InvoicesPage(){const[rows,setRows]=useState<Invoice[]>([]),[selected,setSelected]=useState<Invoice|null>(null),[secret,setSecret]=useState(''),[account,setAccount]=useState(''),[message,setMessage]=useState('');const publishable=process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY||'';const stripePromise=useMemo(()=>publishable&&account?loadStripe(publishable,{stripeAccount:account}):null,[publishable,account]);const load=()=>getInvoices().then(r=>{if('data'in r)setRows(r.data as unknown as Invoice[]);});useEffect(()=>{load();},[]);const open=async(invoice:Invoice)=>{setMessage('');const info=await getInvoicePaymentInfo(invoice.id);if(!('data'in info)){setMessage(info.error.message);return;}const intent=await createInvoicePayment(invoice.id,{idempotencyKey:`portal-${invoice.id}-${crypto.randomUUID()}`});if(!('data'in intent)){setMessage(intent.error.message);return;}setSelected(invoice);setSecret(intent.data.clientSecret);setAccount(info.data.stripeConnectedAccountId);};const outstanding=rows.reduce((n,r)=>n+Number(r.balanceDue||0),0),paid=rows.reduce((n,r)=>n+Number(r.paidAmount||0),0);return <PortalShell activePath="/invoices"><div className="page-header"><h1>Invoices &amp; Payments</h1><p>View invoices and pay your service provider securely through Stripe.</p></div>{message&&<p role="alert">{message}</p>}<div className="grid-cards"><div className="card"><p className="stat-label">Outstanding Balance</p><p className="stat-value">${outstanding.toFixed(2)}</p></div><div className="card"><p className="stat-label">Total Paid</p><p className="stat-value">${paid.toFixed(2)}</p></div></div><div className="card"><h2>Invoice History</h2><table style={{width:'100%'}}><thead><tr><th>Invoice</th><th>Date</th><th>Balance</th><th>Status</th><th/></tr></thead><tbody>{rows.map(row=><tr key={row.id}><td>{row.id}</td><td>{new Date(row.createdAt).toLocaleDateString()}</td><td>${Number(row.balanceDue||0).toFixed(2)}</td><td>{row.status}</td><td>{Number(row.balanceDue||0)>0&&<button className="btn btn-primary" type="button" onClick={()=>open(row)}>Pay now</button>}</td></tr>)}{!rows.length&&<tr><td colSpan={5}>No invoices yet</td></tr>}</tbody></table></div>{selected&&secret&&stripePromise&&<div className="card"><h2>Pay invoice</h2><p>Invoice {selected.id}. The final payment status is confirmed by the service provider after Stripe webhook verification.</p><Elements stripe={stripePromise} options={{clientSecret:secret}}><PaymentForm onDone={()=>{setSelected(null);setSecret('');setMessage('Payment submitted. Your invoice will update after confirmation.');load();}}/></Elements></div>}</PortalShell>}

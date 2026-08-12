@@ -1,0 +1,2 @@
+import {SubscriberCommerceReadiness} from '@/components/SubscriberCommerceReadiness';
+export const metadata={title:'Commerce readiness'};export default function Page(){return <div className="dashboard-content settings-page"><div className="dashboard-intro"><div><p className="eyebrow"><span/> Subscriber onboarding</p><h1>Commerce readiness</h1><p>Review blocking and recommended configuration before publishing customer commerce.</p></div></div><SubscriberCommerceReadiness/></div>}

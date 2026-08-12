@@ -1,89 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { financeApi } from '@/lib/api';
+import {useEffect,useState} from 'react';
+import {api,financeApi} from '@/lib/api';
+import {readSession} from '@/auth/session';
 
-type Invoice = {
-  id: string;
-  number?: string;
-  customerId: string;
-  customerName?: string;
-  amount: number;
-  status: string;
-  dueDate?: string;
-  createdAt: string;
-};
+type Invoice={id:string;invoiceNumber?:string;customerId:string;total:number;paidAmount:number;balanceDue:number;status:string;dueDate?:string;createdAt:string};
+type Payment={id:string;invoiceId:string;amount:number;amountCents?:number;currency:string;status:string;stripePaymentIntentId?:string;stripeChargeId?:string;refundedAmountCents?:number;createdAt:string};
+const statusColors:Record<string,string>={draft:'#9e9e9e',sent:'#4285f4',pending:'#f9ab00',paid:'#34a853',partially_paid:'#f9ab00',overdue:'#ea4335',cancelled:'#5f6368',completed:'#34a853',partially_refunded:'#f9ab00',refunded:'#5f6368',failed:'#ea4335'};
+const currency=(amount:number,code='usd')=>new Intl.NumberFormat('en-US',{style:'currency',currency:code.toUpperCase()}).format(amount||0);
 
-const statusColors: Record<string, string> = { draft: '#9e9e9e', sent: '#4285f4', pending: '#f9ab00', paid: '#34a853', overdue: '#ea4335', cancelled: '#5f6368' };
-
-export function InvoicesDashboard() {
-  const [invoices, setInvoices] = useState<Invoice[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    financeApi.listInvoices().then(res => {
-      if (res.data) setInvoices(res.data as Invoice[]);
-      setLoading(false);
-    });
-  }, []);
-
-  const total = invoices.reduce((s, i) => s + (i.amount || 0), 0);
-  const outstanding = invoices.filter(i => ['sent', 'pending', 'overdue'].includes(i.status)).reduce((s, i) => s + (i.amount || 0), 0);
-  const paid = invoices.filter(i => i.status === 'paid').reduce((s, i) => s + (i.amount || 0), 0);
-  const overdue = invoices.filter(i => i.status === 'overdue');
-
-  if (loading) return <p>Loading invoices...</p>;
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.75rem' }}>
-        <Kpi label="Total Invoiced" value={`$${total.toLocaleString()}`} color="#202124" />
-        <Kpi label="Outstanding" value={`$${outstanding.toLocaleString()}`} color="#f9ab00" />
-        <Kpi label="Collected" value={`$${paid.toLocaleString()}`} color="#34a853" />
-        <Kpi label="Overdue" value={String(overdue.length)} color="#ea4335" />
-      </div>
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h3 style={{ fontSize: '0.95rem' }}>All Invoices ({invoices.length})</h3>
-        <button style={{ padding: '0.5rem 1rem', background: '#1a73e8', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}>+ Create Invoice</button>
-      </div>
-
-      <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', overflow: 'auto' }}>
-        <table style={{ width: '100%', fontSize: '0.85rem', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ background: '#f8f9fa', borderBottom: '1px solid #e0e0e0' }}>
-              <th style={{ padding: '0.6rem', textAlign: 'left' }}>Invoice</th>
-              <th style={{ padding: '0.6rem', textAlign: 'left' }}>Customer</th>
-              <th style={{ padding: '0.6rem', textAlign: 'right' }}>Amount</th>
-              <th style={{ padding: '0.6rem', textAlign: 'left' }}>Status</th>
-              <th style={{ padding: '0.6rem', textAlign: 'left' }}>Due Date</th>
-              <th style={{ padding: '0.6rem', textAlign: 'left' }}>Created</th>
-            </tr>
-          </thead>
-          <tbody>
-            {invoices.length === 0 && <tr><td colSpan={6} style={{ padding: '2rem', textAlign: 'center', color: '#5f6368' }}>No invoices yet</td></tr>}
-            {invoices.map(inv => (
-              <tr key={inv.id} style={{ borderBottom: '1px solid #f0f0f0' }}>
-                <td style={{ padding: '0.5rem 0.6rem', fontWeight: 500 }}>{inv.number || inv.id.slice(0, 12)}</td>
-                <td style={{ padding: '0.5rem 0.6rem' }}>{inv.customerName || inv.customerId}</td>
-                <td style={{ padding: '0.5rem 0.6rem', textAlign: 'right', fontWeight: 600 }}>${(inv.amount || 0).toLocaleString()}</td>
-                <td style={{ padding: '0.5rem 0.6rem' }}><span style={{ background: (statusColors[inv.status] || '#9e9e9e') + '22', color: statusColors[inv.status] || '#9e9e9e', padding: '2px 8px', borderRadius: '4px', fontSize: '0.75rem' }}>{inv.status}</span></td>
-                <td style={{ padding: '0.5rem 0.6rem', color: '#5f6368' }}>{inv.dueDate || '—'}</td>
-                <td style={{ padding: '0.5rem 0.6rem', color: '#5f6368' }}>{inv.createdAt?.slice(0, 10) || '—'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-function Kpi({ label, value, color }: { label: string; value: string; color: string }) {
-  return (
-    <div style={{ background: '#fff', border: '1px solid #e0e0e0', borderRadius: '8px', padding: '0.75rem', textAlign: 'center' }}>
-      <p style={{ fontSize: '1.4rem', fontWeight: 700, color }}>{value}</p>
-      <p style={{ fontSize: '0.75rem', color: '#5f6368' }}>{label}</p>
-    </div>
-  );
-}
+export function InvoicesDashboard(){const[invoices,setInvoices]=useState<Invoice[]>([]),[payments,setPayments]=useState<Payment[]>([]),[loading,setLoading]=useState(true),[busy,setBusy]=useState(''),[message,setMessage]=useState(''),[error,setError]=useState('');const canRefund=Boolean(readSession()?.user.permissions?.includes('payments.refund'));
+ const load=async()=>{const[inv,pay]=await Promise.all([financeApi.listInvoices(),financeApi.listPayments()]);if(inv.data)setInvoices(inv.data as Invoice[]);if(pay.data)setPayments(pay.data as Payment[]);setLoading(false);};useEffect(()=>{load();},[]);
+ const createLink=async(invoice:Invoice)=>{setBusy(`link:${invoice.id}`);setError('');const result=await api<{url:string;expiresAt:string}>('POST',`/api/v1/invoices/${invoice.id}/payment-link`,{expiresInDays:14});if(result.data){await navigator.clipboard.writeText(result.data.url);setMessage(`Payment link copied. It expires ${new Date(result.data.expiresAt).toLocaleString()}.`);}else setError(result.error?.message||'Unable to create payment link.');setBusy('');};
+ const refund=async(payment:Payment)=>{const refundable=Number(payment.amountCents??Math.round(payment.amount*100))-Number(payment.refundedAmountCents||0),raw=window.prompt(`Refund amount in dollars (maximum ${(refundable/100).toFixed(2)}):`,(refundable/100).toFixed(2));if(raw===null)return;const amountCents=Math.round(Number(raw)*100);if(!Number.isInteger(amountCents)||amountCents<=0||amountCents>refundable){setError('Enter a valid amount within the refundable balance.');return;}if(!window.confirm(`Request a ${currency(amountCents/100,payment.currency)} refund? The invoice changes only after Stripe confirms it.`))return;setBusy(`refund:${payment.id}`);setError('');const result=await api<{refundId:string;status:string;reconciliation:string}>('POST',`/api/v1/payments/${payment.id}/refund`,{amountCents,idempotencyKey:crypto.randomUUID(),reason:'requested_by_customer'});if(result.data){setMessage(`Refund ${result.data.refundId} requested. Status remains pending until the verified Stripe webhook reconciles it.`);await load();}else setError(result.error?.message||'Unable to request refund.');setBusy('');};
+ if(loading)return <p>Loading invoices…</p>;const total=invoices.reduce((s,i)=>s+Number(i.total||0),0),outstanding=invoices.reduce((s,i)=>s+Number(i.balanceDue||0),0),paid=invoices.reduce((s,i)=>s+Number(i.paidAmount||0),0);
+ return <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>{message&&<p role="status" className="form-success">{message}</p>}{error&&<p role="alert" className="form-error">{error}</p>}<div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))',gap:'.75rem'}}><Kpi label="Total invoiced" value={currency(total)} color="#202124"/><Kpi label="Outstanding" value={currency(outstanding)} color="#f9ab00"/><Kpi label="Collected" value={currency(paid)} color="#34a853"/></div><section className="panel"><h2>Invoices</h2><div style={{overflow:'auto'}}><table style={{width:'100%',fontSize:'.85rem',borderCollapse:'collapse'}}><thead><tr><th>Invoice</th><th>Customer</th><th>Total</th><th>Balance</th><th>Status</th><th>Due</th><th>Actions</th></tr></thead><tbody>{invoices.map(inv=><tr key={inv.id}><td>{inv.invoiceNumber||inv.id.slice(0,12)}</td><td>{inv.customerId}</td><td>{currency(inv.total)}</td><td>{currency(inv.balanceDue)}</td><td><Status value={inv.status}/></td><td>{inv.dueDate||'—'}</td><td>{inv.balanceDue>0&&<button className="text-button" type="button" disabled={Boolean(busy)} onClick={()=>createLink(inv)}>{busy===`link:${inv.id}`?'Creating…':'Copy payment link'}</button>}</td></tr>)}{!invoices.length&&<tr><td colSpan={7}>No invoices yet.</td></tr>}</tbody></table></div></section><section className="panel"><h2>Customer payments and refunds</h2><p>Refund requests are sent through the subscriber connected Stripe account. Financial balances change only after a verified Stripe webhook.</p><div style={{overflow:'auto'}}><table style={{width:'100%',fontSize:'.85rem',borderCollapse:'collapse'}}><thead><tr><th>Payment</th><th>Invoice</th><th>Amount</th><th>Refunded</th><th>Refundable</th><th>Status</th><th>Action</th></tr></thead><tbody>{payments.map(payment=>{const amount=Number(payment.amountCents??Math.round(payment.amount*100)),refunded=Number(payment.refundedAmountCents||0),refundable=Math.max(0,amount-refunded),eligible=['completed','succeeded','partially_refunded'].includes(payment.status)&&refundable>0;return <tr key={payment.id}><td>{payment.stripeChargeId||payment.stripePaymentIntentId||payment.id}</td><td>{payment.invoiceId}</td><td>{currency(amount/100,payment.currency)}</td><td>{currency(refunded/100,payment.currency)}</td><td>{currency(refundable/100,payment.currency)}</td><td><Status value={payment.status}/></td><td>{canRefund&&eligible?<button className="text-button" type="button" disabled={Boolean(busy)} onClick={()=>refund(payment)}>{busy===`refund:${payment.id}`?'Requesting…':'Refund'}</button>:canRefund?'Unavailable':'Permission required'}</td></tr>})}{!payments.length&&<tr><td colSpan={7}>No customer payments yet.</td></tr>}</tbody></table></div></section></div>}
+function Status({value}:{value:string}){const color=statusColors[value]||'#5f6368';return <span style={{background:`${color}22`,color,padding:'2px 8px',borderRadius:4}}>{value}</span>}
+function Kpi({label,value,color}:{label:string;value:string;color:string}){return <div style={{background:'#fff',border:'1px solid #e0e0e0',borderRadius:8,padding:'.75rem',textAlign:'center'}}><p style={{fontSize:'1.4rem',fontWeight:700,color}}>{value}</p><p style={{fontSize:'.75rem',color:'#5f6368'}}>{label}</p></div>}

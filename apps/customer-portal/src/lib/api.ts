@@ -82,6 +82,15 @@ export function getInvoices() {
   return request<Array<{ id: string; number: string; amount: number; status: string; dueDate: string; createdAt: string }>>('GET', '/portal/api/invoices');
 }
 
+export function getInvoicePaymentInfo(id:string){return request<{invoiceId:string;balanceDue:number;currency:string;acceptedMethods:string[];partialPaymentsEnabled:boolean;stripeConnectedAccountId:string}>('GET',`/portal/api/invoices/${encodeURIComponent(id)}/payment-info`);}
+export function createInvoicePayment(id:string,data:{amountCents?:number;idempotencyKey:string}){return request<{clientSecret:string;stripePaymentIntentId:string;paymentId:string}>('POST',`/portal/api/invoices/${encodeURIComponent(id)}/pay`,data);}
+
 export function getEstimates() {
   return request<Array<{ id: string; number: string; amount: number; status: string; createdAt: string }>>('GET', '/portal/api/estimates');
 }
+
+export type ExpressServiceInfo={enabled:boolean;requireDescription:boolean;emergencyEnabled:boolean;afterHoursEnabled:boolean;eligibleServices:Array<{id:string;name:string;description:string;basePrice:number}>};
+export type ExpressServiceRequest={id:string;serviceId:string;description:string;urgency:string;status:string;createdAt:string;updatedAt?:string};
+export function getExpressService(){return request<ExpressServiceInfo>('GET','/portal/api/express-service');}
+export function getExpressServiceRequests(){return request<ExpressServiceRequest[]>('GET','/portal/api/express-service/requests');}
+export function createExpressServiceRequest(data:{serviceId:string;description:string;urgency:string}){return request<ExpressServiceRequest>('POST','/portal/api/express-service',data);}

@@ -75,9 +75,12 @@ function createBooking(req, res) {
 }
 
 function listInvoices(req, res) {
-  Promise.resolve(req.context.repositories.invoices.list(req.context.tenantId))
-    .then(invoices => sendJson(res, 200, { data: invoices.filter(i => i.customerId === req.context.portalCustomerId) }));
+  Promise.resolve(req.context.repositories.invoices.listForCustomer(req.context.tenantId,req.context.portalCustomerId))
+    .then(invoices => sendJson(res, 200, { data: invoices }));
 }
+
+function paymentInfo(req,res,id){Promise.resolve().then(async()=>{const invoice=await req.context.repositories.invoices.findForCustomer(req.context.tenantId,req.context.portalCustomerId,id);if(!invoice)return sendJson(res,404,{error:{code:'not_found',message:'Invoice not found'}});const settings=await req.context.repositories.subscriberPaymentSettings.get(req.context.tenantId);const account=await req.context.repositories.subscriberStripeAccounts.get(req.context.tenantId);if(!settings.acceptCustomerPayments||!account?.chargesEnabled)return sendJson(res,409,{error:{code:'payments_unavailable',message:'Online payments are not available.'}});return sendJson(res,200,{data:{invoiceId:invoice.id,balanceDue:invoice.balanceDue,currency:invoice.currency||settings.defaultCurrency,acceptedMethods:settings.acceptedMethods,partialPaymentsEnabled:settings.partialPaymentsEnabled,stripeConnectedAccountId:account.stripeAccountId}});}).catch(e=>sendJson(res,e.status||500,{error:{code:e.code||'payment_info_failed',message:e.message}}));}
+function payInvoice(req,res,id){Promise.resolve().then(async()=>{const invoice=await req.context.repositories.invoices.findForCustomer(req.context.tenantId,req.context.portalCustomerId,id);if(!invoice)return sendJson(res,404,{error:{code:'not_found',message:'Invoice not found'}});const {createInvoicePayment}=require('../services/customerPaymentService');const data=await createInvoicePayment(req.context.repositories,req.context.tenantId,{invoiceId:id,amountCents:req.body?.amountCents,idempotencyKey:req.body?.idempotencyKey});return sendJson(res,data.idempotent?200:201,{data});}).catch(e=>sendJson(res,e.status||500,{error:{code:e.code||'payment_failed',message:e.message}}));}
 
 function listEstimates(req, res) {
   Promise.resolve(req.context.repositories.estimates.list(req.context.tenantId))
@@ -146,4 +149,4 @@ function addTicketComment(req, res, id) {
     });
 }
 
-module.exports = { login, me, createAccount, listAccounts, listBookings, createBooking, listInvoices, listEstimates, listTickets, getTicket, createTicket, listTicketComments, addTicketComment };
+module.exports = { login, me, createAccount, listAccounts, listBookings, createBooking, listInvoices, paymentInfo, payInvoice, listEstimates, listTickets, getTicket, createTicket, listTicketComments, addTicketComment };

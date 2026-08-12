@@ -81,6 +81,11 @@ const services = require('./routes/services');
 const estimates = require('./routes/estimates');
 const invoices = require('./routes/invoices');
 const payments = require('./routes/payments');
+const stripeConnect = require('./routes/stripeConnect');
+const stripeWebhooks = require('./routes/stripeWebhooks');
+const expressService = require('./routes/expressService');
+const paymentLinks = require('./routes/paymentLinks');
+const subscriberCommerceReadiness = require('./routes/subscriberCommerceReadiness');
 const technicians = require('./routes/technicians');
 const appointments = require('./routes/appointments');
 const dispatch = require('./routes/dispatch');
@@ -170,6 +175,8 @@ async function router(req, res) {
   if (applyRouteValidation(req, res)) return;
 
   if (req.url === '/api/v1/payments/stripe/webhook' && req.method === 'POST') return payments.webhook(req, res);
+  if (req.url === '/api/webhooks/stripe/platform' && req.method === 'POST') return stripeWebhooks.platform(req,res);
+  if (req.url === '/api/webhooks/stripe/connect' && req.method === 'POST') return stripeWebhooks.connect(req,res);
 
   if (req.url === '/auth/login' && req.method === 'POST') return auth.login(req, res);
   if (req.url === '/auth/register' && req.method === 'POST') return auth.register(req, res);
@@ -183,6 +190,9 @@ async function router(req, res) {
     return auth.logout(req, res);
   }
   if (req.url === '/portal/login' && req.method === 'POST') return portal.login(req, res);
+  const publicPaymentLinkMatch=req.url.match(/^\/api\/public\/payment-links\/([^/?]+)(\/pay)?$/);
+  if(publicPaymentLinkMatch&&req.method==='GET'&&!publicPaymentLinkMatch[2])return paymentLinks.inspect(req,res);
+  if(publicPaymentLinkMatch&&req.method==='POST'&&publicPaymentLinkMatch[2])return paymentLinks.pay(req,res);
   if (req.url === '/tenant-profile' && req.method === 'GET') return tenantAdmin.getPublicProfile(req, res);
   const publicStorefrontMatch=req.url.match(/^\/api\/public\/storefront\/([^/?]+)$/);
   if(publicStorefrontMatch&&req.method==='GET')return publicStorefront.profile(req,res,decodeURIComponent(publicStorefrontMatch[1]));
@@ -204,7 +214,14 @@ async function router(req, res) {
     if (req.url === '/portal/api/bookings' && req.method === 'GET') return portal.listBookings(req, res);
     if (req.url === '/portal/api/bookings' && req.method === 'POST') return portal.createBooking(req, res);
     if (req.url === '/portal/api/invoices' && req.method === 'GET') return portal.listInvoices(req, res);
+    const portalInvoicePaymentInfoMatch=req.url.match(/^\/portal\/api\/invoices\/([^/]+)\/payment-info$/);
+    if(portalInvoicePaymentInfoMatch&&req.method==='GET')return portal.paymentInfo(req,res,portalInvoicePaymentInfoMatch[1]);
+    const portalInvoicePayMatch=req.url.match(/^\/portal\/api\/invoices\/([^/]+)\/pay$/);
+    if(portalInvoicePayMatch&&req.method==='POST')return portal.payInvoice(req,res,portalInvoicePayMatch[1]);
     if (req.url === '/portal/api/estimates' && req.method === 'GET') return portal.listEstimates(req, res);
+    if (req.url === '/portal/api/express-service' && req.method === 'POST') return expressService.createPortalRequest(req,res);
+    if (req.url === '/portal/api/express-service' && req.method === 'GET') return expressService.portalSettings(req,res);
+    if (req.url === '/portal/api/express-service/requests' && req.method === 'GET') return expressService.portalList(req,res);
     if (req.url === '/portal/api/tickets' && req.method === 'GET') return portal.listTickets(req, res);
     if (req.url === '/portal/api/tickets' && req.method === 'POST') return portal.createTicket(req, res);
     const portalTicketCommentsMatch = req.url.match(/^\/portal\/api\/tickets\/([^/]+)\/comments$/);
@@ -389,6 +406,28 @@ async function router(req, res) {
   if(platformOwnerProfileMatch&&req.method==='PATCH')return platformAccess.updateOwnerProfile(req,res,platformOwnerProfileMatch[1]);
   const platformEntitlementMatch=req.url.match(/^\/api\/v1\/platform\/entitlements\/([^/]+)$/);
   if(platformEntitlementMatch&&req.method==='PATCH')return platformAccess.update(req,res,platformEntitlementMatch[1]);
+
+  if(req.url==='/api/v1/stripe/connect/status'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PAYMENTS_CONFIGURE)(req,res))return;return stripeConnect.status(req,res);}
+  if(req.url==='/api/v1/stripe/connect/onboard'&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PAYMENTS_CONNECT_STRIPE)(req,res))return;return stripeConnect.onboard(req,res);}
+  if(req.url==='/api/v1/stripe/connect/refresh-link'&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PAYMENTS_CONNECT_STRIPE)(req,res))return;return stripeConnect.refreshLink(req,res);}
+  if(req.url==='/api/v1/stripe/connect/dashboard'&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PAYMENTS_CONNECT_STRIPE)(req,res))return;return stripeConnect.dashboard(req,res);}
+  if(req.url==='/api/v1/stripe/connect/disconnect'&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PAYMENTS_CONNECT_STRIPE)(req,res))return;return stripeConnect.disconnect(req,res);}
+  if(req.url==='/api/v1/settings/billing/customer-payments'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PAYMENTS_CONFIGURE)(req,res))return;return stripeConnect.getSettings(req,res);}
+  if(req.url==='/api/v1/settings/billing/customer-payments'&&req.method==='PATCH'){if(!requirePermission(PERMISSIONS.BILLING_SETTINGS_MANAGE)(req,res))return;return stripeConnect.updateSettings(req,res);}
+  if(req.url==='/api/v1/payments/create-intent'&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PAYMENTS_COLLECT)(req,res))return;return payments.createIntent(req,res);}
+  if(req.url.startsWith('/api/v1/payments/ledger')&&req.method==='GET'){if(!requirePermission(PERMISSIONS.PAYMENTS_RECONCILE)(req,res))return;return payments.ledger(req,res);}
+  const customerPaymentRefundMatch=req.url.match(/^\/api\/v1\/payments\/([^/]+)\/refund$/);
+  if(customerPaymentRefundMatch&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PAYMENTS_REFUND)(req,res))return;return payments.refund(req,res,customerPaymentRefundMatch[1]);}
+  const invoicePaymentLinkMatch=req.url.match(/^\/api\/v1\/invoices\/([^/]+)\/payment-link$/);
+  if(invoicePaymentLinkMatch&&req.method==='POST'){if(!requirePermission(PERMISSIONS.PAYMENTS_COLLECT)(req,res))return;return paymentLinks.create(req,res,invoicePaymentLinkMatch[1]);}
+  if(req.url==='/api/v1/settings/express-service'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.EXPRESS_SERVICE_CONFIGURE)(req,res))return;return expressService.getSettings(req,res);}
+  if(req.url==='/api/v1/settings/express-service'&&req.method==='PATCH'){if(!requirePermission(PERMISSIONS.EXPRESS_SERVICE_CONFIGURE)(req,res))return;return expressService.saveSettings(req,res);}
+  if(req.url==='/api/v1/settings/subscriber-commerce/readiness'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.TENANT_SETTINGS_READ)(req,res))return;return subscriberCommerceReadiness.get(req,res);}
+  if(req.url==='/api/v1/express-service/requests'&&req.method==='GET'){if(!requirePermission(PERMISSIONS.EXPRESS_SERVICE_READ)(req,res))return;return expressService.list(req,res);}
+  const expressServiceRequestMatch=req.url.match(/^\/api\/v1\/express-service\/requests\/([^/]+)$/);
+  if(expressServiceRequestMatch&&req.method==='PATCH'){if(!requirePermission(PERMISSIONS.EXPRESS_SERVICE_WRITE)(req,res))return;return expressService.update(req,res,expressServiceRequestMatch[1]);}
+  const expressServiceConvertMatch=req.url.match(/^\/api\/v1\/express-service\/requests\/([^/]+)\/convert$/);
+  if(expressServiceConvertMatch&&req.method==='POST'){if(!requirePermission(PERMISSIONS.EXPRESS_SERVICE_WRITE)(req,res))return;return expressService.convert(req,res,expressServiceConvertMatch[1]);}
 
   if (req.url === '/api/v1/me' && req.method === 'GET') {
     if (!requirePermission(PERMISSIONS.USERS_SELF_READ)(req, res)) return;

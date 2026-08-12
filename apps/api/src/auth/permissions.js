@@ -28,9 +28,9 @@ const PERMISSIONS = Object.freeze(Object.fromEntries(discoverPermissionNames().m
 const ROLE_PRESETS = {
   owner: Object.values(PERMISSIONS),
   admin: Object.values(PERMISSIONS),
-  manager: Object.values(PERMISSIONS).filter(value => !value.endsWith('.delete') && value !== 'tenant.settings.write'),
-  technician: Object.values(PERMISSIONS).filter(value => /^(users\.self\.read|jobs\.|schedule\.|dispatch\.|inventory\.read|materials\.|checklists\.|media\.|knowledge\.read|notifications\.read|workflows\.transition)/.test(value)),
-  billing: Object.values(PERMISSIONS).filter(value => /^(users\.self\.read|customers\.read|estimates\.|invoices\.|payments\.|reports\.|exports\.|privacy\.read)/.test(value)),
+  manager: Object.values(PERMISSIONS).filter(value => !value.endsWith('.delete') && value !== 'tenant.settings.write' && !['payments.refund','payments.configure','payments.connect.stripe','billing.settings.manage'].includes(value)),
+  technician: Object.values(PERMISSIONS).filter(value => /^(users\.self\.read|jobs\.|schedule\.|dispatch\.|inventory\.read|materials\.|checklists\.|media\.|knowledge\.read|notifications\.read|workflows\.transition|express\.service\.read)/.test(value)),
+  billing: Object.values(PERMISSIONS).filter(value => /^(users\.self\.read|customers\.read|estimates\.|invoices\.|payments\.|billing\.settings\.manage|reports\.|exports\.|privacy\.read)/.test(value) && value !== 'payments.connect.stripe'),
   read_only: Object.values(PERMISSIONS).filter(value => value.endsWith('.read'))
 };
 

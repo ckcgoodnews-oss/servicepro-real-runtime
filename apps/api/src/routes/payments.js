@@ -2,6 +2,7 @@ const { sendJson } = require('../utils/http');
 const { operationalTenant } = require('../services/tenantResolver');
 const { createPaymentIntent, retrievePaymentIntent, verifyWebhookSignature, paymentsEnabled, isConfigured } = require('../services/paymentService');
 const { getRepositoriesForTenant } = require('../repositories/repositoryFactory');
+const { createInvoicePayment, refundInvoicePayment } = require('../services/customerPaymentService');
 
 function repo(req) { return req.context.repositories.payments; }
 function tenant(req) { return operationalTenant(req); }
@@ -68,7 +69,22 @@ function confirm(req, res, id) {
 }
 
 function refund(req, res, id) {
-  return sendJson(res, 501, { error: { code: 'refund_reconciliation_unavailable', message: 'Refund reconciliation is not enabled.' } });
+  Promise.resolve(refundInvoicePayment(req.context.repositories,tenant(req),id,req.body||{}))
+    .then(data=>sendJson(res,200,{data}))
+    .catch(err=>sendJson(res,err.status||500,{error:{code:err.code||'refund_failed',message:err.message}}));
+}
+
+function createIntent(req,res){
+  Promise.resolve(createInvoicePayment(req.context.repositories,tenant(req),req.body||{}))
+    .then(data=>sendJson(res,data.idempotent?200:201,{data}))
+    .catch(err=>sendJson(res,err.status||500,{error:{code:err.code||'payment_failed',message:err.message}}));
+}
+
+function ledger(req,res){
+  const query=new URL(req.url,'http://servicepro.local').searchParams;
+  Promise.resolve(req.context.repositories.customerPaymentEvents.list(tenant(req),{invoiceId:query.get('invoiceId')||'',limit:query.get('limit')||50}))
+    .then(data=>sendJson(res,200,{data}))
+    .catch(err=>sendJson(res,err.status||500,{error:{code:err.code||'ledger_failed',message:err.message}}));
 }
 
 function webhook(req, res) {
@@ -99,4 +115,4 @@ function webhook(req, res) {
     .catch(err => sendJson(res, err.status || 500, { error: { code: err.code || 'webhook_processing_failed', message: err.message } }));
 }
 
-module.exports = { list, getById, create, confirm, refund, webhook };
+module.exports = { list, getById, create, confirm, refund, webhook, createIntent, ledger };

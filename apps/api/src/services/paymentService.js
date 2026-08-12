@@ -56,12 +56,13 @@ function isConfigured() {
   return Boolean(stripeKey() && process.env.STRIPE_WEBHOOK_SECRET);
 }
 
-async function stripeRequest(path, { method = 'GET', body, idempotencyKey } = {}) {
+async function stripeRequest(path, { method = 'GET', body, idempotencyKey, connectedAccountId } = {}) {
   if (!stripeKey()) throw Object.assign(new Error('Stripe is not configured.'), { code: 'stripe_not_configured', status: 503 });
 
   const headers = { Authorization: `Bearer ${stripeKey()}` };
   if (body) headers['Content-Type'] = 'application/x-www-form-urlencoded';
   if (idempotencyKey) headers['Idempotency-Key'] = idempotencyKey;
+  if (connectedAccountId) headers['Stripe-Account'] = connectedAccountId;
   const res = await fetch(`https://api.stripe.com${path}`, { method, headers, body });
   const data = await res.json().catch(() => ({}));
   if (!res.ok || data.error) {
@@ -111,8 +112,8 @@ async function createRefund(paymentIntentId, amountCents) {
   return stripeRequest('/v1/refunds', { method: 'POST', body: params });
 }
 
-function verifyWebhookSignature(payload, signature, nowSeconds = Math.floor(Date.now() / 1000)) {
-  const secret = process.env.STRIPE_WEBHOOK_SECRET || '';
+function verifyWebhookSignature(payload, signature, nowSeconds = Math.floor(Date.now() / 1000), explicitSecret = '') {
+  const secret = explicitSecret || process.env.STRIPE_WEBHOOK_SECRET || '';
   if (!secret) return null;
 
   const crypto = require('crypto');
@@ -136,5 +137,6 @@ module.exports = {
   createCustomer,
   listPaymentMethods,
   createRefund,
-  verifyWebhookSignature
+  verifyWebhookSignature,
+  stripeRequest
 };
