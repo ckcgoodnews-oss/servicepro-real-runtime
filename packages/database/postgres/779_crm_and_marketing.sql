@@ -22,7 +22,22 @@ CREATE TABLE IF NOT EXISTS crm_leads (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+-- Earlier releases created tenant_id as uuid and Supabase applies an RLS policy
+-- that depends on the column type. PostgreSQL requires dependent policies to be
+-- removed before a type change. Recreate the known tenant policy immediately so
+-- the table is never committed without tenant isolation.
+DROP POLICY IF EXISTS tenant_isolation ON crm_leads;
 ALTER TABLE crm_leads ALTER COLUMN tenant_id TYPE text USING tenant_id::text;
+ALTER TABLE crm_leads ENABLE ROW LEVEL SECURITY;
+ALTER TABLE crm_leads FORCE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON crm_leads
+  FOR ALL
+  USING (
+    tenant_id = coalesce(
+      nullif(current_setting('app.current_tenant', true), ''),
+      '__no_tenant__'
+    )
+  );
 ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS name text NOT NULL DEFAULT '';
 ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS company text NOT NULL DEFAULT '';
 ALTER TABLE crm_leads ADD COLUMN IF NOT EXISTS source text NOT NULL DEFAULT 'manual';
@@ -60,7 +75,18 @@ CREATE TABLE IF NOT EXISTS marketing_campaigns (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
+DROP POLICY IF EXISTS tenant_isolation ON marketing_campaigns;
 ALTER TABLE marketing_campaigns ALTER COLUMN tenant_id TYPE text USING tenant_id::text;
+ALTER TABLE marketing_campaigns ENABLE ROW LEVEL SECURITY;
+ALTER TABLE marketing_campaigns FORCE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON marketing_campaigns
+  FOR ALL
+  USING (
+    tenant_id = coalesce(
+      nullif(current_setting('app.current_tenant', true), ''),
+      '__no_tenant__'
+    )
+  );
 ALTER TABLE marketing_campaigns ALTER COLUMN channel SET DEFAULT 'email';
 ALTER TABLE marketing_campaigns ADD COLUMN IF NOT EXISTS type text NOT NULL DEFAULT 'email';
 ALTER TABLE marketing_campaigns ADD COLUMN IF NOT EXISTS subject text NOT NULL DEFAULT '';
