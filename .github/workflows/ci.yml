@@ -2,9 +2,11 @@
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   api:
@@ -17,6 +19,8 @@ jobs:
           node-version: 20
           cache: npm
       - run: npm ci
+      - name: Validate migration ordering
+        run: npm run migrations:check
       - name: Verify API loads
         run: node -e "require('./apps/api/src/router'); console.log('Router OK')"
       - name: Run tests
@@ -27,6 +31,8 @@ jobs:
   web:
     name: Web — TypeScript, Build
     runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_API_BASE_URL: https://servicepro-api.onrender.com
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -35,7 +41,9 @@ jobs:
           cache: npm
       - run: npm ci
       - run: cd apps/web && npm ci
-      - name: TypeScript check
-        run: cd apps/web && npx tsc --noEmit
-      - name: Production build
-        run: cd apps/web && npm run build
+      - name: Root release build
+        run: npm run build
+      - name: Verify monorepo web build
+        run: npm run web:build
+      - name: Verify Cloudflare Pages export
+        run: npm run web:build:pages
