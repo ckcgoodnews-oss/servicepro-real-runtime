@@ -21,7 +21,7 @@ function validatePhase46Release(){
   const shell=read('apps/web/src/components/AppShell.tsx');
   const navigationRoutes=[...shell.matchAll(/href:\s*'(\/[^']+)'/g)].map(match=>match[1]);
   for(const route of navigationRoutes)assert.ok(manifest.workspaceRoutes.includes(route),`${route} must be represented in the release manifest`);
-  assert.strictEqual(manifest.serviceModel.industryPacks,30);assert.strictEqual(manifest.serviceModel.marketplaceItems,34);
+  assert.strictEqual(manifest.serviceModel.industryPacks,49);assert.strictEqual(manifest.serviceModel.marketplaceItems,53);
   return {version:manifest.version,tag:manifest.tag,routes:manifest.workspaceRoutes.length,checks:required.length+navigationRoutes.length+25};
 }
 

@@ -11,7 +11,7 @@ const { createJsonStore } = require('../apps/api/src/store/jsonStoreAdapter');
 
 const catalog = defaultMarketplaceItems('2026-07-15T00:00:00.000Z');
 const packs = catalog.filter(item => item.itemType === 'service_pack');
-assert.strictEqual(packs.length, 30);
+assert.strictEqual(packs.length, 49);
 assert.strictEqual(new Set(catalog.map(item => item.code)).size, catalog.length);
 
 for (const trade of [

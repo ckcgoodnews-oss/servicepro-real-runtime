@@ -7,15 +7,16 @@
   "sprints": { "first": 716, "last": 730 },
   "serviceModel": {
     "core": "multi-industry field service",
-    "industryPacks": 30,
-    "marketplaceItems": 34
+    "industryPacks": 49,
+    "marketplaceItems": 53
   },
   "deploymentTargets": {
     "render": { "type": "Next.js standalone", "config": "apps/web/render.yaml", "healthCheck": "/" },
     "cloudflarePages": { "type": "static export", "config": "apps/web/wrangler.toml", "output": "apps/web/out" }
   },
   "workspaceRoutes": [
-    "/dashboard", "/work-orders", "/schedule", "/customers", "/assets", "/knowledge",
+    "/dashboard", "/deals", "/contacts", "/work-orders", "/boards", "/tickets",
+    "/schedule", "/customers", "/assets", "/ai-insights", "/knowledge",
     "/notifications", "/organization", "/reports", "/marketplace", "/docs", "/settings", "/profile"
   ],
   "releaseChecks": [
