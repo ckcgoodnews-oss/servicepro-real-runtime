@@ -108,12 +108,13 @@ function getBaseStore() {
  * automatically runs after `SET LOCAL app.current_tenant = tenantId`.
  */
 function createRepositories(store) {
-  const repositories = { store };
+  const resolvedStore = store || getBaseStore();
+  const repositories = { store: resolvedStore };
   for (const registration of repositoryCreators) {
     if (repositories[registration.key]) {
       throw new Error(`Duplicate repository key: ${registration.key}`);
     }
-    repositories[registration.key] = registration.creator(store);
+    repositories[registration.key] = registration.creator(resolvedStore);
   }
   return repositories;
 }
