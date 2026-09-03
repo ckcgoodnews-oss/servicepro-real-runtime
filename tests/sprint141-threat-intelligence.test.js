@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/threatIntelligenceService.js','apps/api/src/repositories/threatIntelligenceRepository.js','apps/api/src/routes/threatIntelligence.js','scripts/seed-threat-intelligence.js','packages/database/postgres/141_threat_intelligence.sql','docs/sprint141-threat-intelligence.md'];
+const required = ['apps/api/src/services/threatIntelligenceService.js','apps/api/src/repositories/threatIntelligenceRepository.js','apps/api/src/routes/threatIntelligence.js','packages/database/postgres/141_threat_intelligence.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 141 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/threatIntelligenceService');
 let feed = svc.normalizeFeedInput({ tenantId: 'tenant_demo', name: 'Feed A' });

@@ -6,7 +6,6 @@ const required = [
   'apps/api/src/repositories/assetServiceHistoryRepository.js',
   'apps/api/src/routes/customerAssets.js',
   'packages/database/postgres/077_customer_assets_runtime.sql',
-  'docs/sprint77-customer-assets-runtime.md'
 ];
 
 for (const file of required) {

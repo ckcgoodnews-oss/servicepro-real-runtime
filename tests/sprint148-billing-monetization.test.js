@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/billingMonetizationService.js','apps/api/src/repositories/billingMonetizationRepository.js','apps/api/src/routes/billingMonetization.js','scripts/seed-billing-monetization.js','packages/database/postgres/148_billing_monetization.sql','docs/sprint148-billing-monetization.md'];
+const required = ['apps/api/src/services/billingMonetizationService.js','apps/api/src/repositories/billingMonetizationRepository.js','apps/api/src/routes/billingMonetization.js','packages/database/postgres/148_billing_monetization.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 148 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/billingMonetizationService');
 

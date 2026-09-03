@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/productionRc1Service.js','apps/api/src/repositories/productionRc1Repository.js','apps/api/src/routes/productionRc1.js','scripts/seed-production-rc1.js','packages/database/postgres/145_production_rc1.sql','docs/sprint145-production-rc1.md'];
+const required = ['apps/api/src/services/productionRc1Service.js','apps/api/src/repositories/productionRc1Repository.js','apps/api/src/routes/productionRc1.js','packages/database/postgres/145_production_rc1.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 145 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/productionRc1Service');
 

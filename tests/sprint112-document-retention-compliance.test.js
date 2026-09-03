@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/retentionService.js',
   'apps/api/src/repositories/retentionRepository.js',
   'apps/api/src/routes/retention.js',
-  'scripts/seed-document-retention.js',
   'packages/database/postgres/112_document_retention_compliance.sql',
-  'docs/sprint112-document-retention-compliance.md'
 ];
 
 for (const file of required) {

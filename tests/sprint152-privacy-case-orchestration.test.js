@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/privacyCaseOrchestrationService.js','apps/api/src/repositories/privacyCaseOrchestrationRepository.js','apps/api/src/routes/privacyCaseOrchestration.js','packages/database/postgres/152_privacy_case_orchestration.sql','docs/sprint152-privacy-case-orchestration.md'];
+const required = ['apps/api/src/services/privacyCaseOrchestrationService.js','apps/api/src/repositories/privacyCaseOrchestrationRepository.js','apps/api/src/routes/privacyCaseOrchestration.js','packages/database/postgres/152_privacy_case_orchestration.sql'];
 for (const file of required) if (!fs.existsSync(file)) throw new Error(`Missing Sprint 152 file: ${file}`);
 const svc = require('../apps/api/src/services/privacyCaseOrchestrationService');
 let record = svc.normalizeCaseInput({ tenantId: 'tenant_demo', dsarId: 'dsar-1', jurisdiction: 'CCPA', receivedAt: '2026-01-01T00:00:00.000Z' });

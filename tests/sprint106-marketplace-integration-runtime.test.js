@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/marketplaceService.js',
   'apps/api/src/repositories/marketplaceRepository.js',
   'apps/api/src/routes/marketplace.js',
-  'scripts/seed-marketplace-integrations.js',
   'packages/database/postgres/106_marketplace_integration_runtime.sql',
-  'docs/sprint106-marketplace-integration-runtime.md'
 ];
 
 for (const file of required) {

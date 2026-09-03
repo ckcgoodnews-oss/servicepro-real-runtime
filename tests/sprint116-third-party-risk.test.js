@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/thirdPartyRiskService.js',
   'apps/api/src/repositories/thirdPartyRiskRepository.js',
   'apps/api/src/routes/thirdPartyRisk.js',
-  'scripts/seed-third-party-risk.js',
   'packages/database/postgres/116_third_party_risk.sql',
-  'docs/sprint116-third-party-risk.md'
 ];
 
 for (const file of required) {

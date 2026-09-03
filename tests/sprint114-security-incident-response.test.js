@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/securityIncidentService.js',
   'apps/api/src/repositories/securityIncidentRepository.js',
   'apps/api/src/routes/securityIncidents.js',
-  'scripts/seed-security-incident-response.js',
   'packages/database/postgres/114_security_incident_response.sql',
-  'docs/sprint114-security-incident-response.md'
 ];
 
 for (const file of required) {

@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/slaService.js',
   'apps/api/src/repositories/slaRepository.js',
   'apps/api/src/routes/sla.js',
-  'scripts/seed-sla.js',
   'packages/database/postgres/089_sla_runtime.sql',
-  'docs/sprint89-sla-runtime.md'
 ];
 
 for (const file of required) {

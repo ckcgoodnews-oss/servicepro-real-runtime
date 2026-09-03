@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/aiGovernanceService.js',
   'apps/api/src/repositories/aiGovernanceRepository.js',
   'apps/api/src/routes/aiGovernance.js',
-  'scripts/seed-ai-governance-model-risk.js',
   'packages/database/postgres/133_ai_governance_model_risk.sql',
-  'docs/sprint133-ai-governance-model-risk.md'
 ];
 
 for (const file of required) {

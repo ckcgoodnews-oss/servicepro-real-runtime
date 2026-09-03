@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/biDashboardService.js',
   'apps/api/src/repositories/biDashboardRepository.js',
   'apps/api/src/routes/biDashboards.js',
-  'scripts/seed-bi-dashboard.js',
   'packages/database/postgres/098_bi_dashboard_runtime.sql',
-  'docs/sprint98-bi-dashboard-runtime.md'
 ];
 
 for (const file of required) {

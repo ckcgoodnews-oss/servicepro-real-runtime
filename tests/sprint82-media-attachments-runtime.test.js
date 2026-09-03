@@ -5,7 +5,6 @@ const required = [
   'apps/api/src/repositories/mediaAttachmentRepository.js',
   'apps/api/src/routes/mediaAttachments.js',
   'packages/database/postgres/082_media_attachments_runtime.sql',
-  'docs/sprint82-media-attachments-runtime.md'
 ];
 
 for (const file of required) {

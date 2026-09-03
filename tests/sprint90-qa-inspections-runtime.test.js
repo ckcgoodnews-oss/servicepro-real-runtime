@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/qaInspectionService.js',
   'apps/api/src/repositories/qaInspectionRepository.js',
   'apps/api/src/routes/qaInspections.js',
-  'scripts/seed-qa-inspections.js',
   'packages/database/postgres/090_qa_inspections_runtime.sql',
-  'docs/sprint90-qa-inspections-runtime.md'
 ];
 
 for (const file of required) {

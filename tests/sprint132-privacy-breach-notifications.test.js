@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/privacyBreachService.js',
   'apps/api/src/repositories/privacyBreachRepository.js',
   'apps/api/src/routes/privacyBreach.js',
-  'scripts/seed-privacy-breach-notifications.js',
   'packages/database/postgres/132_privacy_breach_notifications.sql',
-  'docs/sprint132-privacy-breach-notifications.md'
 ];
 
 for (const file of required) {

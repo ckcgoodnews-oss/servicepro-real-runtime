@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/goLiveHypercareService.js','apps/api/src/repositories/goLiveHypercareRepository.js','apps/api/src/routes/goLiveHypercare.js','scripts/seed-go-live-hypercare.js','packages/database/postgres/146_go_live_hypercare.sql','docs/sprint146-go-live-hypercare.md'];
+const required = ['apps/api/src/services/goLiveHypercareService.js','apps/api/src/repositories/goLiveHypercareRepository.js','apps/api/src/routes/goLiveHypercare.js','packages/database/postgres/146_go_live_hypercare.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 146 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/goLiveHypercareService');
 

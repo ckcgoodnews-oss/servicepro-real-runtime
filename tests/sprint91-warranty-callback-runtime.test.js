@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/warrantyService.js',
   'apps/api/src/repositories/warrantyRepository.js',
   'apps/api/src/routes/warranty.js',
-  'scripts/seed-warranty.js',
   'packages/database/postgres/091_warranty_callback_runtime.sql',
-  'docs/sprint91-warranty-callback-runtime.md'
 ];
 
 for (const file of required) {

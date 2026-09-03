@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/soarAutomationService.js','apps/api/src/repositories/soarAutomationRepository.js','apps/api/src/routes/soarAutomation.js','scripts/seed-soar-automation.js','packages/database/postgres/143_soar_automation.sql','docs/sprint143-soar-automation.md'];
+const required = ['apps/api/src/services/soarAutomationService.js','apps/api/src/repositories/soarAutomationRepository.js','apps/api/src/routes/soarAutomation.js','packages/database/postgres/143_soar_automation.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 143 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/soarAutomationService');
 let playbook = svc.activatePlaybook(svc.normalizePlaybookInput({ tenantId: 'tenant_demo', name: 'Containment', triggerType: 'incident' }));

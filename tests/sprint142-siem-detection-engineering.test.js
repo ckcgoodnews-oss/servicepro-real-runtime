@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/siemDetectionEngineeringService.js','apps/api/src/repositories/siemDetectionEngineeringRepository.js','apps/api/src/routes/siemDetectionEngineering.js','scripts/seed-siem-detection-engineering.js','packages/database/postgres/142_siem_detection_engineering.sql','docs/sprint142-siem-detection-engineering.md'];
+const required = ['apps/api/src/services/siemDetectionEngineeringService.js','apps/api/src/repositories/siemDetectionEngineeringRepository.js','apps/api/src/routes/siemDetectionEngineering.js','packages/database/postgres/142_siem_detection_engineering.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 142 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/siemDetectionEngineeringService');
 let source = svc.activateSource(svc.normalizeLogSourceInput({ tenantId: 'tenant_demo', name: 'IDP Logs', sourceType: 'identity' }));

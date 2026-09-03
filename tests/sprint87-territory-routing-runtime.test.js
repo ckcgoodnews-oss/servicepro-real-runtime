@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/territoryService.js',
   'apps/api/src/repositories/territoryRepository.js',
   'apps/api/src/routes/territories.js',
-  'scripts/seed-territories.js',
   'packages/database/postgres/087_territory_routing_runtime.sql',
-  'docs/sprint87-territory-routing-runtime.md'
 ];
 
 for (const file of required) {

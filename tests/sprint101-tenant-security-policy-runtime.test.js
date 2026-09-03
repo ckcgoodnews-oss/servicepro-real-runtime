@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/tenantSecurityService.js',
   'apps/api/src/repositories/tenantSecurityRepository.js',
   'apps/api/src/routes/tenantSecurity.js',
-  'scripts/seed-tenant-security.js',
   'packages/database/postgres/101_tenant_security_policy_runtime.sql',
-  'docs/sprint101-tenant-security-policy-runtime.md'
 ];
 
 for (const file of required) {

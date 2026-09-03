@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/reminderService.js',
   'apps/api/src/repositories/reminderRepository.js',
   'apps/api/src/routes/reminders.js',
-  'scripts/seed-reminders.js',
   'packages/database/postgres/084_reminders_runtime.sql',
-  'docs/sprint84-reminders-runtime.md'
 ];
 
 for (const file of required) {

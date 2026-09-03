@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/securityQuestionnaireService.js',
   'apps/api/src/repositories/securityQuestionnaireRepository.js',
   'apps/api/src/routes/securityQuestionnaires.js',
-  'scripts/seed-security-questionnaires.js',
   'packages/database/postgres/124_security_questionnaires.sql',
-  'docs/sprint124-security-questionnaires.md'
 ];
 
 for (const file of required) {

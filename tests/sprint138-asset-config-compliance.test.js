@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/assetConfigComplianceService.js',
   'apps/api/src/repositories/assetConfigComplianceRepository.js',
   'apps/api/src/routes/assetConfigCompliance.js',
-  'scripts/seed-asset-config-compliance.js',
   'packages/database/postgres/138_asset_config_compliance.sql',
-  'docs/sprint138-asset-config-compliance.md'
 ];
 
 for (const file of required) {

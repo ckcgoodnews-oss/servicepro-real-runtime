@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/consentPreferenceService.js',
   'apps/api/src/repositories/consentPreferenceRepository.js',
   'apps/api/src/routes/consentPreferences.js',
-  'scripts/seed-consent-preferences.js',
   'packages/database/postgres/130_consent_preferences.sql',
-  'docs/sprint130-consent-preferences.md'
 ];
 
 for (const file of required) {

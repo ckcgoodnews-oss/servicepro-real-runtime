@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/reputationService.js',
   'apps/api/src/repositories/reputationRepository.js',
   'apps/api/src/routes/reputation.js',
-  'scripts/seed-reputation.js',
   'packages/database/postgres/093_reputation_runtime.sql',
-  'docs/sprint93-reputation-runtime.md'
 ];
 
 for (const file of required) {

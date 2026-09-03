@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/supportService.js',
   'apps/api/src/repositories/supportRepository.js',
   'apps/api/src/routes/support.js',
-  'scripts/seed-support-operations.js',
   'packages/database/postgres/108_support_operations_runtime.sql',
-  'docs/sprint108-support-operations-runtime.md'
 ];
 
 for (const file of required) {

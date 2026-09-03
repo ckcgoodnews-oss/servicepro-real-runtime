@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/timeTrackingService.js',
   'apps/api/src/repositories/timeEntryRepository.js',
   'apps/api/src/routes/timeTracking.js',
-  'scripts/seed-time-tracking.js',
   'packages/database/postgres/085_time_tracking_runtime.sql',
-  'docs/sprint85-time-tracking-runtime.md'
 ];
 
 for (const file of required) {

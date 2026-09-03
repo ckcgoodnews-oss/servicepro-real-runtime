@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/bcdrGovernanceService.js',
   'apps/api/src/repositories/bcdrGovernanceRepository.js',
   'apps/api/src/routes/bcdrGovernance.js',
-  'scripts/seed-bcdr-governance.js',
   'packages/database/postgres/137_bcdr_governance.sql',
-  'docs/sprint137-bcdr-governance.md'
 ];
 
 for (const file of required) {

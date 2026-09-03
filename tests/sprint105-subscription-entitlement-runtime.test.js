@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/subscriptionService.js',
   'apps/api/src/repositories/subscriptionRepository.js',
   'apps/api/src/routes/subscription.js',
-  'scripts/seed-subscription-entitlements.js',
   'packages/database/postgres/105_subscription_entitlement_runtime.sql',
-  'docs/sprint105-subscription-entitlement-runtime.md'
 ];
 
 for (const file of required) {

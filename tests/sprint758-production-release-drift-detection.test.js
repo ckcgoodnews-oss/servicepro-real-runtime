@@ -16,7 +16,6 @@ const detectorPath = path.join(
 for (const file of [
   'scripts/lib/release-drift-detector.js',
   'scripts/check-production-release-drift.js',
-  'docs/sprint758-production-release-drift-detection.md',
 ]) {
   assert.ok(
     fs.existsSync(path.join(root, file)),

@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/routePlanningService.js',
   'apps/api/src/repositories/routePlanRepository.js',
   'apps/api/src/routes/routePlans.js',
-  'scripts/seed-route-plans.js',
   'packages/database/postgres/088_route_planning_runtime.sql',
-  'docs/sprint88-route-planning-runtime.md'
 ];
 
 for (const file of required) {

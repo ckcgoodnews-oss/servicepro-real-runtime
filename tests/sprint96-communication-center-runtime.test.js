@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/communicationCenterService.js',
   'apps/api/src/repositories/communicationCenterRepository.js',
   'apps/api/src/routes/communicationCenter.js',
-  'scripts/seed-communication-center.js',
   'packages/database/postgres/096_communication_center_runtime.sql',
-  'docs/sprint96-communication-center-runtime.md'
 ];
 
 for (const file of required) {

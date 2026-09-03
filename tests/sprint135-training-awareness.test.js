@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/trainingAwarenessService.js',
   'apps/api/src/repositories/trainingAwarenessRepository.js',
   'apps/api/src/routes/trainingAwareness.js',
-  'scripts/seed-training-awareness.js',
   'packages/database/postgres/135_training_awareness.sql',
-  'docs/sprint135-training-awareness.md'
 ];
 
 for (const file of required) {

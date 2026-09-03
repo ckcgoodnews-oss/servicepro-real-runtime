@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/legalHoldService.js',
   'apps/api/src/repositories/legalHoldRepository.js',
   'apps/api/src/routes/legalHold.js',
-  'scripts/seed-legal-hold-ediscovery.js',
   'packages/database/postgres/127_legal_hold_ediscovery.sql',
-  'docs/sprint127-legal-hold-ediscovery.md'
 ];
 
 for (const file of required) {

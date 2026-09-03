@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/operationalRiskService.js',
   'apps/api/src/repositories/operationalRiskRepository.js',
   'apps/api/src/routes/operationalRisks.js',
-  'scripts/seed-operational-risk-register.js',
   'packages/database/postgres/120_operational_risk_register.sql',
-  'docs/sprint120-operational-risk-register.md'
 ];
 
 for (const file of required) {

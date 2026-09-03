@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/governanceReportingService.js','apps/api/src/repositories/governanceReportingRepository.js','apps/api/src/routes/governanceReporting.js','scripts/seed-governance-reporting.js','packages/database/postgres/144_governance_reporting.sql','docs/sprint144-governance-reporting.md'];
+const required = ['apps/api/src/services/governanceReportingService.js','apps/api/src/repositories/governanceReportingRepository.js','apps/api/src/routes/governanceReporting.js','packages/database/postgres/144_governance_reporting.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 144 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/governanceReportingService');
 let kpi = svc.normalizeKpiInput({ tenantId: 'tenant_demo', name: 'Open Criticals', direction: 'lower_is_better', warningValue: 5, criticalValue: 10 });

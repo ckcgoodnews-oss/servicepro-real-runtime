@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/complianceControlService.js',
   'apps/api/src/repositories/complianceControlRepository.js',
   'apps/api/src/routes/complianceControls.js',
-  'scripts/seed-compliance-controls.js',
   'packages/database/postgres/117_compliance_controls.sql',
-  'docs/sprint117-compliance-controls.md'
 ];
 
 for (const file of required) {

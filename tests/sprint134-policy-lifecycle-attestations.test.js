@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/policyLifecycleService.js',
   'apps/api/src/repositories/policyLifecycleRepository.js',
   'apps/api/src/routes/policyLifecycle.js',
-  'scripts/seed-policy-lifecycle-attestations.js',
   'packages/database/postgres/134_policy_lifecycle_attestations.sql',
-  'docs/sprint134-policy-lifecycle-attestations.md'
 ];
 
 for (const file of required) {

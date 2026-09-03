@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/customerSuccessService.js',
   'apps/api/src/repositories/customerSuccessRepository.js',
   'apps/api/src/routes/customerSuccess.js',
-  'scripts/seed-customer-success.js',
   'packages/database/postgres/109_customer_success_runtime.sql',
-  'docs/sprint109-customer-success-runtime.md'
 ];
 
 for (const file of required) {

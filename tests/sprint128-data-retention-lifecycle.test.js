@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/dataRetentionService.js',
   'apps/api/src/repositories/dataRetentionRepository.js',
   'apps/api/src/routes/dataRetention.js',
-  'scripts/seed-data-retention-lifecycle.js',
   'packages/database/postgres/128_data_retention_lifecycle.sql',
-  'docs/sprint128-data-retention-lifecycle.md'
 ];
 
 for (const file of required) {

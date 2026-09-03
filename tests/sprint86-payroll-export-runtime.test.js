@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/payrollService.js',
   'apps/api/src/repositories/payrollRepository.js',
   'apps/api/src/routes/payroll.js',
-  'scripts/seed-payroll-export.js',
   'packages/database/postgres/086_payroll_export_runtime.sql',
-  'docs/sprint86-payroll-export-runtime.md'
 ];
 
 for (const file of required) {

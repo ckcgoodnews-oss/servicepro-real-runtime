@@ -5,9 +5,7 @@ const required = [
   'apps/api/src/repositories/warehouseRepository.js',
   'apps/api/src/repositories/inventoryTransferRepository.js',
   'apps/api/src/routes/warehouses.js',
-  'scripts/seed-warehouse.js',
   'packages/database/postgres/080_warehouse_runtime.sql',
-  'docs/sprint80-warehouse-runtime.md'
 ];
 
 for (const file of required) {

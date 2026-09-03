@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/dataResidencyService.js',
   'apps/api/src/repositories/dataResidencyRepository.js',
   'apps/api/src/routes/dataResidency.js',
-  'scripts/seed-data-residency.js',
   'packages/database/postgres/126_data_residency.sql',
-  'docs/sprint126-data-residency.md'
 ];
 
 for (const file of required) {

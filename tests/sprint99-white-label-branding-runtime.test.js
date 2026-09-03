@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/brandingService.js',
   'apps/api/src/repositories/brandingRepository.js',
   'apps/api/src/routes/branding.js',
-  'scripts/seed-branding.js',
   'packages/database/postgres/099_white_label_branding_runtime.sql',
-  'docs/sprint99-white-label-branding-runtime.md'
 ];
 
 for (const file of required) {

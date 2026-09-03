@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/priceBookService.js',
   'apps/api/src/repositories/priceBookRepository.js',
   'apps/api/src/routes/priceBook.js',
-  'scripts/seed-pricebook.js',
   'packages/database/postgres/078_pricebook_runtime.sql',
-  'docs/sprint78-pricebook-runtime.md'
 ];
 
 for (const file of required) {

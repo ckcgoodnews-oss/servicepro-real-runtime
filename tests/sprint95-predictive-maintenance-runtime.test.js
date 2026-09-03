@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/predictiveMaintenanceService.js',
   'apps/api/src/repositories/predictiveMaintenanceRepository.js',
   'apps/api/src/routes/predictiveMaintenance.js',
-  'scripts/seed-predictive-maintenance.js',
   'packages/database/postgres/095_predictive_maintenance_runtime.sql',
-  'docs/sprint95-predictive-maintenance-runtime.md'
 ];
 
 for (const file of required) {

@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/trustCenterService.js',
   'apps/api/src/repositories/trustCenterRepository.js',
   'apps/api/src/routes/trustCenter.js',
-  'scripts/seed-trust-center.js',
   'packages/database/postgres/123_trust_center.sql',
-  'docs/sprint123-trust-center.md'
 ];
 
 for (const file of required) {

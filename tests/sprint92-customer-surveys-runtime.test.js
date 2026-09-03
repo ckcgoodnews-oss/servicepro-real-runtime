@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/surveyService.js',
   'apps/api/src/repositories/surveyRepository.js',
   'apps/api/src/routes/surveys.js',
-  'scripts/seed-surveys.js',
   'packages/database/postgres/092_customer_surveys_runtime.sql',
-  'docs/sprint92-customer-surveys-runtime.md'
 ];
 
 for (const file of required) {

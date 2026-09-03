@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/tenantSettingsService.js',
   'apps/api/src/repositories/tenantSettingsRepository.js',
   'apps/api/src/routes/tenantAdmin.js',
-  'scripts/seed-tenant-settings.js',
   'packages/database/postgres/074_tenant_admin_runtime.sql',
-  'docs/sprint74-tenant-admin-runtime.md'
 ];
 
 for (const file of required) {

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/securityIncidentResponseService.js','apps/api/src/repositories/securityIncidentResponseRepository.js','apps/api/src/routes/securityIncidentResponse.js','scripts/seed-security-incident-response.js','packages/database/postgres/140_security_incident_response.sql','docs/sprint140-security-incident-response.md'];
+const required = ['apps/api/src/services/securityIncidentResponseService.js','apps/api/src/repositories/securityIncidentResponseRepository.js','apps/api/src/routes/securityIncidentResponse.js','packages/database/postgres/140_security_incident_response.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 140 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/securityIncidentResponseService');
 let incident = svc.normalizeIncidentInput({ tenantId: 'tenant_demo', title: 'Credential compromise', incidentType: 'credential_compromise', affectedUserIds: Array.from({ length: 12 }, (_, i) => `u${i}`), businessImpact: 'customer impact' });

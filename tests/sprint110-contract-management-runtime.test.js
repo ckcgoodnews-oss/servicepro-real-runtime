@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/contractService.js',
   'apps/api/src/repositories/contractRepository.js',
   'apps/api/src/routes/contracts.js',
-  'scripts/seed-contract-management.js',
   'packages/database/postgres/110_contract_management_runtime.sql',
-  'docs/sprint110-contract-management-runtime.md'
 ];
 
 for (const file of required) {

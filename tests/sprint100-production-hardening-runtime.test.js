@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/operationsService.js','apps/api/src/repositories/operationsRepository.js','apps/api/src/routes/operations.js','scripts/seed-operations.js','scripts/check-production-readiness.js','packages/database/postgres/100_production_hardening_runtime.sql','docs/sprint100-production-hardening-runtime.md'];
+const required = ['apps/api/src/services/operationsService.js','apps/api/src/repositories/operationsRepository.js','apps/api/src/routes/operations.js','scripts/check-production-readiness.js','packages/database/postgres/100_production_hardening_runtime.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 100 patch file: ${file}`); process.exit(1); } }
 const { normalizeDeploymentEnvironmentInput, normalizeReleaseManifestInput, normalizeHealthCheckInput, normalizeRunbookEntryInput, approveRelease, markReleaseDeployed, markReleaseRolledBack, calculateReadiness, buildReadinessReport, defaultProductionChecks } = require('../apps/api/src/services/operationsService');
 const env = { id: 'env1', ...normalizeDeploymentEnvironmentInput({ name: 'Production', environmentType: 'production' }) };

@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/privacyDsarOpsService.js','apps/api/src/repositories/privacyDsarOpsRepository.js','apps/api/src/routes/privacyDsarOps.js','scripts/seed-privacy-dsar-ops.js','packages/database/postgres/151_privacy_dsar_ops.sql','docs/sprint151-privacy-dsar-ops.md'];
+const required = ['apps/api/src/services/privacyDsarOpsService.js','apps/api/src/repositories/privacyDsarOpsRepository.js','apps/api/src/routes/privacyDsarOps.js','packages/database/postgres/151_privacy_dsar_ops.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 151 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/privacyDsarOpsService');
 

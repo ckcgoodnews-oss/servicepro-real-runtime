@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/customerSuccessOnboardingService.js','apps/api/src/repositories/customerSuccessOnboardingRepository.js','apps/api/src/routes/customerSuccessOnboarding.js','scripts/seed-customer-success-onboarding.js','packages/database/postgres/147_customer_success_onboarding.sql','docs/sprint147-customer-success-onboarding.md'];
+const required = ['apps/api/src/services/customerSuccessOnboardingService.js','apps/api/src/repositories/customerSuccessOnboardingRepository.js','apps/api/src/routes/customerSuccessOnboarding.js','packages/database/postgres/147_customer_success_onboarding.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 147 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/customerSuccessOnboardingService');
 

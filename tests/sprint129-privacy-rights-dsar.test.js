@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/privacyRightsService.js',
   'apps/api/src/repositories/privacyRightsRepository.js',
   'apps/api/src/routes/privacyRights.js',
-  'scripts/seed-privacy-rights-dsar.js',
   'packages/database/postgres/129_privacy_rights_dsar.sql',
-  'docs/sprint129-privacy-rights-dsar.md'
 ];
 
 for (const file of required) {

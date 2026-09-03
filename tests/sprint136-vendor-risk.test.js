@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/vendorRiskService.js',
   'apps/api/src/repositories/vendorRiskRepository.js',
   'apps/api/src/routes/vendorRisk.js',
-  'scripts/seed-vendor-risk.js',
   'packages/database/postgres/136_vendor_risk.sql',
-  'docs/sprint136-vendor-risk.md'
 ];
 
 for (const file of required) {

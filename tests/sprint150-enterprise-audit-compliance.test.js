@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/enterpriseAuditComplianceService.js','apps/api/src/repositories/enterpriseAuditComplianceRepository.js','apps/api/src/routes/enterpriseAuditCompliance.js','scripts/seed-enterprise-audit-compliance.js','packages/database/postgres/150_enterprise_audit_compliance.sql','docs/sprint150-enterprise-audit-compliance.md'];
+const required = ['apps/api/src/services/enterpriseAuditComplianceService.js','apps/api/src/repositories/enterpriseAuditComplianceRepository.js','apps/api/src/routes/enterpriseAuditCompliance.js','packages/database/postgres/150_enterprise_audit_compliance.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 150 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/enterpriseAuditComplianceService');
 

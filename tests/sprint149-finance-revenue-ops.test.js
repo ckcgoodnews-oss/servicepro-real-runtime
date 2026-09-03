@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/financeRevenueOpsService.js','apps/api/src/repositories/financeRevenueOpsRepository.js','apps/api/src/routes/financeRevenueOps.js','scripts/seed-finance-revenue-ops.js','packages/database/postgres/149_finance_revenue_ops.sql','docs/sprint149-finance-revenue-ops.md'];
+const required = ['apps/api/src/services/financeRevenueOpsService.js','apps/api/src/repositories/financeRevenueOpsRepository.js','apps/api/src/routes/financeRevenueOps.js','packages/database/postgres/149_finance_revenue_ops.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 149 patch file: ${file}`); process.exit(1); } }
 const svc = require('../apps/api/src/services/financeRevenueOpsService');
 

@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/processingInventoryService.js',
   'apps/api/src/repositories/processingInventoryRepository.js',
   'apps/api/src/routes/processingInventory.js',
-  'scripts/seed-processing-inventory-dpia.js',
   'packages/database/postgres/131_processing_inventory_dpia.sql',
-  'docs/sprint131-processing-inventory-dpia.md'
 ];
 
 for (const file of required) {

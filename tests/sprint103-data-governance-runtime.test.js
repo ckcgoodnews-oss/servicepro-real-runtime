@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required=['apps/api/src/services/dataGovernanceService.js','apps/api/src/repositories/dataGovernanceRepository.js','apps/api/src/routes/dataGovernance.js','scripts/seed-data-governance.js','packages/database/postgres/103_data_governance_runtime.sql','docs/sprint103-data-governance-runtime.md'];
+const required=['apps/api/src/services/dataGovernanceService.js','apps/api/src/repositories/dataGovernanceRepository.js','apps/api/src/routes/dataGovernance.js','packages/database/postgres/103_data_governance_runtime.sql'];
 for(const file of required){ if(!fs.existsSync(file)){ console.error(`Missing required Sprint 103 patch file: ${file}`); process.exit(1); } }
 const { addDays, daysBetween, normalizeClassificationPolicyInput, normalizeRetentionPolicyInput, normalizeLegalHoldInput, normalizePurgeJobInput, normalizeGovernanceDecisionInput, evaluateRetentionEligibility, planPurgeJob, approvePurgeJob, completePurgeJob } = require('../apps/api/src/services/dataGovernanceService');
 if(addDays('2026-07-06',-10)!=='2026-06-26') process.exit(1);

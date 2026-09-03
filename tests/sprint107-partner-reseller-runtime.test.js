@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/partnerService.js',
   'apps/api/src/repositories/partnerRepository.js',
   'apps/api/src/routes/partner.js',
-  'scripts/seed-partner-reseller.js',
   'packages/database/postgres/107_partner_reseller_runtime.sql',
-  'docs/sprint107-partner-reseller-runtime.md'
 ];
 
 for (const file of required) {

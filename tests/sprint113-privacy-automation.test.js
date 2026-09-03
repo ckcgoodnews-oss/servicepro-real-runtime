@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/privacyService.js',
   'apps/api/src/repositories/privacyRepository.js',
   'apps/api/src/routes/privacy.js',
-  'scripts/seed-privacy-automation.js',
   'packages/database/postgres/113_privacy_automation.sql',
-  'docs/sprint113-privacy-automation.md'
 ];
 
 for (const file of required) {

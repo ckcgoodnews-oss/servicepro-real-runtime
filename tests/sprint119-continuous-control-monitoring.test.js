@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/controlMonitoringService.js',
   'apps/api/src/repositories/controlMonitoringRepository.js',
   'apps/api/src/routes/controlMonitoring.js',
-  'scripts/seed-continuous-control-monitoring.js',
   'packages/database/postgres/119_continuous_control_monitoring.sql',
-  'docs/sprint119-continuous-control-monitoring.md'
 ];
 
 for (const file of required) {

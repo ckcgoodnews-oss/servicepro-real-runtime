@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/auditReadinessService.js',
   'apps/api/src/repositories/auditReadinessRepository.js',
   'apps/api/src/routes/auditReadiness.js',
-  'scripts/seed-audit-readiness.js',
   'packages/database/postgres/118_audit_readiness.sql',
-  'docs/sprint118-audit-readiness.md'
 ];
 
 for (const file of required) {

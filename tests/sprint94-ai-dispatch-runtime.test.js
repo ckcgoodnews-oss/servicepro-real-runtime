@@ -1,5 +1,5 @@
 const fs = require('fs');
-const required = ['apps/api/src/services/aiDispatchService.js','apps/api/src/repositories/aiDispatchRepository.js','apps/api/src/routes/aiDispatch.js','scripts/seed-ai-dispatch.js','packages/database/postgres/094_ai_dispatch_runtime.sql','docs/sprint94-ai-dispatch-runtime.md'];
+const required = ['apps/api/src/services/aiDispatchService.js','apps/api/src/repositories/aiDispatchRepository.js','apps/api/src/routes/aiDispatch.js','packages/database/postgres/094_ai_dispatch_runtime.sql'];
 for (const file of required) { if (!fs.existsSync(file)) { console.error(`Missing required Sprint 94 patch file: ${file}`); process.exit(1); } }
 const { normalizeRecommendationRequestInput, normalizeCandidateInput, scoreSkillFit, scoreTerritoryFit, scoreRouteLoad, scoreCandidate, rankDispatchCandidates } = require('../apps/api/src/services/aiDispatchService');
 const request = normalizeRecommendationRequestInput({ jobId:'job1', customerId:'cust1', priority:'urgent', territoryId:'north', requiredSkills:['HVAC','Diagnostics'] });

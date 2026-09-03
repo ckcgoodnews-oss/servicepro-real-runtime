@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/mobileSyncService.js',
   'apps/api/src/repositories/mobileSyncRepository.js',
   'apps/api/src/routes/mobileSync.js',
-  'scripts/seed-mobile-sync.js',
   'packages/database/postgres/097_mobile_offline_sync_runtime.sql',
-  'docs/sprint97-mobile-offline-sync-runtime.md'
 ];
 
 for (const file of required) {

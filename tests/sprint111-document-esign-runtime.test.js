@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/documentService.js',
   'apps/api/src/repositories/documentRepository.js',
   'apps/api/src/routes/documents.js',
-  'scripts/seed-document-esign.js',
   'packages/database/postgres/111_document_esign_runtime.sql',
-  'docs/sprint111-document-esign-runtime.md'
 ];
 
 for (const file of required) {

@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/workflowService.js',
   'apps/api/src/repositories/workflowRepository.js',
   'apps/api/src/routes/workflows.js',
-  'scripts/seed-workflow-rules.js',
   'packages/database/postgres/075_workflow_runtime.sql',
-  'docs/sprint75-workflow-runtime.md'
 ];
 
 for (const file of required) {

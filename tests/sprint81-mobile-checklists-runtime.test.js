@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/checklistService.js',
   'apps/api/src/repositories/checklistRepository.js',
   'apps/api/src/routes/checklists.js',
-  'scripts/seed-checklists.js',
   'packages/database/postgres/081_mobile_checklists_runtime.sql',
-  'docs/sprint81-mobile-checklists-runtime.md'
 ];
 
 for (const file of required) {

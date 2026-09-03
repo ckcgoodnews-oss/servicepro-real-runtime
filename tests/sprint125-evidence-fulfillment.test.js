@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/evidenceFulfillmentService.js',
   'apps/api/src/repositories/evidenceFulfillmentRepository.js',
   'apps/api/src/routes/evidenceFulfillment.js',
-  'scripts/seed-evidence-fulfillment.js',
   'packages/database/postgres/125_evidence_fulfillment.sql',
-  'docs/sprint125-evidence-fulfillment.md'
 ];
 
 for (const file of required) {

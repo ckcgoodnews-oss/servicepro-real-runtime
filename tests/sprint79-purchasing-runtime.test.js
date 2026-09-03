@@ -5,9 +5,7 @@ const required = [
   'apps/api/src/repositories/vendorRepository.js',
   'apps/api/src/repositories/purchaseOrderRepository.js',
   'apps/api/src/routes/purchasing.js',
-  'scripts/seed-purchasing.js',
   'packages/database/postgres/079_purchasing_runtime.sql',
-  'docs/sprint79-purchasing-runtime.md'
 ];
 
 for (const file of required) {

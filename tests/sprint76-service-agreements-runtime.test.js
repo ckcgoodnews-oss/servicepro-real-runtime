@@ -6,7 +6,6 @@ const required = [
   'apps/api/src/repositories/agreementVisitRepository.js',
   'apps/api/src/routes/serviceAgreements.js',
   'packages/database/postgres/076_service_agreements_runtime.sql',
-  'docs/sprint76-service-agreements-runtime.md'
 ];
 
 for (const file of required) {

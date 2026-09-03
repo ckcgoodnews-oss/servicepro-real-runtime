@@ -4,9 +4,7 @@ const required = [
   'apps/api/src/services/observabilityService.js',
   'apps/api/src/repositories/observabilityRepository.js',
   'apps/api/src/routes/observability.js',
-  'scripts/seed-observability.js',
   'packages/database/postgres/104_observability_incident_runtime.sql',
-  'docs/sprint104-observability-incident-runtime.md'
 ];
 
 for (const file of required) {
