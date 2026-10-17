@@ -81,7 +81,7 @@ function createJsonTrialRepository(store) {
 function createPostgresTrialRepository(store) {
   return {
     async create(trial) {
-      const { rows } = await store.pgPool.query(
+      const { rows } = await store.query(
         `INSERT INTO trials (id, tenant_id, email, name, company_name, phone, country, timezone, industry, team_size, plan, status, verification_token_hash, email_verified_at, provisioned_at, started_at, expires_at, converted_at, cancelled_at, suspended_at, source, campaign, metadata, created_at, updated_at)
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,NOW(),NOW())
          ON CONFLICT (email) WHERE status NOT IN ('expired','cancelled') DO NOTHING
@@ -92,21 +92,21 @@ function createPostgresTrialRepository(store) {
     },
 
     async findByEmail(email) {
-      const { rows } = await store.pgPool.query(
+      const { rows } = await store.query(
         'SELECT * FROM trials WHERE email = $1 ORDER BY created_at DESC LIMIT 1', [email]
       );
       return rows[0] || null;
     },
 
     async findByTenantId(tenantId) {
-      const { rows } = await store.pgPool.query(
+      const { rows } = await store.query(
         'SELECT * FROM trials WHERE tenant_id = $1 LIMIT 1', [tenantId]
       );
       return rows[0] || null;
     },
 
     async findByVerificationHash(hash) {
-      const { rows } = await store.pgPool.query(
+      const { rows } = await store.query(
         'SELECT * FROM trials WHERE verification_token_hash = $1 AND email_verified_at IS NULL LIMIT 1', [hash]
       );
       return rows[0] || null;
@@ -117,7 +117,7 @@ function createPostgresTrialRepository(store) {
       if (!keys.length) return null;
       const setClauses = keys.map((k, i) => `${toSnake(k)} = $${i + 2}`);
       const values = keys.map(k => fields[k]);
-      const { rows } = await store.pgPool.query(
+      const { rows } = await store.query(
         `UPDATE trials SET ${setClauses.join(', ')}, updated_at = NOW() WHERE id = $1 RETURNING *`,
         [id, ...values]
       );
@@ -132,12 +132,12 @@ function createPostgresTrialRepository(store) {
       if (filters.industry) { params.push(filters.industry); conditions.push(`industry = $${params.length}`); }
       if (conditions.length) query += ' WHERE ' + conditions.join(' AND ');
       query += ' ORDER BY created_at DESC LIMIT 100';
-      const { rows } = await store.pgPool.query(query, params);
+      const { rows } = await store.query(query, params);
       return rows;
     },
 
     async getOnboardingSteps(tenantId) {
-      const { rows } = await store.pgPool.query(
+      const { rows } = await store.query(
         'SELECT * FROM trial_onboarding_steps WHERE tenant_id = $1 ORDER BY sequence', [tenantId]
       );
       return rows;
@@ -145,7 +145,7 @@ function createPostgresTrialRepository(store) {
 
     async upsertOnboardingStep(tenantId, userId, stepKey, status) {
       const now = new Date().toISOString();
-      const { rows } = await store.pgPool.query(
+      const { rows } = await store.query(
         `INSERT INTO trial_onboarding_steps (id, tenant_id, user_id, step_key, status, completed_at, created_at, updated_at)
          VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
          ON CONFLICT (tenant_id, step_key) DO UPDATE SET status = $5, completed_at = $6, updated_at = NOW()
