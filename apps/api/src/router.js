@@ -17,6 +17,7 @@ const { attachRequestContext } = require('./context/requestContext');
 const { attachOperationalTenant } = require('./services/tenantResolver');
 const { ownerAccessGuard } = require('./middleware/ownerAccessGuard');
 const platformAccess = require('./routes/platformAccess');
+const siteAdmins = require('./routes/siteAdmins');
 const platformTenantDashboard = require('./routes/platformTenantDashboard');
 const moduleAccess = require('./routes/moduleAccess');
 const publicStorefront = require('./routes/publicStorefront');
@@ -331,6 +332,11 @@ async function router(req, res) {
   }
 
   if (req.url === '/api/v1/platform/tenant-dashboard' && req.method === 'GET') return platformTenantDashboard.dashboard(req, res);
+  if (req.url === '/api/v1/platform/site-admins' && req.method === 'GET') return siteAdmins.list(req,res);
+  if (req.url === '/api/v1/platform/site-admins' && req.method === 'POST') return siteAdmins.grant(req,res);
+  const siteAdminMatch = req.url.match(/^\/api\/v1\/platform\/site-admins\/([a-f0-9-]{36})(\/reset-password)?$/i);
+  if (siteAdminMatch && !siteAdminMatch[2] && req.method === 'DELETE') return siteAdmins.revoke(req,res,siteAdminMatch[1]);
+  if (siteAdminMatch && siteAdminMatch[2] && req.method === 'POST') return siteAdmins.resetPassword(req,res,siteAdminMatch[1]);
   if (req.url === '/api/v1/platform/owners' && req.method === 'GET') return platformAccess.list(req, res);
   if (req.url === '/api/v1/platform/tenant-management' && req.method === 'GET') return tenantManagement.list(req, res);
 

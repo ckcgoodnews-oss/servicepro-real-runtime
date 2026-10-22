@@ -34,7 +34,25 @@ function response() {
   assert.equal(await sessions.findActiveByRefreshHash('tenant_demo',hashToken(firstRefresh)),null,'rotated token must be invalid');
 
   process.env.EXPOSE_AUTH_TOKENS='true'; process.env.NODE_ENV='test';
-  res=response(); await auth.requestPasswordReset(req({email:user.email}),res); const resetToken=res.body.data.developmentToken; assert.ok(resetToken);
+  // Exercise delivery without a real provider credential or network request.
+  const previousFetch=global.fetch;
+  const previousKey=process.env.RESEND_API_KEY, previousFrom=process.env.EMAIL_FROM;
+  let delivery;
+  process.env.RESEND_API_KEY='test-provider-key'; process.env.EMAIL_FROM='ServicePRO <noreply@example.com>';
+  global.fetch=async(url,options)=>{
+    assert.equal(url,'https://api.resend.com/emails');
+    delivery=JSON.parse(options.body);
+    return {ok:true,status:200};
+  };
+  try { res=response(); await auth.requestPasswordReset(req({email:user.email}),res); }
+  finally {
+    global.fetch=previousFetch;
+    if(previousKey===undefined)delete process.env.RESEND_API_KEY;else process.env.RESEND_API_KEY=previousKey;
+    if(previousFrom===undefined)delete process.env.EMAIL_FROM;else process.env.EMAIL_FROM=previousFrom;
+  }
+  const resetToken=res.body.data.developmentToken; assert.ok(resetToken);
+  assert.deepStrictEqual(delivery.to,[user.email]);
+  assert.ok(delivery.text.includes(encodeURIComponent(resetToken)));
   res=response(); await auth.confirmPasswordReset(req({token:resetToken,password:'AnotherStrong2!'}),res); assert.equal(res.statusCode,200);
   assert.equal(await sessions.isActive(activeSessionId,'tenant_demo',user.id),false,'password reset must revoke active sessions');
   res=response(); await auth.confirmPasswordReset(req({token:resetToken,password:'AnotherStrong3!'}),res); assert.equal(res.statusCode,400,'reset token must be one-time');

@@ -21,7 +21,12 @@ function platformAdminEmails() {
 }
 
 function isPlatformAdmin(req) {
+  if (typeof req.context.platformAdmin === 'boolean') return req.context.platformAdmin;
   return platformAdminEmails().includes(normalizeEmail(req.context.email));
 }
 
-module.exports = {DEFAULT_PLATFORM_ADMIN_EMAILS, platformAdminEmails, isPlatformAdmin};
+function isBootstrapAdmin(user) {
+  return user.tenantId === (process.env.DEFAULT_TENANT_ID || 'tenant_demo') && platformAdminEmails().includes(normalizeEmail(user.email));
+}
+
+module.exports = {DEFAULT_PLATFORM_ADMIN_EMAILS, platformAdminEmails, isPlatformAdmin, isBootstrapAdmin};
