@@ -19751,3 +19751,56 @@ END;
 INSERT INTO postgres_runtime_migrations (version) VALUES ('781_tenant_registry_reconciliation.sql') ON CONFLICT (version) DO NOTHING;
 COMMIT;
 -- END SERVICEPRO MIGRATION 781_tenant_registry_reconciliation.sql
+
+-- BEGIN SERVICEPRO MIGRATION 782_site_administrators.sql
+BEGIN;
+-- Only the trusted API/database owner can manage this registry. Tenant roles
+-- and Supabase's public API must never be able to grant platform privileges.
+CREATE TABLE IF NOT EXISTS runtime_site_admins (
+  tenant_id TEXT NOT NULL,
+  user_id UUID NOT NULL REFERENCES runtime_users(id) ON DELETE CASCADE,
+  granted_by TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  PRIMARY KEY (tenant_id,user_id)
+);
+ALTER TABLE runtime_site_admins ENABLE ROW LEVEL SECURITY;
+REVOKE ALL ON runtime_site_admins FROM PUBLIC;
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname='anon') THEN
+    REVOKE ALL ON runtime_site_admins FROM anon;
+  END IF;
+  IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname='authenticated') THEN
+    REVOKE ALL ON runtime_site_admins FROM authenticated;
+  END IF;
+END $$;
+INSERT INTO postgres_runtime_migrations (version) VALUES ('782_site_administrators.sql') ON CONFLICT (version) DO NOTHING;
+COMMIT;
+-- END SERVICEPRO MIGRATION 782_site_administrators.sql
+
+-- BEGIN SERVICEPRO MIGRATION 783_site_admin_email_reservations.sql
+BEGIN;
+-- Legacy deployments authorize platform access by email. Prevent another
+-- company's owner or public signup from copying a registered site-admin email.
+CREATE OR REPLACE FUNCTION public.protect_site_admin_email()
+RETURNS trigger LANGUAGE plpgsql SECURITY INVOKER
+SET search_path = pg_catalog, public AS $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM public.runtime_site_admins a
+    JOIN public.runtime_users u ON u.id=a.user_id AND u.tenant_id=a.tenant_id
+    WHERE lower(btrim(u.email))=lower(btrim(NEW.email)) AND u.id<>NEW.id
+  ) THEN
+    RAISE EXCEPTION 'This email is reserved for an existing site administrator'
+      USING ERRCODE='23505';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+REVOKE ALL ON FUNCTION public.protect_site_admin_email() FROM PUBLIC;
+DROP TRIGGER IF EXISTS protect_site_admin_email ON public.runtime_users;
+CREATE TRIGGER protect_site_admin_email
+BEFORE INSERT OR UPDATE OF email,tenant_id ON public.runtime_users
+FOR EACH ROW EXECUTE FUNCTION public.protect_site_admin_email();
+INSERT INTO postgres_runtime_migrations (version) VALUES ('783_site_admin_email_reservations.sql') ON CONFLICT (version) DO NOTHING;
+COMMIT;
+-- END SERVICEPRO MIGRATION 783_site_admin_email_reservations.sql

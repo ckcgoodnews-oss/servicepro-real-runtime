@@ -1,18 +1,23 @@
 const assert = require('node:assert/strict');
 const test = require('node:test');
 const { authGuard } = require('../apps/api/src/middleware/authGuard');
-const { issueAccessToken } = require('../apps/api/src/services/tokenService');
+const { issueAccessToken, verifyAccessToken } = require('../apps/api/src/services/tokenService');
 
 function response() {
   return { setHeader() {}, end(value) { this.body = JSON.parse(value); } };
 }
 
 function request(token, requestedTenant) {
+  const claims = verifyAccessToken(token);
   return {
     headers: { authorization: `Bearer ${token}` },
     context: {
       tenantId: requestedTenant,
       repositories: {
+        users: {async findById(tenantId,id) {
+          return tenantId===claims.tenantId && id===claims.userId ? {id,tenantId,email:claims.email,status:'active'} : null;
+        }},
+        siteAdmin: {async has() { return false; }},
         workspaces: {
           async find(tenantId) {
             return tenantId === 'tenant_business_b' ? { id: 'workspace-b', tenantId, name: 'Business B' } : null;
