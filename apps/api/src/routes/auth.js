@@ -123,11 +123,8 @@ async function sendPasswordResetEmail(email, token) {
 async function requestPasswordReset(req, res) {
   const { email } = req.body || {};
   if (typeof email === 'string' && email.trim()) {
-    // Match the login lookup behavior for owners in another tenant.
-    let user = await req.context.repositories.users.findByEmail(req.context.tenantId, email.trim());
-    if (!user && req.context.repositories.users.findByEmailAnyTenant) {
-      user = await req.context.repositories.users.findByEmailAnyTenant(email.trim());
-    }
+    // Keep request and confirmation within the same tenant context.
+    const user = await req.context.repositories.users.findByEmail(req.context.tenantId, email.trim());
     if (user) {
       try {
         const token = issueOpaqueToken();
