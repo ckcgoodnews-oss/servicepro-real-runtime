@@ -1,7 +1,7 @@
 const { sendJson } = require('../utils/http');
 const { verifyAccessToken, hashToken } = require('../services/tokenService');
 const { permissionsForRoles } = require('../auth/permissions');
-const { platformAdminEmails } = require('../services/platformAdminService');
+const { isBootstrapAdmin } = require('../services/platformAdminService');
 
 async function authGuard(req, res) {
   const auth = req.headers.authorization || '';
@@ -24,8 +24,16 @@ async function authGuard(req, res) {
   }
 
   const tokenTenantId = claims.tenantId;
+  // Look up the current account and registry on every request: JWT role claims
+  // cannot grant site access, and a revoked grant takes effect immediately.
+  const identity = await req.context.repositories.users.findById(tokenTenantId, claims.userId);
+  if (!identity || (identity.status && identity.status !== 'active')) {
+    sendJson(res, 401, {error:{code:'unauthorized',message:'Account is unavailable'}});
+    return false;
+  }
+  const platformAdmin = !claims.apiTokenId && (isBootstrapAdmin(identity) || await req.context.repositories.siteAdmin.has(tokenTenantId, claims.userId));
+  req.context.platformAdmin = Boolean(platformAdmin);
   if (tokenTenantId !== req.context.tenantId) {
-    const platformAdmin = platformAdminEmails().includes(String(claims.email || '').trim().toLowerCase());
     if (!platformAdmin) {
       sendJson(res, 403, { error: { code: 'forbidden', message: 'Token tenant does not match request tenant' } });
       return false;
@@ -45,9 +53,9 @@ async function authGuard(req, res) {
   }
 
   req.context.userId = claims.userId;
-  req.context.email = claims.email;
-  req.context.roles = claims.roles || [];
-  req.context.permissions = claims.permissions || [];
+  req.context.email = identity.email;
+  req.context.roles = platformAdmin ? ['owner','admin'] : (claims.roles || []);
+  req.context.permissions = platformAdmin ? permissionsForRoles(['admin']) : (claims.permissions || []);
   req.context.sessionId = claims.sessionId || '';
   req.context.apiTokenId = claims.apiTokenId || '';
   req.context.authTenantId = tokenTenantId;

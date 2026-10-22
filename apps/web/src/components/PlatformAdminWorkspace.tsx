@@ -4,6 +4,7 @@ import {FormEvent, useCallback, useEffect, useMemo, useState} from 'react';
 import {authFetch} from '@/auth/session';
 import {ModuleChecklist} from '@/components/ModuleChecklist';
 import {PasswordInput} from '@/components/PasswordInput';
+import {SiteAdminManagement} from '@/components/SiteAdminManagement';
 
 const availableModules = ['operations', 'crm', 'assets', 'inventory', 'billing', 'analytics', 'knowledge', 'communications', 'marketplace', 'administration'];
 
@@ -163,6 +164,7 @@ export function PlatformAdminWorkspace() {
 
   return (
     <div className="platform-admin-grid">
+      <SiteAdminManagement />
       <section className="tenant-command-center">
         <div className="panel-heading">
           <div><h2>Tenant Management Center</h2><p>Platform-wide tenant, user, ownership, subscription, and storage posture.</p></div>

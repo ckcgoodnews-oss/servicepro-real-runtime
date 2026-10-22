@@ -89,7 +89,7 @@ function createPostgresUserRepository(store) {
     async findById(tenantId, id) {
       const result = await store.query(
         `SELECT id::text, tenant_id as "tenantId", email, name, password_hash as "passwordHash",
-                roles, permissions, mfa_enabled as "mfaEnabled", avatar_url as "avatarUrl", timezone, locale,
+                status, roles, permissions, mfa_enabled as "mfaEnabled", avatar_url as "avatarUrl", timezone, locale,
                 notification_preferences as "notificationPreferences", created_at as "createdAt", updated_at as "updatedAt"
          FROM runtime_users WHERE tenant_id=$1 AND id=$2::uuid LIMIT 1`, [tenantId,id]
       ); return result.rows[0] || null;

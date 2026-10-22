@@ -1,12 +1,14 @@
 const {sendJson}=require('../utils/http');
 const {issueOpaqueToken,hashToken}=require('../services/tokenService');
 const {isPlatformAdmin,platformAdminEmails}=require('../services/platformAdminService');
-const {passwordErrors}=require('./auth');
+const {passwordErrors}=require('../services/passwordPolicy');
 const {normalizeModules}=require('../services/moduleAccessService');
 function deny(res){return sendJson(res,403,{error:{code:'forbidden',message:'Platform administrator access required'}});}
 async function eligibleOwners(req){
   const admins=new Set(platformAdminEmails());
-  const owners=(await req.context.repositories.accessEntitlements.listOwners()).filter(owner=>!admins.has(String(owner.email||'').trim().toLowerCase()));
+  const grants=await req.context.repositories.siteAdmin?.list() || [];
+  const grantedIds=new Set(grants.map(row=>`${row.tenantId}:${row.userId}`));
+  const owners=(await req.context.repositories.accessEntitlements.listOwners()).filter(owner=>!admins.has(String(owner.email||'').trim().toLowerCase())&&!grantedIds.has(`${owner.tenantId}:${owner.id}`));
   const catalog=await req.context.repositories.serviceMarketplace.listCatalog();
   const packs=new Set(catalog.filter(item=>item.itemType==='service_pack').map(item=>item.id));
   return Promise.all(owners.map(async owner=>{
