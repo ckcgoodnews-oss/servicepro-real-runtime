@@ -91,15 +91,67 @@ async function register(req, res) {
   return sendJson(res, 201, { data: await issueSession(req, user) });
 }
 
+// Send the one-time link only to the address associated with the account.
+// Never log the token, the URL, or the provider API key.
+async function sendPasswordResetEmail(email, token) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.EMAIL_FROM;
+  const appOrigin = process.env.PASSWORD_RESET_APP_URL || process.env.WEB_APP_URL ||
+    'https://servicepro-web-alpha-ckcgoodnews.onrender.com';
+  if (!apiKey || !from) throw new Error('Reset email provider is not configured');
+  const url = new URL('/reset-password', appOrigin);
+  if (url.protocol !== 'https:') throw new Error('Password reset URL must use HTTPS');
+  url.searchParams.set('token', token);
+  const response = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      authorization: `Bearer ${apiKey}`,
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      from,
+      to: [email],
+      subject: 'Reset your ServicePRO password',
+      text: `A password reset was requested for your ServicePRO account.\n\nUse this link within 30 minutes:\n${url.toString()}\n\nIf you did not request this, ignore this email.`,
+      html: `<p>A password reset was requested for your ServicePRO account.</p><p><a href="${url.toString().replace(/&/g, '&amp;')}">Reset your password</a> (expires in 30 minutes).</p><p>If you did not request this, ignore this email.</p>`
+    }),
+    signal: AbortSignal.timeout(10000)
+  });
+  if (!response.ok) throw new Error(`Reset email provider rejected request (HTTP ${response.status})`);
+}
+
 async function requestPasswordReset(req, res) {
   const { email } = req.body || {};
-  if (email) {
-    const user = await req.context.repositories.users.findByEmail(req.context.tenantId, email);
+  if (typeof email === 'string' && email.trim()) {
+    // Match the login lookup behavior for owners in another tenant.
+    let user = await req.context.repositories.users.findByEmail(req.context.tenantId, email.trim());
+    if (!user && req.context.repositories.users.findByEmailAnyTenant) {
+      user = await req.context.repositories.users.findByEmailAnyTenant(email.trim());
+    }
     if (user) {
-      const token = issueOpaqueToken();
-      await req.context.repositories.authSessions.createPasswordReset({ tenantId: user.tenantId, userId: user.id, tokenHash: hashToken(token), expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString() });
-      await req.context.repositories.authEvents.log({ tenantId: user.tenantId, userId: user.id, eventType: 'auth.password_reset_requested', email: user.email, status: 'success' });
-      if (process.env.NODE_ENV !== 'production' && process.env.EXPOSE_AUTH_TOKENS === 'true') return sendJson(res, 202, { data: { accepted: true, developmentToken: token } });
+      try {
+        const token = issueOpaqueToken();
+        await req.context.repositories.authSessions.createPasswordReset({
+          tenantId: user.tenantId,
+          userId: user.id,
+          tokenHash: hashToken(token),
+          expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString()
+        });
+        await sendPasswordResetEmail(user.email, token);
+        await req.context.repositories.authEvents.log({
+          tenantId: user.tenantId,
+          userId: user.id,
+          eventType: 'auth.password_reset_requested',
+          email: user.email,
+          status: 'success'
+        });
+        if (process.env.NODE_ENV !== 'production' && process.env.EXPOSE_AUTH_TOKENS === 'true') {
+          return sendJson(res, 202, { data: { accepted: true, developmentToken: token } });
+        }
+      } catch (error) {
+        // Do not reveal whether the address belongs to an account.
+        console.error('Password reset email delivery failed:', error.message);
+      }
     }
   }
   return sendJson(res, 202, { data: { accepted: true } });
