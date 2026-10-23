@@ -45,28 +45,34 @@ export function SiteAdminManagement() {
       form.reset(); setResetId(''); setMessage('Password updated and all existing sessions signed out.');
     }
   }
-  return <section className="panel">
+  return <section className="panel site-admin-management">
     <h2>Site administrators</h2>
     <p>Site administrators can manage every company, user, module, and site setting. Company administrators only manage their own company.</p>
     {error && <p className="form-error" role="alert">{error}</p>}
     {message && <p role="status">{message}</p>}
-    <form onSubmit={grant}>
+    <form className="site-admin-form" onSubmit={grant}>
       <h3>Create or grant a site administrator</h3>
-      <label>Email<input name="email" type="email" required autoComplete="off" /></label>
-      <label>Name (required for a new account)<input name="name" autoComplete="off" /></label>
-      <label>Initial password (required for a new account)<PasswordInput name="password" minLength={12} autoComplete="new-password" /></label>
+      <div className="site-admin-fields">
+        <label>Email<input name="email" type="email" required autoComplete="off" /></label>
+        <label>Name (required for a new account)<input name="name" autoComplete="off" /></label>
+        <label>Initial password (required for a new account)<PasswordInput name="password" minLength={12} autoComplete="new-password" /></label>
+      </div>
       <p>Use at least 12 characters with uppercase, lowercase, a number, and a symbol. For an existing account, its password stays unchanged.</p>
-      <label><input type="checkbox" required /> I intend to give this account control of the entire site.</label>
+      <label className="site-admin-confirmation"><input type="checkbox" required /> I intend to give this account control of the entire site.</label>
       <button className="button" disabled={busy}>Grant site administrator access</button>
     </form>
-    <ul>{admins.map(admin => <li key={`${admin.tenantId}:${admin.id}`}>
+    <ul className="site-admin-list">{admins.map(admin => <li key={`${admin.tenantId}:${admin.id}`}>
+      <div className="site-admin-account">
       <strong>{admin.name || admin.email}</strong> — {admin.email}
       {admin.protected && <span> (protected recovery administrator)</span>}
+      </div>
+      <div className="site-admin-actions">
       <button className="button button-small" disabled={busy} onClick={()=>setResetId(resetId === admin.id ? '' : admin.id)}>Set password</button>
       {!admin.protected && <button className="button button-small" disabled={busy} onClick={async()=>{
         if (window.confirm(`Remove site-wide access for ${admin.email}? Company access will remain.`) && await change(`/api/v1/platform/site-admins/${admin.id}`,'DELETE')) setMessage('Site administrator access removed and existing sessions signed out.');
       }}>Remove site access</button>}
-      {resetId === admin.id && <form onSubmit={event=>void reset(event,admin)}>
+      </div>
+      {resetId === admin.id && <form className="site-admin-form site-admin-reset" onSubmit={event=>void reset(event,admin)}>
         <label>New password for {admin.email}<PasswordInput name="password" required minLength={12} autoComplete="new-password" /></label>
         <button className="button button-small" disabled={busy}>Save password and sign out sessions</button>
       </form>}
