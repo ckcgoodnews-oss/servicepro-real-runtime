@@ -1,4 +1,5 @@
-.platform-admin-grid{display:grid;gap:16px}
+.platform-admin-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;min-width:0}
+.platform-admin-grid>*{min-width:0}
 .site-admin-management{min-width:0}
 .site-admin-form{display:grid;gap:12px}
 .site-admin-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
